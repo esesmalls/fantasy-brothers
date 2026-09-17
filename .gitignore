@@ -1,0 +1,36 @@
+# Local engine downloads and export templates are reproducible from the
+# checked-in download helper and checksum/source metadata.
+tools/godot/**
+!tools/godot/SHA512-SUMS.txt
+tools/templates/**
+!tools/templates/**/
+!tools/templates/**/source.json
+
+# Local exports and Godot-generated state.
+builds/
+**/.godot/
+**/*.import
+
+# Local saves and temporary runtime data.
+**/save/
+**/saves/
+**/*.save
+**/*.sav
+**/*.slot
+*.tmp
+*.log
+
+# Local credentials and signing material.
+.env
+.env.*
+!.env.example
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+
+# OS/editor noise.
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

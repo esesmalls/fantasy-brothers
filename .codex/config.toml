@@ -1,0 +1,4 @@
+# 项目内的 AI 小团队并发上限；主代理不计入此数字。
+# 具体角色按任务启用，模型与权限继承当前会话。
+[agents]
+max_concurrent_threads_per_session = 3
