@@ -1,5 +1,7 @@
 # 最小可玩接口 v0.1
 
+0.1.1 增补（2026-09-18）：战斗规则版本 prototype-0.1.1。友军/战犬可作移动中间格但不能落点重叠，敌军及障碍阻挡；逐格扣费和危险结算，行动者致死后自动推进，直到存活活动者或战斗结束。旧档兼容策略见验证文档。
+
 2026-09-17：用户已授权进入最小验证。Godot 4 单一工程；原创程序绘制半身棋子与底座。每类特点先做代表样本，不把长期全部设想塞入本轮。
 
 文件所有权：战斗角色 game/core/battle_rules.gd 与 game/tests/test_battle.gd；内容角色 game/core/campaign_rules.gd 与 game/tests/test_campaign.gd；视觉角色 game/presentation/battle_board.gd 与 docs/06-art-prototype.md；主 AI 负责项目、UI、存档、导出及其他文档。使用显式 preload，不依赖 class_name 缓存；不可覆盖他人文件。
@@ -10,6 +12,7 @@ battle_rules.gd extends RefCounted，方法全部 static。state 可 JSON 序列
 - active_unit(state:Dictionary) -> Dictionary，空时返回 {}
 - get_actions(state, unit_id:String) -> Array，元素 {id,name,cost,range,description,target}
 - preview(state, unit_id:String, action_id:String, target:Dictionary) -> Dictionary，target={q,r}，返回 {ok,reason,summary,chance,damage,cost,path:Array,affected:Array}；不得改状态或随机数
+- action_overlay(state, unit_id:String, action_id:String) -> Dictionary，返回 {range_cells,blocked_cells,valid_targets}，各为[{q,r}]。前两者为几何射程中的射线可通/遮挡格；合法目标严格调用同一preview；资源不足时仍显示范围但无合法目标。move/self返回空集合。
 - apply_action(state, unit_id:String, action_id:String, target:Dictionary) -> Dictionary，原地改 state，返回 {ok,reason,events:Array}
 - end_turn(state) -> Array，推进并返回事件
 - ai_step(state) -> Dictionary，执行当前敌人或受指令战犬的一步，或结束回合
@@ -28,7 +31,8 @@ mission 至少含 id,title,difficulty,supplies；grain 物件存活作为故事�
 campaign_rules.gd extends RefCounted，方法全部 static。
 - create_campaign(origin:String,seed:int)->Dictionary，origin=free/hunters
 - camp_action(c,action:String)->Dictionary，rest/resupply/repair/recruit，返回 {ok,reason}
-- start_expedition(c)->Dictionary，生成保存条件事件，phase=event
+- get_routes(c)->Array[Dictionary]，纯只读预告{id,name,description,food_cost,days,difficulty,reward,supplies,available,reason}，当前road/ridge两条
+- start_expedition(c,route_id:String="road")->Dictionary，校验后按预告扣费、保存route_id/route_name/route_food_cost/route_days与出发历史，生成条件事件，phase=event；旧调用默认road
 - choose_event(c,choice_id:String)->Dictionary，phase=ready
 - battle_config(c)->Dictionary，作为战斗 mission
 - resolve_battle(c,battle)->Dictionary，恰好一次结算，phase=growth或camp
@@ -43,6 +47,7 @@ perks 稳定ID：vigor(+8最大生命及当前生命)、precision(+8命中)，�
 battle_board.gd extends Control。
 signal cell_clicked(q:int,r:int)，signal cell_hovered(q:int,r:int)。
 set_battle(state:Dictionary)、set_selected(unit_id:String)、set_preview(info:Dictionary)、play_events(events:Array,speed:float=1.0)、set_animation_speed(speed:float)。
+set_action_overlay(info:Dictionary)，使用规则action_overlay结果并补action_id/action_name，只读绘制，独立于悬停preview；切换动作/回合/结算需刷新或清空。
 横向布局战场约800×560，可缩放；绘制轴向格、原创半身棋子与底座、武器区别、生命护甲、地表物件、选中预览及浮字。只读状态，动画不改规则。字体用系统Microsoft YaHei，勿复制参考图人物。
 
 ## 验证

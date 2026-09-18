@@ -18,6 +18,23 @@ const KIND_NAMES = {
 	"guard": "盾卫", "spear": "枪兵", "archer": "弓手",
 	"skirmisher": "游击兵", "hunter": "猎人", "dog": "猎犬"
 }
+const ROUTE_ORDER: Array[String] = ["road", "ridge"]
+# Original route text and numbers for the prototype. They deliberately reuse the
+# same mission and event pool so route choice tests preparation, not map content.
+const ROUTE_DETAILS = {
+	"road": {
+		"name": "渡口旧道",
+		"description": "沿着渡口旧道赶往粮仓。路程稳妥，保留既有的补给与风险。",
+		"food_cost": 2, "days": 1, "difficulty_offset": 0, "reward_bonus": 0,
+		"supplies": {"oil": 1, "fire": 2, "water": 2}
+	},
+	"ridge": {
+		"name": "山脊险径",
+		"description": "翻过碎石山脊赶往粮仓。多带粮食换取油料和更高报酬，但敌人的装备与战力更强。",
+		"food_cost": 3, "days": 1, "difficulty_offset": 1, "reward_bonus": 18,
+		"supplies": {"oil": 2, "fire": 2, "water": 2}
+	}
+}
 
 static func create_campaign(origin: String, seed_value: int) -> Dictionary:
 	var actual_origin: String = origin if ORIGIN_KINDS.has(origin) else "free"
@@ -132,28 +149,43 @@ static func camp_action(c: Dictionary, action: String) -> Dictionary:
 		_:
 			return _fail("未知营地操作。")
 
-static func start_expedition(c: Dictionary) -> Dictionary:
-	if str(c.get("phase", "")) != "camp":
-		return _fail("远征已生成，不能重新抽选事件。")
-	if _living(c).is_empty():
-		return _fail("没有存活队员。请先补员；资金不足时可预支签约款。")
-	if int(c.food) < 2:
-		return _fail("出征需要 2 份粮食。营地补给在缺钱缺粮时提供短工恢复通路。")
-	c.food = int(c.food) - 2
-	c.day = int(c.day) + 1
+static func get_routes(c: Dictionary) -> Array[Dictionary]:
+	var routes: Array[Dictionary] = []
+	for route_id: String in ROUTE_ORDER:
+		var details: Dictionary = ROUTE_DETAILS[route_id]
+		var unavailable_reason: String = _route_unavailable_reason(c, details)
+		routes.append({
+			"id": route_id, "name": str(details.name), "description": _route_description(c, route_id, details),
+			"food_cost": int(details.food_cost), "days": int(details.days),
+			"difficulty": _route_difficulty(c, int(details.difficulty_offset)),
+			"reward": _route_reward(c, int(details.reward_bonus)),
+			"supplies": details.supplies.duplicate(true),
+			"available": unavailable_reason.is_empty(),
+			"reason": "补给充足，可以从这里出发。" if unavailable_reason.is_empty() else unavailable_reason
+		})
+	return routes
+
+static func start_expedition(c: Dictionary, route_id: String = "road") -> Dictionary:
+	var route: Dictionary = _route_by_id(c, route_id)
+	if route.is_empty():
+		return _fail("未知远征路线。")
+	if not bool(route.available):
+		return _fail(str(route.reason))
+	# All validation is complete before food, day, flags, or RNG state can change.
+	c.food = int(c.food) - int(route.food_cost)
+	c.day = int(c.day) + int(route.days)
 	var index: int = int(c.flags.get("expeditions_started", 0)) + 1
 	c.flags.expeditions_started = index
-	var difficulty: int = clampi(int((index - 1) / 2), 0, 2)
-	if str(c.flags.get("last_outcome", "")) in ["defeat", "retreat"]:
-		difficulty = 0
 	var participants: Array = []
 	for unit: Dictionary in _living(c):
 		participants.append(str(unit.id))
 	c.expedition = {
 		"id": "exp_%d_%d" % [int(c.seed), index], "index": index,
-		"title": "雨夜粮仓", "difficulty": difficulty,
-		"supplies": {"oil": 1, "fire": 2, "water": 2},
-		"reward": 36 + mini(index, 3) * 6, "renown_bonus": 0,
+		"title": "雨夜粮仓", "difficulty": int(route.difficulty),
+		"supplies": route.supplies.duplicate(true),
+		"reward": int(route.reward), "renown_bonus": 0,
+		"route_id": str(route.id), "route_name": str(route.name),
+		"route_food_cost": int(route.food_cost), "route_days": int(route.days),
 		"choice": "", "participant_ids": participants, "event_id": ""
 	}
 	c.growth_offers = []
@@ -163,8 +195,56 @@ static func start_expedition(c: Dictionary) -> Dictionary:
 	c.event = _make_event(c, event_id)
 	c.expedition.event_id = event_id
 	c.phase = "event"
-	c.last_report = "出征消耗 2 份粮食。眼前的选择将改变本次战斗准备与之后的回报。"
+	c.history.append({
+		"type": "departure", "id": str(c.expedition.id), "route_id": str(route.id),
+		"route_name": str(route.name), "route_food_cost": int(route.food_cost),
+		"route_days": int(route.days), "day": int(c.day)
+	})
+	c.last_report = "经「%s」出征，消耗 %d 份粮食、%d 天。眼前的选择将改变本次战斗准备与之后的回报。" % [
+		str(route.name), int(route.food_cost), int(route.days)]
 	return {"ok": true, "reason": c.last_report, "event": c.event}
+
+static func _route_by_id(c: Dictionary, route_id: String) -> Dictionary:
+	for route: Dictionary in get_routes(c):
+		if str(route.get("id", "")) == route_id:
+			return route
+	return {}
+
+static func _route_unavailable_reason(c: Dictionary, details: Dictionary) -> String:
+	if str(c.get("phase", "")) != "camp":
+		return "远征已生成，不能重新抽选事件。"
+	if _living(c).is_empty():
+		return "没有存活队员。请先补员；资金不足时可预支签约款。"
+	var food_cost: int = int(details.get("food_cost", 0))
+	if int(c.get("food", 0)) < food_cost:
+		return "出征需要 %d 份粮食。营地补给在缺钱缺粮时提供短工恢复通路。" % food_cost
+	return ""
+
+static func _route_description(c: Dictionary, route_id: String, details: Dictionary) -> String:
+	if route_id != "ridge":
+		return str(details.description)
+	if _route_base_difficulty(c) >= 2 and not _is_failure_recovery(c):
+		return "敌情已达当前区域上限，与渡口旧道相同；多消耗 1 粮，获得额外 18 金和 1 油。这是补给与收益选择。"
+	if _is_failure_recovery(c):
+		return "上次失利让敌情回落。山脊险径仍比渡口旧道高一档；多消耗 1 粮，获得额外 18 金和 1 油。"
+	return str(details.description)
+
+static func _is_failure_recovery(c: Dictionary) -> bool:
+	return str(c.get("flags", {}).get("last_outcome", "")) in ["defeat", "retreat"]
+
+static func _route_base_difficulty(c: Dictionary) -> int:
+	var index: int = int(c.get("flags", {}).get("expeditions_started", 0)) + 1
+	var difficulty: int = clampi(int((index - 1) / 2), 0, 2)
+	if _is_failure_recovery(c):
+		return 0
+	return difficulty
+
+static func _route_difficulty(c: Dictionary, difficulty_offset: int) -> int:
+	return clampi(_route_base_difficulty(c) + difficulty_offset, 0, 2)
+
+static func _route_reward(c: Dictionary, reward_bonus: int) -> int:
+	var index: int = int(c.get("flags", {}).get("expeditions_started", 0)) + 1
+	return 36 + mini(index, 3) * 6 + reward_bonus
 
 static func choose_event(c: Dictionary, choice_id: String) -> Dictionary:
 	if str(c.get("phase", "")) != "event":
@@ -216,6 +296,8 @@ static func battle_config(c: Dictionary) -> Dictionary:
 		"id": str(c.expedition.id), "title": str(c.expedition.title),
 		"difficulty": int(c.expedition.difficulty),
 		"supplies": c.expedition.supplies.duplicate(true),
+		"route_id": str(c.expedition.get("route_id", "road")),
+		"route_name": str(c.expedition.get("route_name", "渡口旧道")),
 		"event_id": str(c.expedition.get("event_id", "")),
 		"choice": str(c.expedition.get("choice", ""))
 	}

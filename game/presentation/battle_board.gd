@@ -12,10 +12,16 @@ const GOLD := Color("b79b64")
 const IVORY := Color("e5dbc0")
 const ALLY := Color("548f91")
 const ENEMY := Color("a85945")
+const MOVE_HINT := Color("79b9a5")
+const RANGE_HINT := Color("d2ab58")
+const BLOCKED_HINT := Color("8c7780")
+const TARGET_HINT := Color("d87970")
+const IMPACT_HINT := Color("b895cf")
 
 var _battle: Dictionary = {}
 var _selected: String = ""
 var _preview: Dictionary = {}
+var _action_overlay: Dictionary = {}
 var _hover := Vector2i(-1, -1)
 var _font: SystemFont
 var _scale: float = 1.0
@@ -53,6 +59,12 @@ func set_selected(unit_id: String) -> void:
 
 func set_preview(info: Dictionary) -> void:
 	_preview = info.duplicate(true)
+	queue_redraw()
+
+## Receives a rule-calculated action map. This view never derives range or targets.
+## {range_cells, blocked_cells, valid_targets, action_name, action_id}
+func set_action_overlay(info: Dictionary) -> void:
+	_action_overlay = info.duplicate(true)
 	queue_redraw()
 
 func set_animation_speed(speed: float) -> void:
@@ -224,6 +236,7 @@ func _draw() -> void:
 		for q in range(int(_battle.get("width", 9))):
 			_draw_cell(q, r)
 	_draw_preview()
+	_draw_action_overlay_ground()
 	var drawables: Array = []
 	for prop in _battle.get("props", []):
 		drawables.append({"value": prop, "type": "prop", "y": _hex_center(int(prop.get("q", 0)), int(prop.get("r", 0))).y})
@@ -236,6 +249,8 @@ func _draw() -> void:
 		else:
 			_draw_unit(item["value"])
 	_draw_effects()
+	_draw_action_overlay_foreground()
+	_draw_active_indicator()
 	_draw_legend()
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
@@ -300,24 +315,74 @@ func _draw_preview() -> void:
 	for cell in _preview.get("reachable", []):
 		if cell is Dictionary and cell.has("q") and cell.has("r"):
 			var center: Vector2 = _hex_center(int(cell.q), int(cell.r))
-			draw_colored_polygon(_hex_points(center, HEX_RADIUS - 5.0), Color(0.40, 0.68, 0.63, 0.13))
-			draw_circle(center, 2.1, Color("80ad9c"))
+			draw_colored_polygon(_hex_points(center, HEX_RADIUS - 5.0), Color(MOVE_HINT, 0.13))
+			draw_circle(center, 2.1, MOVE_HINT)
 	var valid: bool = bool(_preview.get("ok", false))
-	var color := Color(0.46, 0.76, 0.72, 0.33) if valid else Color(0.75, 0.38, 0.29, 0.28)
-	for cell in _preview.get("affected", []):
-		if cell is Dictionary and cell.has("q") and cell.has("r"):
-			var polygon: PackedVector2Array = _hex_points(_hex_center(int(cell["q"]), int(cell["r"])), HEX_RADIUS - 4.0)
-			draw_colored_polygon(polygon, color)
-			polygon.append(polygon[0])
-			draw_polyline(polygon, Color("c6ad76"), 1.6, true)
 	var path := PackedVector2Array()
 	for cell in _preview.get("path", []):
 		if cell is Dictionary and cell.has("q") and cell.has("r"):
 			path.append(_hex_center(int(cell["q"]), int(cell["r"])))
 	if path.size() > 1:
-		draw_polyline(path, Color("9cc7b5") if valid else Color("bc7864"), 2.5, true)
+		draw_polyline(path, MOVE_HINT if valid else Color("bc7864"), 2.5, true)
 	for point in path:
 		draw_circle(point, 3.5, Color("ded7a9"))
+
+func _draw_action_overlay_ground() -> void:
+	# Warm diamond marks communicate nominal attack reach, even across empty cells.
+	for cell in _action_overlay.get("range_cells", []):
+		if _is_cell_dictionary(cell):
+			var center := _hex_center(int(cell["q"]), int(cell["r"]))
+			draw_colored_polygon(_hex_points(center, HEX_RADIUS - 7.0), Color(RANGE_HINT, 0.10))
+			_draw_diamond(center, 8.0, RANGE_HINT, 1.4)
+	# A cross-hatched slate cell is geometrically in range, but line of sight is blocked.
+	for cell in _action_overlay.get("blocked_cells", []):
+		if _is_cell_dictionary(cell):
+			var center := _hex_center(int(cell["q"]), int(cell["r"]))
+			draw_colored_polygon(_hex_points(center, HEX_RADIUS - 6.0), Color(BLOCKED_HINT, 0.20))
+			draw_line(center + Vector2(-11, -9), center + Vector2(11, 9), BLOCKED_HINT, 2.0, true)
+			draw_line(center + Vector2(-11, 9), center + Vector2(11, -9), BLOCKED_HINT, 2.0, true)
+	# Area tools can affect most open cells. Keep their legal centres understated and below
+	# pieces, then reserve the full reticle for the one cell the player is inspecting.
+	if _is_area_cell_action():
+		for cell in _action_overlay.get("valid_targets", []):
+			if _is_cell_dictionary(cell):
+				_draw_target_reticle(_hex_center(int(cell["q"]), int(cell["r"])), 6.0, Color(TARGET_HINT, 0.62))
+
+func _draw_action_overlay_foreground() -> void:
+	# The preview is supplied by Battle.preview for the hovered cell. Draw its result above
+	# units so an area action remains visible when its centre contains a character or prop.
+	if bool(_preview.get("ok", false)) and str(_action_overlay.get("action_id", "")) != "move":
+		for cell in _preview.get("affected", []):
+			if _is_cell_dictionary(cell):
+				var polygon: PackedVector2Array = _hex_points(_hex_center(int(cell["q"]), int(cell["r"])), HEX_RADIUS - 4.0)
+				draw_colored_polygon(polygon, Color(IMPACT_HINT, 0.16))
+				polygon.append(polygon[0])
+				draw_polyline(polygon, IMPACT_HINT, 1.6, true)
+	# Unit and prop attacks retain strong foreground reticles. An area tool only promotes
+	# the currently legal hover centre, leaving the board and friendly pieces readable.
+	if _is_area_cell_action():
+		if bool(_preview.get("ok", false)) and _preview.has("q") and _preview.has("r"):
+			_draw_target_reticle(_hex_center(int(_preview["q"]), int(_preview["r"])))
+	else:
+		for cell in _action_overlay.get("valid_targets", []):
+			if _is_cell_dictionary(cell):
+				_draw_target_reticle(_hex_center(int(cell["q"]), int(cell["r"])))
+
+func _is_area_cell_action() -> bool:
+	return str(_action_overlay.get("action_id", "")) in ["oil", "fire", "water"]
+
+func _is_cell_dictionary(value: Variant) -> bool:
+	return value is Dictionary and value.has("q") and value.has("r")
+
+func _draw_diamond(center: Vector2, radius: float, color: Color, width: float = 1.0) -> void:
+	var points := PackedVector2Array([center + Vector2(0, -radius), center + Vector2(radius, 0), center + Vector2(0, radius), center + Vector2(-radius, 0), center + Vector2(0, -radius)])
+	draw_polyline(points, color, width, true)
+
+func _draw_target_reticle(center: Vector2, radius: float = 17.0, color: Color = TARGET_HINT) -> void:
+	draw_arc(center, radius, 0.0, TAU, 20, color, maxf(1.0, radius * 0.12), true)
+	for direction in [Vector2.UP, Vector2.RIGHT, Vector2.DOWN, Vector2.LEFT]:
+		draw_line(center + direction * radius * 1.24, center + direction * radius * 0.76, color, maxf(1.2, radius * 0.15), true)
+	draw_circle(center, maxf(1.4, radius * 0.19), color)
 
 func _draw_prop(prop: Dictionary) -> void:
 	var point: Vector2 = _hex_center(int(prop.get("q", 0)), int(prop.get("r", 0)))
@@ -359,8 +424,7 @@ func _draw_prop(prop: Dictionary) -> void:
 
 func _draw_unit(unit: Dictionary) -> void:
 	var unit_id: String = str(unit.get("id", ""))
-	var point: Vector2 = _hex_center(int(unit.get("q", 0)), int(unit.get("r", 0)))
-	var current: bool = unit_id == _active_id()
+	var point: Vector2 = _unit_display_point(unit)
 	var selected: bool = unit_id == _selected
 	var allied: bool = str(unit.get("team", "enemy")) == "player"
 	var accent: Color = ALLY if allied else ENEMY
@@ -369,20 +433,12 @@ func _draw_unit(unit: Dictionary) -> void:
 		draw_line(point + Vector2(-8, -7), point + Vector2(8, 5), Color("a28b69"), 3.0)
 		draw_line(point + Vector2(8, -7), point + Vector2(-8, 5), Color("a28b69"), 3.0)
 		return
-	if _motions.has(unit_id):
-		var motion: Dictionary = _motions[unit_id]
-		var progress: float = clampf(float(motion["time"]) / float(motion["duration"]), 0.0, 1.0)
-		if str(motion["kind"]) == "attack":
-			point = (motion["from"] as Vector2).lerp(motion["to"], sin(progress * PI))
-		else:
-			point = (motion["from"] as Vector2).lerp(motion["to"], progress * progress * (3.0 - 2.0 * progress))
-			point.y -= sin(progress * PI) * 5.0
 	if _flashes.has(unit_id):
 		point.x += sin(_clock * 95.0) * 2.5
 		accent = accent.lerp(IVORY, 0.45)
 	_ellipse(point + Vector2(2, 5), Vector2(25, 10), Color(0.0, 0.0, 0.0, 0.40))
-	if selected or current:
-		_ellipse(point + Vector2(0, 0), Vector2(27, 11), GOLD if current else Color("a1d0c5"))
+	if selected:
+		_ellipse(point + Vector2(0, 0), Vector2(27, 11), Color("a1d0c5"))
 	_ellipse(point + Vector2(0, 2), Vector2(22, 9), Color("131d21"))
 	_ellipse(point, Vector2(22, 8), accent.darkened(0.23))
 	_ellipse(point + Vector2(0, -2), Vector2(19, 6), Color("6b7465"))
@@ -393,15 +449,56 @@ func _draw_unit(unit: Dictionary) -> void:
 	else:
 		_draw_humanoid(body, kind, accent, allied)
 	_draw_bars(unit, point)
-	if current:
-		_polygon([Vector2(-4, 0), Vector2(4, 0), Vector2(0, 6)], point + Vector2(0, -76), GOLD)
-	if selected or (_hover.x == int(unit.get("q", -2)) and _hover.y == int(unit.get("r", -2))):
+	if (not selected) and _hover.x == int(unit.get("q", -2)) and _hover.y == int(unit.get("r", -2)):
 		var name_text: String = str(unit.get("name", "佣兵"))
 		_text(name_text, point + Vector2(-49, -64), 12, IVORY, 98, HORIZONTAL_ALIGNMENT_CENTER)
 	var statuses: Dictionary = unit.get("statuses", {})
 	if not statuses.is_empty():
 		draw_circle(point + Vector2(27, -28), 6.0, Color("202725"))
 		_text("!", point + Vector2(24, -24), 13, Color("e4bc6e"))
+
+func _unit_display_point(unit: Dictionary) -> Vector2:
+	var unit_id: String = str(unit.get("id", ""))
+	var point: Vector2 = _hex_center(int(unit.get("q", 0)), int(unit.get("r", 0)))
+	if not _motions.has(unit_id):
+		return point
+	var motion: Dictionary = _motions[unit_id]
+	var progress: float = clampf(float(motion["time"]) / float(motion["duration"]), 0.0, 1.0)
+	if str(motion["kind"]) == "attack":
+		return (motion["from"] as Vector2).lerp(motion["to"], sin(progress * PI))
+	point = (motion["from"] as Vector2).lerp(motion["to"], progress * progress * (3.0 - 2.0 * progress))
+	point.y -= sin(progress * PI) * 5.0
+	return point
+
+func _draw_active_indicator() -> void:
+	if not str(_battle.get("outcome", "")).is_empty():
+		return
+	var unit: Dictionary = _unit_by_id(_active_id())
+	if unit.is_empty() or int(unit.get("hp", 0)) <= 0:
+		return
+	var point := _unit_display_point(unit)
+	# Deliberately drawn after depth-sorted pieces: a foreground unit cannot hide whose turn it is.
+	_ellipse_outline(point + Vector2(0, 2), Vector2(33, 13), Color(GOLD, 0.86), 2.2)
+	_ellipse_outline(point + Vector2(0, 2), Vector2(27, 10), Color(IVORY, 0.90), 1.2)
+	for offset_x in [-31.0, 31.0]:
+		_draw_diamond(point + Vector2(offset_x, 2), 4.0, GOLD, 1.5)
+	var tag_top := clampf(point.y - 96.0, 63.0, 470.0)
+	var arrow_origin := Vector2(point.x, tag_top + 22.0)
+	_polygon([Vector2(-6, 0), Vector2(6, 0), Vector2(0, 10)], arrow_origin, GOLD, INK)
+	draw_rect(Rect2(Vector2(point.x - 60, tag_top), Vector2(120, 19)), Color("162022"))
+	draw_rect(Rect2(Vector2(point.x - 60, tag_top), Vector2(120, 19)), GOLD, false, 1.2)
+	var role_names := {"guard": "盾卫", "spear": "长枪", "archer": "弓手", "hunter": "猎人", "skirmisher": "游击", "raider": "劫掠", "dog": "战犬"}
+	var label := "%s · %s" % [str(unit.get("name", "佣兵")), str(role_names.get(str(unit.get("kind", "")), "佣兵"))]
+	if label.length() > 13:
+		label = label.substr(0, 12) + "…"
+	_text(label, Vector2(point.x - 56, tag_top + 14), 12, IVORY, 112, HORIZONTAL_ALIGNMENT_CENTER)
+
+func _ellipse_outline(center: Vector2, radius: Vector2, color: Color, width: float) -> void:
+	var points := PackedVector2Array()
+	for index in range(25):
+		var angle: float = TAU * float(index) / 24.0
+		points.append(center + Vector2(cos(angle) * radius.x, sin(angle) * radius.y))
+	draw_polyline(points, color, width, true)
 
 func _draw_humanoid(point: Vector2, kind: String, accent: Color, allied: bool) -> void:
 	var steel := Color("909b98")
@@ -504,11 +601,21 @@ func _draw_effects() -> void:
 func _draw_legend() -> void:
 	var items: Array = [["油", Color("b39a62")], ["水", Color("86b9bd")], ["火", Color("d88a51")], ["汽", Color("b2c8ba")]]
 	for index in range(items.size()):
-		var point := Vector2(37 + index * 63, 525)
+		var point := Vector2(37 + index * 43, 519)
 		_polygon([Vector2(0, -7), Vector2(5, -2), Vector2(0, 3), Vector2(-5, -2)], point, items[index][1])
-		_text(str(items[index][0]), point + Vector2(11, 3), 13, IVORY)
-	_text("上条生命 · 下条护甲 · 金标当前回合", Vector2(300, 528), 12, Color("a6ae98"))
-	_text("半身棋子样板", Vector2(627, 528), 12, GOLD, 139, HORIZONTAL_ALIGNMENT_RIGHT)
+		_text(str(items[index][0]), point + Vector2(9, 3), 12, IVORY)
+	_text("上条生命 · 下条护甲 · 双环/箭头=当前回合", Vector2(220, 522), 11, Color("a6ae98"))
+	draw_circle(Vector2(37, 541), 2.2, MOVE_HINT)
+	_text("移动", Vector2(44, 545), 11, IVORY)
+	_draw_diamond(Vector2(92, 540), 5.0, RANGE_HINT, 1.2)
+	_text("射程", Vector2(101, 545), 11, IVORY)
+	draw_line(Vector2(151, 535), Vector2(161, 545), BLOCKED_HINT, 1.8, true)
+	draw_line(Vector2(161, 535), Vector2(151, 545), BLOCKED_HINT, 1.8, true)
+	_text("遮挡", Vector2(166, 545), 11, IVORY)
+	_draw_target_reticle(Vector2(218, 540), 5.5)
+	_text("合法", Vector2(242, 545), 11, IVORY)
+	_text("▱ 波及", Vector2(291, 545), 11, IMPACT_HINT)
+	_text(str(_action_overlay.get("action_name", "")), Vector2(558, 545), 11, RANGE_HINT, 210, HORIZONTAL_ALIGNMENT_RIGHT)
 
 func _ellipse(center: Vector2, radius: Vector2, color: Color) -> void:
 	var points := PackedVector2Array()

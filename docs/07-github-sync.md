@@ -2,6 +2,12 @@
 
 更新：2026-09-18，首次同步已完成并已跨对话核对。
 
+## 第三台电脑 0.1.1 接续
+
+本轮基线为 `88c55c8`，实施前与收尾时均只读核对远端 main 相同，未覆盖其他电脑的提交。本轮包含战斗可读性、友军通行、两路线与旧档兼容；本地使用 `codex/battle-readability-routes` 隔离交付提交后快进 main，同步至原仓库。最终哈希以 Git 历史为准，不在同一提交中自引用哈希。未发布 Release。
+
+试玩包为 `builds/FantasyBrothers-0.1.1-windows.zip`，不会随源码推送；其他电脑可复制该压缩包或拉取后重建。个人存档也不经 Git 同步，转移规则见 `docs/10-framework-roadmap.md`。
+
 ## 目标
 
 将本项目同步到 GitHub 用户 `esesmalls` 名下的仓库 `fantasy-brothers`。当前远端已由用户创建为公开仓库；后续如需隐藏源码，再单独调整可见性。

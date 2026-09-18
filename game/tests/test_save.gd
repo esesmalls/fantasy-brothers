@@ -17,6 +17,8 @@ func _initialize() -> void:
 	_test_backup_rotation_and_recovery()
 	_test_rejected_data_preserves_primary()
 	_test_structural_validation()
+	_test_routes_and_legacy_upgrade()
+	_test_lethal_movement_save()
 	_cleanup()
 	print("Save store: %d checks; %d failures" % [checks, failures.size()])
 	for failure in failures:
@@ -180,3 +182,55 @@ func _test_structural_validation() -> void:
 	var bad_turn := battle_state.duplicate(true)
 	bad_turn.battle.turn_index = bad_turn.battle.order.size()
 	check(not Saves.validate(bad_turn).is_empty(), "battle turn index remains inside its order")
+
+func _test_routes_and_legacy_upgrade() -> void:
+	_cleanup()
+	var current := Campaign.create_campaign("free", 1842)
+	Campaign.start_expedition(current, "ridge")
+	var loaded := _save_and_load(current)
+	check(loaded.get("ok", false) and loaded.campaign == current, "ridge route and generated event survive exact reload")
+	_enter_battle(current)
+	loaded = _save_and_load(current)
+	check(loaded.get("ok", false) and loaded.campaign == current, "ridge route mission and full battle survive exact reload")
+	var damaged := current.duplicate(true)
+	damaged.expedition.erase("route_days")
+	check(not Saves.validate(damaged).is_empty(), "partially missing route metadata is rejected")
+	damaged = current.duplicate(true)
+	damaged.expedition.route_id = "unknown"
+	check(not Saves.validate(damaged).is_empty(), "unknown saved route is rejected")
+	var legacy := Campaign.create_campaign("free", 1843)
+	Campaign.start_expedition(legacy)
+	_enter_battle(legacy)
+	for key in ["route_id", "route_name", "route_food_cost", "route_days"]:
+		legacy.expedition.erase(key)
+	legacy.battle.mission.erase("route_id")
+	legacy.battle.mission.erase("route_name")
+	legacy.battle.rules_version = "prototype-0.1"
+	loaded = _save_and_load(legacy)
+	check(loaded.get("ok", false) and loaded.get("upgraded", false), "0.1 save loads with explicit compatibility upgrade")
+	if not loaded.get("ok", false):
+		return
+	var restored: Dictionary = loaded.campaign
+	check(restored.battle.rules_version == Battle.RULES_VERSION and restored.battle.migrated_from_rules == "prototype-0.1", "legacy battle records old rules version and adopts current rules")
+	check(restored.expedition.route_id == "road", "legacy expedition is assigned the existing road without a new choice")
+	check(restored.gold == legacy.gold and restored.food == legacy.food and restored.day == legacy.day, "legacy upgrade does not charge route cost or advance time")
+	check(restored.rng_state == legacy.rng_state and restored.battle.rng_state == legacy.battle.rng_state and restored.event == legacy.event, "legacy upgrade preserves random state and event candidates")
+	check(restored.battle.units == legacy.battle.units and restored.battle.action_log == legacy.battle.action_log, "legacy upgrade preserves units and completed actions")
+	var reloaded := _save_and_load(restored)
+	check(reloaded.get("ok", false) and not reloaded.get("upgraded", true) and reloaded.campaign == restored, "upgraded save is stable on subsequent round trips")
+
+func _test_lethal_movement_save() -> void:
+	_cleanup()
+	var c := Campaign.create_campaign("free", 1901)
+	Campaign.start_expedition(c)
+	_enter_battle(c)
+	var actor: Dictionary = Battle.active_unit(c.battle)
+	actor.hp = 1
+	actor.armor = 0
+	c.battle.cells["3,2"].field = "fire"
+	c.battle.cells["3,2"].expires = 3
+	var result := Battle.apply_action(c.battle, str(actor.id), "move", {"q": 3, "r": 2})
+	check(result.ok and actor.hp == 0 and c.battle.outcome == "", "lethal movement fixture leaves surviving allies in ongoing battle")
+	check(Battle.active_unit(c.battle).get("hp", 0) > 0, "lethal movement advances to a living actor before saving")
+	var loaded := _save_and_load(c)
+	check(loaded.get("ok", false) and loaded.campaign == c, "automatic-save boundary after movement death round trips exactly")

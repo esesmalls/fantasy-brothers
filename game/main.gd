@@ -37,6 +37,7 @@ var notice: String = ""
 var smoke_mode: bool = false
 var outcome_label: Label
 var reachable: Array = []
+var route_buttons: Dictionary = {}
 
 func _ready() -> void:
 	_build_theme()
@@ -104,7 +105,7 @@ func _build_shell() -> void:
 	_button(heading, "手动保存", _manual_save)
 	_button(heading, "读取手动档", _confirm_load)
 	_button(heading, "主菜单", _confirm_menu)
-	resources = _label("边境佣兵纪事   /   最小可玩验证 0.1", 17, MUTED)
+	resources = _label("边境佣兵纪事   /   最小可玩验证 0.1.1", 17, MUTED)
 	screen.add_child(resources)
 	banner = _label("", 16, GOLD)
 	screen.add_child(banner)
@@ -120,6 +121,7 @@ func _clear_body() -> void:
 		body.remove_child(child)
 		child.queue_free()
 	action_buttons.clear()
+	route_buttons.clear()
 	busy = false
 
 func _label(text: String, font_size: int = 17, color: Color = CREAM) -> Label:
@@ -163,7 +165,7 @@ func _panel(parent: Node, width: float = 0.0, expand: bool = true) -> VBoxContai
 func _show_title() -> void:
 	_clear_body()
 	banner.text = "序章   /   渡桥的钟声"
-	resources.text = "边境佣兵纪事   /   最小可玩验证 0.1"
+	resources.text = "边境佣兵纪事   /   最小可玩验证 0.1.1"
 	var columns: HBoxContainer = HBoxContainer.new()
 	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	body.add_child(columns)
@@ -272,6 +274,7 @@ func _show_campaign() -> void:
 	elif phase == "ready":
 		_text(story, "契约已立", 16, GOLD)
 		_text(story, str(campaign.expedition.title), 32)
+		_text(story, "行军路线 · " + str(campaign.expedition.get("route_name", "渡口旧道")), 18, GOLD)
 		_text(story, str(campaign.last_report), 20)
 		_text(story, "目标：击退所有敌人。\n额外承诺：保住粮仓，带回粮食与谢礼。\n死亡永久保留；生命与护甲损耗需要回营恢复。", 18, MUTED)
 		_text(actions, "抵达战场", 24, GOLD)
@@ -331,9 +334,18 @@ func _show_camp(story: VBoxContainer, actions: VBoxContainer) -> void:
 		_text(story, "团志 · 渡桥的钟声", 23, GOLD)
 		_text(story, str(campaign.flags.get("ending_text", "")), 17)
 	_text(story, "新的契约 · 雨夜粮仓", 25, GOLD)
-	_text(story, "出征消耗 2 份口粮。选择会改变补给、难度与报酬；守住粮仓另有谢礼。\n\n建议：恢复生命与护甲后再启程。油罐、水桶和木障碍都可以破坏；别把需要保护的粮仓点燃。", 18, MUTED)
+	_text(story, "先选路线，再处理途中事件。下列敌情、报酬与补给是出发时的准备，途中选择还会改变它们。", 16, MUTED)
+	for route: Dictionary in Campaign.get_routes(campaign):
+		var route_id: String = str(route.id)
+		var route_button: Button = _button(story, str(route.name) + "  ·  接约出征", func(): _start_expedition(route_id))
+		route_button.disabled = not bool(route.available)
+		route_buttons[route_id] = route_button
+		_text(story, str(route.description), 16, MUTED)
+		_text(story, "%d 粮 · %d 天  /  %s  /  报酬 %d 金\n油瓶 %d · 火种 %d · 水具 %d" % [int(route.food_cost), int(route.days), ["小股劫匪", "有备而来", "增援集结"][int(route.difficulty)], int(route.reward), int(route.supplies.oil), int(route.supplies.fire), int(route.supplies.water)], 16, GOLD)
+		if not bool(route.available):
+			_text(story, str(route.reason), 15, RED)
 	_text(actions, "整备与启程", 24, GOLD)
-	_button(actions, "接下契约  ·  出征", _start_expedition)
+	_text(actions, "在中间选择行军路线。\n建议先恢复生命与护甲。", 16, MUTED)
 	_button(actions, "休养一天", func(): _camp_action("rest"), "有粮消耗2粮，每人恢复18生命；缺粮恢复8。")
 	_button(actions, "补给口粮", func(): _camp_action("resupply"), "12金币购买最多6粮；缺钱缺粮时短工换粮。")
 	_button(actions, "修补护甲", func(): _camp_action("repair"), "每名受损队员4金币；无钱时用一天修补6护甲。")
@@ -346,8 +358,8 @@ func _show_camp(story: VBoxContainer, actions: VBoxContainer) -> void:
 func _camp_action(action: String) -> void:
 	_handle_campaign(Campaign.camp_action(campaign, action))
 
-func _start_expedition() -> void:
-	_handle_campaign(Campaign.start_expedition(campaign))
+func _start_expedition(route_id: String = "road") -> void:
+	_handle_campaign(Campaign.start_expedition(campaign, route_id))
 
 func _event_choice(choice: String) -> void:
 	_handle_campaign(Campaign.choose_event(campaign, choice))
@@ -435,6 +447,12 @@ func _refresh_battle(events: Array = []) -> void:
 	var active: Dictionary = Battle.active_unit(b)
 	var done: bool = not str(b.outcome).is_empty()
 	var player: bool = not active.is_empty() and str(active.team) == "player" and str(active.kind) != "dog"
+	if player:
+		var known_action := false
+		for action: Dictionary in Battle.get_actions(b, str(active.id)):
+			known_action = known_action or str(action.id) == selected_action
+		if not known_action:
+			selected_action = "move"
 	board.set_selected(str(active.get("id", "")))
 	var order_names: Array[String] = []
 	for unit_id in b.order:
@@ -450,7 +468,8 @@ func _refresh_battle(events: Array = []) -> void:
 	action_buttons.clear()
 	if player and not done:
 		for action: Dictionary in Battle.get_actions(b, str(active.id)):
-			var button: Button = _button(action_box, ("◆ " if selected_action == str(action.id) else "") + "%s\n%d 行动点" % [str(action.name), int(action.cost)], func(): _choose_action(str(action.id)), str(action.description))
+			var range_text: String = " · %d 格" % int(action.range) if str(action.target) != "self" and str(action.id) != "move" else ""
+			var button: Button = _button(action_box, ("◆ " if selected_action == str(action.id) else "") + "%s\n%d 行动点%s" % [str(action.name), int(action.cost), range_text], func(): _choose_action(str(action.id)), str(action.description))
 			button.custom_minimum_size.y = 46
 			button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			button.add_theme_font_size_override("font_size", 14)
@@ -459,7 +478,7 @@ func _refresh_battle(events: Array = []) -> void:
 	end_button.disabled = not player or done
 	end_button.visible = not done
 	resolve_button.visible = done
-	preview_label.text = "选择动作，将鼠标移到目标格查看结果；单击执行。" if player else "敌方正在行动……" if not done and str(active.get("team", "")) == "enemy" else "战犬正在执行指令……"
+	preview_label.text = "选择攻击或技能显示范围；移到目标格查看结果，单击执行。" if player else "敌方正在行动……" if not done and str(active.get("team", "")) == "enemy" else "战犬正在执行指令……"
 	preview_label.add_theme_color_override("font_color", CREAM)
 	if not done:
 		for prop: Dictionary in b.props:
@@ -483,6 +502,14 @@ func _refresh_battle(events: Array = []) -> void:
 				if Battle.preview(b, str(active.id), "move", {"q": q, "r": r}).ok:
 					reachable.append({"q": q, "r": r})
 	board.set_preview({"reachable": reachable})
+	var overlay: Dictionary = {}
+	if player and not done:
+		overlay = Battle.action_overlay(b, str(active.id), selected_action)
+		overlay.action_id = selected_action
+		for action: Dictionary in Battle.get_actions(b, str(active.id)):
+			if str(action.id) == selected_action:
+				overlay.action_name = str(action.name)
+	board.set_action_overlay(overlay)
 
 func _choose_action(action: String) -> void:
 	if not _can_command():
@@ -505,7 +532,12 @@ func _can_command() -> bool:
 	return not active.is_empty() and str(active.team) == "player" and str(active.kind) != "dog"
 
 func _on_cell_hovered(q: int, r: int) -> void:
-	if not _can_command() or q < 0 or r < 0:
+	if not _can_command():
+		return
+	if q < 0 or r < 0:
+		board.set_preview({"reachable": reachable})
+		preview_label.text = "选择动作，将鼠标移到目标格查看结果；单击执行。"
+		preview_label.add_theme_color_override("font_color", CREAM)
 		return
 	var active: Dictionary = Battle.active_unit(campaign.battle)
 	var p: Dictionary = Battle.preview(campaign.battle, str(active.id), selected_action, {"q": q, "r": r})
@@ -621,7 +653,7 @@ func _popup(title: String, message: String) -> void:
 	dialog.popup_centered()
 
 func _show_help() -> void:
-	_popup("行军手册", "每人每回合 6 行动点。移动每格 2 点，攻击通常 3 点。\n先选择右侧动作，再指向棋盘看预览，单击执行。\n\n盾击命中制造破绽；长枪攻击消耗破绽获得命中优势。\n攻击先损护甲，再损生命；火区直接伤害生命，也伤友军。\n油与火形成火区；水可以灭火，产生遮挡远程的蒸汽。\n主动脱离贴身敌人可能遭反击，推开不触发脱离反击。\n猎人花行动点下令，战犬在自己的回合跟随、牵制或撤回。\n\n消灭敌人获胜，保护粮仓获得额外回报；随时可以撤退。\n空格结束当前队员回合，Esc 切回移动。\n每次行动自动保存；手动存档独立保留，读取不会重抽候选。\n正常 / 加速 / 跳过仅改变表现，不改变结算。")
+	_popup("行军手册", "每人每回合 6 行动点。移动每格 2 点，攻击通常 3 点。\n友军可穿过，不能停在同一格；敌人和障碍仍会挡路。\n金色双环与头顶箭头指示当前行动者。\n点击攻击/技能显示射程，叉号表示遮挡，准星表示合法目标。\n先选择右侧动作，再指向棋盘看预览，单击执行。\n\n盾击命中制造破绽；长枪攻击消耗破绽获得命中优势。\n攻击先损护甲，再损生命；火区直接伤害生命，也伤友军。\n油与火形成火区；水可以灭火，产生遮挡远程的蒸汽。\n主动脱离贴身敌人可能遭反击，推开不触发脱离反击。\n猎人花行动点下令，战犬在自己的回合跟随、牵制或撤回。\n\n消灭敌人获胜，保护粮仓获得额外回报；随时可以撤退。\n空格结束当前队员回合，Esc 切回移动。\n每次行动自动保存；手动存档独立保留，读取不会重抽候选。\n正常 / 加速 / 跳过仅改变表现，不改变结算。")
 
 func _run_smoke() -> void:
 	var smoke = load("res://tests/ui_smoke.gd").new()

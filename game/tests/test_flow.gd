@@ -13,7 +13,8 @@ func _initialize() -> void:
 		for origin in ["free", "hunters"]:
 			var c: Dictionary = Campaign.create_campaign(origin, seed_value)
 			for expedition in range(3):
-				_check(Campaign.start_expedition(c).ok, "expedition starts")
+				var route_id: String = "ridge" if seed_value >= 1710 and int(c.food) >= 3 else "road"
+				_check(Campaign.start_expedition(c, route_id).ok, "expedition starts on " + route_id)
 				_check(Campaign.choose_event(c, str(c.event.choices[0].id)).ok, "legal event choice")
 				c.battle = Battle.create_battle(c.roster, seed_value + int(c.expedition.index) * 7919, Campaign.battle_config(c))
 				c.phase = "battle"

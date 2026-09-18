@@ -7,6 +7,7 @@ var failures: Array[String] = []
 
 func _initialize() -> void:
 	_test_origins_and_camp_recovery()
+	_test_expedition_routes()
 	_test_events_are_saved_and_have_safe_paths()
 	_test_result_claims_casualties_and_recovery()
 	_test_three_expedition_closure()
@@ -73,6 +74,72 @@ func state_signature(c: Dictionary) -> String:
 		int(c.get("expedition", {}).get("supplies", {}).get("oil", 0)), int(c.get("expedition", {}).get("supplies", {}).get("fire", 0)), int(c.get("expedition", {}).get("supplies", {}).get("water", 0)),
 		event_signature(c.get("event", {})), roster
 	])
+
+func route_by_id(routes: Array, route_id: String) -> Dictionary:
+	for route: Dictionary in routes:
+		if str(route.get("id", "")) == route_id:
+			return route
+	return {}
+
+func _test_expedition_routes() -> void:
+	var preview_campaign := Rules.create_campaign("free", 31)
+	var preview_before := JSON.stringify(preview_campaign)
+	var routes := Rules.get_routes(preview_campaign)
+	var road := route_by_id(routes, "road")
+	var ridge := route_by_id(routes, "ridge")
+	check(JSON.stringify(preview_campaign) == preview_before, "route preview is pure and does not advance campaign RNG or state")
+	var required_fields := ["id", "name", "description", "food_cost", "days", "difficulty", "reward", "supplies", "available", "reason"]
+	var complete_preview := routes.size() == 2
+	for route: Dictionary in routes:
+		for field: String in required_fields:
+			complete_preview = complete_preview and route.has(field)
+	check(complete_preview, "two route previews expose the complete stable UI contract")
+	check(str(road.get("name", "")) == "渡口旧道" and bool(road.get("available", false)) and int(road.get("food_cost", 0)) == 2 and int(road.get("days", 0)) == 1 and int(road.get("difficulty", -1)) == 0 and int(road.get("reward", 0)) == 42 and int(road.get("supplies", {}).get("oil", 0)) == 1, "ferry road preserves the prior first-expedition cost, risk, reward, and supplies")
+	check(bool(ridge.get("available", false)) and int(ridge.get("food_cost", 0)) == 3 and int(ridge.get("days", 0)) == 1 and int(ridge.get("difficulty", -1)) == 1 and int(ridge.get("reward", 0)) == 60 and int(ridge.get("supplies", {}).get("oil", 0)) == 2, "ridge trades one ration for higher risk, reward, and oil")
+	check(not str(road.get("reason", "")).is_empty() and not str(ridge.get("reason", "")).is_empty(), "available route previews explain that departure is possible")
+
+	var road_campaign := Rules.create_campaign("free", 32)
+	var road_preview := route_by_id(Rules.get_routes(road_campaign), "road")
+	var road_start := Rules.start_expedition(road_campaign)
+	var road_config := Rules.battle_config(road_campaign)
+	check(road_start.ok and int(road_campaign.food) == 6 and int(road_campaign.day) == 2 and str(road_campaign.expedition.route_id) == "road" and str(road_campaign.expedition.route_name) == str(road_preview.name) and int(road_campaign.expedition.route_food_cost) == int(road_preview.food_cost) and int(road_campaign.expedition.route_days) == int(road_preview.days), "default expedition remains the old road and saves its selected route")
+	check(int(road_campaign.expedition.difficulty) == int(road_preview.difficulty) and int(road_campaign.expedition.reward) == int(road_preview.reward) and JSON.stringify(road_campaign.expedition.supplies) == JSON.stringify(road_preview.supplies) and str(road_config.route_id) == "road" and str(road_config.route_name) == str(road_preview.name), "road preview, expedition, and battle mission use one configuration")
+	check(road_campaign.history.size() == 1 and str(road_campaign.history[0].type) == "departure" and str(road_campaign.history[0].route_id) == "road" and int(road_campaign.history[0].route_food_cost) == 2 and int(road_campaign.history[0].route_days) == 1, "departure history records route and its paid cost")
+	check(choose_first(road_campaign).ok and str(Rules.battle_config(road_campaign).route_id) == "road" and resolve_victory_to_camp(road_campaign).ok, "road selection survives event choice and battle settlement")
+
+	var ridge_campaign := Rules.create_campaign("hunters", 33)
+	var ridge_preview := route_by_id(Rules.get_routes(ridge_campaign), "ridge")
+	var ridge_start := Rules.start_expedition(ridge_campaign, "ridge")
+	var ridge_config := Rules.battle_config(ridge_campaign)
+	check(ridge_start.ok and int(ridge_campaign.food) == 5 and int(ridge_campaign.day) == 2 and str(ridge_campaign.expedition.route_id) == "ridge" and int(ridge_campaign.expedition.difficulty) == int(ridge_preview.difficulty) and int(ridge_campaign.expedition.reward) == int(ridge_preview.reward) and int(ridge_campaign.expedition.supplies.oil) == int(ridge_preview.supplies.oil) and str(ridge_config.route_id) == "ridge" and str(ridge_config.route_name) == str(ridge_preview.name), "ridge consequences reach the mission without creating a new battle or event path")
+
+	var insufficient := Rules.create_campaign("free", 34)
+	insufficient.food = 2
+	var insufficient_before := JSON.stringify(insufficient)
+	check(not bool(route_by_id(Rules.get_routes(insufficient), "ridge").get("available", true)) and not Rules.start_expedition(insufficient, "ridge").ok and JSON.stringify(insufficient) == insufficient_before, "unaffordable ridge is previewed and rejected without changing state or RNG")
+	insufficient.food = 1
+	insufficient_before = JSON.stringify(insufficient)
+	check(not Rules.start_expedition(insufficient).ok and JSON.stringify(insufficient) == insufficient_before, "unaffordable road is rejected without changing state or RNG")
+
+	var invalid := Rules.create_campaign("free", 35)
+	var invalid_before := JSON.stringify(invalid)
+	check(not Rules.start_expedition(invalid, "river").ok and JSON.stringify(invalid) == invalid_before, "unknown route is rejected before any campaign mutation")
+	check(Rules.start_expedition(invalid).ok, "valid road starts after an unknown-route rejection")
+	invalid_before = JSON.stringify(invalid)
+	check(not Rules.start_expedition(invalid, "ridge").ok and JSON.stringify(invalid) == invalid_before, "repeated departure cannot replace route, event, or RNG state")
+
+	var capped := Rules.create_campaign("free", 36)
+	capped.flags.expeditions_started = 4
+	var capped_road := route_by_id(Rules.get_routes(capped), "road")
+	var capped_ridge := route_by_id(Rules.get_routes(capped), "ridge")
+	check(int(capped_road.get("difficulty", -1)) == 2 and int(capped_ridge.get("difficulty", -1)) == 2 and "敌情已达当前区域上限" in str(capped_ridge.get("description", "")) and "补给与收益选择" in str(capped_ridge.get("description", "")), "capped ridge preview states that risk matches the road and choice is supplies for reward")
+
+	var recovery := Rules.create_campaign("free", 37)
+	recovery.flags.expeditions_started = 4
+	recovery.flags.last_outcome = "defeat"
+	var recovery_road := route_by_id(Rules.get_routes(recovery), "road")
+	var recovery_ridge := route_by_id(Rules.get_routes(recovery), "ridge")
+	check(int(recovery_road.get("difficulty", -1)) == 0 and int(recovery_ridge.get("difficulty", -1)) == 1 and "上次失利让敌情回落" in str(recovery_ridge.get("description", "")) and not "敌情已达当前区域上限" in str(recovery_ridge.get("description", "")), "failure recovery preview restores road to zero and describes the ridge's remaining added risk")
 
 func _test_origins_and_camp_recovery() -> void:
 	var free := Rules.create_campaign("free", 12)

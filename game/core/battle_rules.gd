@@ -1,6 +1,6 @@
 extends RefCounted
 # Pure, JSON-compatible rules. Presentation never changes these results.
-const RULES_VERSION = "prototype-0.1"
+const RULES_VERSION = "prototype-0.1.1"
 const DIRECTIONS = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]]
 const FIRE_DAMAGE = 10
 
@@ -108,6 +108,34 @@ static func get_actions(s: Dictionary, unit_id: String) -> Array:
 static func _act(id: String, title: String, cost: int, reach: int, description: String, target: String) -> Dictionary:
 	return {"id": id, "name": title, "cost": cost, "range": reach, "description": description, "target": target}
 
+static func action_overlay(s: Dictionary, unit_id: String, action_id: String) -> Dictionary:
+	# This is presentation data only. Target legality still comes exclusively from preview().
+	var result = {"range_cells": [], "blocked_cells": [], "valid_targets": []}
+	var u = _find_unit(s, unit_id)
+	if u.is_empty() or int(u.hp) <= 0:
+		return result
+	var action = {}
+	for candidate in get_actions(s, unit_id):
+		if candidate.id == action_id:
+			action = candidate
+			break
+	if action.is_empty() or action_id == "move" or action.target == "self":
+		return result
+	var reach = int(action.range)
+	for q in range(int(s.width)):
+		for r in range(int(s.height)):
+			var dist = _distance(int(u.q), int(u.r), q, r)
+			if dist > reach or (dist == 0 and action.target != "cell"):
+				continue
+			var cell = {"q": q, "r": r}
+			if not _action_line_clear(s, u, action_id, q, r, dist):
+				result.blocked_cells.append(cell)
+				continue
+			result.range_cells.append(cell)
+			if preview(s, unit_id, action_id, cell).ok:
+				result.valid_targets.append(cell)
+	return result
+
 static func preview(s: Dictionary, unit_id: String, action_id: String, target: Dictionary) -> Dictionary:
 	# apply_action consumes this same validated, calculated plan.
 	var p = {"ok": false, "reason": "", "summary": "", "chance": 100, "damage": 0, "cost": 0, "path": [], "affected": []}
@@ -164,7 +192,7 @@ static func preview(s: Dictionary, unit_id: String, action_id: String, target: D
 			return _invalid(p, "请选择敌人。")
 		if not victim.is_empty() and victim.team == u.team:
 			return _invalid(p, "不能攻击友军。")
-		if (dist > 1 or int(u.range) > 2) and not _line_clear(s, int(u.q), int(u.r), q, r, int(u.range) > 2 or action_id == "mark"):
+		if not _action_line_clear(s, u, action_id, q, r, dist):
 			return _invalid(p, "掩体或蒸汽遮挡视线。")
 		if action_id.begins_with("command") and _dog_for(s, unit_id).is_empty():
 			return _invalid(p, "没有存活且可接受指令的战犬。")
@@ -197,7 +225,7 @@ static func preview(s: Dictionary, unit_id: String, action_id: String, target: D
 			return _invalid(p, "超出投掷距离。")
 		if int(s.supplies.get(action_id, 0)) <= 0:
 			return _invalid(p, "此类补给已用尽。")
-		if dist > 1 and not _line_clear(s, int(u.q), int(u.r), q, r, true):
+		if not _action_line_clear(s, u, action_id, q, r, dist):
 			return _invalid(p, "掩体或蒸汽挡住投掷路线。")
 		p.affected = _area(s, q, r)
 		p.damage = 6 if action_id == "fire" else 0
@@ -231,6 +259,8 @@ static func apply_action(s: Dictionary, unit_id: String, action_id: String, targ
 	if action_id == "move":
 		var reacted = {}
 		for step in p.path:
+			if int(u.hp) <= 0:
+				break
 			u.ap = int(u.ap) - 2
 			for enemy in _disengagers(s, u, int(u.q), int(u.r), int(step.q), int(step.r)):
 				if reacted.has(enemy.id):
@@ -242,6 +272,10 @@ static func apply_action(s: Dictionary, unit_id: String, action_id: String, targ
 			if int(u.hp) <= 0:
 				break
 			_move_unit(s, u, int(step.q), int(step.r), events)
+			# Fire can kill after entering a path tile. Never continue moving or
+			# charging AP once the mover is dead.
+			if int(u.hp) <= 0:
+				break
 	else:
 		u.ap = int(u.ap) - int(p.cost)
 		var victim = _find_unit(s, str(p.get("target_id", "")))
@@ -282,7 +316,12 @@ static func apply_action(s: Dictionary, unit_id: String, action_id: String, targ
 			for tile in p.affected:
 				_apply_surface(s, int(tile.q), int(tile.r), action_id, events)
 	_check_outcome(s)
-	if s.outcome != "":
+	if s.outcome == "" and int(u.hp) <= 0:
+		# A mover can die to a reaction before entering the next tile or to fire
+		# after entering it. Advance through any further turn-start deaths now so
+		# no dead unit remains the active actor, and keep all events in this action.
+		events.append_array(end_turn(s))
+	elif s.outcome != "":
 		_emit(s, events, "status", "", "", -1, -1, "敌人被击退。" if s.outcome == "victory" else "佣兵团失去战斗能力。", 0)
 	return {"ok": true, "reason": "", "events": events}
 
@@ -381,7 +420,7 @@ static func end_turn(s: Dictionary) -> Array:
 		return events
 	var current = active_unit(s)
 	_record_action(s, str(current.get("id", "")), "end_turn", {})
-	if not current.is_empty():
+	if not current.is_empty() and int(current.hp) > 0:
 		current.ap = 0
 	for _attempt in range(s.order.size() * 3 + 1):
 		s.turn_index = int(s.turn_index) + 1
@@ -533,9 +572,21 @@ static func _detour_step(s: Dictionary, u: Dictionary, target: Dictionary) -> Di
 			previous_q = int(tile.q)
 			previous_r = int(tile.r)
 		if cost < best_cost:
-			best_cost = cost
-			best = route[0]
+			var landing = _first_route_landing(s, u, route)
+			if not landing.is_empty():
+				best_cost = cost
+				best = landing
 	return best
+
+static func _first_route_landing(s: Dictionary, u: Dictionary, route: Array) -> Dictionary:
+	# An AI unit may cross one or more allies in one action, but it must end on
+	# the first empty tile that fits its remaining AP.
+	var steps = mini(route.size(), int(u.ap) / 2)
+	for i in range(steps):
+		var tile = route[i]
+		if _walkable(s, int(tile.q), int(tile.r)):
+			return tile
+	return {}
 
 static func _record_action(s: Dictionary, actor: String, action: String, target: Dictionary) -> void:
 	s.action_seq = int(s.action_seq) + 1
@@ -568,6 +619,8 @@ static func _attack_damage(s: Dictionary, u: Dictionary, v: Dictionary, action: 
 	return damage
 
 static func _path(s: Dictionary, u: Dictionary, q: int, r: int, budget: int) -> Array:
+	# Landing requires an empty cell. Traversal additionally permits living
+	# allies (including dogs), while enemies and props remain hard blockers.
 	if not _walkable(s, q, r):
 		return []
 	var start = _key(int(u.q), int(u.r))
@@ -583,7 +636,7 @@ static func _path(s: Dictionary, u: Dictionary, q: int, r: int, budget: int) -> 
 			var nq = int(here.q) + int(d[0])
 			var nr = int(here.r) + int(d[1])
 			var nk = _key(nq, nr)
-			if came.has(nk) or not _walkable(s, nq, nr):
+			if came.has(nk) or not _traversable(s, u, nq, nr):
 				continue
 			came[nk] = hkey
 			costs[nk] = int(costs[hkey]) + 1
@@ -597,6 +650,15 @@ static func _path(s: Dictionary, u: Dictionary, q: int, r: int, budget: int) -> 
 				return result
 			frontier.append({"q": nq, "r": nr})
 	return []
+
+static func _action_line_clear(s: Dictionary, u: Dictionary, action_id: String, q: int, r: int, dist: int) -> bool:
+	if action_id in ["attack", "shield_bash", "push", "mark", "command_pin"]:
+		if dist <= 1 and int(u.range) <= 2:
+			return true
+		return _line_clear(s, int(u.q), int(u.r), q, r, int(u.range) > 2 or action_id == "mark")
+	if action_id in ["oil", "fire", "water"]:
+		return dist <= 1 or _line_clear(s, int(u.q), int(u.r), q, r, true)
+	return true
 
 static func _line_clear(s: Dictionary, aq: int, ar: int, bq: int, br: int, ranged: bool) -> bool:
 	var distance = _distance(aq, ar, bq, br)
@@ -639,6 +701,12 @@ static func _walkable(s: Dictionary, q: int, r: int) -> bool:
 	if not _inside(s, q, r) or s.cells[_key(q, r)].blocked:
 		return false
 	return _at(s, q, r).is_empty() and _prop_at(s, q, r).is_empty()
+
+static func _traversable(s: Dictionary, u: Dictionary, q: int, r: int) -> bool:
+	if not _inside(s, q, r) or s.cells[_key(q, r)].blocked or not _prop_at(s, q, r).is_empty():
+		return false
+	var occupant = _at(s, q, r)
+	return occupant.is_empty() or occupant.team == u.team
 
 static func _inside(s: Dictionary, q: int, r: int) -> bool:
 	return q >= 0 and r >= 0 and q < int(s.width) and r < int(s.height)

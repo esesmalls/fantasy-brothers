@@ -6,6 +6,9 @@ var failures: Array = []
 func _initialize() -> void:
 	_test_schema_events_and_atomicity()
 	_test_preview_and_costs()
+	_test_friendly_traversal_and_interruptions()
+	_test_dead_active_unit_advances()
+	_test_action_overlay()
 	_test_combo_and_miss()
 	_test_surfaces_and_props()
 	_test_fire_lifetime()
@@ -81,6 +84,194 @@ func _test_preview_and_costs() -> void:
 	check(Rules.active_unit(s).id == "g", "action does not silently skip remaining AP")
 	Rules.end_turn(s)
 	check(Rules.active_unit(s).id == "p" and s.units[1].ap == 6, "explicit turn end advances")
+
+func _test_friendly_traversal_and_interruptions() -> void:
+	var s = fixture()
+	s.units[2].q = 3
+	s.units[2].r = 2
+	var plan = Rules.preview(s, "g", "move", {"q": 2, "r": 4})
+	check(plan.ok and plan.path.size() == 2 and plan.path[0] == {"q": 2, "r": 3}, "movement path may cross a living ally")
+	var moved = Rules.apply_action(s, "g", "move", {"q": 2, "r": 4})
+	var reactions = 0
+	for event in moved.events:
+		if event.type == "attack" and event.actor == s.units[2].id:
+			reactions += 1
+	check(moved.ok and s.units[0].q == 2 and s.units[0].r == 4 and s.units[0].ap == 2, "ally traversal charges AP per entered tile and ends on the empty destination")
+	check(reactions == 1, "leaving control while crossing an ally still triggers one reaction")
+
+	var occupied = fixture()
+	var before = JSON.stringify(occupied)
+	var rejected = Rules.apply_action(occupied, "g", "move", {"q": 2, "r": 3})
+	check(not rejected.ok and JSON.stringify(occupied) == before, "an ally tile remains an invalid movement destination")
+
+	var enemy_block = fixture()
+	enemy_block.units[2].q = 2
+	enemy_block.units[2].r = 3
+	enemy_block.units[1].q = 7
+	enemy_block.units[1].r = 6
+	enemy_block.units[0].ap = 4
+	check(not Rules.preview(enemy_block, "g", "move", {"q": 2, "r": 4}).ok, "an enemy cannot be crossed even when the destination behind it is empty")
+	var prop_block = fixture()
+	prop_block.units[2].q = 7
+	prop_block.units[2].r = 6
+	prop_block.units[1].q = 7
+	prop_block.units[1].r = 5
+	prop_block.units[0].ap = 4
+	prop_block.props = [{"id": "barrier", "kind": "cover", "q": 2, "r": 3, "hp": 16, "max_hp": 16, "blocks": true}]
+	check(not Rules.preview(prop_block, "g", "move", {"q": 2, "r": 4}).ok, "a living prop remains a hard movement blocker")
+	prop_block.props = []
+	prop_block.cells["2,3"].blocked = true
+	check(not Rules.preview(prop_block, "g", "move", {"q": 2, "r": 4}).ok, "blocked terrain remains a hard movement blocker")
+
+	var fire = fixture()
+	fire.units[2].q = 7
+	fire.units[2].r = 6
+	fire.cells["2,3"].field = "fire"
+	fire.cells["2,3"].expires = 2
+	fire.units[0].hp = 15
+	var fire_move = Rules.apply_action(fire, "g", "move", {"q": 2, "r": 4})
+	check(fire_move.ok and fire.units[0].hp == 5 and fire.units[0].q == 2 and fire.units[0].r == 4, "a survivor takes path fire once and continues through the ally to its empty landing")
+	check(fire.units[0].q != fire.units[1].q or fire.units[0].r != fire.units[1].r, "a living mover never remains stacked with the crossed ally")
+
+	var lethal = fixture()
+	lethal.units[2].q = 7
+	lethal.units[2].r = 6
+	lethal.cells["2,3"].field = "fire"
+	lethal.cells["2,3"].expires = 2
+	lethal.units[0].hp = 5
+	var lethal_move = Rules.apply_action(lethal, "g", "move", {"q": 2, "r": 4})
+	var move_events = 0
+	for event in lethal_move.events:
+		if event.type == "move" and event.actor == "g":
+			move_events += 1
+	check(lethal.units[0].hp == 0 and lethal.units[0].q == 2 and lethal.units[0].r == 3, "lethal path fire stops movement on the tile where death occurred")
+	check(lethal.units[0].ap == 4 and move_events == 1, "death during movement prevents later steps and AP charges")
+
+	var ai_state = Rules.create_battle([{"id": "target", "kind": "guard"}], 43, {})
+	var target = ai_state.units[0]
+	var mover = ai_state.units[1]
+	var ally = ai_state.units[2]
+	_setup_ai_corridor(ai_state, target, mover, ally)
+	var ai_result = Rules.ai_step(ai_state)
+	check(ai_result.ok and mover.q == 2 and mover.r == 3 and mover.ap == 2, "enemy AI crosses its ally and lands on the first empty route tile")
+	check(ally.q == 2 and ally.r == 2, "AI ally traversal never displaces or overlaps the crossed unit at action end")
+
+func _setup_ai_corridor(s: Dictionary, target: Dictionary, mover: Dictionary, ally: Dictionary) -> void:
+	target.q = 2
+	target.r = 4
+	mover.q = 2
+	mover.r = 1
+	ally.q = 2
+	ally.r = 2
+	s.units = [target, mover, ally]
+	s.order = [target.id, mover.id, ally.id]
+	s.turn_index = 1
+	s.props = []
+	for pos in [[3, 1], [3, 0], [2, 0], [1, 1], [1, 2]]:
+		s.cells[Rules._key(int(pos[0]), int(pos[1]))].blocked = true
+
+func _test_dead_active_unit_advances() -> void:
+	var enemy_fire = Rules.create_battle([{"id": "target", "kind": "guard"}], 47, {})
+	var target = enemy_fire.units[0]
+	var mover = enemy_fire.units[1]
+	var next_enemy = enemy_fire.units[2]
+	var survivor = enemy_fire.units[3]
+	_setup_ai_corridor(enemy_fire, target, mover, next_enemy)
+	enemy_fire.units.append(survivor)
+	enemy_fire.order.append(survivor.id)
+	survivor.q = 6
+	survivor.r = 5
+	mover.hp = 5
+	mover.armor = 0
+	next_enemy.hp = 5
+	next_enemy.armor = 0
+	enemy_fire.cells["2,2"].field = "fire"
+	enemy_fire.cells["2,2"].expires = 2
+	var fire_result = Rules.ai_step(enemy_fire)
+	var fire_deaths = 0
+	for event in fire_result.events:
+		if event.type == "death" and event.target in [mover.id, next_enemy.id]:
+			fire_deaths += 1
+	check(fire_result.ok and mover.hp == 0 and mover.ap == 4 and mover.q == 2 and mover.r == 2, "enemy death on path fire stops movement and charges only the entered step")
+	check(next_enemy.hp == 0 and fire_deaths == 2, "automatic turn advance merges a chained turn-start fire death into the movement events")
+	check(Rules.active_unit(enemy_fire).id == survivor.id and survivor.hp > 0, "chained fire deaths leave the next living enemy active")
+	var survivor_before = int(survivor.ap)
+	var continued_enemy = Rules.ai_step(enemy_fire)
+	check(continued_enemy.ok and (int(survivor.ap) < survivor_before or Rules.active_unit(enemy_fire).id != survivor.id), "enemy AI can continue after chained active-unit deaths")
+
+	var dog_state = Rules.create_battle([
+		{"id": "hunter", "kind": "hunter"},
+		{"id": "dog", "kind": "dog"}], 53, {})
+	var hunter = dog_state.units[0]
+	var dog = dog_state.units[1]
+	var reactor = dog_state.units[2]
+	var commanded = dog_state.units[3]
+	hunter.q = 7
+	hunter.r = 6
+	dog.q = 2
+	dog.r = 2
+	dog.hp = 5
+	dog.armor = 0
+	dog.command = "pin"
+	dog.command_target = commanded.id
+	reactor.q = 3
+	reactor.r = 1
+	reactor.accuracy = 95
+	commanded.q = 2
+	commanded.r = 5
+	dog_state.props = []
+	dog_state.turn_index = 1
+	dog_state.rng_state = 1
+	var dog_result = Rules.ai_step(dog_state)
+	var reaction_seen = false
+	for event in dog_result.events:
+		if event.type == "attack" and event.actor == reactor.id and event.target == dog.id:
+			reaction_seen = true
+	check(dog_result.ok and reaction_seen and dog.hp == 0 and dog.ap == 4 and dog.q == 2 and dog.r == 2, "reaction death stops commanded dog movement without extra AP or steps")
+	check(Rules.active_unit(dog_state).id == reactor.id and reactor.hp > 0, "dead dog automatically yields to the next living enemy")
+	var enemy_follow_up = Rules.ai_step(dog_state)
+	check(enemy_follow_up.ok, "enemy AI progresses normally after the dog reaction death")
+
+func _test_action_overlay() -> void:
+	var clear = fixture()
+	clear.units[0].kind = "archer"
+	clear.units[0].range = 4
+	clear.units[2].q = 4
+	clear.units[2].r = 2
+	var before = JSON.stringify(clear)
+	var overlay = Rules.action_overlay(clear, "g", "attack")
+	check(JSON.stringify(clear) == before, "action overlay is read-only, including RNG and action history")
+	check(_has_cell(overlay.range_cells, 3, 2) and _has_cell(overlay.range_cells, 4, 2), "attack overlay includes empty and occupied cells with clear geometry")
+	check(_has_cell(overlay.valid_targets, 4, 2) and not _has_cell(overlay.valid_targets, 3, 2), "overlay valid targets come from attack preview legality")
+	var matches_preview = true
+	for cell in overlay.range_cells:
+		if Rules.preview(clear, "g", "attack", cell).ok != _has_cell(overlay.valid_targets, int(cell.q), int(cell.r)):
+			matches_preview = false
+	check(matches_preview, "every clear overlay cell uses the same preview result as actual settlement")
+
+	var blocked = clear.duplicate(true)
+	blocked.props = [{"id": "cover", "kind": "cover", "q": 3, "r": 2, "hp": 16, "max_hp": 16, "blocks": true}]
+	var blocked_overlay = Rules.action_overlay(blocked, "g", "attack")
+	check(_has_cell(blocked_overlay.range_cells, 3, 2) and _has_cell(blocked_overlay.valid_targets, 3, 2), "an attackable blocking prop remains a valid endpoint")
+	check(_has_cell(blocked_overlay.blocked_cells, 4, 2) and not _has_cell(blocked_overlay.range_cells, 4, 2), "cells behind cover are classified as line-blocked")
+	check(not Rules.preview(blocked, "g", "attack", {"q": 4, "r": 2}).ok, "blocked overlay classification agrees with attack preview")
+
+	var no_resource = fixture()
+	no_resource.supplies.fire = 0
+	var resource_before = JSON.stringify(no_resource)
+	var fire_overlay = Rules.action_overlay(no_resource, "g", "fire")
+	check(not fire_overlay.range_cells.is_empty() and fire_overlay.valid_targets.is_empty(), "missing inventory preserves geometric tool range but exposes no legal targets")
+	check(JSON.stringify(no_resource) == resource_before, "resource-gated overlay does not mutate supplies or state")
+	no_resource.supplies.fire = 1
+	no_resource.units[0].ap = 0
+	var no_ap_overlay = Rules.action_overlay(no_resource, "g", "fire")
+	check(not no_ap_overlay.range_cells.is_empty() and no_ap_overlay.valid_targets.is_empty(), "insufficient AP preserves geometric range but exposes no legal targets")
+
+func _has_cell(cells: Array, q: int, r: int) -> bool:
+	for cell in cells:
+		if int(cell.q) == q and int(cell.r) == r:
+			return true
+	return false
 
 func _test_combo_and_miss() -> void:
 	var s = fixture()
@@ -270,7 +461,7 @@ func _test_save_replay() -> void:
 	var b = Rules.apply_action(restored, "g", "shield_bash", {"q": 3, "r": 2})
 	check(JSON.stringify(a.events) == JSON.stringify(b.events), "JSON restored seed produces identical combat events")
 	check(JSON.stringify(JSON.parse_string(JSON.stringify(s))) == JSON.stringify(JSON.parse_string(JSON.stringify(restored))), "JSON restored next full state matches")
-	check(s.rules_version == "prototype-0.1" and s.action_seq == 1, "rule version and root action are saved")
+	check(s.rules_version == "prototype-0.1.1" and s.action_seq == 1, "rule version and root action are saved")
 	var preview_copy = JSON.stringify(s)
 	for _i in range(30):
 		Rules.preview(s, "g", "move", {"q": 0, "r": 1})

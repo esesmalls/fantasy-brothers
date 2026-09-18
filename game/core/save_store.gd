@@ -6,7 +6,8 @@ const MAX_BYTES = 8 * 1024 * 1024
 const MAX_JSON_DEPTH = 40
 const MAX_SAFE_JSON_INT = 9007199254740991
 const RNG_MAX = 2147483646
-const BATTLE_RULES_VERSION = "prototype-0.1"
+const BATTLE_RULES_VERSION = "prototype-0.1.1"
+const LEGACY_BATTLE_RULES_VERSION = "prototype-0.1"
 const UNIT_KINDS = ["guard", "spear", "archer", "skirmisher", "hunter", "dog", "raider"]
 const PERKS = ["vigor", "precision", "breacher", "firewise", "packbond"]
 
@@ -92,7 +93,29 @@ static func _read(path: String) -> Dictionary:
 	_canonicalize_numbers(data)
 	if not validate(data).is_empty():
 		return {"ok": false}
-	return {"ok": true, "campaign": data, "reason": "已读取存档"}
+	var upgraded: bool = _upgrade_loaded(data)
+	return {"ok": true, "campaign": data, "upgraded": upgraded, "reason": "已读取存档；旧版进度已兼容，后续行动使用 0.1.1 规则。" if upgraded else "已读取存档"}
+
+static func _upgrade_loaded(c: Dictionary) -> bool:
+	# Only upgrade after checksum and full structural validation. Never reroll
+	# events or RNG, re-charge a route, or replay completed actions.
+	var upgraded := false
+	var expedition: Dictionary = c.expedition
+	if not expedition.is_empty() and not expedition.has("route_id"):
+		expedition.route_id = "road"
+		expedition.route_name = "渡口旧道"
+		expedition.route_food_cost = 2
+		expedition.route_days = 1
+		upgraded = true
+	var battle: Dictionary = c.battle
+	if not battle.is_empty() and str(battle.get("rules_version", "")) == LEGACY_BATTLE_RULES_VERSION:
+		battle.migrated_from_rules = LEGACY_BATTLE_RULES_VERSION
+		battle.rules_version = BATTLE_RULES_VERSION
+		if battle.get("mission") is Dictionary:
+			battle.mission.route_id = expedition.get("route_id", "road")
+			battle.mission.route_name = expedition.get("route_name", "渡口旧道")
+		upgraded = true
+	return upgraded
 
 static func validate(c: Dictionary) -> String:
 	if not _json_safe(c):
@@ -162,6 +185,17 @@ static func _validate_expedition(expedition: Dictionary) -> String:
 		return "远征补给损坏。"
 	if not expedition.get("participant_ids") is Array or not _unique_nonempty_strings(expedition.participant_ids):
 		return "远征参与者损坏。"
+	var route_fields: Array = ["route_id", "route_name", "route_food_cost", "route_days"]
+	var has_route := false
+	for key in route_fields:
+		has_route = has_route or expedition.has(key)
+	if has_route:
+		if not expedition.has_all(route_fields) or not expedition.route_id is String or not str(expedition.route_id) in ["road", "ridge"]:
+			return "远征路线记录损坏。"
+		if not expedition.route_name is String or str(expedition.route_name).is_empty():
+			return "远征路线名称缺失。"
+		if not _is_integer(expedition.route_food_cost, 0, MAX_SAFE_JSON_INT) or not _is_integer(expedition.route_days, 1, MAX_SAFE_JSON_INT):
+			return "远征路线代价损坏。"
 	return ""
 
 static func _validate_event(event: Dictionary, require_selection: bool) -> String:
@@ -222,7 +256,7 @@ static func _validate_growth(offers: Array, expedition_id: String) -> String:
 	return ""
 
 static func _validate_battle(b: Dictionary, expedition_id: String) -> String:
-	if not _is_integer(b.get("schema", null), 1, 1) or str(b.get("rules_version", "")) != BATTLE_RULES_VERSION:
+	if not _is_integer(b.get("schema", null), 1, 1) or not str(b.get("rules_version", "")) in [BATTLE_RULES_VERSION, LEGACY_BATTLE_RULES_VERSION]:
 		return "战斗版本不兼容。"
 	if str(b.get("id", "")) != expedition_id:
 		return "战斗与远征编号不匹配。"
