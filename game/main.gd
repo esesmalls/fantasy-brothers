@@ -4,6 +4,8 @@ const Campaign = preload("res://core/campaign_rules.gd")
 const Battle = preload("res://core/battle_rules.gd")
 const Saves = preload("res://core/save_store.gd")
 const Board = preload("res://presentation/battle_board.gd")
+const BattleHUD = preload("res://presentation/battle_hud.gd")
+const Inspection = preload("res://presentation/battle_inspection.gd")
 const CREAM = Color("e7ddc6")
 const MUTED = Color("9caeaa")
 const GOLD = Color("c8aa6e")
@@ -38,6 +40,9 @@ var smoke_mode: bool = false
 var outcome_label: Label
 var reachable: Array = []
 var route_buttons: Dictionary = {}
+var battle_hud: Control
+var hovered_unit_id: String = ""
+var hovered_cell := Vector2i(-1, -1)
 
 func _ready() -> void:
 	_build_theme()
@@ -105,7 +110,7 @@ func _build_shell() -> void:
 	_button(heading, "手动保存", _manual_save)
 	_button(heading, "读取手动档", _confirm_load)
 	_button(heading, "主菜单", _confirm_menu)
-	resources = _label("边境佣兵纪事   /   最小可玩验证 0.1.1", 17, MUTED)
+	resources = _label("边境佣兵纪事   /   最小可玩验证 0.1.2", 17, MUTED)
 	screen.add_child(resources)
 	banner = _label("", 16, GOLD)
 	screen.add_child(banner)
@@ -117,6 +122,13 @@ func _build_shell() -> void:
 
 func _clear_body() -> void:
 	board = null
+	if is_instance_valid(battle_hud):
+		remove_child(battle_hud)
+		battle_hud.queue_free()
+	battle_hud = null
+	hovered_unit_id = ""
+	hovered_cell = Vector2i(-1, -1)
+	screen.show()
 	for child in body.get_children():
 		body.remove_child(child)
 		child.queue_free()
@@ -165,7 +177,7 @@ func _panel(parent: Node, width: float = 0.0, expand: bool = true) -> VBoxContai
 func _show_title() -> void:
 	_clear_body()
 	banner.text = "序章   /   渡桥的钟声"
-	resources.text = "边境佣兵纪事   /   最小可玩验证 0.1.1"
+	resources.text = "边境佣兵纪事   /   最小可玩验证 0.1.2"
 	var columns: HBoxContainer = HBoxContainer.new()
 	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	body.add_child(columns)
@@ -229,6 +241,9 @@ func _autosave() -> void:
 	var result: Dictionary = Saves.save_campaign(campaign, save_path)
 	footer.text = "自动保存 · " + Time.get_time_string_from_system() if result.ok else str(result.reason)
 	footer.add_theme_color_override("font_color", MUTED if result.ok else RED)
+	if is_instance_valid(battle_hud):
+		battle_hud.save_label.text = "已自动保存 · 空格结束回合" if result.ok else str(result.reason)
+		battle_hud.save_label.add_theme_color_override("font_color", MUTED if result.ok else RED)
 
 func _manual_save() -> void:
 	if campaign.is_empty():
@@ -386,56 +401,24 @@ func _enter_battle() -> void:
 	_show_campaign()
 
 func _show_battle() -> void:
-	var columns: HBoxContainer = HBoxContainer.new()
-	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	body.add_child(columns)
-	var field: VBoxContainer = VBoxContainer.new()
-	field.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	columns.add_child(field)
-	turn_label = _text(field, "", 16, MUTED)
+	screen.hide()
+	battle_hud = BattleHUD.new()
+	add_child(battle_hud)
 	board = Board.new()
-	board.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	board.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	field.add_child(board)
+	battle_hud.build(self, board)
 	board.cell_clicked.connect(_on_cell_clicked)
 	board.cell_hovered.connect(_on_cell_hovered)
+	board.unit_hovered.connect(_on_unit_hovered)
 	board.set_animation_speed(animation_speed)
-	outcome_label = _text(field, "目标：击退敌人  ·  尽量保住粮仓  ·  点击动作后，在棋盘选择目标", 17, GOLD)
-	var side_panel: PanelContainer = PanelContainer.new()
-	side_panel.custom_minimum_size.x = 325
-	columns.add_child(side_panel)
-	var sidebar: VBoxContainer = VBoxContainer.new()
-	sidebar.add_theme_constant_override("separation", 8)
-	side_panel.add_child(sidebar)
-	active_label = _text(sidebar, "", 22, GOLD)
-	supplies_label = _text(sidebar, "", 15, MUTED)
-	var action_scroll: ScrollContainer = ScrollContainer.new()
-	action_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	action_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	sidebar.add_child(action_scroll)
-	var action_content: VBoxContainer = VBoxContainer.new()
-	action_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	action_content.add_theme_constant_override("separation", 9)
-	action_scroll.add_child(action_content)
-	action_box = GridContainer.new()
-	action_box.columns = 2
-	action_box.add_theme_constant_override("h_separation", 6)
-	action_box.add_theme_constant_override("v_separation", 6)
-	action_content.add_child(action_box)
-	preview_label = _text(action_content, "", 16)
-	preview_label.custom_minimum_size.y = 80
-	_text(action_content, "交锋记录", 19, GOLD)
-	log_label = _text(action_content, "", 14, MUTED)
-	end_button = _button(sidebar, "结束此人回合  [空格]", _end_turn)
-	resolve_button = _button(sidebar, "清点伤亡，返回营地", _resolve)
-	_button(sidebar, "撤离战场", func(): _confirm("撤离战场？", "未完成契约没有报酬；伤亡、消耗与粮仓失守都会计入结果。", _retreat))
-	var speeds: HBoxContainer = HBoxContainer.new()
-	speeds.add_theme_constant_override("separation", 5)
-	sidebar.add_child(speeds)
-	for entry in [["正常", 1.0], ["加速", 3.0], ["跳过", 0.0]]:
-		var value: float = float(entry[1])
-		var speed_button: Button = _button(speeds, str(entry[0]), func(): _set_speed(value))
-		speed_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	active_label = battle_hud.active_label
+	preview_label = battle_hud.preview_label
+	turn_label = battle_hud.turn_label
+	outcome_label = battle_hud.outcome_label
+	log_label = battle_hud.log_label
+	supplies_label = battle_hud.supplies_label
+	action_box = battle_hud.action_box
+	end_button = battle_hud.end_button
+	resolve_button = battle_hud.resolve_button
 	_refresh_battle()
 
 func _refresh_battle(events: Array = []) -> void:
@@ -454,27 +437,17 @@ func _refresh_battle(events: Array = []) -> void:
 		if not known_action:
 			selected_action = "move"
 	board.set_selected(str(active.get("id", "")))
-	var order_names: Array[String] = []
-	for unit_id in b.order:
-		for unit in b.units:
-			if str(unit.id) == str(unit_id) and int(unit.hp) > 0:
-				order_names.append(("▶ " if str(unit_id) == str(active.get("id", "")) else "") + str(unit.name))
-	turn_label.text = "第 %d 轮   /   %s" % [int(b.round), "  ·  ".join(order_names)]
-	active_label.text = "交锋结束" if done else "%s · %s\n行动点 %d / %d" % [str(active.get("name", "")), str(KINDS.get(active.get("kind", ""), "")), int(active.get("ap", 0)), int(active.get("max_ap", 6))]
-	supplies_label.text = "油瓶 %d   火种 %d   水具 %d" % [int(b.supplies.oil), int(b.supplies.fire), int(b.supplies.water)]
-	for child in action_box.get_children():
-		action_box.remove_child(child)
-		child.queue_free()
+	active_label.text = "交锋结束" if done else "%s · %s" % [str(active.get("name", "")), str(KINDS.get(active.get("kind", ""), ""))]
+	for container in [action_box, battle_hud.item_box]:
+		for child in container.get_children():
+			container.remove_child(child)
+			child.queue_free()
 	action_buttons.clear()
 	if player and not done:
 		for action: Dictionary in Battle.get_actions(b, str(active.id)):
-			var range_text: String = " · %d 格" % int(action.range) if str(action.target) != "self" and str(action.id) != "move" else ""
-			var button: Button = _button(action_box, ("◆ " if selected_action == str(action.id) else "") + "%s\n%d 行动点%s" % [str(action.name), int(action.cost), range_text], func(): _choose_action(str(action.id)), str(action.description))
-			button.custom_minimum_size.y = 46
-			button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			button.add_theme_font_size_override("font_size", 14)
-			button.disabled = int(active.ap) < int(action.cost) or (str(action.id) in ["oil", "fire", "water"] and int(b.supplies.get(action.id, 0)) <= 0)
-			action_buttons[str(action.id)] = button
+			var id: String = str(action.id)
+			var unavailable: bool = int(active.ap) < int(action.cost) or (id in ["oil", "fire", "water"] and int(b.supplies.get(id, 0)) <= 0)
+			action_buttons[id] = battle_hud.make_action_button(action, int(b.supplies.get(id, 0)), selected_action == id, unavailable)
 	end_button.disabled = not player or done
 	end_button.visible = not done
 	resolve_button.visible = done
@@ -483,18 +456,13 @@ func _refresh_battle(events: Array = []) -> void:
 	if not done:
 		for prop: Dictionary in b.props:
 			if str(prop.kind) == "grain":
-				outcome_label.text = "目标：击退敌人  /  粮仓耐久 %d/%d  /  %s" % [maxi(0, int(prop.hp)), int(prop.max_hp), "守住粮仓有额外谢礼" if int(prop.hp) > 0 else "粮仓已毁，仍可完成契约"]
+				outcome_label.text = "粮仓 %d/%d  ·  %s" % [maxi(0, int(prop.hp)), int(prop.max_hp), "击退敌人，守住粮食" if int(prop.hp) > 0 else "粮仓已毁，仍可完成契约"]
 	if player and int(active.ap) < 2:
 		preview_label.text = "行动点即将耗尽。可以结束此人的回合。"
 	if done:
 		var names: Dictionary = {"victory": "胜利 · 敌人已被击退", "defeat": "败北 · 队伍无人幸存", "retreat": "撤离 · 誓约留下了代价"}
 		outcome_label.text = str(names.get(b.outcome, b.outcome))
 		preview_label.text = "战斗结果已保存。清点伤亡与报酬后，决定佣兵团接下来的路。"
-	var lines: Array[String] = []
-	for entry in b.log.slice(maxi(0, b.log.size() - 5)):
-		lines.append(str(entry.get("text", "")) if entry is Dictionary else str(entry))
-	log_label.text = "\n".join(lines)
-	banner.text = "盾击制造破绽 → 长枪利用   /   油 + 火 → 火区   /   水 + 火 → 蒸汽"
 	reachable = []
 	if player and not done and selected_action == "move":
 		for q in range(9):
@@ -510,6 +478,10 @@ func _refresh_battle(events: Array = []) -> void:
 			if str(action.id) == selected_action:
 				overlay.action_name = str(action.name)
 	board.set_action_overlay(overlay)
+	battle_hud.refresh_actor(active, b)
+	_hide_inspection()
+	if hovered_cell.x >= 0 and hovered_cell.y >= 0:
+		_on_cell_hovered(hovered_cell.x, hovered_cell.y)
 
 func _choose_action(action: String) -> void:
 	if not _can_command():
@@ -531,30 +503,39 @@ func _can_command() -> bool:
 	var active: Dictionary = Battle.active_unit(campaign.battle)
 	return not active.is_empty() and str(active.team) == "player" and str(active.kind) != "dog"
 
+func _on_unit_hovered(unit_id: String) -> void:
+	hovered_unit_id = unit_id
+
 func _on_cell_hovered(q: int, r: int) -> void:
-	if not _can_command():
+	if board == null or campaign.is_empty() or str(campaign.phase) != "battle" or modal_open:
 		return
+	hovered_cell = Vector2i(q, r)
 	if q < 0 or r < 0:
 		board.set_preview({"reachable": reachable})
-		preview_label.text = "选择动作，将鼠标移到目标格查看结果；单击执行。"
-		preview_label.add_theme_color_override("font_color", CREAM)
+		_hide_inspection()
 		return
-	var active: Dictionary = Battle.active_unit(campaign.battle)
-	var p: Dictionary = Battle.preview(campaign.battle, str(active.id), selected_action, {"q": q, "r": r})
-	p.reachable = reachable
-	board.set_preview(p)
-	var detail: String = ""
+	var p: Dictionary = {}
+	if _can_command():
+		var active: Dictionary = Battle.active_unit(campaign.battle)
+		p = Battle.preview(campaign.battle, str(active.id), selected_action, {"q": q, "r": r})
+		p.reachable = reachable
+		board.set_preview(p)
+		preview_label.text = str(p.summary)
+		preview_label.add_theme_color_override("font_color", CREAM if p.ok else RED)
+	var info: Dictionary = Inspection.inspect_cell(campaign.battle, q, r, hovered_unit_id)
+	battle_hud.show_inspection(info, p)
+
+func _inspect_unit(unit_id: String) -> void:
+	if board == null or campaign.is_empty() or str(campaign.phase) != "battle" or modal_open:
+		return
 	for unit: Dictionary in campaign.battle.units:
-		if int(unit.q) == q and int(unit.r) == r and int(unit.hp) > 0:
-			detail = "\n%s · 生命 %d/%d · 护甲 %d/%d" % [str(unit.name), int(unit.hp), int(unit.max_hp), int(unit.armor), int(unit.max_armor)]
-			var status_names: Dictionary = {"exposed": "破绽", "marked": "标记", "defending": "戒备", "pinned": "牵制"}
-			for status in unit.statuses:
-				detail += " / " + str(status_names.get(status, status))
-	for prop: Dictionary in campaign.battle.props:
-		if int(prop.q) == q and int(prop.r) == r and int(prop.hp) > 0:
-			detail += "\n%s · 耐久 %d/%d" % [str({"oil": "油罐", "water": "水桶", "cover": "木障碍", "grain": "粮仓"}.get(prop.kind, prop.kind)), int(prop.hp), int(prop.max_hp)]
-	preview_label.text = str(p.summary) + detail
-	preview_label.add_theme_color_override("font_color", CREAM if p.ok else RED)
+		if str(unit.id) == unit_id:
+			battle_hud.show_inspection(Inspection.inspect_cell(campaign.battle, int(unit.q), int(unit.r), unit_id))
+			return
+
+func _hide_inspection() -> void:
+	if is_instance_valid(battle_hud):
+		battle_hud.inspection_panel.hide()
 
 func _on_cell_clicked(q: int, r: int) -> void:
 	if _can_command():
@@ -580,6 +561,8 @@ func _end_turn() -> void:
 	ai_timer = 0.55
 
 func _process(delta: float) -> void:
+	if is_instance_valid(battle_hud):
+		battle_hud.position_inspection()
 	if board == null or campaign.is_empty() or str(campaign.phase) != "battle" or modal_open or smoke_mode:
 		return
 	ai_timer -= delta
@@ -619,6 +602,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		_refresh_battle()
 
 func _confirm(title: String, message: String, action: Callable) -> void:
+	_hide_inspection()
 	modal_open = true
 	var dialog: ConfirmationDialog = ConfirmationDialog.new()
 	dialog.title = title
@@ -637,6 +621,7 @@ func _confirm(title: String, message: String, action: Callable) -> void:
 	dialog.popup_centered()
 
 func _popup(title: String, message: String) -> void:
+	_hide_inspection()
 	modal_open = true
 	var dialog: AcceptDialog = AcceptDialog.new()
 	dialog.title = title
@@ -653,7 +638,7 @@ func _popup(title: String, message: String) -> void:
 	dialog.popup_centered()
 
 func _show_help() -> void:
-	_popup("行军手册", "每人每回合 6 行动点。移动每格 2 点，攻击通常 3 点。\n友军可穿过，不能停在同一格；敌人和障碍仍会挡路。\n金色双环与头顶箭头指示当前行动者。\n点击攻击/技能显示射程，叉号表示遮挡，准星表示合法目标。\n先选择右侧动作，再指向棋盘看预览，单击执行。\n\n盾击命中制造破绽；长枪攻击消耗破绽获得命中优势。\n攻击先损护甲，再损生命；火区直接伤害生命，也伤友军。\n油与火形成火区；水可以灭火，产生遮挡远程的蒸汽。\n主动脱离贴身敌人可能遭反击，推开不触发脱离反击。\n猎人花行动点下令，战犬在自己的回合跟随、牵制或撤回。\n\n消灭敌人获胜，保护粮仓获得额外回报；随时可以撤退。\n空格结束当前队员回合，Esc 切回移动。\n每次行动自动保存；手动存档独立保留，读取不会重抽候选。\n正常 / 加速 / 跳过仅改变表现，不改变结算。")
+	_popup("行军手册", "每人每回合 6 行动点。移动每格 2 点，攻击通常 3 点。\n友军可穿过，不能停在同一格；敌人和障碍仍会挡路。\n金色双环与头顶箭头指示当前行动者。\n点击攻击/技能显示射程，叉号表示遮挡，准星表示合法目标。\n先选择底部动作，再指向棋盘看预览，单击执行。\n鼠标经过敌我、物件和地表查看详情；底部行动队列也可悬停。\n左上角战报可以展开。\n\n盾击命中制造破绽；长枪攻击消耗破绽获得命中优势。\n攻击先损护甲，再损生命；火区直接伤害生命，也伤友军。\n油与火形成火区；水可以灭火，产生遮挡远程的蒸汽。\n主动脱离贴身敌人可能遭反击，推开不触发脱离反击。\n猎人花行动点下令，战犬在自己的回合跟随、牵制或撤回。\n\n消灭敌人获胜，保护粮仓获得额外回报；随时可以撤退。\n空格结束当前队员回合，Esc 切回移动。\n每次行动自动保存；手动存档独立保留，读取不会重抽候选。\n正常 / 加速 / 跳过仅改变表现，不改变结算。")
 
 func _run_smoke() -> void:
 	var smoke = load("res://tests/ui_smoke.gd").new()

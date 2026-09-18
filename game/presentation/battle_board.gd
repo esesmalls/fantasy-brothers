@@ -3,6 +3,7 @@ extends Control
 
 signal cell_clicked(q: int, r: int)
 signal cell_hovered(q: int, r: int)
+signal unit_hovered(unit_id: String)
 
 const CANVAS := Vector2(800.0, 560.0)
 const HEX_RADIUS := 34.0
@@ -23,6 +24,8 @@ var _selected: String = ""
 var _preview: Dictionary = {}
 var _action_overlay: Dictionary = {}
 var _hover := Vector2i(-1, -1)
+var _hover_unit: String = ""
+var _playfield_rect := Rect2()
 var _font: SystemFont
 var _scale: float = 1.0
 var _offset := Vector2.ZERO
@@ -38,7 +41,8 @@ var _old_positions: Dictionary = {}
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
-	custom_minimum_size = Vector2(440.0, 330.0)
+	# The owning HUD owns window constraints; this board adapts to its supplied safe area.
+	custom_minimum_size = Vector2.ZERO
 	_font = SystemFont.new()
 	_font.font_names = PackedStringArray(["Microsoft YaHei", "Microsoft YaHei UI", "Noto Sans CJK SC", "Arial"])
 	resized.connect(queue_redraw)
@@ -60,6 +64,17 @@ func set_selected(unit_id: String) -> void:
 func set_preview(info: Dictionary) -> void:
 	_preview = info.duplicate(true)
 	queue_redraw()
+
+## Reserves the part of this full-viewport Control where units and cells may appear.
+## Coordinates are local to this Control; HUDs may occupy all space outside this rectangle.
+func set_playfield_rect(rect: Rect2) -> void:
+	_playfield_rect = rect
+	queue_redraw()
+
+## Screen-local anchor for tooltips and UI callouts. It uses the same transform as input.
+func cell_screen_position(q: int, r: int) -> Vector2:
+	_layout()
+	return _offset + _hex_center(q, r) * _scale
 
 ## Receives a rule-calculated action map. This view never derives range or targets.
 ## {range_cells, blocked_cells, valid_targets, action_name, action_id}
@@ -166,28 +181,126 @@ func _unit_by_id(unit_id: String) -> Dictionary:
 	return {}
 
 func _layout() -> void:
-	_scale = maxf(0.01, minf(size.x / CANVAS.x, size.y / CANVAS.y))
-	_offset = (size - CANVAS * _scale) * 0.5
+	var safe := _resolved_playfield_rect()
+	# These actual grid extents include high weapon/helmet silhouettes, rather than the
+	# retired title and footer bands. A future scenario may change its grid dimensions.
+	var width: int = int(_battle.get("width", 9))
+	var height: int = int(_battle.get("height", 7))
+	var far_center := _hex_center(maxi(0, width - 1), maxi(0, height - 1))
+	var map_bounds := Rect2(Vector2(ORIGIN.x - 41.0, ORIGIN.y - 96.0), Vector2(far_center.x - ORIGIN.x + 83.0, far_center.y - ORIGIN.y + 134.0))
+	_scale = maxf(0.01, minf(safe.size.x / map_bounds.size.x, safe.size.y / map_bounds.size.y))
+	var content_size := map_bounds.size * _scale
+	_offset = safe.position + (safe.size - content_size) * 0.5 - map_bounds.position * _scale
+
+func _resolved_playfield_rect() -> Rect2:
+	if _playfield_rect.size.x > 8.0 and _playfield_rect.size.y > 8.0:
+		return _playfield_rect.intersection(Rect2(Vector2.ZERO, size))
+	# Existing callers that have not yet supplied a rect still receive a legible full view.
+	return Rect2(Vector2(18.0, 18.0), (size - Vector2(36.0, 36.0)).max(Vector2(1.0, 1.0)))
 
 func _gui_input(event: InputEvent) -> void:
 	_layout()
 	if event is InputEventMouseMotion:
-		var cell: Vector2i = _point_to_hex((event.position - _offset) / _scale)
-		if cell != _hover:
-			_hover = cell
-			cell_hovered.emit(cell.x, cell.y)
-			queue_redraw()
+		_update_hover(event.position)
 	elif event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			var cell: Vector2i = _point_to_hex((event.position - _offset) / _scale)
+			var point: Vector2 = (event.position - _offset) / _scale
+			var unit: Dictionary = _unit_hit_at(point)
+			var cell: Vector2i = _point_to_hex(point)
+			if not unit.is_empty():
+				cell = Vector2i(int(unit.get("q", -1)), int(unit.get("r", -1)))
+			else:
+				cell = _prop_hit_cell(point, cell)
 			if _valid_cell(cell):
 				cell_clicked.emit(cell.x, cell.y)
 				accept_event()
 
+func _update_hover(screen_point: Vector2) -> void:
+	var point: Vector2 = (screen_point - _offset) / _scale
+	var unit: Dictionary = _unit_hit_at(point)
+	var unit_id: String = str(unit.get("id", ""))
+	var cell: Vector2i = _point_to_hex(point)
+	if not unit.is_empty():
+		cell = Vector2i(int(unit.get("q", -1)), int(unit.get("r", -1)))
+	else:
+		cell = _prop_hit_cell(point, cell)
+	if unit_id != _hover_unit:
+		_hover_unit = unit_id
+		unit_hovered.emit(unit_id)
+	if cell != _hover:
+		_hover = cell
+		cell_hovered.emit(cell.x, cell.y)
+	queue_redraw()
+
 func _clear_hover() -> void:
 	_hover = Vector2i(-1, -1)
+	if not _hover_unit.is_empty():
+		_hover_unit = ""
+		unit_hovered.emit("")
 	cell_hovered.emit(-1, -1)
 	queue_redraw()
+
+## Hit units in reverse painter order, so a front silhouette owns its visible pixels.
+## Use the visible head, cloak and base rather than a transparent bounding rectangle.
+func _unit_hit_at(point: Vector2) -> Dictionary:
+	var drawables: Array = []
+	for unit in _battle.get("units", []):
+		if int(unit.get("hp", 0)) > 0:
+			drawables.append(unit)
+	drawables.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return _unit_display_point(a).y < _unit_display_point(b).y)
+	for index in range(drawables.size() - 1, -1, -1):
+		var unit: Dictionary = drawables[index]
+		var delta := point - _unit_display_point(unit)
+		var kind: String = str(unit.get("kind", "guard"))
+		if kind == "dog":
+			if _dog_hit(delta):
+				return unit
+		elif _humanoid_hit(delta):
+			return unit
+	return {}
+
+func _humanoid_hit(delta: Vector2) -> bool:
+	# Helmet/head: centred on the actual polygon, not the spear or empty shoulder space.
+	var head := delta - Vector2(0.0, -48.0)
+	if head.x * head.x / 144.0 + head.y * head.y / 196.0 <= 1.0:
+		return true
+	# Cloak silhouette is a tapered, low body shape from the program-drawn humanoid.
+	if delta.y >= -37.0 and delta.y <= -2.0:
+		var progress := (delta.y + 37.0) / 35.0
+		var half_width := lerpf(22.0, 18.0, progress)
+		if absf(delta.x) <= half_width:
+			return true
+	# The base is the precise grid anchor and remains convenient at normal zoom.
+	return delta.x * delta.x / 676.0 + delta.y * delta.y / 100.0 <= 1.0
+
+func _dog_hit(delta: Vector2) -> bool:
+	# Body, head and base follow the compact drawn dog silhouette.
+	var body := delta - Vector2(-2.0, -20.0)
+	if body.x * body.x / 576.0 + body.y * body.y / 169.0 <= 1.0:
+		return true
+	var head := delta - Vector2(22.0, -27.0)
+	if head.x * head.x / 100.0 + head.y * head.y / 81.0 <= 1.0:
+		return true
+	return delta.x * delta.x / 676.0 + delta.y * delta.y / 100.0 <= 1.0
+
+func _prop_hit_cell(point: Vector2, fallback: Vector2i) -> Vector2i:
+	var props: Array = []
+	for prop in _battle.get("props", []):
+		if int(prop.get("hp", 0)) > 0:
+			props.append(prop)
+	props.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return _hex_center(int(a.get("q", 0)), int(a.get("r", 0))).y < _hex_center(int(b.get("q", 0)), int(b.get("r", 0))).y)
+	for index in range(props.size() - 1, -1, -1):
+		var prop: Dictionary = props[index]
+		var delta := point - _hex_center(int(prop.get("q", 0)), int(prop.get("r", 0)))
+		var kind: String = str(prop.get("kind", "cover"))
+		var bounds := Rect2(Vector2(-30.0, -35.0), Vector2(60.0, 48.0))
+		if kind == "oil" or kind == "water":
+			bounds = Rect2(Vector2(-18.0, -28.0), Vector2(36.0, 38.0))
+		elif kind == "grain":
+			bounds = Rect2(Vector2(-30.0, -52.0), Vector2(60.0, 67.0))
+		if bounds.has_point(delta):
+			return Vector2i(int(prop.get("q", -1)), int(prop.get("r", -1)))
+	return fallback
 
 func _valid_cell(cell: Vector2i) -> bool:
 	return cell.x >= 0 and cell.x < int(_battle.get("width", 9)) and cell.y >= 0 and cell.y < int(_battle.get("height", 7))
@@ -224,14 +337,9 @@ func _draw() -> void:
 	if _font == null:
 		return
 	_layout()
-	draw_rect(Rect2(Vector2.ZERO, size), Color("111a1d"))
+	_draw_backdrop()
 	draw_set_transform(_offset, 0.0, Vector2(_scale, _scale))
-	draw_rect(Rect2(Vector2(8, 8), CANVAS - Vector2(16, 16)), Color("1c292b"))
-	draw_rect(Rect2(Vector2(8, 8), CANVAS - Vector2(16, 16)), Color("56605a"), false, 1.0)
-	draw_rect(Rect2(Vector2(14, 14), CANVAS - Vector2(28, 28)), Color("827552"), false, 1.0)
-	_draw_ornaments()
-	_text("灰烬边境  /  战场", Vector2(30, 43), 18, IVORY)
-	_text("第 %s 轮" % str(_battle.get("round", 1)), Vector2(643, 43), 16, GOLD, 125, HORIZONTAL_ALIGNMENT_RIGHT)
+	_draw_world_decor()
 	for r in range(int(_battle.get("height", 7))):
 		for q in range(int(_battle.get("width", 9))):
 			_draw_cell(q, r)
@@ -251,20 +359,38 @@ func _draw() -> void:
 	_draw_effects()
 	_draw_action_overlay_foreground()
 	_draw_active_indicator()
-	_draw_legend()
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
-func _draw_ornaments() -> void:
-	for corner in [Vector2(24, 24), Vector2(776, 24), Vector2(24, 536), Vector2(776, 536)]:
-		var motif := PackedVector2Array([corner + Vector2(0, -5), corner + Vector2(5, 0), corner + Vector2(0, 5), corner + Vector2(-5, 0)])
-		draw_colored_polygon(motif, GOLD)
-	# Sparse map hatching is decoration, not interactable terrain.
-	for index in range(13):
-		var p := Vector2(37 + index * 58, 479 + (index % 3) * 4)
-		draw_line(p, p + Vector2(19, -8), Color("34413d"), 1.0, true)
-		draw_line(p + Vector2(8, 2), p + Vector2(27, -6), Color("34413d"), 1.0, true)
-	draw_line(Vector2(30, 57), Vector2(770, 57), Color("66654f"), 1.0, true)
-	draw_line(Vector2(30, 503), Vector2(770, 503), Color("66654f"), 1.0, true)
+func _draw_backdrop() -> void:
+	# A restrained hand-drawn ground field fills the viewport. It is visual atmosphere only:
+	# every tactical property remains represented by a real cell, prop, or rule overlay.
+	draw_rect(Rect2(Vector2.ZERO, size), Color("17231e"))
+	var safe := _resolved_playfield_rect()
+	draw_rect(safe.grow(24.0), Color("273326"))
+	for index in range(26):
+		var x := fmod(float(index * 137), maxf(1.0, size.x + 120.0)) - 48.0
+		var y := fmod(float(index * 79 + 31), maxf(1.0, size.y + 70.0)) - 28.0
+		var tuft := Color("38462e") if index % 2 == 0 else Color("303d2b")
+		draw_line(Vector2(x, y), Vector2(x + 12.0, y - 5.0), tuft, 1.2, true)
+		draw_line(Vector2(x + 6.0, y + 3.0), Vector2(x + 17.0, y - 2.0), tuft, 1.0, true)
+	# Worn earth tracks give a route through the scene without pretending to be a game rule.
+	var path := PackedVector2Array([
+		Vector2(safe.position.x - 8.0, safe.position.y + safe.size.y * 0.73),
+		Vector2(safe.position.x + safe.size.x * 0.24, safe.position.y + safe.size.y * 0.57),
+		Vector2(safe.position.x + safe.size.x * 0.57, safe.position.y + safe.size.y * 0.52),
+		Vector2(safe.end.x + 12.0, safe.position.y + safe.size.y * 0.29),
+	])
+	draw_polyline(path, Color("665b3d"), 42.0, true)
+	draw_polyline(path, Color("87774e"), 1.2, true)
+	draw_rect(safe.grow(20.0), Color("857a58", 0.34), false, 1.0)
+
+func _draw_world_decor() -> void:
+	# Kept below cells: shrubs and route markings support the place without competing with input.
+	for index in range(11):
+		var point := Vector2(42.0 + float((index * 71) % 704), 74.0 + float((index * 103) % 385))
+		_ellipse(point, Vector2(10.0 + float(index % 3) * 3.0, 5.0 + float(index % 2) * 2.0), Color("263528", 0.58))
+		for blade in range(3):
+			draw_line(point + Vector2(float(blade * 5 - 5), 2.0), point + Vector2(float(blade * 4 - 4), -7.0 - blade), Color("526143", 0.65), 1.0)
 
 func _draw_cell(q: int, r: int) -> void:
 	var point: Vector2 = _hex_center(q, r)
@@ -281,7 +407,7 @@ func _draw_cell(q: int, r: int) -> void:
 	var polygon: PackedVector2Array = _hex_points(point)
 	draw_colored_polygon(polygon, color)
 	polygon.append(polygon[0])
-	draw_polyline(polygon, Color("596454"), 1.0, true)
+	draw_polyline(polygon, Color("718067", 0.44), 0.85, true)
 	if surface == "oil":
 		_ellipse(point, Vector2(22, 13), Color("171e20"))
 		draw_arc(point + Vector2(-2, 0), 14, 0.2, 2.7, 14, Color("8e794b"), 1.4, true)
@@ -453,9 +579,39 @@ func _draw_unit(unit: Dictionary) -> void:
 		var name_text: String = str(unit.get("name", "佣兵"))
 		_text(name_text, point + Vector2(-49, -64), 12, IVORY, 98, HORIZONTAL_ALIGNMENT_CENTER)
 	var statuses: Dictionary = unit.get("statuses", {})
-	if not statuses.is_empty():
-		draw_circle(point + Vector2(27, -28), 6.0, Color("202725"))
-		_text("!", point + Vector2(24, -24), 13, Color("e4bc6e"))
+	var status_index := 0
+	for status in statuses:
+		_draw_status_symbol(str(status), point + Vector2(27.0 + status_index * 13.0, -28.0))
+		status_index += 1
+	if _hover.x == int(unit.get("q", -2)) and _hover.y == int(unit.get("r", -2)):
+		var cell: Dictionary = _battle.get("cells", {}).get("%d,%d" % [int(unit.get("q", 0)), int(unit.get("r", 0))], {})
+		if str(cell.get("field", "")) == "fire":
+			_text("脚下是火！", point + Vector2(-47, -77), 12, Color("f0b36b"), 94, HORIZONTAL_ALIGNMENT_CENTER)
+		elif statuses.has("defending"):
+			_text("守住阵线", point + Vector2(-47, -77), 12, Color("c8d4b0"), 94, HORIZONTAL_ALIGNMENT_CENTER)
+
+func _draw_status_symbol(status: String, center: Vector2) -> void:
+	draw_circle(center, 7.2, Color("18211e", 0.92))
+	if status == "defending":
+		# A small shield says the unit is holding, without inventing a morale state.
+		_polygon([Vector2(-4, -5), Vector2(4, -5), Vector2(5, 0), Vector2(0, 6), Vector2(-5, 0)], center, Color("99b7a6"), IVORY)
+		draw_line(center + Vector2(0, -4), center + Vector2(0, 3), Color("34585b"), 1.0)
+	elif status == "exposed":
+		# A split plate mirrors the actual `破绽` rule status.
+		_polygon([Vector2(-4, -5), Vector2(4, -5), Vector2(5, 0), Vector2(0, 6), Vector2(-5, 0)], center, Color("bb806a"), Color("e6c289"))
+		draw_line(center + Vector2(-1, -5), center + Vector2(1, -1), INK, 1.4)
+		draw_line(center + Vector2(1, -1), center + Vector2(-1, 3), INK, 1.4)
+	elif status == "marked":
+		draw_arc(center, 4.0, 0.0, TAU, 12, Color("e1be6f"), 1.2, true)
+		draw_circle(center, 1.6, Color("e1be6f"))
+		draw_line(center + Vector2(-6, 0), center + Vector2(-3, 0), Color("e1be6f"), 1.0)
+		draw_line(center + Vector2(3, 0), center + Vector2(6, 0), Color("e1be6f"), 1.0)
+	elif status == "pinned":
+		draw_arc(center + Vector2(-2, 0), 3.4, -1.4, 1.4, 8, Color("a8b9b5"), 1.4, true)
+		draw_arc(center + Vector2(2, 0), 3.4, 1.7, 4.55, 8, Color("a8b9b5"), 1.4, true)
+		draw_line(center + Vector2(-1, 0), center + Vector2(1, 0), Color("a8b9b5"), 1.4)
+	else:
+		_draw_diamond(center, 4.2, Color("d5bb77"), 1.3)
 
 func _unit_display_point(unit: Dictionary) -> Vector2:
 	var unit_id: String = str(unit.get("id", ""))
