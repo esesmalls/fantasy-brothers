@@ -6,6 +6,7 @@ const Policy = preload("res://tests/play_policy.gd")
 var failures: Array[String] = []
 var checks: int = 0
 var output: String = "user://qa/screens"
+var captured_attack: bool = false
 
 func run(app: Control) -> void:
 	for argument: String in OS.get_cmdline_user_args():
@@ -51,6 +52,18 @@ func run(app: Control) -> void:
 			var saved_state: Dictionary = app.campaign.duplicate(true)
 			app._load(app.manual_path)
 			_check(app.campaign == saved_state, "mid-battle save/load exact state")
+			app.action_buttons["attack"].grab_focus()
+			var turn_before: int = int(app.campaign.battle.turn_index)
+			var space: InputEventKey = InputEventKey.new()
+			space.keycode = KEY_SPACE
+			space.pressed = true
+			Input.parse_input_event(space)
+			await app.get_tree().process_frame
+			space.pressed = false
+			Input.parse_input_event(space)
+			await app.get_tree().process_frame
+			_check(int(app.campaign.battle.turn_index) != turn_before, "space ends turn while an action button has keyboard focus")
+			app._load(app.manual_path)
 		app._set_speed(0.0)
 		var steps: int = 0
 		while str(app.campaign.battle.outcome).is_empty() and steps < 900:
@@ -64,6 +77,14 @@ func run(app: Control) -> void:
 					app._end_turn()
 				else:
 					app.selected_action = command.action
+					if not captured_attack and command.action in ["attack", "shield_bash"]:
+						var before_preview: String = JSON.stringify(app.campaign)
+						app._choose_action(str(command.action))
+						app._on_cell_hovered(int(command.target.q), int(command.target.r))
+						_check(app.preview_label.text.contains("命中") and app.preview_label.text.contains("伤害"), "legal attack preview presents chance and damage")
+						_check(JSON.stringify(app.campaign) == before_preview, "attack hover does not mutate rules or RNG")
+						await _capture(app, "05b-attack-preview")
+						captured_attack = true
 					app.board.cell_clicked.emit(int(command.target.q), int(command.target.r))
 			steps += 1
 			if steps % 8 == 0:

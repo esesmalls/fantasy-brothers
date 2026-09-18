@@ -195,6 +195,10 @@ func _show_title() -> void:
 	_text(setup, "操作：选择动作，再点击目标格。\n空格结束当前回合，Esc 取消动作。\n事件、动作、结算与成长后自动保存。", 16, MUTED)
 
 func _request_new(origin: String, seed_text: String) -> void:
+	seed_text = seed_text.strip_edges()
+	if not seed_text.is_empty() and (not seed_text.is_valid_int() or int(seed_text) < 0 or int(seed_text) > 2000000000):
+		_popup("种子格式不正确", "请输入 0 到 2000000000 之间的整数，或留空使用随机种子。")
+		return
 	var seed_value: int = int(seed_text) if seed_text.is_valid_int() else int(Time.get_unix_time_from_system()) % 2000000000
 	if Saves.load_campaign(save_path).get("ok", false):
 		_confirm("建立新佣兵团？", "将替换自动存档；手动存档保留。你可先取消并手动保存当前旅程。", func(): _new_campaign(origin, seed_value))

@@ -14,6 +14,7 @@ func _initialize() -> void:
 	_test_dog_command()
 	_test_dog_command_focus()
 	_test_save_replay()
+	_test_ai_detours_when_ranged_line_is_blocked()
 	_test_ai_and_outcomes()
 	print("Battle rules: %d checks; %d failures" % [checks, failures.size()])
 	for failure in failures:
@@ -274,6 +275,41 @@ func _test_save_replay() -> void:
 	for _i in range(30):
 		Rules.preview(s, "g", "move", {"q": 0, "r": 1})
 	check(JSON.stringify(s) == preview_copy, "repeated previews never advance randomness")
+
+func _test_ai_detours_when_ranged_line_is_blocked() -> void:
+	var s = Rules.create_battle([{"id": "target", "kind": "guard"}], 37, {})
+	var target = s.units[0]
+	var archer = s.units[3]
+	target.q = 3
+	target.r = 3
+	archer.q = 5
+	archer.r = 3
+	s.units = [target, archer]
+	s.order = [target.id, archer.id]
+	s.turn_index = 1
+	s.props = [
+		{"id": "front_cover", "kind": "cover", "q": 4, "r": 3, "hp": 16, "max_hp": 16, "blocks": true},
+		{"id": "lower_cover", "kind": "cover", "q": 4, "r": 4, "hp": 16, "max_hp": 16, "blocks": true}]
+	check(not Rules.preview(s, archer.id, "attack", {"q": target.q, "r": target.r}).ok, "cover blocks an archer target already inside nominal range")
+	var first = Rules.ai_step(s)
+	var first_moved = false
+	for event in first.events:
+		if event.type == "move" and event.actor == archer.id:
+			first_moved = true
+	check(first.ok and first_moved and archer.q == 5 and archer.r == 2, "blocked ranged AI takes the equal-distance first detour step")
+	var steps = 1
+	while s.turn_index == 1 and s.outcome == "" and steps < 8:
+		Rules.ai_step(s)
+		steps += 1
+	check(steps < 8 and s.turn_index == 0, "blocked ranged AI still terminates its detour turn in bounded steps")
+	Rules.end_turn(s)
+	check(Rules.preview(s, archer.id, "attack", {"q": target.q, "r": target.r}).ok, "ranged AI has a legal attack line on its next turn after detouring")
+	var follow_up = Rules.ai_step(s)
+	var attacked = false
+	for event in follow_up.events:
+		if event.type == "attack" and event.actor == archer.id:
+			attacked = true
+	check(attacked, "ranged AI uses the attack line opened by its cover detour")
 
 func _test_ai_and_outcomes() -> void:
 	var s = fixture()
