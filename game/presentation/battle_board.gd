@@ -1,6 +1,8 @@
 extends Control
 ## Read-only battle presentation. Rules own positions, damage and resources.
 
+const CharacterPortrait = preload("res://presentation/character_portrait.gd")
+
 signal cell_clicked(q: int, r: int)
 signal cell_hovered(q: int, r: int)
 signal unit_hovered(unit_id: String)
@@ -568,12 +570,10 @@ func _draw_unit(unit: Dictionary) -> void:
 	_ellipse(point + Vector2(0, 2), Vector2(22, 9), Color("131d21"))
 	_ellipse(point, Vector2(22, 8), accent.darkened(0.23))
 	_ellipse(point + Vector2(0, -2), Vector2(19, 6), Color("6b7465"))
-	var kind: String = str(unit.get("kind", "guard"))
 	var body: Vector2 = point + Vector2(0, -4)
-	if kind == "dog":
-		_draw_dog(body, accent, allied)
-	else:
-		_draw_humanoid(body, kind, accent, allied)
+	# Shared layers read only this battle snapshot. Effects and motion have already
+	# adjusted `body`; equipment or injury drawing never changes combat results.
+	CharacterPortrait.draw_character(self, unit, body, 1.0, allied, accent)
 	_draw_bars(unit, point)
 	if (not selected) and _hover.x == int(unit.get("q", -2)) and _hover.y == int(unit.get("r", -2)):
 		var name_text: String = str(unit.get("name", "佣兵"))
@@ -655,71 +655,6 @@ func _ellipse_outline(center: Vector2, radius: Vector2, color: Color, width: flo
 		var angle: float = TAU * float(index) / 24.0
 		points.append(center + Vector2(cos(angle) * radius.x, sin(angle) * radius.y))
 	draw_polyline(points, color, width, true)
-
-func _draw_humanoid(point: Vector2, kind: String, accent: Color, allied: bool) -> void:
-	var steel := Color("909b98")
-	var dark_steel := Color("536368")
-	var skin := Color("c7a37e") if allied else Color("ba9676")
-	# A tapered cloak and shoulders keep the silhouette legible above a small base.
-	_polygon([Vector2(-14, -33), Vector2(-22, -5), Vector2(-8, 2), Vector2(13, 0), Vector2(21, -7), Vector2(13, -33)], point, accent.darkened(0.32), INK)
-	_polygon([Vector2(-15, -32), Vector2(-11, -10), Vector2(0, -5), Vector2(12, -11), Vector2(16, -32), Vector2(7, -39), Vector2(-8, -39)], point, dark_steel if kind in ["guard", "spear"] else Color("716349"), INK)
-	_polygon([Vector2(-18, -34), Vector2(-24, -28), Vector2(-21, -20), Vector2(-11, -23), Vector2(-10, -32)], point, steel if kind == "guard" else accent, INK)
-	_polygon([Vector2(12, -33), Vector2(21, -29), Vector2(24, -20), Vector2(14, -20), Vector2(9, -29)], point, steel if kind == "guard" else accent, INK)
-	draw_line(point + Vector2(-9, -29), point + Vector2(8, -14), Color("b59866"), 3.0, true)
-	draw_line(point + Vector2(-11, -12), point + Vector2(12, -12), Color("2c3330"), 4.0, true)
-	draw_rect(Rect2(point + Vector2(-2, -15), Vector2(6, 6)), GOLD)
-	_polygon([Vector2(-7, -48), Vector2(-8, -41), Vector2(-5, -34), Vector2(4, -33), Vector2(9, -41), Vector2(7, -49)], point, skin, INK)
-	if kind in ["guard", "spear"]:
-		_polygon([Vector2(-10, -43), Vector2(-10, -53), Vector2(-5, -58), Vector2(5, -58), Vector2(11, -52), Vector2(11, -42), Vector2(7, -43), Vector2(7, -50), Vector2(-7, -50), Vector2(-7, -43)], point, steel, INK)
-		draw_line(point + Vector2(-8, -50), point + Vector2(10, -50), Color("d0d1b7"), 1.5)
-		draw_line(point + Vector2(1, -51), point + Vector2(1, -40), dark_steel, 3.0)
-	elif kind in ["archer", "hunter"]:
-		_polygon([Vector2(-12, -39), Vector2(-13, -49), Vector2(-5, -60), Vector2(7, -57), Vector2(14, -44), Vector2(9, -35), Vector2(6, -47), Vector2(-4, -51), Vector2(-8, -41)], point, accent.darkened(0.25), INK)
-		# Fletched arrows behind the shoulder distinguish bow users.
-		for index in range(3):
-			var tail := point + Vector2(-20 + index * 3, -51 - index * 2)
-			draw_line(tail, tail + Vector2(7, 27), Color("c5b17c"), 1.3)
-			draw_line(tail + Vector2(-3, -2), tail + Vector2(2, 4), IVORY, 2.0)
-	else:
-		_polygon([Vector2(-10, -43), Vector2(-11, -52), Vector2(-7, -56), Vector2(-3, -53), Vector2(3, -58), Vector2(10, -53), Vector2(12, -44), Vector2(6, -48), Vector2(-4, -48)], point, Color("49423b"), INK)
-		if kind == "raider":
-			_polygon([Vector2(-9, -38), Vector2(-5, -30), Vector2(3, -28), Vector2(8, -39), Vector2(0, -36)], point, Color("60513f"))
-	draw_line(point + Vector2(-5, -44), point + Vector2(-2, -44), INK, 1.5)
-	draw_line(point + Vector2(4, -44), point + Vector2(7, -44), INK, 1.5)
-	if kind == "guard":
-		_polygon([Vector2(-30, -29), Vector2(-17, -33), Vector2(-6, -29), Vector2(-8, -10), Vector2(-17, 0), Vector2(-27, -8)], point, accent, Color("c2b897"))
-		draw_line(point + Vector2(-18, -28), point + Vector2(-17, -6), GOLD, 2.0)
-		draw_line(point + Vector2(-25, -18), point + Vector2(-11, -18), GOLD, 2.0)
-		_ellipse(point + Vector2(-18, -18), Vector2(4, 5), steel)
-		draw_line(point + Vector2(22, -6), point + Vector2(29, -37), steel, 4.0, true)
-		draw_line(point + Vector2(18, -12), point + Vector2(28, -9), GOLD, 3.0)
-	elif kind == "spear":
-		draw_line(point + Vector2(23, 1), point + Vector2(31, -64), Color("b39463"), 3.0, true)
-		_polygon([Vector2(31, -75), Vector2(25, -62), Vector2(30, -56), Vector2(35, -64)], point, Color("c7cfbc"), INK)
-		draw_line(point + Vector2(17, -25), point + Vector2(28, -27), skin, 5.0, true)
-	elif kind in ["archer", "hunter"]:
-		var bow := PackedVector2Array([point + Vector2(24, -49), point + Vector2(31, -37), point + Vector2(32, -22), point + Vector2(25, -5)])
-		draw_polyline(bow, Color("c2a376"), 3.0, true)
-		draw_line(point + Vector2(24, -49), point + Vector2(25, -5), Color("d9ceb0"), 1.0, true)
-		draw_line(point + Vector2(17, -25), point + Vector2(28, -26), skin, 4.0, true)
-	else:
-		draw_line(point + Vector2(19, -13), point + Vector2(32, -42), Color("aa8958"), 3.0, true)
-		if kind == "raider":
-			_polygon([Vector2(30, -45), Vector2(38, -44), Vector2(43, -31), Vector2(31, -34), Vector2(25, -38)], point, steel, INK)
-		else:
-			_polygon([Vector2(29, -41), Vector2(36, -52), Vector2(35, -37), Vector2(30, -33)], point, Color("d1d0b9"), INK)
-
-func _draw_dog(point: Vector2, accent: Color, allied: bool) -> void:
-	var fur := Color("aa9674") if allied else Color("897562")
-	_polygon([Vector2(-25, -14), Vector2(-20, -23), Vector2(-3, -25), Vector2(9, -20), Vector2(18, -28), Vector2(29, -23), Vector2(30, -16), Vector2(20, -12), Vector2(11, -9), Vector2(-10, -8)], point, fur, INK)
-	_polygon([Vector2(12, -22), Vector2(11, -38), Vector2(19, -28), Vector2(25, -34), Vector2(27, -21)], point, fur.darkened(0.12), INK)
-	_polygon([Vector2(-21, -12), Vector2(-22, -1), Vector2(-15, 0), Vector2(-14, -11)], point, fur.darkened(0.18), INK)
-	_polygon([Vector2(4, -13), Vector2(9, -1), Vector2(15, -1), Vector2(12, -14)], point, fur.darkened(0.18), INK)
-	draw_polyline(PackedVector2Array([point + Vector2(-22, -19), point + Vector2(-30, -27), point + Vector2(-29, -32)]), fur, 5.0, true)
-	_polygon([Vector2(-12, -25), Vector2(3, -24), Vector2(7, -11), Vector2(-12, -10)], point, accent, Color("c4b38a"))
-	draw_line(point + Vector2(12, -22), point + Vector2(17, -14), Color("ac6b43"), 3.0)
-	draw_circle(point + Vector2(23, -24), 1.6, INK)
-	draw_circle(point + Vector2(30, -19), 2.2, INK)
 
 func _draw_bars(unit: Dictionary, point: Vector2) -> void:
 	var hp: float = clampf(float(unit.get("hp", 0)) / maxf(1.0, float(unit.get("max_hp", 1))), 0.0, 1.0)

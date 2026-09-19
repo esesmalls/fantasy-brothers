@@ -461,7 +461,7 @@ func _test_save_replay() -> void:
 	var b = Rules.apply_action(restored, "g", "shield_bash", {"q": 3, "r": 2})
 	check(JSON.stringify(a.events) == JSON.stringify(b.events), "JSON restored seed produces identical combat events")
 	check(JSON.stringify(JSON.parse_string(JSON.stringify(s))) == JSON.stringify(JSON.parse_string(JSON.stringify(restored))), "JSON restored next full state matches")
-	check(s.rules_version == "prototype-0.1.1" and s.action_seq == 1, "rule version and root action are saved")
+	check(s.rules_version == Rules.RULES_VERSION and s.action_seq == 1, "rule version and root action are saved")
 	var preview_copy = JSON.stringify(s)
 	for _i in range(30):
 		Rules.preview(s, "g", "move", {"q": 0, "r": 1})

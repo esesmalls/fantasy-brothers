@@ -1,4 +1,5 @@
 extends RefCounted
+const EquipmentData = preload("res://core/equipment_data.gd")
 # Read-only presentation projection of battle state. It never previews or settles actions.
 
 const KIND_NAMES := {
@@ -59,6 +60,11 @@ static func _fill_unit(result: Dictionary, battle: Dictionary, unit: Dictionary)
 	else:
 		lines.append("行动点：%d / %d" % [int(unit.get("ap", 0)), int(unit.get("max_ap", 0))])
 	lines.append("攻击：%d · 基础命中：%d%% · 射程：%d 格" % [int(unit.get("attack", 0)), int(unit.get("accuracy", 0)), int(unit.get("range", 0))])
+	var loadout: Dictionary = unit.get("visual_loadout", {})
+	for slot: String in ["weapon", "armor"]:
+		var item: Dictionary = EquipmentData.get_definition(str(loadout.get(slot, "")))
+		if not item.is_empty():
+			lines.append(("手持：" if slot == "weapon" else "穿戴：") + str(item.name))
 	lines.append(_turn_line(battle, unit))
 	_append_statuses(lines, battle, unit)
 	_append_perks(lines, unit)

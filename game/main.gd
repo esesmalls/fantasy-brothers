@@ -7,6 +7,8 @@ const Board = preload("res://presentation/battle_board.gd")
 const BattleHUD = preload("res://presentation/battle_hud.gd")
 const Inspection = preload("res://presentation/battle_inspection.gd")
 const WorldScreen = preload("res://presentation/world_screen.gd")
+const Equipment = preload("res://core/equipment_rules.gd")
+const EquipmentScreen = preload("res://presentation/equipment_screen.gd")
 const CREAM = Color("e7ddc6")
 const MUTED = Color("9caeaa")
 const GOLD = Color("c8aa6e")
@@ -41,6 +43,11 @@ var smoke_mode: bool = false
 var outcome_label: Label
 var reachable: Array = []
 var route_buttons: Dictionary = {}
+var equipment_screen: Control
+var equipment_open := false
+var equipment_unit_id := ""
+var equipment_notice := ""
+var equipment_button: Button
 var world_screen: Control
 var camp_detail := false
 var world_overview := false
@@ -114,7 +121,7 @@ func _build_shell() -> void:
 	_button(heading, "手动保存", _manual_save)
 	_button(heading, "读取手动档", _confirm_load)
 	_button(heading, "主菜单", _confirm_menu)
-	resources = _label("边境佣兵纪事   /   最小可玩验证 0.1.3", 17, MUTED)
+	resources = _label("边境佣兵纪事   /   最小可玩验证 0.1.4", 17, MUTED)
 	screen.add_child(resources)
 	banner = _label("", 16, GOLD)
 	screen.add_child(banner)
@@ -125,6 +132,8 @@ func _build_shell() -> void:
 	screen.add_child(footer)
 
 func _clear_body() -> void:
+	equipment_screen = null
+	equipment_button = null
 	world_screen = null
 	board = null
 	if is_instance_valid(battle_hud):
@@ -182,7 +191,7 @@ func _panel(parent: Node, width: float = 0.0, expand: bool = true) -> VBoxContai
 func _show_title() -> void:
 	_clear_body()
 	banner.text = "序章   /   渡桥的钟声"
-	resources.text = "边境佣兵纪事   /   最小可玩验证 0.1.3"
+	resources.text = "边境佣兵纪事   /   最小可玩验证 0.1.4"
 	var columns: HBoxContainer = HBoxContainer.new()
 	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	body.add_child(columns)
@@ -226,6 +235,9 @@ func _request_new(origin: String, seed_text: String) -> void:
 
 func _new_campaign(origin: String, seed_value: int) -> void:
 	campaign = Campaign.create_campaign(origin, seed_value)
+	equipment_open = false
+	equipment_unit_id = ""
+	equipment_notice = ""
 	camp_detail = false
 	world_overview = false
 	notice = "新旅程开始。先查看四名队员，再接下契约。"
@@ -241,6 +253,8 @@ func _load(path: String) -> void:
 		_popup("读取失败", str(result.reason))
 		return
 	campaign = result.campaign
+	equipment_open = false
+	equipment_notice = ""
 	camp_detail = false
 	world_overview = false
 	notice = str(result.reason)
@@ -277,6 +291,11 @@ func _show_campaign() -> void:
 	banner.text = "灰岸边境  /  契约与旅行  /  战术交锋  /  返回营地"
 	if phase == "battle":
 		_show_battle()
+		return
+	if phase == "camp" and equipment_open:
+		equipment_screen = EquipmentScreen.new()
+		body.add_child(equipment_screen)
+		equipment_screen.build(self, equipment_unit_id)
 		return
 	if phase in ["travel", "returning"] or (phase == "camp" and not camp_detail) or (phase in ["event", "ready"] and world_overview):
 		world_screen = WorldScreen.new()
@@ -368,12 +387,17 @@ func _show_camp(story: VBoxContainer, actions: VBoxContainer) -> void:
 	_button(story, "查看边境地图 · 寻找契约", _show_world_view)
 	_text(story, "队伍已经驻扎在灰岸营地。生活与整备会改变实际资源、日期与队员状态；出征前可在地图上比较路线。", 17, MUTED)
 	_text(actions, "整备与启程", 24, GOLD)
+	equipment_button = _button(actions, "军需帐 · 装备与交易", _show_equipment)
 	_text(actions, "先恢复生命与护甲。\n准备好后回到地图接取契约。", 16, MUTED)
 	_button(actions, "休养一天", func(): _camp_action("rest"), "有粮消耗2粮，每人恢复18生命；缺粮恢复8。")
 	_button(actions, "补给口粮", func(): _camp_action("resupply"), "12金币购买最多6粮；缺钱缺粮时短工换粮。")
-	_button(actions, "修补护甲", func(): _camp_action("repair"), "每名受损队员4金币；无钱时用一天修补6护甲。")
+	var repair: Dictionary = Equipment.get_repair_preview(campaign)
+	var repair_button: Button = _button(actions, "修补护甲 · %d 金" % int(repair.price) if bool(repair.affordable) else "修补护甲 · 用工一天", func(): _camp_action("repair"), str(repair.description))
+	repair_button.disabled = not bool(repair.available)
+	if repair_button.disabled: repair_button.text = "防护完整 · 无需修补"
+	_text(actions, str(repair.description), 14, MUTED)
 	_button(actions, "补齐空缺", func(): _camp_action("recruit"), "佣兵28金，战犬18金；不足时预支，战利品最多扣三分之一还款。")
-	_text(actions, "休养：2 粮恢复 18 生命\n补给：12 金换最多 6 粮\n修补：每名受损队员 4 金\n补员：佣兵 28 金 / 战犬 18 金", 16, MUTED)
+	_text(actions, "休养：2 粮恢复 18 生命\n补给：12 金换最多 6 粮\n修补：每 4 点总损耗收 1 金，向上取整\n补员：佣兵 28 金 / 战犬 18 金", 16, MUTED)
 	_text(actions, "缺钱时可短工、慢慢休养或预支补员。死亡不会被休养抹去。", 15, MUTED)
 	if int(campaign.flags.get("advance_debt", 0)) > 0:
 		_text(actions, "预支签约款：%d 金" % int(campaign.flags.advance_debt), 16, RED)
@@ -397,12 +421,14 @@ func _return_to_camp() -> void:
 
 func _show_camp_view() -> void:
 	if str(campaign.get("phase", "")) != "camp": return
+	equipment_open = false
 	camp_detail = true
 	world_overview = false
 	_show_campaign()
 
 func _show_world_view() -> void:
 	if not str(campaign.get("phase", "")) in ["camp", "travel", "event", "ready", "returning"]: return
+	equipment_open = false
 	camp_detail = false
 	world_overview = true
 	_show_campaign()
@@ -688,3 +714,24 @@ func _show_help() -> void:
 func _run_smoke() -> void:
 	var smoke = load("res://tests/ui_smoke.gd").new()
 	await smoke.run(self)
+
+func _show_equipment(unit_id: String = "") -> void:
+	if str(campaign.get("phase", "")) != "camp": return
+	equipment_open = true
+	camp_detail = true
+	if not unit_id.is_empty(): equipment_unit_id = unit_id
+	_show_campaign()
+
+func _equipment_action(action: String, item_id: String) -> void:
+	var result: Dictionary
+	match action:
+		"buy": result = Equipment.buy(campaign, item_id)
+		"sell": result = Equipment.sell(campaign, item_id)
+		"equip": result = Equipment.equip(campaign, equipment_unit_id, item_id)
+		_: return
+	if not bool(result.get("ok", false)):
+		_popup("暂时无法执行", str(result.get("reason", "")))
+		return
+	equipment_notice = str(result.get("reason", "已完成整备。"))
+	_autosave()
+	_show_campaign()

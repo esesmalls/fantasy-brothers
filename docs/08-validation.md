@@ -1,3 +1,35 @@
+# 0.1.4 交付验证记录
+
+日期：2026-09-19，基线63ed359，Godot 4.7.2.stable.official.ed1daf0bf，Windows/NVIDIA RTX 4080 Laptop/OpenGL Compatibility。新战斗prototype-0.1.4；旧0.1.1进行中战斗保留快照和版本，以kind回退既有动作。
+
+| 检查 | 检查/失败 | 证据 |
+| --- | --- | --- |
+| 战斗 | 129/0 | builds/qa/014-test_battle.log |
+| 战役 | 72/0 | builds/qa/014-test_campaign.log |
+| 存档 | 53/0 | builds/qa/014-test_save.log |
+| 世界 | 126/0 | builds/qa/014-test_world.log |
+| 完整流程 | 1725/0 | builds/qa/014-test_flow.log，20种子×2团×3远征，105胜/15其他 |
+| 装备 | 66/0 | builds/qa/014-test_equipment.log |
+| 只读详情 | 30/0 | builds/qa/014-inspection.log |
+| 共享人物分层 | 7/0 | builds/qa/014-character-layers.log |
+| 源码界面 | 251/0 | builds/qa/014-ui-source/smoke-report.json，独立QA |
+| 最终Windows导出界面 | 283/0 | builds/qa/export-014.log；251项场景+32张真实渲染截图 |
+
+工具 tools/verify.ps1 已接入equipment/character_layers，build.ps1导出0.1.4。规则与UI源码测试重定向APPDATA至工作区隔离目录；导出运行实际EXE，测试保存user://qa而非玩家档。环境证书/日志权限提示不等同产品故障；早期源码UI存读失败确认是默认AppData沙箱拒写，改隔离目录后最终251/0。最终图形导出正常退出、无脚本错误。旧按岗位限制方案235/0不是本版最终结论。
+
+新增验证：物品实例唯一、不可双持/重复售卖、已装备和配发品不可出售、购买资金与售价、换装差量与成长保留、护甲损耗回写、死亡丢装和补员、修理预算与战犬。跨人物武器改变动作和射程，kind与猎人指令保留；装备和显示快照进入新战斗。旧0.1.1没有style的战斗仍有原盾击/长枪行为，既有快照、RNG、成长候选保存。最后补旧0.1.3 camp/returning迁移用例，位置/资源/RNG/claim保留、返营不重复领奖，迁移后可购买换装；仅新增测试，生产代码未变。
+
+UI通过真实按钮完成采购/换装/出售、跨背景弓手持枪、猎人持剑盾，小窗口九个招式完整显示；肖像与战场显示相同装备ID，悬停显示武器和护甲名。装备专用战损回写用受控结算夹具，伤势图用仅显示副本夹具，不冒充一次真实敌人命中；既有长流程另有真实自动战斗。所有夹具都还原或使用独立战役。
+
+未覆盖三台电脑的每份真实个人旧档、其他显卡、真人手感与经济平衡。完整装备套层/独立头盔披风副手未实现；当前剑盾是一个组合武器。源码和导出有重复覆盖，计数不累加为独立质量指标，自动战斗结果不代表玩家胜率。
+
+最终产物SHA256：
+- EXE：ACD809A5D87C9A8047104556ECC7BE49AB291C66687DFBEAC10D75CA6AF5D085
+- ZIP：A525CF447562FCF328509F759B67CBAEE5AD2E6FFD4191C05E1D6C780F19EE52
+
+以下保留上一版历史记录。
+
+---
 # 0.1.3 交付验证记录
 
 日期：2026-09-19，基线10161e4，Godot 4.7.2.stable.official.ed1daf0bf。第三台 Windows / NVIDIA RTX 4080 Laptop / OpenGL Compatibility。旧战斗规则不变，增加 world.schema=1 与旧存档迁移。

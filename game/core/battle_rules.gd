@@ -1,6 +1,6 @@
 extends RefCounted
 # Pure, JSON-compatible rules. Presentation never changes these results.
-const RULES_VERSION = "prototype-0.1.1"
+const RULES_VERSION = "prototype-0.1.4"
 const DIRECTIONS = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]]
 const FIRE_DAMAGE = 10
 
@@ -63,6 +63,11 @@ static func _unit(raw: Dictionary, team: String) -> Dictionary:
 	u.id = str(u.get("id", team + "_" + kind))
 	u.name = str(u.get("name", kind))
 	u.kind = kind
+	u.weapon_style = str(u.get("weapon_style", _default_weapon_style(kind)))
+	if not u.get("visual_loadout") is Dictionary:
+		u.visual_loadout = _default_visual_loadout(kind, u.weapon_style)
+	else:
+		u.visual_loadout = u.visual_loadout.duplicate(true)
 	u.team = team
 	u.max_hp = int(u.get("max_hp", 28 if kind == "dog" else 38))
 	u.hp = int(u.get("hp", u.max_hp))
@@ -70,7 +75,7 @@ static func _unit(raw: Dictionary, team: String) -> Dictionary:
 	u.armor = int(u.get("armor", u.max_armor))
 	u.attack = int(u.get("attack", 10 if kind == "dog" else 14))
 	u.accuracy = int(u.get("accuracy", 80))
-	u.range = int(u.get("range", 4 if kind in ["archer", "hunter"] else (2 if kind == "spear" else 1)))
+	u.range = int(u.get("range", _style_range(str(u.weapon_style))))
 	u.max_ap = 6
 	u.ap = 6
 	u.statuses = {}
@@ -87,11 +92,13 @@ static func get_actions(s: Dictionary, unit_id: String) -> Array:
 	var u = _find_unit(s, unit_id)
 	if u.is_empty() or int(u.hp) <= 0:
 		return []
+	var style := _weapon_style(u)
+	var attack_name: String = str({"guard": "剑击", "spear": "长枪刺击", "archer": "射击", "hunter": "猎弓射击", "skirmisher": "短兵攻击"}.get(style, "攻击"))
 	var actions = [
 		_act("move", "移动", 2, 3, "每格2行动点；离开敌方控制区可能遭反击。", "cell"),
-		_act("attack", "长枪刺击" if u.kind == "spear" else "攻击", 3, int(u.range), "消耗破绽获得25命中。" if u.kind == "spear" else "攻击敌人或破坏物件。", "enemy_or_prop"),
+		_act("attack", attack_name, 3, int(u.range), "消耗破绽获得25命中。" if style == "spear" else "攻击敌人或破坏物件。", "enemy_or_prop"),
 		_act("defend", "戒备", 2, 0, "至自身下回合开始，敌人命中率降低20。", "self")]
-	if u.kind == "guard":
+	if style == "guard":
 		actions.append(_act("shield_bash", "盾击", 3, 1, "造成6伤害并制造破绽，长枪可利用。", "enemy"))
 		actions.append(_act("push", "推开", 2, 1, "确定推动1格；不触发脱离反击，危险地表仍生效。", "enemy"))
 	if u.kind == "hunter":
@@ -212,7 +219,7 @@ static func preview(s: Dictionary, unit_id: String, action_id: String, target: D
 		else:
 			p.chance = _hit_chance(s, u, victim, action_id) if not victim.is_empty() else 100
 			p.damage = _attack_damage(s, u, victim, action_id)
-			p.consume_exposed = action_id == "attack" and u.kind == "spear" and not victim.is_empty() and victim.statuses.has("exposed")
+			p.consume_exposed = action_id == "attack" and _weapon_style(u) == "spear" and not victim.is_empty() and victim.statuses.has("exposed")
 			p.summary = "命中%d%%；命中时%d伤害（护甲先吸收）。" % [p.chance, p.damage]
 			if p.consume_exposed:
 				p.summary += " 消耗破绽+25命中，未命中也消耗。"
@@ -599,7 +606,7 @@ static func _hit_chance(_s: Dictionary, u: Dictionary, v: Dictionary, action: St
 	var chance = int(u.accuracy)
 	if v.statuses.has("defending"):
 		chance -= 20
-	if action == "attack" and u.kind == "spear" and v.statuses.has("exposed"):
+	if action == "attack" and _weapon_style(u) == "spear" and v.statuses.has("exposed"):
 		chance += 25
 	if u.kind == "hunter" and v.statuses.has("marked"):
 		chance += 15
@@ -610,7 +617,7 @@ static func _attack_damage(s: Dictionary, u: Dictionary, v: Dictionary, action: 
 	if u.perks.has("breacher"):
 		if action == "shield_bash":
 			damage += 4
-		elif u.kind == "spear" and not v.is_empty() and v.statuses.has("exposed"):
+		elif _weapon_style(u) == "spear" and not v.is_empty() and v.statuses.has("exposed"):
 			damage += 6
 	if u.kind == "dog" and not v.is_empty() and v.statuses.has("marked"):
 		var hunter = _find_unit(s, str(u.get("hunter_id", "")))
@@ -755,6 +762,29 @@ static func _distance(aq: int, ar: int, bq: int, br: int) -> int:
 
 static func _key(q: int, r: int) -> String:
 	return str(q) + "," + str(r)
+
+static func _weapon_style(u: Dictionary) -> String:
+	# Saved 0.1.3 battles intentionally remain untouched and use their original
+	# kind as the weapon fallback for the rest of that in-progress battle.
+	return str(u.get("weapon_style", _default_weapon_style(str(u.get("kind", "")))))
+
+static func _default_weapon_style(kind: String) -> String:
+	if kind == "raider":
+		return "skirmisher"
+	if kind == "dog":
+		return ""
+	return kind
+
+static func _style_range(style: String) -> int:
+	return int({"guard": 1, "spear": 2, "archer": 4, "skirmisher": 1, "hunter": 3}.get(style, 1))
+
+static func _default_visual_loadout(kind: String, style: String) -> Dictionary:
+	var weapons := {"guard": "weapon_guard_sword", "spear": "weapon_spear_long",
+		"archer": "weapon_archer_bow", "skirmisher": "weapon_skirmisher_blade",
+		"hunter": "weapon_hunter_bow"}
+	var armors := {"guard": "armor_mail", "spear": "armor_brigandine",
+		"archer": "armor_padded", "skirmisher": "armor_leather", "hunter": "armor_leather"}
+	return {"weapon": str(weapons.get(style, "")), "armor": str(armors.get(kind, ""))}
 
 static func _random(s: Dictionary, upper: int) -> int:
 	s.rng_state = (int(s.rng_state) * 48271) % 2147483647

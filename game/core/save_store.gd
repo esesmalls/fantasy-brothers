@@ -2,13 +2,15 @@ extends RefCounted
 ## Versioned snapshots; rotate the previous verified snapshot before replacing it.
 
 const World = preload("res://core/world_data.gd")
+const Equipment = preload("res://core/equipment_rules.gd")
 
 const FORMAT_VERSION = 1
 const MAX_BYTES = 8 * 1024 * 1024
 const MAX_JSON_DEPTH = 40
 const MAX_SAFE_JSON_INT = 9007199254740991
 const RNG_MAX = 2147483646
-const BATTLE_RULES_VERSION = "prototype-0.1.1"
+const BATTLE_RULES_VERSION = "prototype-0.1.4"
+const PREVIOUS_BATTLE_RULES_VERSION = "prototype-0.1.1"
 const LEGACY_BATTLE_RULES_VERSION = "prototype-0.1"
 const UNIT_KINDS = ["guard", "spear", "archer", "skirmisher", "hunter", "dog", "raider"]
 const PERKS = ["vigor", "precision", "breacher", "firewise", "packbond"]
@@ -93,12 +95,12 @@ static func _read(path: String) -> Dictionary:
 		return {"ok": false}
 	var data: Dictionary = payload_parser.data
 	_canonicalize_numbers(data)
-	if not validate(data).is_empty():
+	if not validate(data, true).is_empty():
 		return {"ok": false}
 	var upgraded: bool = _upgrade_loaded(data)
 	if not validate(data).is_empty():
 		return {"ok": false}
-	return {"ok": true, "campaign": data, "upgraded": upgraded, "reason": "已读取存档；旧版进度已兼容，后续行动使用 0.1.1 规则。" if upgraded else "已读取存档"}
+	return {"ok": true, "campaign": data, "upgraded": upgraded, "reason": "已读取存档；旧版战役已兼容，后续新战斗使用0.1.4装备规则。" if upgraded else "已读取存档"}
 
 static func _upgrade_loaded(c: Dictionary) -> bool:
 	# Only upgrade after checksum and full structural validation. Never reroll
@@ -128,6 +130,8 @@ static func _upgrade_loaded(c: Dictionary) -> bool:
 	if not c.has("world"):
 		c.world = World.new_world()
 		_upgrade_world_for_legacy_phase(c)
+		upgraded = true
+	if Equipment.migrate_legacy(c):
 		upgraded = true
 	return upgraded
 
@@ -186,7 +190,7 @@ static func _edge_ids(path: Array) -> Array:
 		ids.append("%s>%s" % [str(path[i]), str(path[i + 1])])
 	return ids
 
-static func validate(c: Dictionary) -> String:
+static func validate(c: Dictionary, allow_legacy_equipment: bool = false) -> String:
 	if not _json_safe(c):
 		return "包含无法安全序列化的数据。"
 	if not _is_integer(c.get("schema", -1), 1, 1):
@@ -219,6 +223,13 @@ static func validate(c: Dictionary) -> String:
 		return "旧版存档包含未知阶段。"
 	if not _valid_units(c.roster, "player"):
 		return "队员数据损坏。"
+	if not c.has("equipment"):
+		if not allow_legacy_equipment:
+			return "装备状态缺失。"
+	else:
+		var equipment_problem := Equipment.validate_campaign(c)
+		if not equipment_problem.is_empty():
+			return equipment_problem
 	for key in c.claimed:
 		if not key is String or str(key).is_empty() or c.claimed[key] != true:
 			return "远征领取记录损坏。"
@@ -450,7 +461,7 @@ static func _validate_growth(offers: Array, expedition_id: String) -> String:
 	return ""
 
 static func _validate_battle(b: Dictionary, expedition_id: String) -> String:
-	if not _is_integer(b.get("schema", null), 1, 1) or not str(b.get("rules_version", "")) in [BATTLE_RULES_VERSION, LEGACY_BATTLE_RULES_VERSION]:
+	if not _is_integer(b.get("schema", null), 1, 1) or not str(b.get("rules_version", "")) in [BATTLE_RULES_VERSION, PREVIOUS_BATTLE_RULES_VERSION, LEGACY_BATTLE_RULES_VERSION]:
 		return "战斗版本不兼容。"
 	if str(b.get("id", "")) != expedition_id:
 		return "战斗与远征编号不匹配。"

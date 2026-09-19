@@ -2,6 +2,7 @@ extends RefCounted
 const Campaign = preload("res://core/campaign_rules.gd")
 const Battle = preload("res://core/battle_rules.gd")
 const Saves = preload("res://core/save_store.gd")
+const Equipment = preload("res://core/equipment_rules.gd")
 const Policy = preload("res://tests/play_policy.gd")
 var failures: Array[String] = []
 var checks: int = 0
@@ -357,12 +358,178 @@ func run(app: Control) -> void:
 	await _capture(app, "15-element-area")
 	app._choose_action("move")
 	_check(app.board._action_overlay.get("range_cells", []).is_empty() and not app.reachable.is_empty(), "switching to movement clears attack range")
+	await _test_equipment_ui(app)
 	var report: Dictionary = {"checks": checks, "failures": failures, "engine": Engine.get_version_info().string, "exported": not OS.has_feature("editor"), "screen_dir": output}
 	var file: FileAccess = FileAccess.open(output.path_join("smoke-report.json"), FileAccess.WRITE)
 	file.store_string(JSON.stringify(report, "  "))
 	file.close()
 	print("UI_SMOKE: %d checks, %d failures; %s" % [checks, failures.size(), output])
 	app.get_tree().quit(0 if failures.is_empty() else 1)
+
+func _test_equipment_ui(app: Control) -> void:
+	# Keep the equipment loop isolated from the long campaign fixture above. All
+	# player-facing trade and loadout changes go through real UI buttons.
+	app._new_campaign("free", 1944)
+	app.get_window().size = Vector2i(1180, 740)
+	await app.get_tree().process_frame
+	app._show_camp_view()
+	var opening_state := JSON.stringify(app.campaign)
+	await _activate_scrolled_button(app, app.equipment_button)
+	_check(is_instance_valid(app.equipment_screen) and app.equipment_open, "camp equipment button opens the three-column quartermaster screen")
+	_check(JSON.stringify(app.campaign) == opening_state, "opening and reading equipment does not change resources, RNG, or campaign state")
+	_check(app.equipment_screen.unit_buttons.has("crew_3") and app.equipment_screen.buy_buttons.has("weapon_spear_hooked"), "equipment screen exposes another background and every human weapon style through stable IDs")
+	await _capture(app, "16-small-equipment")
+	if not is_instance_valid(app.equipment_screen) or not app.equipment_screen.buy_buttons.has("weapon_spear_hooked"):
+		return
+
+	var archer_before: Dictionary = _roster_unit(app.campaign, "crew_3").duplicate(true)
+	var gold_before := int(app.campaign.gold)
+	var instances_before := _equipment_instance_ids(app.campaign)
+	var spear_price := _shop_price(app.campaign, "crew_1", "weapon_spear_hooked")
+	await _activate_scrolled_button(app, app.equipment_screen.buy_buttons["weapon_spear_hooked"])
+	var spear_id := _new_equipment_instance_id(app.campaign, instances_before)
+	_check(not spear_id.is_empty() and int(app.campaign.gold) == gold_before - spear_price, "real buy click pays the displayed hooked-spear price once and creates one stable inventory instance")
+	await _activate_scrolled_button(app, app.equipment_screen.unit_buttons["crew_3"])
+	_check(app.equipment_screen.equip_buttons.has(spear_id), "purchased spear remains available after selecting an archer background")
+	if spear_id.is_empty() or not app.equipment_screen.equip_buttons.has(spear_id):
+		return
+	await _activate_scrolled_button(app, app.equipment_screen.equip_buttons[spear_id])
+	var archer: Dictionary = _roster_unit(app.campaign, "crew_3")
+	_check(str(archer.get("equipment", {}).get("weapon", "")) == spear_id and str(archer.weapon_style) == "spear" and int(archer.attack) == int(archer_before.attack) + 3 and int(archer.accuracy) == int(archer_before.accuracy) - 6 and int(archer.range) == 2, "real cross-background equip click applies spear stats, style, and range to the archer")
+	await _activate_scrolled_button(app, app.equipment_screen.unit_buttons["crew_1"])
+	var guard: Dictionary = _roster_unit(app.campaign, "crew_1")
+
+	# Buy and sell a separate purchased armor to cover the resale path without
+	# confusing it with the armor instance used by the durability check below.
+	gold_before = int(app.campaign.gold)
+	instances_before = _equipment_instance_ids(app.campaign)
+	var padded_price := _shop_price(app.campaign, "crew_1", "armor_padded")
+	await _activate_scrolled_button(app, app.equipment_screen.buy_buttons["armor_padded"])
+	var resale_armor_id := _new_equipment_instance_id(app.campaign, instances_before)
+	var resale_value := _inventory_sell_price(app.campaign, "crew_1", resale_armor_id)
+	_check(not resale_armor_id.is_empty() and int(app.campaign.gold) == gold_before - padded_price and app.equipment_screen.sell_buttons.has(resale_armor_id), "real armor purchase enters inventory and exposes its bounded resale value")
+	if not resale_armor_id.is_empty() and app.equipment_screen.sell_buttons.has(resale_armor_id):
+		await _activate_scrolled_button(app, app.equipment_screen.sell_buttons[resale_armor_id])
+		_check(not resale_armor_id in _equipment_instance_ids(app.campaign) and int(app.campaign.gold) == gold_before - padded_price + resale_value and resale_value < padded_price, "real sell click removes one instance, pays once, and cannot recover its purchase price")
+
+	# A second padded armor remains owned so its wear can be followed through a
+	# battle result and two later swaps.
+	instances_before = _equipment_instance_ids(app.campaign)
+	await _activate_scrolled_button(app, app.equipment_screen.buy_buttons["armor_padded"])
+	var worn_armor_id := _new_equipment_instance_id(app.campaign, instances_before)
+	_check(not worn_armor_id.is_empty() and app.equipment_screen.equip_buttons.has(worn_armor_id), "second purchased armor has a distinct stable instance ID")
+	if worn_armor_id.is_empty() or not app.equipment_screen.equip_buttons.has(worn_armor_id):
+		return
+	var issued_armor_id := str(_roster_unit(app.campaign, "crew_1").get("equipment", {}).get("armor", ""))
+	await _activate_scrolled_button(app, app.equipment_screen.equip_buttons[worn_armor_id])
+	guard = _roster_unit(app.campaign, "crew_1")
+	_check(str(guard.equipment.armor) == worn_armor_id and int(guard.armor) == 10 and int(guard.max_armor) == 10, "armor equip click uses the selected instance's full current durability")
+	app._manual_save()
+	var equipped_state: Dictionary = app.campaign.duplicate(true)
+	app._load(app.manual_path)
+	_check(app.campaign == equipped_state, "equipment purchases, resale, loadout, attributes, and instance serials survive manual save/load exactly")
+
+	app._show_world_view()
+	await _activate_button(app, app.route_buttons["road"])
+	await _advance_until(app, "event")
+	app._event_choice(str(app.campaign.event.choices[0].id))
+	await _advance_until(app, "ready")
+	app._enter_battle()
+	await app.get_tree().process_frame
+	var battle_guard := _battle_unit(app.campaign.battle, "crew_1")
+	var battle_archer := _battle_unit(app.campaign.battle, "crew_3")
+	_check(not battle_guard.is_empty() and int(battle_guard.max_armor) == 10 and not battle_archer.is_empty() and str(battle_archer.weapon_style) == "spear" and int(battle_archer.attack) == int(archer_before.attack) + 3 and int(battle_archer.accuracy) == int(archer_before.accuracy) - 6 and int(battle_archer.range) == 2, "cross-background weapon and equipped armor attributes reach the actual battle snapshot")
+	app._end_turn()
+	app._end_turn()
+	_check(str(Battle.active_unit(app.campaign.battle).id) == "crew_3" and app.action_buttons.has("attack") and app.action_buttons["attack"].tooltip_text.contains("长枪") and not app.action_buttons.has("shield_bash") and not app.action_buttons.has("push"), "actual archer turn uses the equipped spear action set rather than the character background")
+	app._on_unit_hovered("crew_3")
+	app._on_cell_hovered(int(battle_archer.q), int(battle_archer.r))
+	_check(app.battle_hud.inspection_body.text.contains("钩刃长枪"), "battle inspection names the cross-background equipped weapon")
+	await _capture(app, "17-small-cross-weapon")
+	# Controlled battle-result fixture: the settlement path is under test here;
+	# no claim is made that assigning this wear simulates a player attack.
+	if not battle_guard.is_empty():
+		battle_guard.armor = 4
+	app._retreat()
+	app._resolve()
+	_check(app.campaign.phase == "returning" and int(_equipment_instance(app.campaign, worn_armor_id).get("durability", -1)) == 4, "battle settlement writes remaining armor into the equipped stable instance")
+	await _activate_button(app, app.world_screen.return_button)
+	_check(app.campaign.phase == "camp" and int(_roster_unit(app.campaign, "crew_1").armor) == 4, "return to camp preserves the settled armor loss")
+	app._show_equipment("crew_1")
+	_check(app.equipment_screen.equip_buttons.has(issued_armor_id), "replaced issued armor remains available in the shared inventory")
+	if app.equipment_screen.equip_buttons.has(issued_armor_id):
+		await _activate_scrolled_button(app, app.equipment_screen.equip_buttons[issued_armor_id])
+		_check(int(_roster_unit(app.campaign, "crew_1").armor) == 24 and app.equipment_screen.equip_buttons.has(worn_armor_id), "switching to the intact issued armor uses that instance's own durability")
+	if app.equipment_screen.equip_buttons.has(worn_armor_id):
+		await _activate_scrolled_button(app, app.equipment_screen.equip_buttons[worn_armor_id])
+		_check(int(_roster_unit(app.campaign, "crew_1").armor) == 4 and int(_equipment_instance(app.campaign, worn_armor_id).get("durability", -1)) == 4, "switching damaged armor off and on does not repair it")
+	await _capture(app, "17-small-equipment-wear")
+	await _test_hunter_shield_ui(app)
+
+func _test_hunter_shield_ui(app: Control) -> void:
+	# Extreme mixed loadout: a hunter background keeps all dog commands while a
+	# sword-and-shield weapon supplies both shield actions. This is the widest HUD.
+	app._new_campaign("hunters", 1945)
+	app.get_window().size = Vector2i(1180, 740)
+	await app.get_tree().process_frame
+	app._show_camp_view()
+	await _activate_scrolled_button(app, app.equipment_button)
+	var issued_sword := str(_roster_unit(app.campaign, "crew_1").equipment.weapon)
+	var before := _equipment_instance_ids(app.campaign)
+	await _activate_scrolled_button(app, app.equipment_screen.buy_buttons["weapon_spear_hooked"])
+	var replacement_spear := _new_equipment_instance_id(app.campaign, before)
+	if replacement_spear.is_empty() or not app.equipment_screen.equip_buttons.has(replacement_spear):
+		return
+	await _activate_scrolled_button(app, app.equipment_screen.equip_buttons[replacement_spear])
+	await _activate_scrolled_button(app, app.equipment_screen.unit_buttons["crew_3"])
+	_check(app.equipment_screen.equip_buttons.has(issued_sword), "a weapon released by another background can be selected for the hunter")
+	if not app.equipment_screen.equip_buttons.has(issued_sword):
+		return
+	await _activate_scrolled_button(app, app.equipment_screen.equip_buttons[issued_sword])
+	var hunter := _roster_unit(app.campaign, "crew_3")
+	_check(str(hunter.kind) == "hunter" and str(hunter.weapon_style) == "guard" and int(hunter.range) == 1 and str(hunter.visual_loadout.weapon) == "weapon_guard_sword", "real cross-background swap keeps hunter identity while applying sword-and-shield style and appearance")
+	_check(is_instance_valid(app.equipment_screen.portrait) and str(app.equipment_screen.portrait._unit.get("visual_loadout", {}).get("weapon", "")) == "weapon_guard_sword", "camp portrait receives the same read-only equipped weapon snapshot")
+	await _capture(app, "18-small-hunter-shield-camp")
+
+	# Controlled visual-only injury fixture. CharacterPortrait duplicates its
+	# input; restore the healthy snapshot and verify campaign state never changes.
+	var state_before_injury := JSON.stringify(app.campaign)
+	var wounded: Dictionary = hunter.duplicate(true)
+	wounded.hp = maxi(1, int(wounded.max_hp / 4))
+	wounded.armor = mini(2, int(wounded.max_armor))
+	app.equipment_screen.portrait.set_unit(wounded)
+	_check(int(app.equipment_screen.portrait._unit.hp) == int(wounded.hp) and JSON.stringify(app.campaign) == state_before_injury, "portrait injury fixture uses a copy and cannot alter real health or equipment state")
+	await _capture(app, "18a-small-hunter-injury-fixture")
+	app.equipment_screen.portrait.set_unit(hunter)
+	_check(int(app.equipment_screen.portrait._unit.hp) == int(hunter.hp) and JSON.stringify(app.campaign) == state_before_injury, "portrait fixture restores the healthy display without changing the campaign")
+
+	app._show_world_view()
+	await _activate_button(app, app.route_buttons["road"])
+	await _advance_until(app, "event")
+	app._event_choice(str(app.campaign.event.choices[0].id))
+	await _advance_until(app, "ready")
+	app._enter_battle()
+	app._end_turn()
+	app._end_turn()
+	await app.get_tree().process_frame
+	await app.get_tree().process_frame
+	var active := Battle.active_unit(app.campaign.battle)
+	var expected: Array[String] = ["move", "attack", "defend", "shield_bash", "push", "mark", "command_follow", "command_pin", "command_recall"]
+	var all_actions_visible: bool = str(active.id) == "crew_3" and app.action_box.get_child_count() == expected.size()
+	for action_id: String in expected:
+		all_actions_visible = all_actions_visible and app.action_buttons.has(action_id)
+		if app.action_buttons.has(action_id):
+			var button: Button = app.action_buttons[action_id]
+			all_actions_visible = all_actions_visible and button.is_visible_in_tree() and not button.disabled and button.get_global_rect().end.x <= app.get_viewport_rect().size.x + 1.0 and button.get_global_rect().end.y <= app.get_viewport_rect().size.y + 1.0
+	_check(all_actions_visible, "minimum-window hunter sword-and-shield turn exposes all nine weapon and background actions as usable controls")
+	_check(app.action_box.get_global_rect().position.x > app.battle_hud.actor_stats.get_global_rect().end.x and app.action_box.get_global_rect().end.x < app.battle_hud.end_button.get_global_rect().position.x, "nine-action grid stays between the current-character panel and battle controls")
+	var battle_hunter := _battle_unit(app.campaign.battle, "crew_3")
+	app._on_unit_hovered("crew_3")
+	app._on_cell_hovered(int(battle_hunter.q), int(battle_hunter.r))
+	var inspection_rect: Rect2 = app.battle_hud.inspection_panel.get_global_rect()
+	_check(app.battle_hud.inspection_body.text.contains("营团剑盾") and app.battle_hud.inspection_body.text.contains("中型皮甲"), "battle inspection names both visible equipment layers")
+	_check(inspection_rect.end.y <= app.battle_hud.dock.get_global_rect().position.y + 1.0 and inspection_rect.position.y >= 0.0, "equipment-expanded inspection card remains above the command dock in the minimum window")
+	await _capture(app, "19-small-hunter-shield-battle")
 
 func _check(condition: bool, label: String) -> void:
 	checks += 1
@@ -387,6 +554,50 @@ func _first_unit(battle: Dictionary, team: String) -> Dictionary:
 		if str(unit.team) == team and int(unit.hp) > 0:
 			return unit
 	return {}
+
+func _roster_unit(campaign: Dictionary, unit_id: String) -> Dictionary:
+	for unit: Dictionary in campaign.get("roster", []):
+		if str(unit.get("id", "")) == unit_id:
+			return unit
+	return {}
+
+func _battle_unit(battle: Dictionary, unit_id: String) -> Dictionary:
+	for unit: Dictionary in battle.get("units", []):
+		if str(unit.get("id", "")) == unit_id:
+			return unit
+	return {}
+
+func _equipment_instance(campaign: Dictionary, instance_id: String) -> Dictionary:
+	for instance: Dictionary in campaign.get("equipment", {}).get("instances", []):
+		if str(instance.get("id", "")) == instance_id:
+			return instance
+	return {}
+
+func _equipment_instance_ids(campaign: Dictionary) -> Array[String]:
+	var ids: Array[String] = []
+	for instance: Dictionary in campaign.get("equipment", {}).get("instances", []):
+		ids.append(str(instance.get("id", "")))
+	return ids
+
+func _new_equipment_instance_id(campaign: Dictionary, before: Array[String]) -> String:
+	var added: Array[String] = []
+	for instance_id: String in _equipment_instance_ids(campaign):
+		if not instance_id in before:
+			added.append(instance_id)
+	_check(added.size() == 1, "equipment command creates exactly one new stable instance")
+	return added[0] if added.size() == 1 else ""
+
+func _shop_price(campaign: Dictionary, unit_id: String, definition_id: String) -> int:
+	for item: Dictionary in Equipment.get_view(campaign, unit_id).get("shop", []):
+		if str(item.get("id", "")) == definition_id:
+			return int(item.get("price", 0))
+	return 0
+
+func _inventory_sell_price(campaign: Dictionary, unit_id: String, instance_id: String) -> int:
+	for item: Dictionary in Equipment.get_view(campaign, unit_id).get("inventory", []):
+		if str(item.get("id", "")) == instance_id:
+			return int(item.get("sell_price", 0))
+	return 0
 
 func _unit_name(battle: Dictionary, unit_id: String) -> String:
 	for unit: Dictionary in battle.units:
@@ -478,6 +689,23 @@ func _activate_button(app: Control, button: Button) -> void:
 		await app.get_tree().process_frame
 		return
 	await _real_click(app, button.get_global_rect().get_center())
+
+func _activate_scrolled_button(app: Control, button: Button) -> void:
+	# Equipment columns scroll independently. Bring the target into its own
+	# viewport before taking a native-input coordinate.
+	await app.get_tree().process_frame
+	await app.get_tree().process_frame
+	if not is_instance_valid(button):
+		_check(false, "scrolled button remains valid after the rebuilt screen settles")
+		return
+	var ancestor: Node = button.get_parent()
+	while ancestor != null:
+		if ancestor is ScrollContainer:
+			(ancestor as ScrollContainer).ensure_control_visible(button)
+		ancestor = ancestor.get_parent()
+	await app.get_tree().process_frame
+	await app.get_tree().process_frame
+	await _activate_button(app, button)
 
 func _real_click(app: Control, point: Vector2) -> void:
 	point = app.get_viewport().get_screen_transform() * point

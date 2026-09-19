@@ -3,6 +3,7 @@ extends RefCounted
 ## These values are playtest hypotheses, not the final economy or progression.
 
 const World = preload("res://core/world_data.gd")
+const Equipment = preload("res://core/equipment_rules.gd")
 
 const PERK_INFO = {
 	"vigor": {"title": "坚韧", "description": "最大生命与当前生命永久 +8。"},
@@ -63,6 +64,7 @@ static func create_campaign(origin: String, seed_value: int) -> Dictionary:
 			unit_name = "灰牙"
 		c.roster.append(_new_unit(str(kinds[i]), "crew_%d" % (i + 1), unit_name, i))
 	_bind_hunter(c)
+	Equipment.initialize_new_campaign(c)
 	return c
 
 static func camp_action(c: Dictionary, action: String) -> Dictionary:
@@ -101,22 +103,13 @@ static func camp_action(c: Dictionary, action: String) -> Dictionary:
 				return _camp_ok(c, "缺粮又缺钱：队伍帮渡口搬货两天，换来 4 份粮食。可继续远征。")
 			return _fail("补给需要 12 金；粮食少于 2 且资金不足时，可在渡口做短工换粮。")
 		"repair":
-			var damaged: Array = []
-			for unit: Dictionary in living:
-				if int(unit.armor) < int(unit.max_armor):
-					damaged.append(unit)
-			if damaged.is_empty():
-				return _fail("存活队员的护甲已经完整。")
-			var price: int = damaged.size() * 4
-			if int(c.gold) >= price:
-				c.gold = int(c.gold) - price
-				for unit: Dictionary in damaged:
-					unit.armor = int(unit.max_armor)
-				return _camp_ok(c, "花费 %d 金，修复 %d 名队员的全部护甲。" % [price, damaged.size()])
-			c.day = int(c.day) + 1
-			for unit: Dictionary in damaged:
-				unit.armor = mini(int(unit.max_armor), int(unit.armor) + 6)
-			return _camp_ok(c, "资金不足：用一天拾取与拼补，每名受损队员恢复 6 护甲，无需金币。")
+			# Roster armor remains a battle-facing mirror; persist any current wear
+			# before pricing repairs across equipped and stored armor instances.
+			Equipment.sync_roster_armor_to_instances(c)
+			var repair := Equipment.repair_all(c)
+			if not repair.ok:
+				return repair
+			return _camp_ok(c, str(repair.reason))
 		"recruit":
 			var slot: int = -1
 			for i in range(c.roster.size()):
@@ -141,7 +134,9 @@ static func camp_action(c: Dictionary, action: String) -> Dictionary:
 				c.roster.append(recruit)
 			else:
 				_record_memorial(c, c.roster[slot])
+				Equipment.discard_unit_loadout(c, c.roster[slot])
 				c.roster[slot] = recruit
+			Equipment.grant_recruit_loadout(c, recruit)
 			c.day = int(c.day) + 1
 			_bind_hunter(c)
 			var advance_note: String = ""
@@ -504,7 +499,11 @@ static func resolve_battle(c: Dictionary, battle: Dictionary) -> Dictionary:
 	for unit: Dictionary in _living(c):
 		if not player_units.has(str(unit.id)):
 			return _fail("战斗缺少出征队员的结果，未进行结算。")
+	var equipment_problem := Equipment.battle_result_problem(c, battle)
+	if not equipment_problem.is_empty():
+		return _fail(equipment_problem)
 	# All validation precedes mutation. The claim guards both money and progression.
+	var equipment_settlement := Equipment.apply_battle_result(c, battle)
 	c.claimed[expedition_id] = true
 	var casualties: Array = []
 	for unit: Dictionary in c.roster:
@@ -575,7 +574,9 @@ static func resolve_battle(c: Dictionary, battle: Dictionary) -> Dictionary:
 	if casualties.is_empty():
 		report += "\n无人阵亡。伤势和护甲损耗会保留，返营后可休养和修补。"
 	else:
-		report += "\n阵亡：" + "、".join(casualties) + "。他们的经历留在名册中，原位可补员。"
+		report += "\n阵亡：" + "、".join(casualties) + "。他们的经历留在名册中，原位可补员。阵亡时随身武器与护甲遗失。"
+		if not equipment_settlement.get("lost", []).is_empty():
+			report += " 遗失：" + "、".join(equipment_settlement.lost) + "。"
 	if int(expedition.index) >= 3 and not bool(c.flags.get("ending_seen", false)):
 		c.flags.ending_seen = true
 		c.flags.ending_text = _ending(c)
@@ -631,6 +632,7 @@ static func choose_growth(c: Dictionary, offer_id: String) -> Dictionary:
 				for survivor: Dictionary in _living(c):
 					survivor.hp = mini(int(survivor.max_hp), int(survivor.hp) + 10)
 					survivor.armor = mini(int(survivor.max_armor), int(survivor.armor) + 6)
+				Equipment.sync_roster_armor_to_instances(c)
 				effect_note = "改为战地整备：存活队员恢复 10 生命、6 护甲。"
 			_:
 				return _fail("成长候选损坏，未进行任何结算。")

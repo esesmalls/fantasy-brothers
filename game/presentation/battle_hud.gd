@@ -133,7 +133,8 @@ func _build_dock() -> void:
 	var skills := _vbox(groups, 3)
 	_label(skills, "招式", 12, GOLD)
 	action_box = GridContainer.new()
-	action_box.columns = 7
+	# A hunter carrying sword and shield keeps commands as well as weapon skills.
+	action_box.columns = 9
 	action_box.add_theme_constant_override("h_separation", 4)
 	skills.add_child(action_box)
 	groups.add_child(VSeparator.new())
