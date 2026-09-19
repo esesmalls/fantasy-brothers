@@ -152,7 +152,7 @@ func _build_dock() -> void:
 	var controls := _vbox(main, 5)
 	controls.custom_minimum_size.x = 152
 	end_button = _button(controls, "结束回合  [空格]", controller._end_turn, 35)
-	resolve_button = _button(controls, "清点伤亡 · 回营", controller._resolve, 35)
+	resolve_button = _button(controls, "清点战果 · 离场", controller._resolve, 35)
 	retreat_button = _button(controls, "撤离战场", func(): controller._confirm("撤离战场？", "未完成契约没有报酬；伤亡与消耗仍会保留。", controller._retreat), 29)
 	var speeds := HBoxContainer.new()
 	speeds.add_theme_constant_override("separation", 3)

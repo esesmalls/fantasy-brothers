@@ -15,20 +15,69 @@ func run(app: Control) -> void:
 	DirAccess.make_dir_recursive_absolute(output)
 	await _capture(app, "01-title")
 	app._new_campaign("free", 1709)
-	_check(app.route_buttons.has("road") and app.route_buttons.has("ridge"), "camp exposes both route choices")
+	await app.get_tree().process_frame
+	_check(is_instance_valid(app.world_screen) and is_instance_valid(app.world_screen.map), "new campaign opens the world map with an interactive map control")
+	_check(app.route_buttons.has("road") and app.route_buttons.has("ridge") and app.route_buttons == app.world_screen.route_buttons, "world map exposes both real route buttons through the controller alias")
+	var map_read_before: String = JSON.stringify(app.campaign)
+	var ferry_name: String = _world_location_name(app.campaign, "loc_ferry_crossing")
+	await _real_map_location(app, "loc_ferry_crossing")
+	_check(app.world_screen.map._hover_id == "loc_ferry_crossing" and app.world_screen.location_title.text.begins_with(ferry_name), "real pointer hover and click select a discovered map location")
+	_check(JSON.stringify(app.campaign) == map_read_before and app.campaign.phase == "camp", "map location browsing is read-only and does not begin travel")
+	var route_preview_text: String = _node_text(app.world_screen)
+	for route: Dictionary in Campaign.get_routes(app.campaign):
+		var route_id: String = str(route.id)
+		_check(app.route_buttons[route_id].tooltip_text == str(route.description), "%s route button exposes the rule description" % route_id)
+		_check(route_preview_text.contains("%d 粮 · %d 天" % [int(route.food_cost), int(route.days)]) and route_preview_text.contains("%d 金" % int(route.reward)) and route_preview_text.contains("油 %d · 火 %d · 水 %d" % [int(route.supplies.oil), int(route.supplies.fire), int(route.supplies.water)]), "%s route card displays rule-owned cost, duration, reward, and tools" % route_id)
 	var before_routes: String = JSON.stringify(app.campaign)
 	app._show_campaign()
-	_check(JSON.stringify(app.campaign) == before_routes, "reopening route panel does not reroll or spend resources")
-	await _capture(app, "02-camp")
+	_check(JSON.stringify(app.campaign) == before_routes, "reopening the world map does not reroll or spend resources")
+	_check(is_instance_valid(app.world_screen.camp_button) and app.world_screen.camp_button.is_visible_in_tree(), "world map offers the separate camp-life view")
+	await _capture(app, "02-world-camp")
+	await _activate_button(app, app.world_screen.camp_button)
+	_check(app.campaign.phase == "camp" and app.camp_detail and app.world_screen == null, "camp button opens roster and life actions without changing campaign phase")
+	app._show_world_view()
 	for expedition in range(3):
-		app._start_expedition()
-		_check(app.campaign.phase == "event", "event opens")
+		if not is_instance_valid(app.world_screen):
+			app._show_world_view()
+		var departure_food: int = int(app.campaign.food)
+		var departure_day: int = int(app.campaign.day)
+		var road_rule: Dictionary = Campaign.get_routes(app.campaign)[0]
+		await _activate_button(app, app.route_buttons["road"])
+		_check(app.campaign.phase == "travel", "road route button accepts the contract and starts saved travel")
+		_check(str(app.campaign.world.travel.route_id) == "road" and int(app.campaign.world.travel.current_edge_index) == 0, "accepted road route begins at the saved origin node")
+		_check(int(app.campaign.food) == departure_food - int(road_rule.food_cost) and int(app.campaign.day) == departure_day + int(road_rule.days), "road route charges its previewed food and days exactly once on departure")
 		if expedition == 0:
-			await _capture(app, "03-event")
+			await _capture(app, "03-world-travel")
+			app._manual_save()
+			var travel_state: Dictionary = app.campaign.duplicate(true)
+			app._load(app.manual_path)
+			_check(app.campaign == travel_state and str(app.campaign.world.travel.event_instance_id) == str(travel_state.world.travel.event_instance_id), "saved in-progress travel reloads its exact node, RNG, and generated event instance")
+			var reopened_travel: String = JSON.stringify(app.campaign)
+			app._show_campaign()
+			_check(JSON.stringify(app.campaign) == reopened_travel and int(app.campaign.food) == departure_food - int(road_rule.food_cost), "reopening in-progress travel neither rerolls nor charges the route again")
+		await _advance_until(app, "event")
+		_check(app.campaign.phase == "event", "travel reaches its saved event node")
+		if expedition == 0:
+			await _capture(app, "04-world-event")
+			app._manual_save()
+			var event_state: Dictionary = app.campaign.duplicate(true)
+			app._load(app.manual_path)
+			_check(app.campaign == event_state, "saved travel event and choices reload exactly without reroll")
+			var event_view_before: String = JSON.stringify(app.campaign)
+			app._show_world_view()
+			await app.get_tree().process_frame
+			_check(is_instance_valid(app.world_screen) and is_instance_valid(app.world_screen.continue_button), "event exposes a read-only map overview with a continue control")
+			await _real_map_location(app, str(app.campaign.world.company_location_id))
+			_check(JSON.stringify(app.campaign) == event_view_before and app.campaign.phase == "event", "browsing the event location on the map does not resolve or reroll the event")
+			await _capture(app, "04a-world-event-overview")
+			await _activate_button(app, app.world_screen.continue_button)
+			_check(app.world_screen == null and app.campaign.phase == "event" and JSON.stringify(app.campaign) == event_view_before, "closing the map overview restores the same unresolved event")
 		app._event_choice(str(app.campaign.event.choices[0].id))
-		_check(app.campaign.phase == "ready", "event choice reaches briefing")
+		_check(app.campaign.phase in ["travel", "ready"], "event choice resumes the saved trip")
+		await _advance_until(app, "ready")
+		_check(app.campaign.phase == "ready", "remaining travel reaches the contract briefing")
 		if expedition == 0:
-			await _capture(app, "04-briefing")
+			await _capture(app, "05-briefing")
 		app._enter_battle()
 		_check(app.campaign.phase == "battle", "battle opens")
 		if expedition == 0:
@@ -181,12 +230,30 @@ func run(app: Control) -> void:
 		_check(app.campaign.battle.outcome == "victory", "seed1709 expedition %d victory" % expedition)
 		await _capture(app, "06-result-%d" % expedition)
 		app._resolve()
-		_check(app.campaign.phase in ["growth", "camp"], "result resolves")
+		_check(app.campaign.phase in ["growth", "returning"], "result resolves once before return travel")
 		if app.campaign.phase == "growth":
 			if expedition == 0:
 				await _capture(app, "07-growth")
 			app._growth_choice(str(app.campaign.growth_offers[0].id))
-		_check(app.campaign.phase == "camp", "returns to camp")
+		_check(app.campaign.phase == "returning" and is_instance_valid(app.world_screen.return_button), "growth completion reaches the explicit return journey")
+		if expedition == 0:
+			await _capture(app, "08-world-return")
+			app._manual_save()
+			var returning_state: Dictionary = app.campaign.duplicate(true)
+			app._load(app.manual_path)
+			_check(app.campaign == returning_state and is_instance_valid(app.world_screen.return_button), "returning state reloads with its return control")
+		await _activate_button(app, app.world_screen.return_button)
+		_check(app.campaign.phase == "camp" and str(app.campaign.world.company_location_id) == "loc_greyshore_camp", "return button restores the company to camp")
+		if expedition == 0:
+			await _capture(app, "09-camp-life")
+			var granary_state: Dictionary = app.campaign.world.location_states.get("loc_granary", {}).duplicate(true)
+			app._show_world_view()
+			await _real_map_location(app, "loc_granary")
+			_check(not granary_state.is_empty() and str(granary_state.get("flags", {}).get("last_outcome", "")) == "victory", "victory return preserves the granary's latest outcome in world state")
+			var granary_name: String = _world_location_name(app.campaign, "loc_granary")
+			_check(app.world_screen.location_title.text.begins_with(granary_name) and (app.world_screen.location_body.text.contains("胜") or app.world_screen.location_body.text.contains("粮")), "returned company can inspect the granary's saved victory consequence on the map [expected=%s title=%s body=%s]" % [granary_name, app.world_screen.location_title.text, app.world_screen.location_body.text])
+			_check(app.campaign.world.location_states.get("loc_granary", {}) == granary_state, "reading the returned granary record does not mutate its saved consequence")
+			app._show_camp_view()
 		for unused in range(4):
 			Campaign.camp_action(app.campaign, "rest")
 		Campaign.camp_action(app.campaign, "repair")
@@ -198,8 +265,14 @@ func run(app: Control) -> void:
 	await _capture(app, "08-ending")
 	app._new_campaign("hunters", 1710)
 	app.get_window().size = Vector2i(1180, 740)
-	app._start_expedition()
+	await app.get_tree().process_frame
+	_check(is_instance_valid(app.world_screen) and is_instance_valid(app.world_screen.map) and app.world_screen.map.get_global_rect().size.x > 0.0 and app.world_screen.map.get_global_rect().size.y > 0.0, "minimum window keeps a visible world-map control")
+	_check(app.world_screen.camp_button.get_global_rect().end.y <= app.get_viewport_rect().size.y + 1.0 and app.route_buttons["road"].get_global_rect().end.y <= app.get_viewport_rect().size.y + 1.0 and app.route_buttons["ridge"].get_global_rect().end.y <= app.get_viewport_rect().size.y + 1.0, "minimum window keeps camp and both route controls inside the viewport")
+	await _capture(app, "10-small-world")
+	await _activate_button(app, app.route_buttons["road"])
+	await _advance_until(app, "event")
 	app._event_choice(str(app.campaign.event.choices[0].id))
+	await _advance_until(app, "ready")
 	app._enter_battle()
 	await app.get_tree().process_frame
 	await app.get_tree().process_frame
@@ -226,7 +299,9 @@ func run(app: Control) -> void:
 	app._retreat()
 	var retired_hud: Control = app.battle_hud
 	app._resolve()
-	_check(app.campaign.phase == "camp" and app.campaign.flags.last_outcome == "retreat", "retreat returns to camp")
+	_check(app.campaign.phase == "returning" and app.campaign.flags.last_outcome == "retreat", "retreat resolves into the return journey")
+	app._return_to_camp()
+	_check(app.campaign.phase == "camp" and app.campaign.flags.last_outcome == "retreat", "retreat return reaches camp with its outcome preserved")
 	app._autosave()
 	app._load(app.save_path)
 	await app.get_tree().process_frame
@@ -235,8 +310,11 @@ func run(app: Control) -> void:
 	_check(reload_result.get("ok", false), "final autosave readable")
 	app.get_window().size = Vector2i(1180, 740)
 	await _capture(app, "10-small-window")
-	app._start_expedition()
+	app._show_world_view()
+	await _activate_button(app, app.route_buttons["road"])
+	await _advance_until(app, "event")
 	app._event_choice(str(app.campaign.event.choices[0].id))
+	await _advance_until(app, "ready")
 	app._enter_battle()
 	await app.get_tree().process_frame
 	_check(is_instance_valid(app.battle_hud) and app.battle_hud.get_parent() == app and not app.screen.visible and not app.battle_hud.inspection_panel.visible, "re-entering battle creates one clean HUD without a stale tooltip")
@@ -246,14 +324,20 @@ func run(app: Control) -> void:
 	app._new_campaign("free", 1842)
 	await _capture(app, "12-small-routes")
 	var ridge: Dictionary = Campaign.get_routes(app.campaign)[1]
-	app.route_buttons["ridge"].pressed.emit()
-	_check(app.campaign.phase == "event" and app.campaign.expedition.route_id == "ridge", "ridge button starts its own route")
+	await _activate_button(app, app.route_buttons["ridge"])
+	_check(app.campaign.phase == "travel" and app.campaign.expedition.route_id == "ridge", "ridge button starts its own saved route")
 	_check(app.campaign.expedition.reward == ridge.reward and app.campaign.expedition.difficulty == ridge.difficulty, "ridge UI preview matches generated expedition")
 	app._manual_save()
 	var route_state: Dictionary = app.campaign.duplicate(true)
 	app._load(app.manual_path)
-	_check(app.campaign == route_state, "route choice and event survive UI save/load without reroll")
+	_check(app.campaign == route_state, "ridge route choice and travel position survive UI save/load without reroll")
+	await _advance_until(app, "event")
+	app._manual_save()
+	var ridge_event_state: Dictionary = app.campaign.duplicate(true)
+	app._load(app.manual_path)
+	_check(app.campaign == ridge_event_state, "ridge event instance survives UI save/load without reroll")
 	app._event_choice(str(app.campaign.event.choices[0].id))
+	await _advance_until(app, "ready")
 	app._enter_battle()
 	app._end_turn()
 	app._end_turn()
@@ -310,6 +394,12 @@ func _unit_name(battle: Dictionary, unit_id: String) -> String:
 			return str(unit.name)
 	return ""
 
+func _world_location_name(campaign: Dictionary, location_id: String) -> String:
+	for location: Dictionary in Campaign.get_world_view(campaign).get("locations", []):
+		if str(location.get("id", "")) == location_id:
+			return str(location.get("name", ""))
+	return ""
+
 func _real_unit_hover(app: Control, unit: Dictionary) -> void:
 	app.board._layout()
 	var local_point: Vector2 = app.board._offset + (app.board._unit_display_point(unit) + Vector2(0, -30)) * app.board._scale
@@ -321,7 +411,68 @@ func _real_unit_hover(app: Control, unit: Dictionary) -> void:
 	await app.get_tree().process_frame
 	await app.get_tree().process_frame
 
+func _real_map_location(app: Control, location_id: String) -> void:
+	await app.get_tree().process_frame
+	await app.get_tree().process_frame
+	var map: Control = app.world_screen.map
+	map._layout()
+	var location: Dictionary = {}
+	for item in map._world.get("locations", []):
+		if item is Dictionary and str(item.get("id", "")) == location_id:
+			location = item
+			break
+	_check(not location.is_empty(), "map fixture contains location " + location_id)
+	if location.is_empty():
+		return
+	var local_point: Vector2 = map._offset + map._location_point(location) * map._scale
+	var screen_point: Vector2 = app.get_viewport().get_screen_transform() * (map.global_position + local_point)
+	var motion := InputEventMouseMotion.new()
+	motion.position = screen_point
+	motion.global_position = screen_point
+	Input.parse_input_event(motion)
+	await app.get_tree().process_frame
+	var click := InputEventMouseButton.new()
+	click.button_index = MOUSE_BUTTON_LEFT
+	click.position = screen_point
+	click.global_position = screen_point
+	click.pressed = true
+	Input.parse_input_event(click)
+	await app.get_tree().process_frame
+	click.pressed = false
+	Input.parse_input_event(click)
+	await app.get_tree().process_frame
+
+func _advance_until(app: Control, target_phase: String) -> void:
+	var steps := 0
+	while str(app.campaign.phase) != target_phase and str(app.campaign.phase) == "travel" and steps < 12:
+		_check(is_instance_valid(app.world_screen) and is_instance_valid(app.world_screen.advance_button), "travel step exposes a real continue button")
+		if not is_instance_valid(app.world_screen) or not is_instance_valid(app.world_screen.advance_button):
+			return
+		await _activate_button(app, app.world_screen.advance_button)
+		steps += 1
+	_check(str(app.campaign.phase) == target_phase, "travel reaches %s within its saved route" % target_phase)
+
+func _node_text(root: Node) -> String:
+	var lines: Array[String] = []
+	_collect_node_text(root, lines)
+	return "\n".join(lines)
+
+func _collect_node_text(root: Node, lines: Array[String]) -> void:
+	if root is Label:
+		lines.append(str(root.text))
+	elif root is Button:
+		lines.append(str(root.text))
+	for child: Node in root.get_children():
+		_collect_node_text(child, lines)
+
 func _activate_button(app: Control, button: Button) -> void:
+	# Campaign actions rebuild the entire screen. Give the replacement controls
+	# two layout passes before reading their global rectangles for native input.
+	await app.get_tree().process_frame
+	await app.get_tree().process_frame
+	if not is_instance_valid(button):
+		_check(false, "button remains valid after the rebuilt screen settles")
+		return
 	if DisplayServer.get_name() == "headless":
 		button.pressed.emit()
 		await app.get_tree().process_frame

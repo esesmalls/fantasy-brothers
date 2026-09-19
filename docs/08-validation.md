@@ -1,3 +1,33 @@
+# 0.1.3 交付验证记录
+
+日期：2026-09-19，基线10161e4，Godot 4.7.2.stable.official.ed1daf0bf。第三台 Windows / NVIDIA RTX 4080 Laptop / OpenGL Compatibility。旧战斗规则不变，增加 world.schema=1 与旧存档迁移。
+
+| 检查 | 检查/失败 | 证据 |
+| --- | --- | --- |
+| 战斗 | 129/0 | builds/qa/013-test_battle.log |
+| 战役 | 72/0 | builds/qa/013-campaign.log |
+| 存档 | 53/0 | builds/qa/013-save.log |
+| 世界 | 126/0 | builds/qa/013-world.log |
+| 完整流程 | 1725/0 | builds/qa/013-flow.log，20种子×2团×3远征，105胜/15其他 |
+| 只读详情 | 30/0 | builds/qa/013-test_inspection.log |
+| 独立源码界面 | 211/0 | QA以隔离APPDATA运行；临时目录已清除 |
+| 最终Windows导出界面 | 237/0 | builds/qa/export-013.log，211项场景检查+26张截图 |
+
+工具入口 tools/verify.ps1 已接入 test_world.gd。导出运行的是 builds/windows/FantasyBrothers.exe，测试使用独立 user://qa/ 路径，不覆盖个人自动/手动档。构建日志 builds/qa/build-013.log。源码和导出检查有重复，不能累加成独立质量指标；自动战斗胜率不代表人类胜率。
+
+新增覆盖：合法阶段迁移；两路线一次扣费；地图浏览只读；保存旅行位置、事件实例、选择和随机状态；第三次桥头绕行存读后到正确地点；旧 event/ready/battle/growth/camp 迁移；胜败撤退返营与零资源恢复；事件和契约防重复；非法调用完整状态不变。图形输入覆盖路线/行军/地图节点/事件浏览/返营，以及原战斗HUD、存档、范围和反馈。
+
+发现并修复：世界存档跨字段校验、空实例列表和Variant类型；ready伪造战果只能原子拒绝，结算必须来自登记的当前战斗；真实点击测试切回地图后过早读取未布局按钮坐标，已等待两帧再点击。首轮导出因此连续失败并异常退出，最终重新导出全程237/0、正常退出，未用headless结果代替真实导出。
+
+规则测试出现Windows根证书读取提示；最终图形导出日志无脚本错误。未覆盖另两台实际设备、每份个人旧档、真人趣味和平衡、商业美术质量。败北返营有规则/完整流程覆盖，未另做败北界面专项截图。
+
+最终产物 SHA256：
+- EXE：173F5479028A17A97C26761BEFEB87C33E54B5B7E1B6E2E53EE247F5445FE7F7
+- ZIP：BA9B8055ABAECEB30064AA5690D68B5564AEA5A5AB1C4E258984BE2EAD4C0068
+
+以下保留上一版历史记录，不代表本版计数。
+
+---
 # 0.1.2 交付验证记录
 
 日期：2026-09-19。基线 Git edb6370，Godot 4.7.2.stable.official.ed1daf0bf。第三台 Windows 电脑，沿用同一引擎和导出模板。战斗规则与存档结构未改版。

@@ -2,6 +2,8 @@ extends RefCounted
 ## Original prototype campaign rules. All state is JSON-safe and owned by callers.
 ## These values are playtest hypotheses, not the final economy or progression.
 
+const World = preload("res://core/world_data.gd")
+
 const PERK_INFO = {
 	"vigor": {"title": "坚韧", "description": "最大生命与当前生命永久 +8。"},
 	"precision": {"title": "沉着瞄准", "description": "命中永久 +8；最终命中仍受战斗上限约束。"},
@@ -50,7 +52,7 @@ static func create_campaign(origin: String, seed_value: int) -> Dictionary:
 		},
 		"history": [], "phase": "camp", "expedition": {}, "event": {},
 		"growth_offers": [], "growth_unit_id": "", "last_report": "",
-		"battle": {}, "claimed": {}
+		"battle": {}, "claimed": {}, "world": World.new_world()
 	}
 	var kinds: Array = ORIGIN_KINDS[actual_origin]
 	for i in range(4):
@@ -165,7 +167,60 @@ static func get_routes(c: Dictionary) -> Array[Dictionary]:
 		})
 	return routes
 
-static func start_expedition(c: Dictionary, route_id: String = "road") -> Dictionary:
+static func get_world_view(c: Dictionary) -> Dictionary:
+	var world: Dictionary = c.get("world", {})
+	var travel: Dictionary = world.get("travel", {})
+	var discovered: Array = world.get("discovered_location_ids", [])
+	var locations: Array = []
+	for raw_location: Dictionary in World.LOCATIONS:
+		var location: Dictionary = raw_location.duplicate(true)
+		location.discovered = str(location.id) in discovered
+		locations.append(location)
+	var path: Array = travel.get("route_path", []).duplicate()
+	var step: int = int(travel.get("current_edge_index", 0))
+	var next_location_id: String = ""
+	if step + 1 < path.size():
+		next_location_id = str(path[step + 1])
+	return {
+		"locations": locations,
+		"edges": World.EDGES.duplicate(true),
+		"location_id": str(world.get("company_location_id", World.CAMP_ID)),
+		"route_path": path,
+		"visited_ids": path.slice(0, mini(step + 1, path.size())),
+		"travel_status": str(travel.get("status", "idle")),
+		"step": step,
+		"total_steps": maxi(0, path.size() - 1),
+		"next_location_id": next_location_id,
+		"report": str(c.get("last_report", ""))
+	}
+
+static func get_contract_offers(c: Dictionary, location_id: String) -> Array[Dictionary]:
+	var reason: String = ""
+	if location_id != World.CAMP_ID:
+		reason = "雨夜粮仓契约目前只在灰岸营地接取。"
+	elif str(c.get("phase", "")) != "camp" or str(c.get("world", {}).get("company_location_id", "")) != World.CAMP_ID:
+		reason = "先完成当前旅行、战斗与返营。"
+	elif not str(c.get("world", {}).get("active_contract_id", "")).is_empty():
+		reason = "已有尚未返营的契约。"
+	return [{
+		"id": World.CONTRACT_ID,
+		"title": "雨夜粮仓",
+		"description": "前往边境粮仓，击退劫掠者并尽量保住粮袋。",
+		"location_id": World.CAMP_ID,
+		"destination_id": "loc_granary",
+		"routes": get_routes(c),
+		"available": reason.is_empty(),
+		"reason": "可以选择路线并接约。" if reason.is_empty() else reason
+	}]
+
+static func accept_contract(c: Dictionary, contract_id: String, route_id: String) -> Dictionary:
+	if contract_id != World.CONTRACT_ID:
+		return _fail("未知契约。")
+	var world: Dictionary = c.get("world", {})
+	if world.is_empty() or str(world.get("company_location_id", "")) != World.CAMP_ID:
+		return _fail("佣兵团必须在灰岸营地接取契约。")
+	if not str(world.get("active_contract_id", "")).is_empty() or not world.get("travel", {}).is_empty():
+		return _fail("已有尚未返营的契约。")
 	var route: Dictionary = _route_by_id(c, route_id)
 	if route.is_empty():
 		return _fail("未知远征路线。")
@@ -179,22 +234,50 @@ static func start_expedition(c: Dictionary, route_id: String = "road") -> Dictio
 	var participants: Array = []
 	for unit: Dictionary in _living(c):
 		participants.append(str(unit.id))
+	var expedition_id := "exp_%d_%d" % [int(c.seed), index]
 	c.expedition = {
-		"id": "exp_%d_%d" % [int(c.seed), index], "index": index,
+		"id": expedition_id, "index": index,
 		"title": "雨夜粮仓", "difficulty": int(route.difficulty),
 		"supplies": route.supplies.duplicate(true),
 		"reward": int(route.reward), "renown_bonus": 0,
 		"route_id": str(route.id), "route_name": str(route.name),
 		"route_food_cost": int(route.food_cost), "route_days": int(route.days),
-		"choice": "", "participant_ids": participants, "event_id": ""
+		"choice": "", "participant_ids": participants, "event_id": "",
+		"contract_id": contract_id, "travel_id": expedition_id,
+		"location_id": "loc_granary"
 	}
 	c.growth_offers = []
 	c.growth_unit_id = ""
 	c.battle = {}
 	var event_id: String = _select_event(c, index)
+	var route_path: Array = World.route_path(route_id)
+	var event_step: int = 1 if route_path.size() > 2 else maxi(0, route_path.size() - 1)
+	if event_id == "event_granary_stores":
+		event_step = route_path.size() - 1
+	elif event_id == "event_bell_at_bridge":
+		if route_id == "road":
+			route_path = [World.CAMP_ID, "loc_ferry_crossing", "loc_bridgehead", "loc_ferry_crossing", "loc_granary"]
+		else:
+			route_path = [World.CAMP_ID, "loc_ridge_pass", "loc_bridgehead", "loc_ridge_pass", "loc_hunter_edge", "loc_granary"]
+		event_step = 2
+	var event_location_id: String = str(route_path[event_step])
 	c.event = _make_event(c, event_id)
+	c.event.event_instance_id = "%s:%s" % [expedition_id, event_id]
+	c.event.scope = "travel"
+	c.event.content_version = World.CONTENT_VERSION
+	c.event.location_id = event_location_id
 	c.expedition.event_id = event_id
-	c.phase = "event"
+	world.active_contract_id = contract_id
+	world.travel = {
+		"id": expedition_id, "contract_id": contract_id,
+		"origin_id": World.CAMP_ID, "destination_id": "loc_granary",
+		"route_id": str(route.id), "route_path": route_path,
+		"edge_ids": _edge_ids(route_path), "current_edge_index": 0,
+		"food_cost": int(route.food_cost), "days": int(route.days),
+		"event_instance_id": str(c.event.event_instance_id),
+		"event_step": event_step, "status": "traveling"
+	}
+	c.phase = "travel"
 	c.history.append({
 		"type": "departure", "id": str(c.expedition.id), "route_id": str(route.id),
 		"route_name": str(route.name), "route_food_cost": int(route.food_cost),
@@ -202,7 +285,59 @@ static func start_expedition(c: Dictionary, route_id: String = "road") -> Dictio
 	})
 	c.last_report = "经「%s」出征，消耗 %d 份粮食、%d 天。眼前的选择将改变本次战斗准备与之后的回报。" % [
 		str(route.name), int(route.food_cost), int(route.days)]
-	return {"ok": true, "reason": c.last_report, "event": c.event}
+	return {"ok": true, "reason": c.last_report, "event": c.event, "world": get_world_view(c)}
+
+static func start_expedition(c: Dictionary, route_id: String = "road") -> Dictionary:
+	return accept_contract(c, World.CONTRACT_ID, route_id)
+
+static func advance_travel(c: Dictionary) -> Dictionary:
+	if str(c.get("phase", "")) != "travel":
+		return _fail("当前没有可以推进的旅行。")
+	var world: Dictionary = c.get("world", {})
+	var travel: Dictionary = world.get("travel", {})
+	var path: Array = travel.get("route_path", [])
+	var step: int = int(travel.get("current_edge_index", -1))
+	if path.size() < 2 or step < 0 or step >= path.size() - 1 or str(travel.get("status", "")) != "traveling":
+		return _fail("旅行记录损坏或已经结束。")
+	var next_step := step + 1
+	var location_id := str(path[next_step])
+	travel.current_edge_index = next_step
+	world.company_location_id = location_id
+	_discover(world, location_id)
+	_touch_location(world, location_id, int(c.day))
+	if next_step == int(travel.get("event_step", -1)) and not str(travel.event_instance_id) in world.resolved_event_instance_ids:
+		c.phase = "event"
+		travel.status = "event"
+		c.last_report = "旅队抵达%s，一件已确定的旅途事件等待处理。" % _location_name(location_id)
+	elif next_step == path.size() - 1:
+		c.phase = "ready"
+		travel.status = "ready"
+		c.last_report = "佣兵团抵达雨夜粮仓，可以进入战斗。"
+	else:
+		c.last_report = "旅队抵达%s，下一段行程仍按已支付路线推进。" % _location_name(location_id)
+	return {"ok": true, "reason": c.last_report, "world": get_world_view(c)}
+
+static func _edge_ids(path: Array) -> Array:
+	var ids: Array = []
+	for i in range(path.size() - 1):
+		ids.append("%s>%s" % [str(path[i]), str(path[i + 1])])
+	return ids
+
+static func _discover(world: Dictionary, location_id: String) -> void:
+	if not location_id in world.discovered_location_ids:
+		world.discovered_location_ids.append(location_id)
+
+static func _touch_location(world: Dictionary, location_id: String, day: int) -> void:
+	if not world.location_states.has(location_id):
+		world.location_states[location_id] = {"flags": {}, "last_visit_day": day}
+	else:
+		world.location_states[location_id].last_visit_day = day
+
+static func _location_name(location_id: String) -> String:
+	for location: Dictionary in World.LOCATIONS:
+		if str(location.id) == location_id:
+			return str(location.name)
+	return location_id
 
 static func _route_by_id(c: Dictionary, route_id: String) -> Dictionary:
 	for route: Dictionary in get_routes(c):
@@ -249,6 +384,14 @@ static func _route_reward(c: Dictionary, reward_bonus: int) -> int:
 static func choose_event(c: Dictionary, choice_id: String) -> Dictionary:
 	if str(c.get("phase", "")) != "event":
 		return _fail("当前没有等待选择的事件。")
+	var world: Dictionary = c.get("world", {})
+	var travel: Dictionary = world.get("travel", {})
+	var event_instance_id: String = str(c.get("event", {}).get("event_instance_id", ""))
+	if not travel.is_empty():
+		if event_instance_id.is_empty() or event_instance_id != str(travel.get("event_instance_id", "")):
+			return _fail("事件实例与当前旅行不匹配。")
+		if event_instance_id in world.get("resolved_event_instance_ids", []):
+			return _fail("这个旅途事件已经处理。")
 	var chosen: Dictionary = {}
 	for choice: Dictionary in c.event.get("choices", []):
 		if str(choice.id) == choice_id:
@@ -285,7 +428,25 @@ static func choose_event(c: Dictionary, choice_id: String) -> Dictionary:
 		"type": "event", "id": str(c.event.id), "choice": choice_id,
 		"expedition_id": str(c.expedition.id), "day": int(c.day)
 	})
-	c.phase = "ready"
+	if bool(c.event.get("legacy_direct_ready", false)):
+		world.resolved_event_instance_ids.append(event_instance_id)
+		c.phase = "ready"
+		travel.status = "ready"
+		travel.current_edge_index = travel.get("route_path", []).size() - 1
+		world.company_location_id = "loc_granary"
+		_discover(world, "loc_granary")
+	elif not travel.is_empty():
+		world.resolved_event_instance_ids.append(event_instance_id)
+		var step: int = int(travel.get("current_edge_index", 0))
+		var path: Array = travel.get("route_path", [])
+		if step == path.size() - 1:
+			c.phase = "ready"
+			travel.status = "ready"
+		else:
+			c.phase = "travel"
+			travel.status = "traveling"
+	else:
+		c.phase = "ready"
 	c.last_report = str(chosen.description) + missing_note
 	return {"ok": true, "reason": c.last_report, "report": c.last_report}
 
@@ -299,18 +460,38 @@ static func battle_config(c: Dictionary) -> Dictionary:
 		"route_id": str(c.expedition.get("route_id", "road")),
 		"route_name": str(c.expedition.get("route_name", "渡口旧道")),
 		"event_id": str(c.expedition.get("event_id", "")),
-		"choice": str(c.expedition.get("choice", ""))
+		"choice": str(c.expedition.get("choice", "")),
+		"contract_id": str(c.expedition.get("contract_id", World.CONTRACT_ID)),
+		"travel_id": str(c.expedition.get("travel_id", c.expedition.id)),
+		"location_id": str(c.expedition.get("location_id", "loc_granary"))
 	}
+
+static func begin_battle(c: Dictionary, battle: Dictionary) -> Dictionary:
+	if str(c.get("phase", "")) != "ready":
+		return _fail("当前阶段不能进入战斗。")
+	var expedition_id: String = str(c.get("expedition", {}).get("id", ""))
+	if expedition_id.is_empty() or str(battle.get("id", "")) != expedition_id:
+		return _fail("战斗与当前契约不匹配。")
+	var travel: Dictionary = c.get("world", {}).get("travel", {})
+	if not travel.is_empty() and str(travel.get("status", "")) != "ready":
+		return _fail("旅队尚未抵达契约战场。")
+	c.battle = battle.duplicate(true)
+	c.phase = "battle"
+	if not travel.is_empty():
+		travel.status = "battle"
+	return {"ok": true, "reason": "进入雨夜粮仓战斗。"}
 
 static func resolve_battle(c: Dictionary, battle: Dictionary) -> Dictionary:
 	var expedition: Dictionary = c.get("expedition", {})
 	var expedition_id: String = str(expedition.get("id", ""))
 	if expedition_id.is_empty() or str(battle.get("id", "")) != expedition_id:
 		return _fail("战斗与当前远征不匹配，未进行结算。")
+	if str(c.get("phase", "")) != "battle":
+		return _fail("当前阶段不能结算战斗。")
+	if c.get("battle", {}).is_empty() or battle != c.battle:
+		return _fail("提交的战斗结果不是当前已登记的战斗状态。")
 	if c.get("claimed", {}).has(expedition_id):
 		return _fail("这次远征已经结算，不能重复领取奖励。")
-	if not str(c.get("phase", "")) in ["ready", "battle"]:
-		return _fail("当前阶段不能结算战斗。")
 	var outcome: String = str(battle.get("outcome", ""))
 	if not outcome in ["victory", "defeat", "retreat"]:
 		return _fail("战斗尚未结束。")
@@ -378,12 +559,21 @@ static func resolve_battle(c: Dictionary, battle: Dictionary) -> Dictionary:
 		"gold": earned - repayment, "deaths": casualties.duplicate(), "day": int(c.day)
 	})
 	c.battle = battle.duplicate(true)
+	var world: Dictionary = c.get("world", {})
+	var travel: Dictionary = world.get("travel", {})
+	if not travel.is_empty():
+		travel.status = "returning"
+		var granary_state: Dictionary = world.location_states.get("loc_granary", {"flags": {}, "last_visit_day": int(c.day)})
+		granary_state.flags.last_outcome = outcome
+		granary_state.flags.grain_saved = grain_survives and outcome == "victory"
+		granary_state.last_visit_day = int(c.day)
+		world.location_states["loc_granary"] = granary_state
 	var report: String = "%s\n实收 %d 金；粮食 +%d；当前 %d 金、%d 份粮食。" % [
 		narrative, earned - repayment, grain_food, int(c.gold), int(c.food)]
 	if repayment > 0:
 		report += "\n已偿还预支签约款 %d 金，尚欠 %d 金。" % [repayment, int(c.flags.advance_debt)]
 	if casualties.is_empty():
-		report += "\n无人阵亡。生命与护甲损耗已带回营地，需要休养和修补。"
+		report += "\n无人阵亡。伤势和护甲损耗会保留，返营后可休养和修补。"
 	else:
 		report += "\n阵亡：" + "、".join(casualties) + "。他们的经历留在名册中，原位可补员。"
 	if int(expedition.index) >= 3 and not bool(c.flags.get("ending_seen", false)):
@@ -392,7 +582,7 @@ static func resolve_battle(c: Dictionary, battle: Dictionary) -> Dictionary:
 		report += "\n\n【短篇收束】\n" + str(c.flags.ending_text) + "\n你可以继续经营佣兵团，经历尚未遇到的事件与构筑。"
 	c.growth_offers = []
 	c.growth_unit_id = ""
-	c.phase = "camp"
+	c.phase = "returning"
 	if outcome == "victory" and not _living(c).is_empty():
 		_generate_growth(c)
 		if not c.growth_offers.is_empty():
@@ -450,9 +640,30 @@ static func choose_growth(c: Dictionary, offer_id: String) -> Dictionary:
 	})
 	c.growth_offers = []
 	c.growth_unit_id = ""
-	c.phase = "camp"
+	c.phase = "returning"
 	c.last_report = str(c.last_report) + "\n\n" + effect_note
 	return {"ok": true, "reason": effect_note, "report": effect_note}
+
+static func return_to_camp(c: Dictionary) -> Dictionary:
+	if str(c.get("phase", "")) != "returning":
+		return _fail("当前没有等待完成的返营行程。")
+	var world: Dictionary = c.get("world", {})
+	var travel: Dictionary = world.get("travel", {})
+	if world.is_empty() or travel.is_empty() or str(travel.get("status", "")) != "returning":
+		return _fail("返营记录缺失。")
+	var expedition_id: String = str(c.get("expedition", {}).get("id", ""))
+	if expedition_id.is_empty() or not c.get("claimed", {}).has(expedition_id):
+		return _fail("契约尚未完成一次性结算。")
+	world.company_location_id = World.CAMP_ID
+	_discover(world, World.CAMP_ID)
+	_touch_location(world, World.CAMP_ID, int(c.day))
+	travel.status = "completed"
+	world.active_contract_id = ""
+	world.travel = {}
+	c.phase = "camp"
+	c.last_report = str(c.last_report) + "\n\n佣兵团已经返回灰岸营地；回程已计入本次结算，不额外消耗天数或口粮。伤势、护甲与阵亡记录全部保留。"
+	c.history.append({"type": "return", "id": expedition_id, "location_id": World.CAMP_ID, "day": int(c.day)})
+	return {"ok": true, "reason": "已返回灰岸营地。", "report": c.last_report, "world": get_world_view(c)}
 
 static func _new_unit(kind: String, id: String, unit_name: String, slot: int) -> Dictionary:
 	var stats: Dictionary = {

@@ -46,23 +46,30 @@ func _same_state(a: Dictionary, b: Dictionary) -> bool:
 	return a == b
 
 func _choose_first(c: Dictionary) -> void:
+	while str(c.get("phase", "")) == "travel":
+		if not Campaign.advance_travel(c).get("ok", false):
+			return
 	var choices: Array = c.get("event", {}).get("choices", [])
 	if not choices.is_empty():
 		Campaign.choose_event(c, str(choices[0].id))
+	while str(c.get("phase", "")) == "travel":
+		if not Campaign.advance_travel(c).get("ok", false):
+			return
 
 func _enter_battle(c: Dictionary) -> void:
-	if str(c.phase) == "event":
+	if str(c.phase) in ["travel", "event"]:
 		_choose_first(c)
-	c.battle = Battle.create_battle(c.roster, int(c.seed) + int(c.expedition.index) * 7919, Campaign.battle_config(c))
-	c.phase = "battle"
+	var battle := Battle.create_battle(c.roster, int(c.seed) + int(c.expedition.index) * 7919, Campaign.battle_config(c))
+	Campaign.begin_battle(c, battle)
 
 func _victory_battle(c: Dictionary) -> Dictionary:
-	var battle := Battle.create_battle(c.roster, int(c.seed) + int(c.expedition.index) * 7919, Campaign.battle_config(c))
-	for unit: Dictionary in battle.units:
+	if str(c.phase) == "ready":
+		_enter_battle(c)
+	for unit: Dictionary in c.battle.units:
 		if str(unit.team) == "enemy":
 			unit.hp = 0
-	battle.outcome = "victory"
-	return battle
+	c.battle.outcome = "victory"
+	return c.battle
 
 func _test_phase_round_trips() -> void:
 	_cleanup()
@@ -203,6 +210,9 @@ func _test_routes_and_legacy_upgrade() -> void:
 	_enter_battle(legacy)
 	for key in ["route_id", "route_name", "route_food_cost", "route_days"]:
 		legacy.expedition.erase(key)
+	for key in ["contract_id", "travel_id", "location_id"]:
+		legacy.expedition.erase(key)
+	legacy.erase("world")
 	legacy.battle.mission.erase("route_id")
 	legacy.battle.mission.erase("route_name")
 	legacy.battle.rules_version = "prototype-0.1"

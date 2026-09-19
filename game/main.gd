@@ -6,6 +6,7 @@ const Saves = preload("res://core/save_store.gd")
 const Board = preload("res://presentation/battle_board.gd")
 const BattleHUD = preload("res://presentation/battle_hud.gd")
 const Inspection = preload("res://presentation/battle_inspection.gd")
+const WorldScreen = preload("res://presentation/world_screen.gd")
 const CREAM = Color("e7ddc6")
 const MUTED = Color("9caeaa")
 const GOLD = Color("c8aa6e")
@@ -40,6 +41,9 @@ var smoke_mode: bool = false
 var outcome_label: Label
 var reachable: Array = []
 var route_buttons: Dictionary = {}
+var world_screen: Control
+var camp_detail := false
+var world_overview := false
 var battle_hud: Control
 var hovered_unit_id: String = ""
 var hovered_cell := Vector2i(-1, -1)
@@ -110,7 +114,7 @@ func _build_shell() -> void:
 	_button(heading, "手动保存", _manual_save)
 	_button(heading, "读取手动档", _confirm_load)
 	_button(heading, "主菜单", _confirm_menu)
-	resources = _label("边境佣兵纪事   /   最小可玩验证 0.1.2", 17, MUTED)
+	resources = _label("边境佣兵纪事   /   最小可玩验证 0.1.3", 17, MUTED)
 	screen.add_child(resources)
 	banner = _label("", 16, GOLD)
 	screen.add_child(banner)
@@ -121,6 +125,7 @@ func _build_shell() -> void:
 	screen.add_child(footer)
 
 func _clear_body() -> void:
+	world_screen = null
 	board = null
 	if is_instance_valid(battle_hud):
 		remove_child(battle_hud)
@@ -177,7 +182,7 @@ func _panel(parent: Node, width: float = 0.0, expand: bool = true) -> VBoxContai
 func _show_title() -> void:
 	_clear_body()
 	banner.text = "序章   /   渡桥的钟声"
-	resources.text = "边境佣兵纪事   /   最小可玩验证 0.1.2"
+	resources.text = "边境佣兵纪事   /   最小可玩验证 0.1.3"
 	var columns: HBoxContainer = HBoxContainer.new()
 	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	body.add_child(columns)
@@ -221,6 +226,8 @@ func _request_new(origin: String, seed_text: String) -> void:
 
 func _new_campaign(origin: String, seed_value: int) -> void:
 	campaign = Campaign.create_campaign(origin, seed_value)
+	camp_detail = false
+	world_overview = false
 	notice = "新旅程开始。先查看四名队员，再接下契约。"
 	_autosave()
 	_show_campaign()
@@ -234,6 +241,8 @@ func _load(path: String) -> void:
 		_popup("读取失败", str(result.reason))
 		return
 	campaign = result.campaign
+	camp_detail = false
+	world_overview = false
 	notice = str(result.reason)
 	_show_campaign()
 
@@ -265,9 +274,15 @@ func _show_campaign() -> void:
 	_clear_body()
 	_update_resources()
 	var phase: String = str(campaign.phase)
-	banner.text = "整备营地  /  途中抉择  /  战术交锋  /  命运与成长"
+	banner.text = "灰岸边境  /  契约与旅行  /  战术交锋  /  返回营地"
 	if phase == "battle":
 		_show_battle()
+		return
+	if phase in ["travel", "returning"] or (phase == "camp" and not camp_detail) or (phase in ["event", "ready"] and world_overview):
+		world_screen = WorldScreen.new()
+		body.add_child(world_screen)
+		world_screen.build(self)
+		route_buttons = world_screen.route_buttons
 		return
 	var columns: HBoxContainer = HBoxContainer.new()
 	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -278,7 +293,8 @@ func _show_campaign() -> void:
 	if phase == "camp":
 		_show_camp(story, actions)
 	elif phase == "event":
-		_text(story, "途中抉择", 16, GOLD)
+		_text(story, "途中抉择 · " + _world_location_name(), 16, GOLD)
+		_button(actions, "查看行程地图", _show_world_view)
 		_text(story, str(campaign.event.title), 30)
 		_text(story, str(campaign.event.body), 20)
 		_text(story, "承诺会留在团志里，并改变这次远征的准备和回报。", 16, MUTED)
@@ -287,7 +303,8 @@ func _show_campaign() -> void:
 			_button(actions, str(choice.title), func(): _event_choice(str(choice.id)))
 			_text(actions, str(choice.description), 16, MUTED)
 	elif phase == "ready":
-		_text(story, "契约已立", 16, GOLD)
+		_text(story, "抵达 · " + _world_location_name(), 16, GOLD)
+		_button(actions, "查看行程地图", _show_world_view)
 		_text(story, str(campaign.expedition.title), 32)
 		_text(story, "行军路线 · " + str(campaign.expedition.get("route_name", "渡口旧道")), 18, GOLD)
 		_text(story, str(campaign.last_report), 20)
@@ -348,19 +365,10 @@ func _show_camp(story: VBoxContainer, actions: VBoxContainer) -> void:
 	if bool(campaign.flags.get("ending_seen", false)):
 		_text(story, "团志 · 渡桥的钟声", 23, GOLD)
 		_text(story, str(campaign.flags.get("ending_text", "")), 17)
-	_text(story, "新的契约 · 雨夜粮仓", 25, GOLD)
-	_text(story, "先选路线，再处理途中事件。下列敌情、报酬与补给是出发时的准备，途中选择还会改变它们。", 16, MUTED)
-	for route: Dictionary in Campaign.get_routes(campaign):
-		var route_id: String = str(route.id)
-		var route_button: Button = _button(story, str(route.name) + "  ·  接约出征", func(): _start_expedition(route_id))
-		route_button.disabled = not bool(route.available)
-		route_buttons[route_id] = route_button
-		_text(story, str(route.description), 16, MUTED)
-		_text(story, "%d 粮 · %d 天  /  %s  /  报酬 %d 金\n油瓶 %d · 火种 %d · 水具 %d" % [int(route.food_cost), int(route.days), ["小股劫匪", "有备而来", "增援集结"][int(route.difficulty)], int(route.reward), int(route.supplies.oil), int(route.supplies.fire), int(route.supplies.water)], 16, GOLD)
-		if not bool(route.available):
-			_text(story, str(route.reason), 15, RED)
+	_button(story, "查看边境地图 · 寻找契约", _show_world_view)
+	_text(story, "队伍已经驻扎在灰岸营地。生活与整备会改变实际资源、日期与队员状态；出征前可在地图上比较路线。", 17, MUTED)
 	_text(actions, "整备与启程", 24, GOLD)
-	_text(actions, "在中间选择行军路线。\n建议先恢复生命与护甲。", 16, MUTED)
+	_text(actions, "先恢复生命与护甲。\n准备好后回到地图接取契约。", 16, MUTED)
 	_button(actions, "休养一天", func(): _camp_action("rest"), "有粮消耗2粮，每人恢复18生命；缺粮恢复8。")
 	_button(actions, "补给口粮", func(): _camp_action("resupply"), "12金币购买最多6粮；缺钱缺粮时短工换粮。")
 	_button(actions, "修补护甲", func(): _camp_action("repair"), "每名受损队员4金币；无钱时用一天修补6护甲。")
@@ -374,9 +382,43 @@ func _camp_action(action: String) -> void:
 	_handle_campaign(Campaign.camp_action(campaign, action))
 
 func _start_expedition(route_id: String = "road") -> void:
-	_handle_campaign(Campaign.start_expedition(campaign, route_id))
+	camp_detail = false
+	world_overview = false
+	_handle_campaign(Campaign.accept_contract(campaign, "contract_rain_granary", route_id))
+
+func _advance_travel() -> void:
+	world_overview = false
+	_handle_campaign(Campaign.advance_travel(campaign))
+
+func _return_to_camp() -> void:
+	camp_detail = true
+	world_overview = false
+	_handle_campaign(Campaign.return_to_camp(campaign))
+
+func _show_camp_view() -> void:
+	if str(campaign.get("phase", "")) != "camp": return
+	camp_detail = true
+	world_overview = false
+	_show_campaign()
+
+func _show_world_view() -> void:
+	if not str(campaign.get("phase", "")) in ["camp", "travel", "event", "ready", "returning"]: return
+	camp_detail = false
+	world_overview = true
+	_show_campaign()
+
+func _close_world_overview() -> void:
+	world_overview = false
+	_show_campaign()
+
+func _world_location_name() -> String:
+	var view: Dictionary = Campaign.get_world_view(campaign)
+	for location: Dictionary in view.locations:
+		if str(location.id) == str(view.location_id): return str(location.name)
+	return "边境"
 
 func _event_choice(choice: String) -> void:
+	world_overview = false
 	_handle_campaign(Campaign.choose_event(campaign, choice))
 
 func _growth_choice(offer: String) -> void:
@@ -393,8 +435,11 @@ func _handle_campaign(result: Dictionary) -> void:
 func _enter_battle() -> void:
 	if str(campaign.phase) != "ready":
 		return
-	campaign.battle = Battle.create_battle(campaign.roster, int(campaign.seed) + int(campaign.expedition.index) * 7919, Campaign.battle_config(campaign))
-	campaign.phase = "battle"
+	var battle: Dictionary = Battle.create_battle(campaign.roster, int(campaign.seed) + int(campaign.expedition.index) * 7919, Campaign.battle_config(campaign))
+	var result: Dictionary = Campaign.begin_battle(campaign, battle)
+	if not result.get("ok", false):
+		_popup("无法进入战场", str(result.get("reason", "")))
+		return
 	selected_action = "move"
 	notice = ""
 	_autosave()
@@ -638,7 +683,7 @@ func _popup(title: String, message: String) -> void:
 	dialog.popup_centered()
 
 func _show_help() -> void:
-	_popup("行军手册", "每人每回合 6 行动点。移动每格 2 点，攻击通常 3 点。\n友军可穿过，不能停在同一格；敌人和障碍仍会挡路。\n金色双环与头顶箭头指示当前行动者。\n点击攻击/技能显示射程，叉号表示遮挡，准星表示合法目标。\n先选择底部动作，再指向棋盘看预览，单击执行。\n鼠标经过敌我、物件和地表查看详情；底部行动队列也可悬停。\n左上角战报可以展开。\n\n盾击命中制造破绽；长枪攻击消耗破绽获得命中优势。\n攻击先损护甲，再损生命；火区直接伤害生命，也伤友军。\n油与火形成火区；水可以灭火，产生遮挡远程的蒸汽。\n主动脱离贴身敌人可能遭反击，推开不触发脱离反击。\n猎人花行动点下令，战犬在自己的回合跟随、牵制或撤回。\n\n消灭敌人获胜，保护粮仓获得额外回报；随时可以撤退。\n空格结束当前队员回合，Esc 切回移动。\n每次行动自动保存；手动存档独立保留，读取不会重抽候选。\n正常 / 加速 / 跳过仅改变表现，不改变结算。")
+	_popup("行军手册", "地图上比较路线并接约，按“继续行军”逐站前进。\n事件在途中触发，选择后继续赶往粮仓；每一步自动保存。\n战后清点战果、选择成长，再返营休养、补给、修甲和补员。\n点击地图地点仅查看详情，不会出发或扣费。\n\n每人每回合 6 行动点。移动每格 2 点，攻击通常 3 点。\n友军可穿过，不能停在同一格；敌人和障碍仍会挡路。\n金色双环与头顶箭头指示当前行动者。\n点击攻击/技能显示射程，叉号表示遮挡，准星表示合法目标。\n先选择底部动作，再指向棋盘看预览，单击执行。\n鼠标经过敌我、物件和地表查看详情；底部行动队列也可悬停。\n左上角战报可以展开。\n\n盾击命中制造破绽；长枪攻击消耗破绽获得命中优势。\n攻击先损护甲，再损生命；火区直接伤害生命，也伤友军。\n油与火形成火区；水可以灭火，产生遮挡远程的蒸汽。\n主动脱离贴身敌人可能遭反击，推开不触发脱离反击。\n猎人花行动点下令，战犬在自己的回合跟随、牵制或撤回。\n\n消灭敌人获胜，保护粮仓获得额外回报；随时可以撤退。\n空格结束当前队员回合，Esc 切回移动。\n每次行动自动保存；手动存档独立保留，读取不会重抽候选。\n正常 / 加速 / 跳过仅改变表现，不改变结算。")
 
 func _run_smoke() -> void:
 	var smoke = load("res://tests/ui_smoke.gd").new()

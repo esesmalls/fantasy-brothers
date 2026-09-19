@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Rules = preload("res://core/campaign_rules.gd")
+const Battle = preload("res://core/battle_rules.gd")
 
 var checks := 0
 var failures: Array[String] = []
@@ -24,31 +25,55 @@ func check(value: bool, label: String) -> void:
 		failures.append(label)
 
 func choose_first(c: Dictionary) -> Dictionary:
+	while str(c.get("phase", "")) == "travel":
+		var advanced := Rules.advance_travel(c)
+		if not advanced.get("ok", false):
+			return advanced
 	var choices: Array = c.event.get("choices", [])
 	if choices.is_empty():
 		return {"ok": false, "reason": "event has no choices"}
-	return Rules.choose_event(c, str(choices[0].id))
+	var result := Rules.choose_event(c, str(choices[0].id))
+	while result.get("ok", false) and str(c.get("phase", "")) == "travel":
+		var advanced := Rules.advance_travel(c)
+		if not advanced.get("ok", false):
+			return advanced
+	return result
+
+func replace_current_event(c: Dictionary, event_id: String) -> void:
+	var event := Rules._make_event(c, event_id)
+	var travel: Dictionary = c.world.travel
+	var instance_id := "%s:%s" % [str(c.expedition.id), event_id]
+	event.event_instance_id = instance_id
+	event.scope = "travel"
+	event.content_version = "world-0.1"
+	event.location_id = str(travel.route_path[int(travel.event_step)])
+	c.event = event
+	c.expedition.event_id = event_id
+	travel.event_instance_id = instance_id
 
 func battle_result(c: Dictionary, outcome: String, dead_ids: Array = [], grain_alive := true, dead_enemies := 0) -> Dictionary:
-	var units: Array = []
-	for member: Dictionary in c.roster:
-		if int(member.hp) <= 0:
-			continue
-		var result := {"id": str(member.id), "team": "player", "hp": int(member.hp), "armor": int(member.armor)}
-		if str(member.id) in dead_ids:
-			result.hp = 0
-		units.append(result)
-	for i in range(dead_enemies):
-		units.append({"id": "enemy_test_%d" % i, "team": "enemy", "hp": 0, "armor": 0})
-	return {
-		"id": str(c.expedition.id), "outcome": outcome, "units": units,
-		"props": [{"id": "grain", "kind": "grain", "hp": 14 if grain_alive else 0}]
-	}
+	if str(c.phase) == "ready":
+		var battle := Battle.create_battle(c.roster, int(c.seed) + int(c.expedition.index) * 7919, Rules.battle_config(c))
+		Rules.begin_battle(c, battle)
+	for unit: Dictionary in c.battle.units:
+		if str(unit.team) == "player":
+			if str(unit.id) in dead_ids:
+				unit.hp = 0
+		elif dead_enemies > 0:
+			unit.hp = 0
+			dead_enemies -= 1
+	for prop: Dictionary in c.battle.props:
+		if str(prop.kind) == "grain":
+			prop.hp = 14 if grain_alive else 0
+	c.battle.outcome = outcome
+	return c.battle
 
 func resolve_victory_to_camp(c: Dictionary, grain_alive := true) -> Dictionary:
 	var result := Rules.resolve_battle(c, battle_result(c, "victory", [], grain_alive))
 	if c.phase == "growth" and not c.growth_offers.is_empty():
 		Rules.choose_growth(c, str(c.growth_offers[0].id))
+	if c.phase == "returning":
+		Rules.return_to_camp(c)
 	return result
 
 func event_signature(event: Dictionary) -> String:
@@ -161,9 +186,10 @@ func _test_origins_and_camp_recovery() -> void:
 func _test_events_are_saved_and_have_safe_paths() -> void:
 	var c := Rules.create_campaign("free", 41)
 	var start := Rules.start_expedition(c)
-	check(start.ok and c.phase == "event" and str(c.event.id) == "event_bell_on_bank", "first expedition has stable opening event")
+	check(start.ok and c.phase == "travel" and str(c.event.id) == "event_bell_on_bank", "first expedition saves its stable opening event before travel")
 	var saved_event := JSON.stringify(c.event)
 	check(not Rules.start_expedition(c).ok and JSON.stringify(c.event) == saved_event, "reopening an unresolved expedition cannot reroll its event")
+	check(Rules.advance_travel(c).ok and c.phase == "event", "travel reaches the saved opening event")
 	var six_ids := ["event_bell_on_bank", "event_granary_stores", "event_hunter_tracks", "event_village_reply", "event_unposted_letter", "event_bell_at_bridge"]
 	for event_id: String in six_ids:
 		var event := Rules._make_event(c, event_id)
@@ -175,6 +201,8 @@ func _test_events_are_saved_and_have_safe_paths() -> void:
 	check(bool(c.flags.villagers_promised), "opening promise persists after its battle result")
 	var next_start := Rules.start_expedition(c)
 	check(next_start.ok and str(c.event.id) == "event_village_reply", "promise condition selects the single follow-up event")
+	while c.phase == "travel":
+		Rules.advance_travel(c)
 	var promised_participant := str(c.event.participant_id)
 	for member: Dictionary in c.roster:
 		if str(member.id) == promised_participant:
@@ -186,14 +214,21 @@ func _test_events_are_saved_and_have_safe_paths() -> void:
 	check(Rules.start_expedition(c3).ok and str(c3.event.id) == "event_bell_at_bridge", "third expedition selects bridge closure regardless of prior cast")
 	var hungry_free := Rules.create_campaign("free", 43)
 	Rules.start_expedition(hungry_free)
+	while hungry_free.phase == "travel":
+		Rules.advance_travel(hungry_free)
 	hungry_free.food = 0
-	hungry_free.event = Rules._make_event(hungry_free, "event_hunter_tracks")
+	replace_current_event(hungry_free, "event_hunter_tracks")
 	check(not Rules.choose_event(hungry_free, "tracks_scout").ok and Rules.choose_event(hungry_free, "tracks_salvage").ok, "non-hunter tracking preserves a free alternative when food is gone")
 	var hunters := Rules.create_campaign("hunters", 44)
 	Rules.start_expedition(hunters)
+	while hunters.phase == "travel":
+		Rules.advance_travel(hunters)
 	hunters.food = 0
-	hunters.event = Rules._make_event(hunters, "event_hunter_tracks")
-	check(Rules.choose_event(hunters, "tracks_scout").ok and hunters.phase == "ready", "hunter tracking removes the food cost through its roster-specific method")
+	replace_current_event(hunters, "event_hunter_tracks")
+	var hunter_choice := Rules.choose_event(hunters, "tracks_scout")
+	while hunters.phase == "travel":
+		Rules.advance_travel(hunters)
+	check(hunter_choice.ok and hunters.phase == "ready", "hunter tracking removes the food cost through its roster-specific method")
 
 func _test_result_claims_casualties_and_recovery() -> void:
 	var c := Rules.create_campaign("hunters", 64)
@@ -201,10 +236,11 @@ func _test_result_claims_casualties_and_recovery() -> void:
 	choose_first(c)
 	var fallen_id := str(c.roster[2].id)
 	var defeat := Rules.resolve_battle(c, battle_result(c, "defeat", [fallen_id]))
-	check(defeat.ok and c.phase == "camp" and int(c.roster[2].hp) == 0, "defeat carries a named casualty into campaign state")
+	check(defeat.ok and c.phase == "returning" and int(c.roster[2].hp) == 0, "defeat carries a named casualty into the return state")
 	check(c.flags.memorial.size() == 1 and str(c.flags.memorial[0].id) == fallen_id, "casualty enters memorial exactly once")
 	var settled := JSON.stringify(c)
 	check(not Rules.resolve_battle(c, c.battle).ok and JSON.stringify(c) == settled, "same expedition cannot claim a second settlement or reward")
+	check(Rules.return_to_camp(c).ok, "defeated survivors complete the explicit return trip")
 	var recruit := Rules.camp_action(c, "recruit")
 	check(recruit.ok and int(c.roster[2].hp) > 0 and str(c.roster[2].kind) == "hunter", "casualty can be replaced in its original tactical slot")
 	check(str(c.roster[3].hunter_id) == str(c.roster[2].id), "replacement hunter rebinds surviving dog")
@@ -213,7 +249,8 @@ func _test_result_claims_casualties_and_recovery() -> void:
 	choose_first(retreat_company)
 	retreat_company.roster[0].hp = 7
 	var retreat := Rules.resolve_battle(retreat_company, battle_result(retreat_company, "retreat", [], false, 2))
-	check(retreat.ok and retreat_company.phase == "camp" and int(retreat_company.roster[0].hp) == 7 and int(retreat_company.gold) == 78, "retreat preserves injuries and only pays bounded scavenged loot")
+	check(retreat.ok and retreat_company.phase == "returning" and int(retreat_company.roster[0].hp) == 7 and int(retreat_company.gold) == 78, "retreat preserves injuries and only pays bounded scavenged loot")
+	check(Rules.return_to_camp(retreat_company).ok, "retreat can always return to camp")
 
 func _test_three_expedition_closure() -> void:
 	var c := Rules.create_campaign("free", 77)
@@ -244,16 +281,16 @@ func _test_growth_offer_save_and_absence_path() -> void:
 			member.hp = 0
 	var gold_before := int(c.gold)
 	var absence := Rules.choose_growth(c, str(c.growth_offers[0].id))
-	check(absence.ok and c.phase == "camp" and int(c.gold) == gold_before + 12, "missing growth recipient resolves to a finite company-wide fallback")
+	check(absence.ok and c.phase == "returning" and int(c.gold) == gold_before + 12, "missing growth recipient resolves to a finite company-wide fallback")
+	check(Rules.return_to_camp(c).ok, "growth fallback still completes the return trip")
 
 func _test_json_determinism() -> void:
 	var original := Rules.create_campaign("hunters", 1234)
 	Rules.start_expedition(original)
 	var restored = JSON.parse_string(JSON.stringify(original))
 	check(event_signature(original.event) == event_signature(restored.event), "JSON round trip preserves generated event and its participant")
-	var choice_id := str(original.event.choices[0].id)
-	var a := Rules.choose_event(original, choice_id)
-	var b := Rules.choose_event(restored, choice_id)
+	var a := choose_first(original)
+	var b := choose_first(restored)
 	check(a.ok and b.ok and state_signature(original) == state_signature(restored), "JSON-restored campaign applies the same event effects deterministically")
 	var battle_a := battle_result(original, "victory")
 	var battle_b := battle_result(restored, "victory")

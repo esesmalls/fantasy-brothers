@@ -2,11 +2,11 @@
 
 一款以战术战斗、佣兵命运和魔幻中世纪美术为重点的原创 2D 单机游戏，目标平台为 Steam。
 
-当前阶段：最小可玩验证 v0.1.2，战场铺满视口，人物、招式、战具与行动顺序集中到底部，敌我和场景信息悬停查看，战报位于左上角。当前优先搭完整框架与功能，再逐步丰富内容；以下规划仍不代表最终平衡、预算或发售承诺。
+当前阶段：最小可玩验证 v0.1.3，六处地点接通地图接约、逐站旅行、途中事件、契约战斗、清点成长与返营生活；保留上一版战场优先的底部HUD与悬浮信息。当前优先搭完整框架与功能，再逐步丰富内容；以下规划仍不代表最终平衡、预算或发售承诺。
 
 更新日期：2026-09-19。
 
-双击根目录 `Play.cmd`，或解压 `builds/FantasyBrothers-0.1.2-windows.zip` 后运行 `FantasyBrothers.exe`。建议自由佣兵团、种子 `1709`、渡口旧道。完整玩法与边界见 [试玩说明](docs/PLAYTEST.md)，接续顺序见 [框架计划](docs/10-framework-roadmap.md)；下一增量先接 [大地图闭环](docs/11-world-map-framework.md)。
+双击根目录 `Play.cmd`，或解压 `builds/FantasyBrothers-0.1.3-windows.zip` 后运行 `FantasyBrothers.exe`。建议自由佣兵团、种子 `1709`、渡口旧道。完整玩法与边界见 [试玩说明](docs/PLAYTEST.md)，接续顺序见 [框架计划](docs/10-framework-roadmap.md)；当前地图范围见 [大地图闭环](docs/11-world-map-framework.md)。
 
 源码仓库：[esesmalls/fantasy-brothers](https://github.com/esesmalls/fantasy-brothers)。源码不包含本地构建包；另一台 Windows 电脑按下方步骤重新准备工具和构建。
 

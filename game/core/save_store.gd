@@ -1,6 +1,8 @@
 extends RefCounted
 ## Versioned snapshots; rotate the previous verified snapshot before replacing it.
 
+const World = preload("res://core/world_data.gd")
+
 const FORMAT_VERSION = 1
 const MAX_BYTES = 8 * 1024 * 1024
 const MAX_JSON_DEPTH = 40
@@ -94,6 +96,8 @@ static func _read(path: String) -> Dictionary:
 	if not validate(data).is_empty():
 		return {"ok": false}
 	var upgraded: bool = _upgrade_loaded(data)
+	if not validate(data).is_empty():
+		return {"ok": false}
 	return {"ok": true, "campaign": data, "upgraded": upgraded, "reason": "已读取存档；旧版进度已兼容，后续行动使用 0.1.1 规则。" if upgraded else "已读取存档"}
 
 static func _upgrade_loaded(c: Dictionary) -> bool:
@@ -107,6 +111,12 @@ static func _upgrade_loaded(c: Dictionary) -> bool:
 		expedition.route_food_cost = 2
 		expedition.route_days = 1
 		upgraded = true
+	if not expedition.is_empty():
+		if not expedition.has("contract_id"):
+			expedition.contract_id = World.CONTRACT_ID
+			expedition.travel_id = str(expedition.id)
+			expedition.location_id = "loc_granary"
+			upgraded = true
 	var battle: Dictionary = c.battle
 	if not battle.is_empty() and str(battle.get("rules_version", "")) == LEGACY_BATTLE_RULES_VERSION:
 		battle.migrated_from_rules = LEGACY_BATTLE_RULES_VERSION
@@ -115,7 +125,66 @@ static func _upgrade_loaded(c: Dictionary) -> bool:
 			battle.mission.route_id = expedition.get("route_id", "road")
 			battle.mission.route_name = expedition.get("route_name", "渡口旧道")
 		upgraded = true
+	if not c.has("world"):
+		c.world = World.new_world()
+		_upgrade_world_for_legacy_phase(c)
+		upgraded = true
 	return upgraded
+
+static func _upgrade_world_for_legacy_phase(c: Dictionary) -> void:
+	var phase: String = str(c.phase)
+	if phase == "camp" or c.expedition.is_empty():
+		return
+	var expedition: Dictionary = c.expedition
+	var route_id: String = str(expedition.get("route_id", "road"))
+	var path: Array = World.route_path(route_id)
+	var event_id: String = str(expedition.get("event_id", c.event.get("id", "")))
+	var event_instance_id := "%s:%s" % [str(expedition.id), event_id]
+	var event_step: int = 1
+	if event_id == "event_granary_stores":
+		event_step = path.size() - 1
+	elif event_id == "event_bell_at_bridge":
+		if route_id == "road":
+			path = [World.CAMP_ID, "loc_ferry_crossing", "loc_bridgehead", "loc_ferry_crossing", "loc_granary"]
+		else:
+			path = [World.CAMP_ID, "loc_ridge_pass", "loc_bridgehead", "loc_ridge_pass", "loc_hunter_edge", "loc_granary"]
+		event_step = 2
+	var step: int = event_step if phase == "event" else path.size() - 1
+	var status: String = phase
+	if phase == "growth" or phase == "returning":
+		status = "returning"
+	c.world.active_contract_id = World.CONTRACT_ID
+	c.world.travel = {
+		"id": str(expedition.id), "contract_id": World.CONTRACT_ID,
+		"origin_id": World.CAMP_ID, "destination_id": "loc_granary",
+		"route_id": route_id, "route_path": path,
+		"edge_ids": _edge_ids(path), "current_edge_index": step,
+		"food_cost": int(expedition.get("route_food_cost", 2)),
+		"days": int(expedition.get("route_days", 1)),
+		"event_instance_id": event_instance_id, "event_step": event_step,
+		"status": status
+	}
+	c.world.company_location_id = str(path[step])
+	for i in range(step + 1):
+		if not str(path[i]) in c.world.discovered_location_ids:
+			c.world.discovered_location_ids.append(str(path[i]))
+	if not c.event.is_empty():
+		c.event.event_instance_id = event_instance_id
+		c.event.scope = "travel"
+		c.event.content_version = World.CONTENT_VERSION
+		c.event.location_id = str(path[event_step])
+		if phase == "event":
+			# Old event saves had already paid their route and opened the choice.
+			# Preserve their direct event -> ready continuation without replaying travel.
+			c.event.legacy_direct_ready = true
+	if phase in ["ready", "battle", "growth", "returning"]:
+		c.world.resolved_event_instance_ids.append(event_instance_id)
+
+static func _edge_ids(path: Array) -> Array:
+	var ids: Array = []
+	for i in range(path.size() - 1):
+		ids.append("%s>%s" % [str(path[i]), str(path[i + 1])])
+	return ids
 
 static func validate(c: Dictionary) -> String:
 	if not _json_safe(c):
@@ -141,8 +210,13 @@ static func validate(c: Dictionary) -> String:
 			return "队伍或成长字段缺失。"
 	if not c.get("growth_unit_id") is String or not c.get("last_report") is String:
 		return "成长或报告字段缺失。"
-	if not str(c.get("origin", "")) in ["free", "hunters"] or not str(c.get("phase", "")) in ["camp", "event", "ready", "battle", "growth"]:
+	var legacy_world: bool = not c.has("world")
+	if not legacy_world and not c.get("world") is Dictionary:
+		return "世界状态缺失。"
+	if not str(c.get("origin", "")) in ["free", "hunters"] or not str(c.get("phase", "")) in ["camp", "travel", "event", "ready", "battle", "growth", "returning"]:
 		return "未知的队伍或阶段。"
+	if legacy_world and str(c.phase) in ["travel", "returning"]:
+		return "旧版存档包含未知阶段。"
 	if not _valid_units(c.roster, "player"):
 		return "队员数据损坏。"
 	for key in c.claimed:
@@ -153,8 +227,8 @@ static func validate(c: Dictionary) -> String:
 		var expedition_problem := _validate_expedition(c.expedition)
 		if not expedition_problem.is_empty():
 			return expedition_problem
-	if phase in ["event", "ready", "battle"]:
-		var event_problem := _validate_event(c.event, phase != "event")
+	if phase in ["travel", "event", "ready", "battle"]:
+		var event_problem := _validate_event(c.event, phase in ["ready", "battle"])
 		if not event_problem.is_empty():
 			return event_problem
 	if phase == "growth":
@@ -169,7 +243,127 @@ static func validate(c: Dictionary) -> String:
 		var battle_problem := _validate_battle(c.battle, str(c.expedition.id))
 		if not battle_problem.is_empty():
 			return battle_problem
+	if not legacy_world:
+		var world_problem := _validate_world(c)
+		if not world_problem.is_empty():
+			return world_problem
 	return ""
+
+static func _validate_world(c: Dictionary) -> String:
+	var world: Dictionary = c.world
+	if not _is_integer(world.get("schema", null), World.SCHEMA, World.SCHEMA) or str(world.get("content_version", "")) != World.CONTENT_VERSION:
+		return "世界存档版本不兼容。"
+	for key in ["company_location_id", "active_contract_id"]:
+		if not world.get(key) is String:
+			return "世界位置或契约字段损坏。"
+	for key in ["travel", "location_states"]:
+		if not world.get(key) is Dictionary:
+			return "世界旅行或地点状态缺失。"
+	for key in ["discovered_location_ids", "pending_effects", "resolved_event_instance_ids"]:
+		if not world.get(key) is Array:
+			return "世界列表状态缺失。"
+	if not World.has_location(str(world.company_location_id)):
+		return "公司所在地点未知。"
+	if not _unique_nonempty_strings(world.discovered_location_ids) or not str(world.company_location_id) in world.discovered_location_ids:
+		return "地点发现记录损坏。"
+	for location_id in world.discovered_location_ids:
+		if not World.has_location(str(location_id)):
+			return "地点发现记录引用未知地点。"
+	if not world.pending_effects.is_empty():
+		return "当前版本不接受未知的延迟世界效果。"
+	if not _unique_strings(world.resolved_event_instance_ids):
+		return "事件实例结算记录损坏。"
+	for event_instance_id in world.resolved_event_instance_ids:
+		if str(event_instance_id).is_empty():
+			return "事件实例结算记录损坏。"
+	for location_id in world.location_states:
+		var state = world.location_states[location_id]
+		if not location_id is String or not World.has_location(str(location_id)) or not state is Dictionary:
+			return "地点状态引用损坏。"
+		if not state.get("flags") is Dictionary or not _is_integer(state.get("last_visit_day", null), 1, MAX_SAFE_JSON_INT):
+			return "地点状态内容损坏。"
+	var phase: String = str(c.phase)
+	var travel: Dictionary = world.travel
+	if phase == "camp":
+		if str(world.company_location_id) != World.CAMP_ID or not str(world.active_contract_id).is_empty() or not travel.is_empty():
+			return "营地阶段残留未完成旅行。"
+		return ""
+	if travel.is_empty() or str(world.active_contract_id) != World.CONTRACT_ID:
+		return "当前阶段缺少活动契约旅行。"
+	var required := ["id", "contract_id", "origin_id", "destination_id", "route_id", "route_path", "edge_ids", "current_edge_index", "food_cost", "days", "event_instance_id", "event_step", "status"]
+	if not travel.has_all(required):
+		return "旅行字段缺失。"
+	var expedition_id: String = str(c.expedition.get("id", ""))
+	if str(travel.id) != expedition_id or str(travel.contract_id) != World.CONTRACT_ID or str(c.expedition.get("travel_id", "")) != expedition_id or str(c.expedition.get("contract_id", "")) != World.CONTRACT_ID:
+		return "旅行、契约与远征编号不一致。"
+	if str(travel.origin_id) != World.CAMP_ID or str(travel.destination_id) != "loc_granary" or not str(travel.route_id) in ["road", "ridge"]:
+		return "旅行端点或路线损坏。"
+	if str(c.expedition.get("route_id", "")) != str(travel.route_id) or str(c.expedition.get("location_id", "")) != "loc_granary":
+		return "远征路线或目标地点不一致。"
+	if not travel.route_path is Array or travel.route_path.size() < 2 or not _unique_path_locations_are_known(travel.route_path):
+		return "旅行路径损坏。"
+	if str(travel.route_path[0]) != World.CAMP_ID or str(travel.route_path[-1]) != "loc_granary":
+		return "旅行路径端点损坏。"
+	if not travel.edge_ids is Array or travel.edge_ids.size() != travel.route_path.size() - 1:
+		return "旅行边记录损坏。"
+	for i in range(travel.route_path.size() - 1):
+		var from_id := str(travel.route_path[i])
+		var to_id := str(travel.route_path[i + 1])
+		if not World.has_edge(from_id, to_id) or str(travel.edge_ids[i]) != "%s>%s" % [from_id, to_id]:
+			return "旅行路径包含未知连线。"
+	var expected_path: Array = World.route_path(str(travel.route_id))
+	var expected_event_step: int = 1 if expected_path.size() > 2 else expected_path.size() - 1
+	if str(c.expedition.get("event_id", "")) == "event_granary_stores":
+		expected_event_step = expected_path.size() - 1
+	elif str(c.expedition.get("event_id", "")) == "event_bell_at_bridge":
+		expected_path = [World.CAMP_ID, "loc_ferry_crossing", "loc_bridgehead", "loc_ferry_crossing", "loc_granary"] if str(travel.route_id) == "road" else [World.CAMP_ID, "loc_ridge_pass", "loc_bridgehead", "loc_ridge_pass", "loc_hunter_edge", "loc_granary"]
+		expected_event_step = 2
+	if travel.route_path != expected_path or int(travel.event_step) != expected_event_step:
+		return "旅行路径与已保存事件不一致。"
+	if not _is_integer(travel.current_edge_index, 0, travel.route_path.size() - 1) or not _is_integer(travel.event_step, 1, travel.route_path.size() - 1):
+		return "旅行推进索引损坏。"
+	if not _is_integer(travel.food_cost, 0, MAX_SAFE_JSON_INT) or not _is_integer(travel.days, 1, MAX_SAFE_JSON_INT):
+		return "旅行代价损坏。"
+	if str(world.company_location_id) != str(travel.route_path[int(travel.current_edge_index)]):
+		return "公司位置与旅行索引不一致。"
+	if not travel.event_instance_id is String or str(travel.event_instance_id) != "%s:%s" % [expedition_id, str(c.expedition.event_id)]:
+		return "旅行事件实例编号不一致。"
+	if not c.event.is_empty():
+		if str(c.event.get("event_instance_id", "")) != str(travel.event_instance_id) or str(c.event.get("scope", "")) != "travel" or str(c.event.get("content_version", "")) != World.CONTENT_VERSION:
+			return "事件实例元数据损坏。"
+		if str(c.event.get("location_id", "")) != str(travel.route_path[int(travel.event_step)]):
+			return "事件地点与旅行路径不一致。"
+	elif phase in ["travel", "event", "ready", "battle"]:
+		return "活动旅行缺少已保存事件。"
+	var expected_status: String = str({"travel": "traveling", "event": "event", "ready": "ready", "battle": "battle", "growth": "returning", "returning": "returning"}.get(phase, ""))
+	if str(travel.status) != expected_status:
+		return "旅行状态与战役阶段不一致。"
+	var resolved: bool = str(travel.event_instance_id) in world.resolved_event_instance_ids
+	var step: int = int(travel.current_edge_index)
+	var event_step: int = int(travel.event_step)
+	if phase == "event" and (resolved or step != event_step):
+		return "事件阶段与旅行节点不一致。"
+	if phase == "travel" and ((step < event_step and resolved) or (step >= event_step and not resolved)):
+		return "旅行进度与事件解决记录不一致。"
+	if phase in ["ready", "battle", "growth", "returning"] and (not resolved or step != travel.route_path.size() - 1):
+		return "后续阶段缺少事件解决记录。"
+	if resolved and not c.event.is_empty():
+		var selected_problem: String = _validate_event(c.event, true)
+		if not selected_problem.is_empty():
+			return selected_problem
+	if phase in ["travel", "event", "ready", "battle"] and c.claimed.has(expedition_id):
+		return "未结算契约错误标记为已领取。"
+	if phase in ["growth", "returning"] and not c.claimed.has(expedition_id):
+		return "返营阶段缺少唯一结算记录。"
+	return ""
+
+static func _unique_path_locations_are_known(path: Array) -> bool:
+	# Repeated locations are intentional on the bridge detour; every entry must
+	# still be a stable known location ID.
+	for location_id in path:
+		if not location_id is String or not World.has_location(str(location_id)):
+			return false
+	return true
 
 static func _validate_expedition(expedition: Dictionary) -> String:
 	if not expedition.get("id") is String or str(expedition.id).is_empty() or not expedition.get("title") is String:

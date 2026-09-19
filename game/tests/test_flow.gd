@@ -15,9 +15,13 @@ func _initialize() -> void:
 			for expedition in range(3):
 				var route_id: String = "ridge" if seed_value >= 1710 and int(c.food) >= 3 else "road"
 				_check(Campaign.start_expedition(c, route_id).ok, "expedition starts on " + route_id)
+				while str(c.phase) == "travel":
+					_check(Campaign.advance_travel(c).ok, "travel reaches saved event")
 				_check(Campaign.choose_event(c, str(c.event.choices[0].id)).ok, "legal event choice")
-				c.battle = Battle.create_battle(c.roster, seed_value + int(c.expedition.index) * 7919, Campaign.battle_config(c))
-				c.phase = "battle"
+				while str(c.phase) == "travel":
+					_check(Campaign.advance_travel(c).ok, "travel reaches contract battle")
+				var battle := Battle.create_battle(c.roster, seed_value + int(c.expedition.index) * 7919, Campaign.battle_config(c))
+				_check(Campaign.begin_battle(c, battle).ok, "battle begins atomically")
 				var steps: int = 0
 				while str(c.battle.outcome).is_empty() and steps < 900:
 					var u: Dictionary = Battle.active_unit(c.battle)
@@ -45,6 +49,7 @@ func _initialize() -> void:
 				_check(not Campaign.resolve_battle(c, c.battle).ok, "duplicate resolution rejected")
 				if c.phase == "growth":
 					_check(Campaign.choose_growth(c, str(c.growth_offers[0].id)).ok, "growth delivered")
+				_check(Campaign.return_to_camp(c).ok, "return trip completes without another cost")
 				for unused in range(4):
 					Campaign.camp_action(c, "recruit")
 					Campaign.camp_action(c, "rest")
