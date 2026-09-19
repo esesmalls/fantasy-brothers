@@ -18,6 +18,7 @@
 4. [假设、决策与官方资料](docs/03-decisions-and-sources.md)：哪些已由用户提出，哪些仍是建议，以及 Steam、Godot 资料来源。
 5. [肉鸽、技能与场景扩展](docs/04-systems-expansion.md)：持续战役、随机成长、技能联动、元素反应、结算与验证。
 6. 研究依据：[PTR](docs/research/ptr-findings.md)、[肉鸽叙事](docs/research/roguelite-findings.md)、[元素与场景](docs/research/elements-findings.md)。
+7. 最新人物方案：[属性、培养与命运](docs/13-character-progression.md)、[开发日志研究](docs/research/character-development-findings.md)、[家庭与代际传承](docs/14-family-and-legacy.md)。本轮为分析，游戏版本仍为0.1.4；繁衍按用户要求先作长期预留。
 
 ## 当前建议
 
@@ -53,4 +54,4 @@
 
 先阅读 [项目约定](AGENTS.md)、[当前状态](docs/STATUS.md)和相关设计文档，明确当前里程碑，再领取一个有完成标准的任务。长期进度依靠版本、任务卡和测试证据记录；不依靠聊天记忆。
 
-项目内提供 `.codex/agents/` 专项角色定义与 `.codex/config.toml` 并发设置。它们用于后续会话的按需分工，不是持续运行的后台团队。本轮已按需使用战斗、内容、视觉与 QA 角色，复杂规则分配 Sol、内容及视觉分配 Terra、同步准备分配 Luna。
+项目内提供 `.codex/agents/` 专项角色定义与 `.codex/config.toml` 并发设置，用于按需分工。此前实现阶段使用战斗、内容、视觉与QA角色；最新人物研究由主AI统筹、两个Sol子代理分别只读审查工程与内容，没有启动新游戏实现。
