@@ -22,7 +22,7 @@
 
 下一批四步范围与整批测试见 [招聘、契约、部署与人物后果](docs/16-next-four-steps.md)，尚未实现。
 
-最新先评审 [美术生产方式选型](docs/17-art-pipeline-selection.md)：模块化手绘2D、OpenAI参考编辑、分层校准与Godot装配；SpriteCook作为可选辅助。用户同意方法后，再详细设计覆盖当前框架的资产并推进四步开发。
+用户已确认 [美术生产方式](docs/17-art-pipeline-selection.md)。最新交付 [详细美术计划](docs/18-art-production-plan.md) 与 [设定集研究](docs/research/art-book-findings.md)：模块化手绘人物/装备、伤损/尸体、战场/世界、图标化UI，以及与四步功能合并的顺序与验收。本轮只写计划，游戏和资产尚未改动。
 
 ## 当前建议
 
