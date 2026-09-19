@@ -42,7 +42,44 @@ static func inspect_cell(battle: Dictionary, q: int, r: int, preferred_unit_id: 
 	_append_cell(result.lines, battle, cell, unit)
 	if unit.is_empty() and prop.is_empty():
 		result.lines.push_front("坐标：q %d / r %d" % [q, r])
+	result.compact = _compact(battle, unit, prop, cell)
 	return result
+
+static func _compact(battle: Dictionary, unit: Dictionary, prop: Dictionary, cell: Dictionary) -> Dictionary:
+	var bars: Array = []
+	var badges: Array = []
+	var stats: Array = []
+	var turn := ""
+	if not unit.is_empty():
+		bars.append({"id": "hp", "glyph": "heart", "value": int(unit.hp), "max": int(unit.max_hp), "color": "b95f57"})
+		bars.append({"id": "armor", "glyph": "guard", "value": int(unit.armor), "max": int(unit.max_armor), "color": "789ead"})
+		bars.append({"id": "ap", "glyph": "hourglass", "value": 0 if int(unit.hp) <= 0 else int(unit.ap), "max": int(unit.max_ap), "color": "c5a561"})
+		turn = _turn_line(battle, unit).trim_prefix("行动顺序：").replace("此前还有 ", "再过 ").replace(" 名单位行动", " 人行动")
+		stats = [{"glyph": "attack", "value": str(unit.get("attack", 0))}, {"glyph": "archer", "value": str(unit.get("range", 0))}, {"glyph": "defend", "value": str(unit.get("defense", 0))}]
+		var status_names := {"defending": ["defend", "戒备", "b9c6a0"], "exposed": ["broken_shield", "破绽", "e29873"], "marked": ["mark", "标记", "e29873"], "pinned": ["pin", "牵制", "e29873"]}
+		for id in unit.get("statuses", {}):
+			var entry: Array = status_names.get(str(id), ["unknown", "?", "e29873"])
+			badges.append({"id": str(id), "glyph": entry[0], "label": entry[1], "color": entry[2]})
+	# Immediate terrain danger precedes passive perks in the compact strip.
+	var field := str(cell.get("field", ""))
+	if not field.is_empty():
+		badges.append({"id": field, "glyph": "flame" if field == "fire" else "steam", "label": "火区" if field == "fire" else "蒸汽", "color": "e29873" if field == "fire" else "98c3c8"})
+	var surface := str(cell.get("surface", "dry"))
+	if surface != "dry":
+		badges.append({"id": surface, "glyph": surface, "label": "油地" if surface == "oil" else "积水", "color": "c5a561" if surface == "oil" else "98c3c8"})
+	if not unit.is_empty():
+		var perk_glyphs := {"vigor": "heart", "precision": "mark", "breacher": "broken_shield", "firewise": "flame", "packbond": "dog"}
+		for perk in unit.get("perks", []):
+			badges.append({"id": str(perk), "glyph": perk_glyphs.get(str(perk), "unknown"), "label": "", "color": "c5a561"})
+		if str(unit.kind) == "dog":
+			badges.push_front({"id": "dog_order", "glyph": {"pin": "pin", "recall": "recall"}.get(str(unit.get("command", "follow")), "command_follow"), "label": {"pin": "牵制", "recall": "撤回"}.get(str(unit.get("command", "follow")), "跟随"), "color": "c5a561"})
+	elif not prop.is_empty():
+		bars.append({"id": "durability", "glyph": "guard", "value": int(prop.hp), "max": int(prop.max_hp), "color": "789ead"})
+		turn = "阻挡通行" if int(prop.hp) > 0 and bool(prop.get("blocks", false)) else "可以通行"
+		badges.push_front({"id": "prop", "glyph": str(prop.kind) if str(prop.kind) in ["oil", "water"] else "guard", "label": {"oil": "破坏铺油", "water": "破坏泼水", "cover": "破坏开路", "grain": "保护目标"}.get(str(prop.kind), "物件"), "color": "c5a561"})
+	else:
+		turn = "不可通行" if bool(cell.get("blocked", false)) else ("干燥地面" if badges.is_empty() else "")
+	return {"bars": bars, "badges": badges, "stats": stats, "turn": turn}
 
 static func _fill_unit(result: Dictionary, battle: Dictionary, unit: Dictionary) -> void:
 	var dead := int(unit.get("hp", 0)) <= 0
@@ -163,7 +200,7 @@ static func _append_dog(lines: Array[String], battle: Dictionary, dog: Dictionar
 	var command_text: String = str({"follow": "跟随主人并攻击邻近敌人", "pin": "牵制指定目标", "recall": "撤回主人身边并停止攻击"}.get(command, command))
 	lines.append("战犬指令：%s（在自身回合执行）" % command_text)
 	var hunter := _source_name(battle, str(dog.get("hunter_id", "")))
-	lines.append("绑定猎人：%s" % (hunter if not hunter.is_empty() else "无或已无法识别"))
+	lines.append("指挥者：%s" % (hunter if not hunter.is_empty() else "无或已无法识别"))
 	if command == "pin":
 		var target := _source_name(battle, str(dog.get("command_target", "")))
 		lines.append("牵制目标：%s" % (target if not target.is_empty() else "无有效目标"))

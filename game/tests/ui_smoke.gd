@@ -140,17 +140,57 @@ func run(app: Control) -> void:
 			app._on_cell_hovered(int(refresh_target.q), int(refresh_target.r))
 			await app.get_tree().process_frame
 			await app.get_tree().process_frame
+			await _real_unit_hover(app, refresh_target)
 			var long_rect: Rect2 = app.battle_hud.inspection_panel.get_global_rect()
+			_check(not app.battle_hud.inspection_detailed and not app.battle_hud.inspection_body.is_visible_in_tree() and app.battle_hud.inspection_bars.size() == 3, "default inspection uses three colored meters instead of expanded prose")
+			_check(long_rect.size.x <= 265 and long_rect.size.y <= 310, "dense default inspection stays compact despite five perks and four statuses [size=%s]" % long_rect.size)
+			var before_alt := JSON.stringify(app.campaign)
+			await _capture(app, "05c-compact-inspection")
+			await _press_alt(app)
+			_check(app.battle_hud.inspection_detailed and app.battle_hud.inspection_body.is_visible_in_tree() and not app.battle_hud.inspection_compact.visible, "Alt press switches the existing hover to full detail")
+			var detail_rect: Rect2 = app.battle_hud.inspection_panel.get_global_rect()
+			_check(detail_rect.size.x <= 381 and detail_rect.size.y <= 445, "expanded inspection also has bounded dimensions [size=%s]" % detail_rect.size)
+			var wheel := InputEventMouseButton.new()
+			wheel.button_index = MOUSE_BUTTON_WHEEL_DOWN
+			wheel.pressed = true
+			wheel.position = app.get_viewport().get_screen_transform() * (app.board.global_position + app.board._offset + (app.board._unit_display_point(refresh_target) + Vector2(0, -30)) * app.board._scale)
+			wheel.global_position = wheel.position
+			Input.parse_input_event(wheel)
+			await app.get_tree().process_frame
+			_check(app.battle_hud.inspection_scroll.scroll_vertical > 0 and JSON.stringify(app.campaign) == before_alt, "detail wheel reveals overflow without performing battle actions or changing RNG [scroll=%d max=%.1f body=%s]" % [app.battle_hud.inspection_scroll.scroll_vertical, app.battle_hud.inspection_scroll.get_v_scroll_bar().max_value, app.battle_hud.inspection_body.size])
 			_check(app.battle_hud.inspection_body.text.contains("同猎") and app.battle_hud.inspection_body.text.contains("破绽") and app.battle_hud.inspection_body.text.contains("火区"), "long inspection fixture shows five perks, multiple statuses, and its fire field")
 			var long_dock_top: float = app.battle_hud.dock.get_global_rect().position.y
 			_check(long_rect.size.y < app.get_viewport_rect().size.y and long_rect.position.y >= 0.0 and long_rect.end.y <= long_dock_top + 1.0, "long inspection card remains inside the viewport and above the command dock [card=%s dock_top=%.1f viewport=%s]" % [long_rect, long_dock_top, app.get_viewport_rect().size])
 			await _capture(app, "05c-long-inspection")
+			await _press_alt(app)
+			_check(not app.battle_hud.inspection_detailed and not app.battle_hud.inspection_scroll.visible and JSON.stringify(app.campaign) == before_alt, "second Alt press returns to compact mode without consuming an action")
+			var click := InputEventMouseButton.new()
+			click.button_index = MOUSE_BUTTON_LEFT
+			click.pressed = true
+			var covered_cell: Dictionary = app.reachable[0]
+			_check(bool(Battle.preview(app.campaign.battle, str(Battle.active_unit(app.campaign.battle).id), "move", covered_cell).ok), "card click-through fixture covers a genuinely actionable destination")
+			var covered_point: Vector2 = app.board.global_position + app.board._offset + app.board._hex_center(int(covered_cell.q), int(covered_cell.r)) * app.board._scale
+			# Freeze only the controller's pointer-follow layout for this overlay
+			# fixture until the queued physical click has actually been dispatched.
+			app.set_process(false)
+			app.battle_hud.inspection_panel.global_position = covered_point - Vector2(30, 30)
+			click.position = app.get_viewport().get_screen_transform() * covered_point
+			click.global_position = click.position
+			Input.parse_input_event(click)
+			await app.get_tree().process_frame
+			_check(JSON.stringify(app.campaign) == before_alt, "clicking visible inspection content cannot issue a battlefield action")
+			click.pressed = false
+			Input.parse_input_event(click)
+			await app.get_tree().process_frame
+			app.set_process(true)
 			refresh_target.perks = original_perks
 			refresh_target.statuses = original_statuses
 			app.campaign.battle.cells[refresh_key] = original_cell
 			_check(JSON.stringify(app.campaign) == refresh_before, "long inspection fixture restores the complete battle state")
 			app.board._clear_hover()
 			_check(not app.battle_hud.inspection_panel.visible and app.hovered_cell == Vector2i(-1, -1), "board exit clears tooltip and hovered cell")
+			await _press_alt(app)
+			_check(not app.battle_hud.inspection_detailed, "Alt without a visible target cannot pre-expand the next tooltip")
 			var log_before: String = JSON.stringify(app.campaign)
 			var log_seq: int = int(app.campaign.battle.action_seq)
 			_check(app.battle_hud.dock.mouse_filter == Control.MOUSE_FILTER_STOP and app.battle_hud.log_panel.mouse_filter == Control.MOUSE_FILTER_STOP and app.battle_hud.log_toggle.mouse_filter == Control.MOUSE_FILTER_STOP, "HUD panels and controls intercept pointer input above the board")
@@ -297,6 +337,17 @@ func run(app: Control) -> void:
 	_check(app.hovered_unit_id == str(hunter.id) and app.hovered_cell == Vector2i(int(hunter.q), int(hunter.r)), "minimum-window real upper-body hover resolves the hunter [expected=%s@%s actual=%s@%s]" % [hunter.id, Vector2i(int(hunter.q), int(hunter.r)), app.hovered_unit_id, app.hovered_cell])
 	_check(app.battle_hud.inspection_panel.visible and app.battle_hud.inspection_title.text == str(hunter.name), "minimum-window hunter tooltip opens with the correct identity [expected=%s actual=%s visible=%s]" % [hunter.name, app.battle_hud.inspection_title.text, app.battle_hud.inspection_panel.visible])
 	_check(app.battle_hud.inspection_panel.size.y < app.get_viewport_rect().size.y and app.battle_hud.inspection_panel.get_global_rect().end.y <= app.battle_hud.dock.get_global_rect().position.y + 1.0, "minimum-window hunter tooltip remains above the command dock")
+	var small_before := JSON.stringify(app.campaign)
+	await _press_alt(app)
+	var small_detail: Rect2 = app.battle_hud.inspection_panel.get_global_rect()
+	_check(app.battle_hud.inspection_detailed and small_detail.end.x <= app.get_viewport_rect().size.x + 1 and small_detail.end.y <= app.battle_hud.dock.get_global_rect().position.y, "small-window Alt detail stays inside the battlefield")
+	await _capture(app, "12a-small-alt-detail")
+	app.modal_open = true
+	await _press_alt(app)
+	_check(app.battle_hud.inspection_detailed, "Alt does not toggle inspection through a modal dialog")
+	app.modal_open = false
+	await _press_alt(app)
+	_check(not app.battle_hud.inspection_detailed and JSON.stringify(app.campaign) == small_before, "small-window inspection toggles remain presentation-only")
 	app._set_speed(3.0)
 	await _capture(app, "09-small-hunter-hud")
 	app._retreat()
@@ -737,6 +788,21 @@ func _real_unit_hover(app: Control, unit: Dictionary) -> void:
 	motion.position = screen_point
 	motion.global_position = motion.position
 	Input.parse_input_event(motion)
+	await app.get_tree().process_frame
+	await app.get_tree().process_frame
+
+func _press_alt(app: Control) -> void:
+	var event := InputEventKey.new()
+	event.keycode = KEY_ALT
+	event.physical_keycode = KEY_ALT
+	event.pressed = true
+	Input.parse_input_event(event)
+	await app.get_tree().process_frame
+	event = InputEventKey.new()
+	event.keycode = KEY_ALT
+	event.physical_keycode = KEY_ALT
+	event.pressed = false
+	Input.parse_input_event(event)
 	await app.get_tree().process_frame
 	await app.get_tree().process_frame
 

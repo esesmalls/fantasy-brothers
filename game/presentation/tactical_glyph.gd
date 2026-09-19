@@ -19,6 +19,20 @@ func _draw() -> void:
 	var scale := minf(icon_rect.size.x, icon_rect.size.y) / 20.0
 	draw_set_transform(center, 0.0, Vector2(scale, scale))
 	match glyph:
+		"heart": _poly([Vector2(0, 8), Vector2(-8, 0), Vector2(-8, -5), Vector2(-4, -8), Vector2(0, -4), Vector2(4, -8), Vector2(8, -5), Vector2(8, 0)], Color(tint, 0.22))
+		"hourglass":
+			_poly([Vector2(-6, -8), Vector2(6, -8), Vector2(5, -4), Vector2(-5, 4), Vector2(-6, 8), Vector2(6, 8), Vector2(5, 4), Vector2(-5, -4)])
+		"broken_shield":
+			_shield(false)
+			_line(Vector2(7, -9), Vector2(-7, 8), 2.4)
+		"flame": _poly([Vector2(0, 9), Vector2(-7, 4), Vector2(-7, -1), Vector2(-3, -6), Vector2(-2, 0), Vector2(2, -9), Vector2(7, 0), Vector2(7, 5)], Color(tint, 0.25))
+		"steam":
+			for y in [-5, 0, 5]:
+				draw_polyline(PackedVector2Array([Vector2(-9, y + 2), Vector2(-4, y), Vector2(2, y + 2), Vector2(8, y)]), tint, 1.5, true)
+		"unknown":
+			_poly([Vector2(0, -9), Vector2(9, 0), Vector2(0, 9), Vector2(-9, 0)])
+			_line(Vector2(0, -4), Vector2(0, 2))
+			draw_circle(Vector2(0, 5), 1.0, tint)
 		"move": _boots()
 		"attack": _sword()
 		"shield_bash": _shield(true)

@@ -51,3 +51,5 @@
 3. 源码和文档经 GitHub 接力；`builds/`、引擎、模板和个人存档不入库。另一台运行 `tools/setup.ps1`、`tools/verify.ps1`、`tools/build.ps1 -SkipTests` 重建。
 4. 游戏进度位于 `%APPDATA%\FantasyBrothersPrototype\`，三台电脑不会自动同步。需要转移进度时关闭游戏后复制 `campaign.json`、`manual.json` 及对应 `.bak`；不要覆盖较新的进度。
 5. 交付记录必须写运行版本、实际验证和未覆盖项。当前电脑的结果不冒充另两台显卡的兼容性测试。
+
+最新反馈（0.1.5.1）：默认战斗悬浮改为色条/图标，Alt切详细，已实现；后续四步作为同批交付的最小范围见[16-next-four-steps.md](16-next-four-steps.md)。顺序为招聘后勤、差异化契约、出战替补部署、伤势/永久伤残/性格样本，逐步规则验证再做整批实际导出回归。该文档优先于下表较粗的B/C拆分，本轮不声称已实现这四步。

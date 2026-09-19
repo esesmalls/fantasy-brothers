@@ -33,6 +33,8 @@ func _test_units_order_and_read_only(battle: Dictionary) -> void:
 	var before := JSON.stringify(battle)
 	var player := Inspection.inspect_cell(battle, int(battle.units[0].q), int(battle.units[0].r))
 	check(player.title == "林恩" and player.team == "player" and player.subtitle.contains("猎人"), "player inspection identifies name, team, and role")
+	check(player.compact.bars.size() == 3 and player.compact.bars[0].value == battle.units[0].hp and player.compact.bars[1].value == battle.units[0].armor and player.compact.bars[2].value == battle.units[0].ap, "compact health armor and action meters use actual state")
+	check(player.compact.badges.size() == 2 and player.compact.stats[1].value == str(battle.units[0].range), "compact projection includes perks and actual range")
 	check(_has(player.lines, "生命：") and _has(player.lines, "护甲：") and _has(player.lines, "基础命中") and _has(player.lines, "射程"), "unit inspection exposes combat statistics")
 	check(_has(player.lines, "行动顺序：当前行动者") and not _has(player.lines, "order") and not _has(player.lines, "速度"), "active unit uses a concise player-facing turn label")
 	check(_has(player.lines, "沉着瞄准") and _has(player.lines, "同猎"), "known perks use their official names and readable descriptions")
@@ -76,7 +78,7 @@ func _test_statuses_and_dog(battle: Dictionary) -> void:
 	battle.cells["%d,%d" % [int(dog.q), int(dog.r)]].field = "fire"
 	battle.cells["%d,%d" % [int(dog.q), int(dog.r)]].expires = 2
 	var dog_info := Inspection.inspect_cell(battle, int(dog.q), int(dog.r))
-	check(_has(dog_info.lines, "战犬指令：牵制") and _has(dog_info.lines, "绑定猎人：林恩") and _has(dog_info.lines, "牵制目标：劫掠者"), "dog inspection reports command, hunter binding, and readable target")
+	check(_has(dog_info.lines, "战犬指令：牵制") and _has(dog_info.lines, "指挥者：林恩") and _has(dog_info.lines, "牵制目标：劫掠者"), "dog inspection reports command, handler binding, and readable target")
 	check(_has(dog_info.lines, "识火") and _has(dog_info.lines, "伤害减半") and not _has(dog_info.lines, "读取单位专长"), "firewise hazard distinction is shown without implementation language")
 
 func _test_props_and_surfaces(battle: Dictionary) -> void:

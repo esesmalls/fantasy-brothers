@@ -2,11 +2,11 @@
 
 一款以战术战斗、佣兵命运和魔幻中世纪美术为重点的原创 2D 单机游戏，目标平台为 Steam。
 
-当前阶段：最小可玩验证 v0.1.5，人物帐接通四项属性、个人升级、营地训练和跨出身学习驯兽；营地军需帐接通装备、库存与交易，人类自由组合武器，营地与战场共用可见装备和伤势的分层人物；六处地点接通地图接约、逐站旅行、途中事件、契约战斗、清点成长与返营生活；保留上一版战场优先的底部HUD与悬浮信息。当前优先搭完整框架与功能，再逐步丰富内容；以下规划仍不代表最终平衡、预算或发售承诺。
+当前阶段：最小可玩验证 v0.1.5.1，战场悬浮默认色条与图标、Alt切详细；人物帐接通四项属性、个人升级、营地训练和跨出身学习驯兽；营地军需帐接通装备、库存与交易，人类自由组合武器，营地与战场共用可见装备和伤势的分层人物；六处地点接通地图接约、逐站旅行、途中事件、契约战斗、清点成长与返营生活；保留上一版战场优先的底部HUD与悬浮信息。当前优先搭完整框架与功能，再逐步丰富内容；以下规划仍不代表最终平衡、预算或发售承诺。
 
 更新日期：2026-09-19。
 
-双击根目录 `Play.cmd`，或解压 `builds/FantasyBrothers-0.1.5-windows.zip` 后运行 `FantasyBrothers.exe`。建议自由佣兵团、种子 `1709`、渡口旧道。完整玩法与边界见 [试玩说明](docs/PLAYTEST.md)，接续顺序见 [框架计划](docs/10-framework-roadmap.md)；当前地图范围见 [大地图闭环](docs/11-world-map-framework.md)。
+双击根目录 `Play.cmd`，或解压 `builds/FantasyBrothers-0.1.5.1-windows.zip` 后运行 `FantasyBrothers.exe`。建议自由佣兵团、种子 `1709`、渡口旧道。完整玩法与边界见 [试玩说明](docs/PLAYTEST.md)，接续顺序见 [框架计划](docs/10-framework-roadmap.md)；当前地图范围见 [大地图闭环](docs/11-world-map-framework.md)。
 
 源码仓库：[esesmalls/fantasy-brothers](https://github.com/esesmalls/fantasy-brothers)。源码不包含本地构建包；另一台 Windows 电脑按下方步骤重新准备工具和构建。
 
@@ -19,6 +19,8 @@
 5. [肉鸽、技能与场景扩展](docs/04-systems-expansion.md)：持续战役、随机成长、技能联动、元素反应、结算与验证。
 6. 研究依据：[PTR](docs/research/ptr-findings.md)、[肉鸽叙事](docs/research/roguelite-findings.md)、[元素与场景](docs/research/elements-findings.md)。
 7. 最新人物方案：[属性、培养与命运](docs/13-character-progression.md)、[开发日志研究](docs/research/character-development-findings.md)、[家庭与代际传承](docs/14-family-and-legacy.md)。已实现部分见[0.1.5人物属性](docs/15-character-attributes.md)；伤残性格仍为后续方案，繁衍先作长期预留。
+
+下一批四步范围与整批测试见 [招聘、契约、部署与人物后果](docs/16-next-four-steps.md)，尚未实现。
 
 ## 当前建议
 

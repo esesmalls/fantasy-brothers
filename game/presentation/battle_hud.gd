@@ -35,6 +35,13 @@ var inspection_title: Label
 var inspection_subtitle: Label
 var inspection_body: Label
 var inspection_preview: Label
+var inspection_compact: VBoxContainer
+var inspection_scroll: ScrollContainer
+var inspection_hint: Label
+var inspection_detailed := false
+var inspection_info: Dictionary = {}
+var inspection_last_preview: Dictionary = {}
+var inspection_bars: Dictionary = {}
 var log_expanded := false
 
 func build(owner_control: Control, battle_board: Control) -> void:
@@ -178,22 +185,31 @@ func _build_dock() -> void:
 
 func _build_inspection() -> void:
 	inspection_panel = _frame(self, 12)
-	inspection_panel.custom_minimum_size.x = 320
+	inspection_panel.custom_minimum_size.x = 264
 	inspection_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	inspection_panel.add_theme_stylebox_override("panel", controller._style("252a21f8", "c3a368", 12))
 	var box := _vbox(inspection_panel, 5)
 	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	inspection_title = _label(box, "", 19, GOLD)
 	inspection_subtitle = _label(box, "", 13, MUTED)
-	var separator := HSeparator.new()
-	separator.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	box.add_child(separator)
-	inspection_body = _label(box, "", 14)
+	inspection_compact = _vbox(box, 4)
+	inspection_compact.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	inspection_scroll = ScrollContainer.new()
+	inspection_scroll.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	inspection_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	inspection_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	inspection_scroll.get_v_scroll_bar().mouse_filter = Control.MOUSE_FILTER_IGNORE
+	box.add_child(inspection_scroll)
+	inspection_body = _label(inspection_scroll, "", 14)
 	inspection_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	inspection_body.custom_minimum_size.x = 296
+	inspection_body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	inspection_body.custom_minimum_size.x = 342
 	inspection_preview = _label(box, "", 13, GOLD)
 	inspection_preview.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	inspection_preview.custom_minimum_size.x = 296
+	inspection_preview.custom_minimum_size.x = 240
+	inspection_preview.max_lines_visible = 2
+	inspection_preview.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	inspection_hint = _label(box, "Alt · 详细信息", 11, MUTED)
 	inspection_panel.hide()
 
 func layout() -> void:
@@ -310,26 +326,120 @@ func show_inspection(info: Dictionary, preview: Dictionary = {}) -> void:
 	if info.is_empty():
 		inspection_panel.hide()
 		return
+	var changed := inspection_info != info
+	inspection_info = info.duplicate(true)
+	inspection_last_preview = preview.duplicate(true)
 	inspection_title.text = str(info.get("title", ""))
+	inspection_title.clip_text = true
+	inspection_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	inspection_title.add_theme_color_override("font_color", RED if info.get("team", "") == "enemy" else GOLD)
 	inspection_subtitle.text = str(info.get("subtitle", ""))
+	inspection_subtitle.clip_text = true
 	inspection_body.text = "\n".join(info.get("lines", []))
-	# Experienced units can carry several perks and statuses. Give those cards
-	# more width so complete descriptions still fit above the command dock.
-	var card_width: float = 600.0 if info.get("lines", []).size() > 12 else 320.0
-	inspection_panel.custom_minimum_size.x = card_width
-	inspection_body.custom_minimum_size.x = card_width - 24.0
-	inspection_preview.custom_minimum_size.x = card_width - 24.0
-	inspection_preview.text = str(preview.get("summary", ""))
-	inspection_preview.visible = not inspection_preview.text.is_empty()
-	inspection_preview.add_theme_color_override("font_color", GOLD if preview.get("ok", true) else RED)
-	inspection_panel.size = Vector2(card_width, 0)
+	if changed:
+		_build_compact(info.get("compact", {}))
+		inspection_scroll.scroll_vertical = 0
+	_apply_inspection_mode()
 	inspection_panel.show()
 	position_inspection()
+
+func _apply_inspection_mode() -> void:
+	var card_width := 380.0 if inspection_detailed else 264.0
+	inspection_panel.custom_minimum_size.x = card_width
+	inspection_body.custom_minimum_size.x = card_width - 38.0
+	inspection_preview.custom_minimum_size.x = card_width - 24.0
+	inspection_scroll.custom_minimum_size = Vector2(card_width - 24.0, minf(300.0, maxf(100.0, dock.position.y - 170.0)))
+	inspection_scroll.visible = inspection_detailed
+	inspection_compact.visible = not inspection_detailed
+	inspection_hint.text = "Alt · 简洁信息    滚轮 · 翻阅" if inspection_detailed else "Alt · 详细信息"
+	inspection_preview.text = str(inspection_last_preview.get("summary", ""))
+	inspection_preview.visible = inspection_detailed and not inspection_preview.text.is_empty()
+	inspection_preview.add_theme_color_override("font_color", GOLD if inspection_last_preview.get("ok", true) else RED)
+	inspection_panel.size = Vector2(card_width, 0)
+
+func _icon(parent: Node, id: String, color: Color = GOLD) -> Control:
+	var icon := Glyph.new()
+	icon.set_glyph(id)
+	icon.tint = color
+	icon.custom_minimum_size = Vector2(22, 22)
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	parent.add_child(icon)
+	return icon
+
+func _build_compact(data: Dictionary) -> void:
+	for child in inspection_compact.get_children():
+		inspection_compact.remove_child(child)
+		child.queue_free()
+	inspection_bars.clear()
+	for meter: Dictionary in data.get("bars", []):
+		var row := HBoxContainer.new()
+		row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		inspection_compact.add_child(row)
+		_icon(row, str(meter.glyph), Color(str(meter.color)))
+		var bar := ProgressBar.new()
+		bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		bar.custom_minimum_size.y = 22
+		bar.show_percentage = false
+		bar.max_value = maxi(1, int(meter.max))
+		bar.value = int(meter.value)
+		bar.add_theme_stylebox_override("background", controller._style("111914", "53604e", 0))
+		bar.add_theme_stylebox_override("fill", controller._style(str(meter.color), str(meter.color), 0))
+		row.add_child(bar)
+		var number := _label(bar, "%d / %d" % [int(meter.value), int(meter.max)], 13)
+		number.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		number.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		number.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		number.add_theme_color_override("font_shadow_color", Color.BLACK)
+		number.add_theme_constant_override("shadow_offset_x", 1)
+		number.add_theme_constant_override("shadow_offset_y", 1)
+		inspection_bars[str(meter.id)] = bar
+	if not str(data.get("turn", "")).is_empty(): _label(inspection_compact, str(data.turn), 12, MUTED)
+	if not data.get("stats", []).is_empty():
+		var stats_row := HBoxContainer.new()
+		stats_row.add_theme_constant_override("separation", 7)
+		stats_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		inspection_compact.add_child(stats_row)
+		for stat: Dictionary in data.stats:
+			_icon(stats_row, str(stat.glyph))
+			_label(stats_row, str(stat.value), 13)
+	var badges: Array = data.get("badges", [])
+	if not badges.is_empty():
+		var row := HFlowContainer.new()
+		row.custom_minimum_size.x = 240
+		row.add_theme_constant_override("h_separation", 7)
+		row.add_theme_constant_override("v_separation", 2)
+		row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		inspection_compact.add_child(row)
+		for index in range(mini(8, badges.size())):
+			var badge: Dictionary = badges[index]
+			var chip := HBoxContainer.new()
+			chip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			row.add_child(chip)
+			_icon(chip, str(badge.glyph), Color(str(badge.color)))
+			if not str(badge.label).is_empty(): _label(chip, str(badge.label), 12)
+		if badges.size() > 8: _label(row, "+%d" % (badges.size() - 8), 12, GOLD)
+
+func _input(event: InputEvent) -> void:
+	if not is_instance_valid(controller) or controller.modal_open:
+		return
+	if event is InputEventKey and event.keycode == KEY_ALT and event.pressed and not event.echo and not event.ctrl_pressed and inspection_panel.visible:
+		inspection_detailed = not inspection_detailed
+		_apply_inspection_mode()
+		get_viewport().set_input_as_handled()
+	elif event is InputEventMouseButton and inspection_panel.visible and event.button_index in [MOUSE_BUTTON_LEFT, MOUSE_BUTTON_RIGHT] and inspection_panel.get_global_rect().has_point(event.position):
+		# Keep hover motion transparent but never issue a battlefield command
+		# through the visible card, including when clamped near an edge.
+		get_viewport().set_input_as_handled()
+	elif event is InputEventMouseButton and event.pressed and inspection_detailed and inspection_panel.visible and event.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN]:
+		inspection_scroll.scroll_vertical += 66 if event.button_index == MOUSE_BUTTON_WHEEL_DOWN else -66
+		get_viewport().set_input_as_handled()
 
 func position_inspection() -> void:
 	if not is_inside_tree() or inspection_panel == null or not inspection_panel.visible:
 		return
+	if inspection_detailed:
+		inspection_scroll.custom_minimum_size.y = minf(inspection_body.get_combined_minimum_size().y, minf(300.0, maxf(100.0, dock.position.y - 170.0)))
 	# Containers finish text reflow after the initial assignment. Shrink to the
 	# updated minimum as well, instead of retaining a previous card's height.
 	inspection_panel.reset_size()
