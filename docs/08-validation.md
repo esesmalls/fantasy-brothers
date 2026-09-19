@@ -1,3 +1,37 @@
+# 0.1.5 交付验证记录
+
+2026-09-19，基线02a9ef2，Godot 4.7.2.stable.official.ed1daf0bf，Windows/NVIDIA RTX 4080 Laptop/OpenGL Compatibility。新战斗prototype-0.1.5，旧0.1.4/0.1.1战场保留完整快照。
+
+| 检查 | 检查/失败 | 证据 |
+| --- | --- | --- |
+| 战斗 / 战役 / 世界 | 129/0、72/0、126/0 | builds/qa/verify-015.log |
+| 存档 | 53/0 | builds/qa/015-save-final.log |
+| 完整流程 | 1730/0 | builds/qa/015-flow-final.log，20种子×2团×3远征，110胜/10其他 |
+| 装备 / 详情 / 人物分层 | 66/0、30/0、7/0 | builds/qa/verify-015.log |
+| 人物属性与培养 | 67/0 | builds/qa/015-characters-final.log |
+| 独立旧档与成长回归 | 491/0 | QA代理实际执行test_progression_regression.gd；verify-015.log同步覆盖491/0 |
+| 源码界面 | 289/0 | builds/qa/verify-015.log，user://qa/screens/smoke-report.json |
+| 最终Windows导出 | 326/0 | builds/qa/export-015/smoke-report.json，exported:true；289项场景+37张实际渲染截图 |
+
+全套verify通过后，因恢复战犬同猎候选与修正最老0.1迁移，局部重跑人物、存档、战役、独立回归及完整流程；最后重新导出并运行实际EXE的全部UI场景。未在无新风险时反复跑所有规则。源码/导出覆盖重复，不能相加为独立质量指标；自动胜率不代表玩家胜率。
+
+新增规则验证：有效属性直接影响预览和命中结算；1–8级累计经验与点数；死亡/重复领奖；基础训练完整扣费、非营地/无粮无钱无额度时无状态变化；装备加减值不改变永久培养上限；跨出身学习驯兽、唯一犬绑定和真实动作；战犬不获不可消费的人类点数。移动、等待、仅发犬指令即逃跑不发经验。
+
+独立夹具来自旧提交保存器生成的合成QA战役，覆盖0.1.4的camp/event/battle/growth/returning与真实0.1.1 battle。验证旧vigor/precision、51/66伤血、+3/-5武器、11/24甲损、历史、RNG、claim、未领候选及初始阵容完整保留；二次迁移和保存不漂移。另有synthetic prototype-0.1兼容断点：升级到0.1.4快照而不要求不存在的0.1.5元数据。用户个人存档未用于这些夹具。
+
+UI真实第一次胜利后获得经验，再实际点击体魄/防御加点，检查数值、点数、伤血和手动存读；训练与驯兽通过真实按钮扣资源、绑定犬并进入战斗。新增人物/装备同人往返、履历只读、标题小窗口布局。保留原三远征、地图、装备、元素、动画速度/跳过和HUD测试。QA存档位于user://qa；不覆盖campaign.json/manual.json。
+
+本轮修复：等级镜像在升级后不同步；负XP未拒绝；临时装备修正参与培养上限；非营地加点缺少规则拦截；空犬指令可获得撤退经验；犬产生不可使用点数；人物标题竖排；最老快照错误标为新规则；战犬同猎候选被误移除。最终图形日志无脚本错误。
+
+导出命令：tools/build.ps1 -SkipTests。实际EXE参数：`-- --smoke-test --smoke-dir="S:/fantasy brothers/builds/qa/export-015"`。构建日志builds/qa/build-015.log，图形日志builds/qa/export-015.log。
+
+SHA256：
+- EXE：C39FE1CFAAF98FBA73762D72A7EABB806E2C05CA55A3B47DDD2EEC3ED494A633
+- ZIP：EF6F2C78CE4963AF1FB6169E2B00ADAA0AC7F61D3E9F5D16738963805FB035C7
+
+未覆盖另两台电脑/显卡、每份真实用户旧档、长线经济与真人手感。没有实现招聘工资、天赋抽选、伤残性格、繁衍或自由走图。下方保留历史记录。
+
+---
 # 0.1.4 交付验证记录
 
 日期：2026-09-19，基线63ed359，Godot 4.7.2.stable.official.ed1daf0bf，Windows/NVIDIA RTX 4080 Laptop/OpenGL Compatibility。新战斗prototype-0.1.4；旧0.1.1进行中战斗保留快照和版本，以kind回退既有动作。

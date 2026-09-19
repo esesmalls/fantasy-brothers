@@ -50,6 +50,8 @@ static func _fill_unit(result: Dictionary, battle: Dictionary, unit: Dictionary)
 	var side := "我方" if str(unit.get("team", "")) == "player" else "敌方"
 	result.title = str(unit.get("name", "未命名单位"))
 	result.subtitle = "%s · %s%s" % [side, role, " · 已倒下" if dead else ""]
+	if unit.has("level"):
+		result.subtitle += " · %d级" % int(unit.level)
 	result.glyph = "†" if dead else ("犬" if str(unit.get("kind", "")) == "dog" else ("我" if str(unit.get("team", "")) == "player" else "敌"))
 	result.team = str(unit.get("team", "neutral"))
 	var lines: Array[String] = result.lines
@@ -60,6 +62,9 @@ static func _fill_unit(result: Dictionary, battle: Dictionary, unit: Dictionary)
 	else:
 		lines.append("行动点：%d / %d" % [int(unit.get("ap", 0)), int(unit.get("max_ap", 0))])
 	lines.append("攻击：%d · 基础命中：%d%% · 射程：%d 格" % [int(unit.get("attack", 0)), int(unit.get("accuracy", 0)), int(unit.get("range", 0))])
+	if unit.has("level"):
+		var stats: Dictionary = unit.get("effective_stats", unit)
+		lines.append("近战技艺：%d · 远程技艺：%d · 防御：%d" % [int(stats.get("melee_skill", unit.get("accuracy", 0))), int(stats.get("ranged_skill", unit.get("accuracy", 0))), int(stats.get("defense", 0))])
 	var loadout: Dictionary = unit.get("visual_loadout", {})
 	for slot: String in ["weapon", "armor"]:
 		var item: Dictionary = EquipmentData.get_definition(str(loadout.get(slot, "")))
@@ -132,7 +137,7 @@ static func _append_statuses(lines: Array[String], battle: Dictionary, unit: Dic
 		match status_name:
 			"defending": text = "戒备：敌人对其命中 -20，至该单位下回合开始"
 			"exposed": text = "破绽：长枪攻击可消耗，获得 +25 命中"
-			"marked": text = "标记：猎人对其 +15 命中；同猎战犬可获得伤害加成"
+			"marked": text = "标记：具备驯兽本领者对其 +15 命中；同猎战犬可获得伤害加成" if str(battle.get("rules_version", "")) == "prototype-0.1.5" else "标记：猎人对其 +15 命中；同猎战犬可获得伤害加成"
 			"pinned": text = "牵制标记"
 		if int(data.get("expires", 0)) > 0:
 			text += "；第 %d 轮末到期" % int(data.expires)

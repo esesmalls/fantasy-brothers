@@ -10,6 +10,7 @@ var buy_buttons: Dictionary = {}
 var sell_buttons: Dictionary = {}
 var equip_buttons: Dictionary = {}
 var back_button: Button
+var character_button: Button
 var portrait: Control
 
 func build(owner_control: Control, unit_id: String) -> void:
@@ -42,6 +43,7 @@ func build(owner_control: Control, unit_id: String) -> void:
 			break
 	if not selected.is_empty():
 		controller._text(gear, "攻击 %d  ·  命中 %d%%\n护甲 %d / %d  ·  射程 %d 格" % [int(selected.attack), int(selected.accuracy), int(selected.armor), int(selected.max_armor), int(selected.range)], 19, controller.GOLD)
+		character_button = controller._button(gear, "人物帐 · 查看属性与培养", func(): controller._show_characters(str(selected.get("id", ""))))
 	for slot: Dictionary in view.get("slots", []):
 		controller._text(gear, str(slot.get("name", "")), 20)
 		controller._text(gear, str(slot.get("description", "")), 15, controller.MUTED)

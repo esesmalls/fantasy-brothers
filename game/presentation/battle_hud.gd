@@ -243,6 +243,9 @@ func refresh_actor(active: Dictionary, battle: Dictionary) -> void:
 		actor_glyph.tint = GOLD if str(active.team) == "player" else RED
 		actor_glyph.queue_redraw()
 		actor_stats.text = "生命 %d/%d   护甲 %d/%d\n行动 %d/%d   攻击 %d   射程 %d" % [int(active.hp), int(active.max_hp), int(active.armor), int(active.max_armor), int(active.ap), int(active.max_ap), int(active.attack), int(active.range)]
+		if active.has("level"):
+			var stats: Dictionary = active.get("effective_stats", active)
+			actor_stats.text += "\n近战 %d   远程 %d   防御 %d" % [int(stats.get("melee_skill", active.get("accuracy", 0))), int(stats.get("ranged_skill", active.get("accuracy", 0))), int(stats.get("defense", 0))]
 	retreat_button.disabled = not str(battle.outcome).is_empty()
 	refresh_queue(battle)
 	update_log(battle)

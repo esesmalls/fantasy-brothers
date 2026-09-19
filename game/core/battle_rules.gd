@@ -1,6 +1,6 @@
 extends RefCounted
 # Pure, JSON-compatible rules. Presentation never changes these results.
-const RULES_VERSION = "prototype-0.1.4"
+const RULES_VERSION = "prototype-0.1.5"
 const DIRECTIONS = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]]
 const FIRE_DAMAGE = 10
 
@@ -23,13 +23,29 @@ static func create_battle(roster: Array, seed: int, mission: Dictionary = {}) ->
 		u.q = p[0]
 		u.r = p[1]
 		s.units.append(u)
-	var hunter_id = ""
+	var handlers: Dictionary = {}
 	for u in s.units:
-		if u.kind == "hunter":
-			hunter_id = u.id
+		if _has_capability(u, "beast_handler"):
+			handlers[str(u.id)] = u
 	for u in s.units:
 		if u.kind == "dog":
-			u.hunter_id = hunter_id
+			var owner_id := str(u.get("hunter_id", ""))
+			if not handlers.has(owner_id):
+				owner_id = ""
+				for handler_id in handlers:
+					if str(handlers[handler_id].get("beast_id", "")) == str(u.id):
+						owner_id = str(handler_id)
+						break
+				if owner_id.is_empty():
+					for handler_id in handlers:
+						var already_used := false
+						for other in s.units:
+							if other != u and str(other.get("kind", "")) == "dog" and str(other.get("hunter_id", "")) == str(handler_id):
+								already_used = true
+						if not already_used:
+							owner_id = str(handler_id)
+							break
+			u.hunter_id = owner_id
 			u.command = "follow"
 			u.command_target = ""
 	var difficulty = clampi(int(mission.get("difficulty", 0)), 0, 2)
@@ -75,6 +91,15 @@ static func _unit(raw: Dictionary, team: String) -> Dictionary:
 	u.armor = int(u.get("armor", u.max_armor))
 	u.attack = int(u.get("attack", 10 if kind == "dog" else 14))
 	u.accuracy = int(u.get("accuracy", 80))
+	u.defense = int(u.get("defense", 0))
+	u.melee_skill = int(u.get("melee_skill", u.accuracy))
+	u.ranged_skill = int(u.get("ranged_skill", u.accuracy))
+	u.level = int(u.get("level", 1))
+	u.background_name = str(u.get("background_name", ""))
+	if u.get("capability_tags") is Array:
+		u.capability_tags = u.capability_tags.duplicate()
+	else:
+		u.capability_tags = ["beast_handler"] if kind == "hunter" else []
 	u.range = int(u.get("range", _style_range(str(u.weapon_style))))
 	u.max_ap = 6
 	u.ap = 6
@@ -101,8 +126,8 @@ static func get_actions(s: Dictionary, unit_id: String) -> Array:
 	if style == "guard":
 		actions.append(_act("shield_bash", "盾击", 3, 1, "造成6伤害并制造破绽，长枪可利用。", "enemy"))
 		actions.append(_act("push", "推开", 2, 1, "确定推动1格；不触发脱离反击，危险地表仍生效。", "enemy"))
-	if u.kind == "hunter":
-		actions.append(_act("mark", "猎物标记", 2, 4, "猎人对标记目标+15命中；羁绊战犬伤害提高。", "enemy"))
+	if _has_capability(u, "beast_handler"):
+		actions.append(_act("mark", "猎物标记", 2, 4, "驯兽者对标记目标+15命中；羁绊战犬伤害提高。", "enemy"))
 		actions.append(_act("command_follow", "战犬跟随", 1, 0, "战犬自身回合跟随主人，攻击邻近敌人。", "self"))
 		actions.append(_act("command_pin", "战犬牵制", 1, 6, "指定敌人，战犬自身回合接近并攻击。", "enemy"))
 		actions.append(_act("command_recall", "战犬撤回", 1, 0, "战犬自身回合撤向主人，停止攻击。", "self"))
@@ -603,12 +628,12 @@ static func _record_action(s: Dictionary, actor: String, action: String, target:
 		"action": action, "target": target.duplicate(true), "rng_before": int(s.rng_state)})
 
 static func _hit_chance(_s: Dictionary, u: Dictionary, v: Dictionary, action: String) -> int:
-	var chance = int(u.accuracy)
+	var chance = int(u.accuracy) - int(v.get("defense", 0))
 	if v.statuses.has("defending"):
 		chance -= 20
 	if action == "attack" and _weapon_style(u) == "spear" and v.statuses.has("exposed"):
 		chance += 25
-	if u.kind == "hunter" and v.statuses.has("marked"):
+	if _has_capability(u, "beast_handler") and v.statuses.has("marked"):
 		chance += 15
 	return clampi(chance, 5, 95)
 
@@ -747,6 +772,13 @@ static func _dog_for(s: Dictionary, id: String) -> Dictionary:
 		if u.kind == "dog" and int(u.hp) > 0 and u.get("hunter_id", "") == id:
 			return u
 	return {}
+
+static func _has_capability(unit: Dictionary, capability_id: String) -> bool:
+	# Old battle snapshots intentionally lack capability metadata and retain the
+	# 0.1.4 hunter fallback until that already-started battle ends.
+	if unit.get("capability_tags") is Array:
+		return capability_id in unit.capability_tags
+	return capability_id == "beast_handler" and str(unit.get("kind", "")) == "hunter"
 
 static func _area(s: Dictionary, q: int, r: int) -> Array:
 	var area = [{"q": q, "r": r}]

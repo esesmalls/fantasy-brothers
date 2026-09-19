@@ -4,6 +4,7 @@ extends RefCounted
 
 const Data = preload("res://core/equipment_data.gd")
 const World = preload("res://core/world_data.gd")
+const Character = preload("res://core/character_rules.gd")
 
 static func initialize_new_campaign(c: Dictionary) -> void:
 	c.equipment = {"schema": Data.SCHEMA, "next_instance_serial": 1, "instances": []}
@@ -45,6 +46,8 @@ static func discard_unit_loadout(c: Dictionary, unit: Dictionary) -> void:
 	unit.equipment = {"weapon": "", "armor": ""}
 	unit.weapon_style = ""
 	unit.visual_loadout = {"weapon": "", "armor": ""}
+	if unit.get("stat_sources") is Dictionary:
+		Character.recompute_character(unit, c)
 
 static func get_view(c: Dictionary, unit_id: String = "") -> Dictionary:
 	var units: Array = []
@@ -161,14 +164,9 @@ static func equip(c: Dictionary, unit_id: String, instance_id: String) -> Dictio
 	var slot := str(definition.slot)
 	var old_id := str(unit.get("equipment", {}).get(slot, ""))
 	var old_instance := _find_instance(c, old_id)
-	var old_definition := Data.get_definition(str(old_instance.get("definition_id", "")))
 	# Validation is complete. Preserve old armor wear on its instance before the
 	# stable IDs are swapped; equipping the new instance restores only its own wear.
 	if slot == "weapon":
-		unit.attack = int(unit.attack) + int(definition.get("attack", 0)) - int(old_definition.get("attack", 0))
-		unit.accuracy = int(unit.accuracy) + int(definition.get("accuracy", 0)) - int(old_definition.get("accuracy", 0))
-		unit.range = int(definition.range)
-		unit.weapon_style = str(definition.weapon_style)
 		unit.visual_loadout.weapon = str(definition.id)
 	else:
 		if not old_instance.is_empty():
@@ -177,6 +175,7 @@ static func equip(c: Dictionary, unit_id: String, instance_id: String) -> Dictio
 		unit.armor = clampi(int(instance.durability), 0, int(instance.max_durability))
 		unit.visual_loadout.armor = str(definition.id)
 	unit.equipment[slot] = instance_id
+	Character.recompute_character(unit, c)
 	c.last_report = "%s换上「%s」；旧装备已返回仓库。" % [str(unit.name), str(definition.name)]
 	return {"ok": true, "reason": str(c.last_report)}
 

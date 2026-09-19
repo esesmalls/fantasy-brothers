@@ -221,7 +221,7 @@ func _test_routes_and_legacy_upgrade() -> void:
 	if not loaded.get("ok", false):
 		return
 	var restored: Dictionary = loaded.campaign
-	check(restored.battle.rules_version == Battle.RULES_VERSION and restored.battle.migrated_from_rules == "prototype-0.1", "legacy battle records old rules version and adopts current rules")
+	check(restored.battle.rules_version == "prototype-0.1.4" and restored.battle.migrated_from_rules == "prototype-0.1", "legacy battle records old rules version and adopts 0.1.4 compatibility rules")
 	check(restored.expedition.route_id == "road", "legacy expedition is assigned the existing road without a new choice")
 	check(restored.gold == legacy.gold and restored.food == legacy.food and restored.day == legacy.day, "legacy upgrade does not charge route cost or advance time")
 	check(restored.rng_state == legacy.rng_state and restored.battle.rng_state == legacy.battle.rng_state and restored.event == legacy.event, "legacy upgrade preserves random state and event candidates")

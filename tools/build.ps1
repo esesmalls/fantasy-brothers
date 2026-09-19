@@ -11,6 +11,6 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Windows export failed.' }
     Copy-Item -LiteralPath 'game/assets/godot-notices.txt' -Destination 'builds/windows/GODOT-NOTICES.txt'
     Copy-Item -LiteralPath 'docs/PLAYTEST.md' -Destination 'builds/windows/PLAYTEST.md'
-    Compress-Archive -Path 'builds/windows/*' -DestinationPath 'builds/FantasyBrothers-0.1.4-windows.zip' -Force
-    Get-FileHash -Algorithm SHA256 -LiteralPath 'builds/windows/FantasyBrothers.exe', 'builds/FantasyBrothers-0.1.4-windows.zip'
+    Compress-Archive -Path 'builds/windows/*' -DestinationPath 'builds/FantasyBrothers-0.1.5-windows.zip' -Force
+    Get-FileHash -Algorithm SHA256 -LiteralPath 'builds/windows/FantasyBrothers.exe', 'builds/FantasyBrothers-0.1.5-windows.zip'
 } finally { Pop-Location }

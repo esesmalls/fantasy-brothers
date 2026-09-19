@@ -4,6 +4,7 @@ extends RefCounted
 
 const World = preload("res://core/world_data.gd")
 const Equipment = preload("res://core/equipment_rules.gd")
+const Character = preload("res://core/character_rules.gd")
 
 const PERK_INFO = {
 	"vigor": {"title": "坚韧", "description": "最大生命与当前生命永久 +8。"},
@@ -63,8 +64,8 @@ static func create_campaign(origin: String, seed_value: int) -> Dictionary:
 		elif str(kinds[i]) == "dog":
 			unit_name = "灰牙"
 		c.roster.append(_new_unit(str(kinds[i]), "crew_%d" % (i + 1), unit_name, i))
-	_bind_hunter(c)
 	Equipment.initialize_new_campaign(c)
+	Character.ensure_campaign(c)
 	return c
 
 static func camp_action(c: Dictionary, action: String) -> Dictionary:
@@ -137,8 +138,9 @@ static func camp_action(c: Dictionary, action: String) -> Dictionary:
 				Equipment.discard_unit_loadout(c, c.roster[slot])
 				c.roster[slot] = recruit
 			Equipment.grant_recruit_loadout(c, recruit)
+			Character.ensure_character(recruit, c)
 			c.day = int(c.day) + 1
-			_bind_hunter(c)
+			Character.ensure_campaign(c)
 			var advance_note: String = ""
 			if advance > 0:
 				advance_note = " 其中 %d 金为预支签约款，之后每次战利品最多扣三分之一偿还。" % advance
@@ -502,8 +504,13 @@ static func resolve_battle(c: Dictionary, battle: Dictionary) -> Dictionary:
 	var equipment_problem := Equipment.battle_result_problem(c, battle)
 	if not equipment_problem.is_empty():
 		return _fail(equipment_problem)
+	var progression_claim_id := "battle:%s" % expedition_id
+	var progression_problem := Character.battle_progression_problem(c, battle, outcome, progression_claim_id)
+	if not progression_problem.is_empty():
+		return _fail(progression_problem)
 	# All validation precedes mutation. The claim guards both money and progression.
 	var equipment_settlement := Equipment.apply_battle_result(c, battle)
+	var progression_settlement := Character.apply_battle_progression(c, battle, outcome, progression_claim_id)
 	c.claimed[expedition_id] = true
 	var casualties: Array = []
 	for unit: Dictionary in c.roster:
@@ -577,6 +584,14 @@ static func resolve_battle(c: Dictionary, battle: Dictionary) -> Dictionary:
 		report += "\n阵亡：" + "、".join(casualties) + "。他们的经历留在名册中，原位可补员。阵亡时随身武器与护甲遗失。"
 		if not equipment_settlement.get("lost", []).is_empty():
 			report += " 遗失：" + "、".join(equipment_settlement.lost) + "。"
+	var xp_notes: Array[String] = []
+	for award: Dictionary in progression_settlement.get("awards", []):
+		var recipient := _find_living(c, str(award.unit_id))
+		xp_notes.append("%s +%d经验" % [str(recipient.get("name", award.unit_id)), int(award.xp)])
+	if not xp_notes.is_empty():
+		report += "\n人物成长：" + "、".join(xp_notes) + "。"
+	elif outcome != "victory":
+		report += "\n本次撤离前没有有效行动，不发人物经验。"
 	if int(expedition.index) >= 3 and not bool(c.flags.get("ending_seen", false)):
 		c.flags.ending_seen = true
 		c.flags.ending_text = _ending(c)
@@ -611,14 +626,12 @@ static func choose_growth(c: Dictionary, offer_id: String) -> Dictionary:
 			c.gold = int(c.gold) + 12
 			effect_note = "原定成长队员已经缺席。导师退回 12 金训练费，全团带着这份经验继续前行。"
 		else:
-			if perk in unit.perks or not perk in _eligible_perks(unit):
-				return _fail("该专长已经学习或不适合这名队员，未消耗成长机会。")
+			# Saved candidates are promises from their generating rules version. Do
+			# not re-run current eligibility and invalidate an old breacher offer.
+			if perk in unit.perks or not PERK_INFO.has(perk):
+				return _fail("该专长已经学习或候选数据损坏，未消耗成长机会。")
 			unit.perks.append(perk)
-			if perk == "vigor":
-				unit.max_hp = int(unit.max_hp) + 8
-				unit.hp = int(unit.hp) + 8
-			elif perk == "precision":
-				unit.accuracy = int(unit.accuracy) + 8
+			Character.recompute_character(unit, c)
 			effect_note = "%s学会「%s」：%s" % [str(unit.name), str(offer.title), str(offer.description)]
 	else:
 		match str(offer.get("fallback", "")):
@@ -841,10 +854,11 @@ static func _generate_growth(c: Dictionary) -> void:
 
 static func _eligible_perks(unit: Dictionary) -> Array:
 	var pool: Array = ["vigor", "precision", "firewise"]
-	if str(unit.kind) in ["guard", "spear"]:
+	if str(unit.kind) != "dog":
 		pool.append("breacher")
-	if str(unit.kind) == "dog":
-		pool.append("packbond")
+	# Dogs retain their original bond growth, while trained human handlers may
+	# now learn the same synergy without a lifetime background restriction.
+	pool.append("packbond")
 	var result: Array = []
 	for perk in pool:
 		if not perk in unit.get("perks", []):

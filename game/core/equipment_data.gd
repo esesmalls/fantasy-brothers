@@ -48,7 +48,7 @@ const DEFINITIONS := {
 	},
 	"weapon_hunter_bow": {
 		"id": "weapon_hunter_bow", "slot": "weapon", "name": "猎团弓",
-		"description": "猎弓流派：普通攻击射程3。战犬指令只属于猎人背景。属性修正为0。",
+		"description": "猎弓流派：普通攻击射程3。战犬指令由已学驯兽能力提供。属性修正为0。",
 		"allowed_kinds": HUMAN_KINDS, "weapon_style": "hunter", "range": 3, "attack": 0, "accuracy": 0, "price": 17, "sell_price": 8
 	},
 	"weapon_hunter_recurve": {

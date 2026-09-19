@@ -1,0 +1,842 @@
+{
+	"fixtures": {
+		"battle_v011": {
+			"battle": {
+				"action_log": [
+					{
+						"action": "oil",
+						"actor": "crew_1",
+						"id": 1,
+						"rng_before": 39021,
+						"round": 1,
+						"target": {
+							"q": 2,
+							"r": 2
+						}
+					}
+				],
+				"action_seq": 1,
+				"cells": {
+					"0,0": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"0,1": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"0,2": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"0,3": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"0,4": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"0,5": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"0,6": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"1,0": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"1,1": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"1,2": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "oil"
+					},
+					"1,3": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "oil"
+					},
+					"1,4": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"1,5": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"1,6": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"2,0": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"2,1": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "oil"
+					},
+					"2,2": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "oil"
+					},
+					"2,3": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "oil"
+					},
+					"2,4": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"2,5": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"2,6": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"3,0": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"3,1": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "oil"
+					},
+					"3,2": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "oil"
+					},
+					"3,3": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"3,4": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"3,5": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"3,6": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"4,0": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"4,1": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "oil"
+					},
+					"4,2": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"4,3": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"4,4": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"4,5": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "water"
+					},
+					"4,6": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"5,0": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"5,1": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"5,2": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"5,3": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"5,4": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"5,5": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"5,6": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"6,0": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"6,1": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"6,2": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"6,3": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"6,4": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"6,5": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"6,6": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"7,0": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"7,1": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"7,2": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"7,3": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"7,4": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"7,5": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"7,6": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"8,0": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"8,1": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"8,2": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"8,3": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"8,4": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"8,5": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					},
+					"8,6": {
+						"blocked": false,
+						"expires": 0,
+						"field": "",
+						"surface": "dry"
+					}
+				},
+				"height": 7,
+				"id": "exp_31101_1",
+				"initial_roster": [
+					{
+						"accuracy": 96,
+						"ap": 6,
+						"armor": 24,
+						"attack": 12,
+						"hp": 66,
+						"id": "crew_1",
+						"kind": "guard",
+						"max_ap": 6,
+						"max_armor": 24,
+						"max_hp": 66,
+						"name": "艾妲",
+						"perks": [
+							"vigor",
+							"precision"
+						],
+						"q": 1,
+						"r": 1,
+						"range": 1,
+						"statuses": {},
+						"team": "player"
+					},
+					{
+						"accuracy": 88,
+						"ap": 6,
+						"armor": 16,
+						"attack": 15,
+						"hp": 48,
+						"id": "crew_2",
+						"kind": "spear",
+						"max_ap": 6,
+						"max_armor": 16,
+						"max_hp": 48,
+						"name": "罗温",
+						"perks": [],
+						"q": 1,
+						"r": 2,
+						"range": 2,
+						"statuses": {},
+						"team": "player"
+					},
+					{
+						"accuracy": 86,
+						"ap": 6,
+						"armor": 10,
+						"attack": 14,
+						"hp": 40,
+						"id": "crew_3",
+						"kind": "archer",
+						"max_ap": 6,
+						"max_armor": 10,
+						"max_hp": 40,
+						"name": "米芮",
+						"perks": [],
+						"q": 1,
+						"r": 3,
+						"range": 4,
+						"statuses": {},
+						"team": "player"
+					},
+					{
+						"accuracy": 88,
+						"ap": 6,
+						"armor": 14,
+						"attack": 15,
+						"hp": 46,
+						"id": "crew_4",
+						"kind": "skirmisher",
+						"max_ap": 6,
+						"max_armor": 14,
+						"max_hp": 46,
+						"name": "塔洛",
+						"perks": [],
+						"q": 1,
+						"r": 4,
+						"range": 1,
+						"statuses": {},
+						"team": "player"
+					}
+				],
+				"log": [
+					"油地表",
+					"油地表",
+					"油地表",
+					"油地表",
+					"油地表",
+					"油地表",
+					"油地表"
+				],
+				"mission": {
+					"choice": "bell_protect",
+					"difficulty": 1,
+					"event_id": "event_bell_on_bank",
+					"id": "exp_31101_1",
+					"route_id": "ridge",
+					"route_name": "山脊险径",
+					"supplies": {
+						"fire": 2,
+						"oil": 2,
+						"water": 4
+					},
+					"title": "雨夜粮仓"
+				},
+				"order": [
+					"crew_1",
+					"crew_2",
+					"crew_3",
+					"crew_4",
+					"enemy_0",
+					"enemy_1",
+					"enemy_2"
+				],
+				"outcome": "",
+				"props": [
+					{
+						"blocks": true,
+						"hp": 6,
+						"id": "oil_jar",
+						"kind": "oil",
+						"max_hp": 6,
+						"q": 4,
+						"r": 2
+					},
+					{
+						"blocks": true,
+						"hp": 6,
+						"id": "water_barrel",
+						"kind": "water",
+						"max_hp": 6,
+						"q": 3,
+						"r": 4
+					},
+					{
+						"blocks": true,
+						"hp": 16,
+						"id": "wood_cover",
+						"kind": "cover",
+						"max_hp": 16,
+						"q": 4,
+						"r": 3
+					},
+					{
+						"blocks": true,
+						"hp": 14,
+						"id": "grain",
+						"kind": "grain",
+						"max_hp": 14,
+						"q": 6,
+						"r": 2
+					}
+				],
+				"rng_state": 39021,
+				"round": 1,
+				"rules_version": "prototype-0.1.1",
+				"schema": 1,
+				"seed": 39020,
+				"supplies": {
+					"fire": 2,
+					"oil": 1,
+					"water": 4
+				},
+				"turn_index": 0,
+				"units": [
+					{
+						"accuracy": 96,
+						"ap": 3,
+						"armor": 24,
+						"attack": 12,
+						"hazard_round": -1,
+						"hp": 66,
+						"id": "crew_1",
+						"kind": "guard",
+						"max_ap": 6,
+						"max_armor": 24,
+						"max_hp": 66,
+						"name": "艾妲",
+						"perks": [
+							"vigor",
+							"precision"
+						],
+						"q": 2,
+						"r": 2,
+						"range": 1,
+						"statuses": {},
+						"team": "player"
+					},
+					{
+						"accuracy": 88,
+						"ap": 6,
+						"armor": 16,
+						"attack": 15,
+						"hazard_round": -1,
+						"hp": 48,
+						"id": "crew_2",
+						"kind": "spear",
+						"max_ap": 6,
+						"max_armor": 16,
+						"max_hp": 48,
+						"name": "罗温",
+						"perks": [],
+						"q": 2,
+						"r": 3,
+						"range": 2,
+						"statuses": {},
+						"team": "player"
+					},
+					{
+						"accuracy": 86,
+						"ap": 6,
+						"armor": 10,
+						"attack": 14,
+						"hazard_round": -1,
+						"hp": 40,
+						"id": "crew_3",
+						"kind": "archer",
+						"max_ap": 6,
+						"max_armor": 10,
+						"max_hp": 40,
+						"name": "米芮",
+						"perks": [],
+						"q": 1,
+						"r": 3,
+						"range": 4,
+						"statuses": {},
+						"team": "player"
+					},
+					{
+						"accuracy": 88,
+						"ap": 6,
+						"armor": 14,
+						"attack": 15,
+						"hazard_round": -1,
+						"hp": 46,
+						"id": "crew_4",
+						"kind": "skirmisher",
+						"max_ap": 6,
+						"max_armor": 14,
+						"max_hp": 46,
+						"name": "塔洛",
+						"perks": [],
+						"q": 1,
+						"r": 4,
+						"range": 1,
+						"statuses": {},
+						"team": "player"
+					},
+					{
+						"accuracy": 73,
+						"ap": 6,
+						"armor": 7,
+						"attack": 11,
+						"hazard_round": -1,
+						"hp": 31,
+						"id": "enemy_0",
+						"kind": "raider",
+						"max_ap": 6,
+						"max_armor": 7,
+						"max_hp": 31,
+						"name": "劫掠者",
+						"perks": [],
+						"q": 5,
+						"r": 2,
+						"range": 1,
+						"statuses": {},
+						"team": "enemy"
+					},
+					{
+						"accuracy": 73,
+						"ap": 6,
+						"armor": 7,
+						"attack": 11,
+						"hazard_round": -1,
+						"hp": 31,
+						"id": "enemy_1",
+						"kind": "raider",
+						"max_ap": 6,
+						"max_armor": 7,
+						"max_hp": 31,
+						"name": "劫掠者",
+						"perks": [],
+						"q": 6,
+						"r": 4,
+						"range": 1,
+						"statuses": {},
+						"team": "enemy"
+					},
+					{
+						"accuracy": 73,
+						"ap": 6,
+						"armor": 7,
+						"attack": 11,
+						"hazard_round": -1,
+						"hp": 31,
+						"id": "enemy_2",
+						"kind": "archer",
+						"max_ap": 6,
+						"max_armor": 7,
+						"max_hp": 31,
+						"name": "劫匪弓手",
+						"perks": [],
+						"q": 5,
+						"r": 5,
+						"range": 4,
+						"statuses": {},
+						"team": "enemy"
+					}
+				],
+				"width": 9
+			},
+			"battle_sha256": "25ed3a894a373b4622aa6220fe1bf4ff9a9eaf4f0fde5ad18f8ff76bcdcc2530",
+			"campaign_rng_state": 31102,
+			"claimed": {},
+			"event": {
+				"absence_path": "由全团接手承诺；不依赖单一人物存活。",
+				"body": "渡口的旧钟被布包住，钟身裂口像一道未愈的伤。艾妲看见几个村民站在雨里：粮仓今晚会遭抢，他们愿意把最后两桶水交给肯留下的人。雇主却只关心钟能否按时过桥。",
+				"choices": [
+					{
+						"costs": {},
+						"description": "本次多带 2 份水、契约赏金少 8 金；村民记下承诺，未来会回信。",
+						"effects": {
+							"reward": -8,
+							"water": 2
+						},
+						"id": "bell_protect",
+						"set_flags": {
+							"villagers_promised": true
+						},
+						"title": "先护住粮仓"
+					},
+					{
+						"costs": {},
+						"description": "拿到 1 份油、1 份火；本次契约赏金多 6 金，村民不再许诺后援。",
+						"effects": {
+							"fire": 1,
+							"oil": 1,
+							"reward": 6
+						},
+						"id": "bell_contract",
+						"set_flags": {
+							"bell_contract": true
+						},
+						"title": "按雇主的备战安排"
+					}
+				],
+				"id": "event_bell_on_bank",
+				"participant_id": "crew_1",
+				"repeat_limit": 1,
+				"selected_choice": "bell_protect",
+				"test_path": "start_expedition → choose_event → resolve_battle",
+				"title": "泥岸的钟声",
+				"trigger": "第一次远征；全团承接村民或雇主的约定"
+			},
+			"growth_offers": [],
+			"growth_unit_id": "",
+			"history": [
+				{
+					"day": 2,
+					"id": "exp_31101_1",
+					"route_days": 1,
+					"route_food_cost": 3,
+					"route_id": "ridge",
+					"route_name": "山脊险径",
+					"type": "departure"
+				},
+				{
+					"choice": "bell_protect",
+					"day": 2,
+					"expedition_id": "exp_31101_1",
+					"id": "event_bell_on_bank",
+					"type": "event"
+				}
+			],
+			"phase": "battle",
+			"resources": {
+				"day": 2,
+				"food": 5,
+				"gold": 72,
+				"renown": 0
+			},
+			"roster_legacy": [
+				{
+					"accuracy": 96,
+					"armor": 24,
+					"attack": 12,
+					"hp": 66,
+					"id": "crew_1",
+					"kind": "guard",
+					"max_armor": 24,
+					"max_hp": 66,
+					"name": "艾妲",
+					"perks": [
+						"vigor",
+						"precision"
+					],
+					"range": 1
+				},
+				{
+					"accuracy": 88,
+					"armor": 16,
+					"attack": 15,
+					"hp": 48,
+					"id": "crew_2",
+					"kind": "spear",
+					"max_armor": 16,
+					"max_hp": 48,
+					"name": "罗温",
+					"perks": [],
+					"range": 2
+				},
+				{
+					"accuracy": 86,
+					"armor": 10,
+					"attack": 14,
+					"hp": 40,
+					"id": "crew_3",
+					"kind": "archer",
+					"max_armor": 10,
+					"max_hp": 40,
+					"name": "米芮",
+					"perks": [],
+					"range": 4
+				},
+				{
+					"accuracy": 88,
+					"armor": 14,
+					"attack": 15,
+					"hp": 46,
+					"id": "crew_4",
+					"kind": "skirmisher",
+					"max_armor": 14,
+					"max_hp": 46,
+					"name": "塔洛",
+					"perks": [],
+					"range": 1
+				}
+			]
+		}
+	},
+	"save_rules_version": "prototype-0.1.1",
+	"source_commit": "edb63706083319721597c1f9ce41f1e097eb936e"
+}

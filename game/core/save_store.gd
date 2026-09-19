@@ -3,15 +3,17 @@ extends RefCounted
 
 const World = preload("res://core/world_data.gd")
 const Equipment = preload("res://core/equipment_rules.gd")
+const Character = preload("res://core/character_rules.gd")
 
 const FORMAT_VERSION = 1
 const MAX_BYTES = 8 * 1024 * 1024
 const MAX_JSON_DEPTH = 40
 const MAX_SAFE_JSON_INT = 9007199254740991
 const RNG_MAX = 2147483646
-const BATTLE_RULES_VERSION = "prototype-0.1.4"
-const PREVIOUS_BATTLE_RULES_VERSION = "prototype-0.1.1"
-const LEGACY_BATTLE_RULES_VERSION = "prototype-0.1"
+const BATTLE_RULES_VERSION = "prototype-0.1.5"
+const PREVIOUS_BATTLE_RULES_VERSION = "prototype-0.1.4"
+const LEGACY_BATTLE_RULES_VERSION = "prototype-0.1.1"
+const ORIGINAL_BATTLE_RULES_VERSION = "prototype-0.1"
 const UNIT_KINDS = ["guard", "spear", "archer", "skirmisher", "hunter", "dog", "raider"]
 const PERKS = ["vigor", "precision", "breacher", "firewise", "packbond"]
 
@@ -100,7 +102,7 @@ static func _read(path: String) -> Dictionary:
 	var upgraded: bool = _upgrade_loaded(data)
 	if not validate(data).is_empty():
 		return {"ok": false}
-	return {"ok": true, "campaign": data, "upgraded": upgraded, "reason": "已读取存档；旧版战役已兼容，后续新战斗使用0.1.4装备规则。" if upgraded else "已读取存档"}
+	return {"ok": true, "campaign": data, "upgraded": upgraded, "reason": "已读取存档；旧版战役已兼容，后续新战斗使用0.1.5人物规则。" if upgraded else "已读取存档"}
 
 static func _upgrade_loaded(c: Dictionary) -> bool:
 	# Only upgrade after checksum and full structural validation. Never reroll
@@ -119,10 +121,14 @@ static func _upgrade_loaded(c: Dictionary) -> bool:
 			expedition.travel_id = str(expedition.id)
 			expedition.location_id = "loc_granary"
 			upgraded = true
+	# In-progress battles are immutable versioned snapshots. Character migration
+	# only touches the campaign roster; battle RNG, units and logs remain byte-for-byte.
 	var battle: Dictionary = c.battle
-	if not battle.is_empty() and str(battle.get("rules_version", "")) == LEGACY_BATTLE_RULES_VERSION:
-		battle.migrated_from_rules = LEGACY_BATTLE_RULES_VERSION
-		battle.rules_version = BATTLE_RULES_VERSION
+	if not battle.is_empty() and str(battle.get("rules_version", "")) == ORIGINAL_BATTLE_RULES_VERSION:
+		battle.migrated_from_rules = ORIGINAL_BATTLE_RULES_VERSION
+		# The historical migration only adds route compatibility. It must not
+		# advertise 0.1.5 character metadata that the frozen battle never stored.
+		battle.rules_version = PREVIOUS_BATTLE_RULES_VERSION
 		if battle.get("mission") is Dictionary:
 			battle.mission.route_id = expedition.get("route_id", "road")
 			battle.mission.route_name = expedition.get("route_name", "渡口旧道")
@@ -133,6 +139,8 @@ static func _upgrade_loaded(c: Dictionary) -> bool:
 		upgraded = true
 	if Equipment.migrate_legacy(c):
 		upgraded = true
+	var character_upgrade := Character.ensure_campaign(c)
+	upgraded = upgraded or bool(character_upgrade.get("changed", false))
 	return upgraded
 
 static func _upgrade_world_for_legacy_phase(c: Dictionary) -> void:
@@ -230,6 +238,9 @@ static func validate(c: Dictionary, allow_legacy_equipment: bool = false) -> Str
 		var equipment_problem := Equipment.validate_campaign(c)
 		if not equipment_problem.is_empty():
 			return equipment_problem
+	var character_problem := Character.validate_campaign(c, allow_legacy_equipment)
+	if not character_problem.is_empty():
+		return character_problem
 	for key in c.claimed:
 		if not key is String or str(key).is_empty() or c.claimed[key] != true:
 			return "远征领取记录损坏。"
@@ -461,7 +472,7 @@ static func _validate_growth(offers: Array, expedition_id: String) -> String:
 	return ""
 
 static func _validate_battle(b: Dictionary, expedition_id: String) -> String:
-	if not _is_integer(b.get("schema", null), 1, 1) or not str(b.get("rules_version", "")) in [BATTLE_RULES_VERSION, PREVIOUS_BATTLE_RULES_VERSION, LEGACY_BATTLE_RULES_VERSION]:
+	if not _is_integer(b.get("schema", null), 1, 1) or not str(b.get("rules_version", "")) in [BATTLE_RULES_VERSION, PREVIOUS_BATTLE_RULES_VERSION, LEGACY_BATTLE_RULES_VERSION, ORIGINAL_BATTLE_RULES_VERSION]:
 		return "战斗版本不兼容。"
 	if str(b.get("id", "")) != expedition_id:
 		return "战斗与远征编号不匹配。"
@@ -482,6 +493,17 @@ static func _validate_battle(b: Dictionary, expedition_id: String) -> String:
 			return "战斗区域或任务字段缺失。"
 	if not _valid_units(b.units):
 		return "战斗单位损坏。"
+	if str(b.rules_version) == BATTLE_RULES_VERSION:
+		for unit: Dictionary in b.units:
+			if not unit.has_all(["defense", "melee_skill", "ranged_skill", "level", "background_name", "capability_tags"]):
+				return "新版战斗缺少人物属性快照。"
+			if not unit.capability_tags is Array or not _unique_strings(unit.capability_tags):
+				return "新版战斗能力快照损坏。"
+			for key in ["defense", "melee_skill", "ranged_skill"]:
+				if not _is_integer(unit.get(key, null), -100000, 100000):
+					return "新版战斗人物属性快照损坏。"
+			if not _is_integer(unit.get("level", null), 1, 1000) or not unit.background_name is String:
+				return "新版战斗人物元数据损坏。"
 	if b.order.size() != b.units.size() or not _unique_nonempty_strings(b.order):
 		return "战斗行动顺序损坏。"
 	var unit_ids: Dictionary = {}

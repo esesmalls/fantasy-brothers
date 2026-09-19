@@ -3,6 +3,7 @@ const Campaign = preload("res://core/campaign_rules.gd")
 const Battle = preload("res://core/battle_rules.gd")
 const Saves = preload("res://core/save_store.gd")
 const Equipment = preload("res://core/equipment_rules.gd")
+const Characters = preload("res://core/character_rules.gd")
 const Policy = preload("res://tests/play_policy.gd")
 var failures: Array[String] = []
 var checks: int = 0
@@ -247,6 +248,7 @@ func run(app: Control) -> void:
 		_check(app.campaign.phase == "camp" and str(app.campaign.world.company_location_id) == "loc_greyshore_camp", "return button restores the company to camp")
 		if expedition == 0:
 			await _capture(app, "09-camp-life")
+			await _test_character_level_ui(app)
 			var granary_state: Dictionary = app.campaign.world.location_states.get("loc_granary", {}).duplicate(true)
 			app._show_world_view()
 			await _real_map_location(app, "loc_granary")
@@ -359,6 +361,7 @@ func run(app: Control) -> void:
 	app._choose_action("move")
 	_check(app.board._action_overlay.get("range_cells", []).is_empty() and not app.reachable.is_empty(), "switching to movement clears attack range")
 	await _test_equipment_ui(app)
+	await _test_character_training_ui(app)
 	var report: Dictionary = {"checks": checks, "failures": failures, "engine": Engine.get_version_info().string, "exported": not OS.has_feature("editor"), "screen_dir": output}
 	var file: FileAccess = FileAccess.open(output.path_join("smoke-report.json"), FileAccess.WRITE)
 	file.store_string(JSON.stringify(report, "  "))
@@ -530,6 +533,121 @@ func _test_hunter_shield_ui(app: Control) -> void:
 	_check(app.battle_hud.inspection_body.text.contains("营团剑盾") and app.battle_hud.inspection_body.text.contains("中型皮甲"), "battle inspection names both visible equipment layers")
 	_check(inspection_rect.end.y <= app.battle_hud.dock.get_global_rect().position.y + 1.0 and inspection_rect.position.y >= 0.0, "equipment-expanded inspection card remains above the command dock in the minimum window")
 	await _capture(app, "19-small-hunter-shield-battle")
+
+func _test_character_level_ui(app: Control) -> void:
+	# Use survivors of the real first seed1709 battle, not invented level points.
+	var student_id := ""
+	for member: Dictionary in app.campaign.roster:
+		if int(member.hp) > 0 and str(member.kind) != "dog":
+			_check(int(member.get("progression", {}).get("xp", 0)) >= 100 and int(member.get("level", 1)) >= 2, "victory grants each surviving human real experience and a level")
+			if student_id.is_empty(): student_id = str(member.id)
+	_check(not student_id.is_empty(), "first battle leaves a living character for the progression UI")
+	if student_id.is_empty(): return
+	app._show_camp_view()
+	var before_view := JSON.stringify(app.campaign)
+	await _activate_scrolled_button(app, app.character_button)
+	app._show_characters(student_id)
+	await app.get_tree().process_frame
+	_check(is_instance_valid(app.character_screen) and app.character_open and not app.equipment_open, "camp button opens the character ledger")
+	_check(JSON.stringify(app.campaign) == before_view, "character selection and attribute descriptions are read-only")
+	_check(app.character_screen.stat_labels.size() == 4 and app.character_screen.upgrade_buttons.size() == 4, "ledger exposes four rule-owned attribute choices")
+	_check(app.character_screen.points_label.text.contains(str(app.character_screen.view.attribute_points)) and app.character_screen.experience_label.text.contains(str(app.character_screen.view.xp)), "visible growth points and experience match the rule view")
+	await _capture(app, "20-character-earned-level")
+	var before: Dictionary = _roster_unit(app.campaign, student_id).duplicate(true)
+	var missing_hp: int = int(before.max_hp) - int(before.hp)
+	var growth: Dictionary = _stat_view(Characters.get_view(app.campaign, student_id), "vitality")
+	_check(not growth.is_empty() and bool(growth.get("can_upgrade", false)), "earned points can improve physique")
+	await _activate_scrolled_button(app, app.character_screen.upgrade_buttons["vitality"])
+	var after: Dictionary = _roster_unit(app.campaign, student_id)
+	_check(int(after.max_hp) == int(before.max_hp) + int(growth.get("upgrade_amount", 0)) and int(after.max_hp) - int(after.hp) == missing_hp, "real attribute click raises physique by its preview while preserving wounds")
+	_check(int(after.get("progression", {}).get("attribute_points", 0)) == int(before.get("progression", {}).get("attribute_points", 0)) - 1, "attribute click consumes one earned point")
+	var defense_before: Dictionary = _stat_view(Characters.get_view(app.campaign, student_id), "defense")
+	await _activate_scrolled_button(app, app.character_screen.upgrade_buttons["defense"])
+	var defense_after: Dictionary = _stat_view(Characters.get_view(app.campaign, student_id), "defense")
+	_check(int(defense_after.value) == int(defense_before.value) + int(defense_before.upgrade_amount), "real second choice independently improves defense")
+	_check(int(app.character_screen.view.attribute_points) == 0 and app.character_screen.upgrade_buttons["vitality"].disabled, "spent points disable further upgrades")
+	app.get_window().size = Vector2i(1180, 740)
+	await app.get_tree().process_frame
+	await app.get_tree().process_frame
+	var ledger_rect: Rect2 = app.character_screen.get_global_rect()
+	_check(ledger_rect.position.x >= 0 and ledger_rect.end.x <= app.get_viewport_rect().size.x + 1.0, "four-attribute ledger remains within the minimum-width viewport")
+	for heading: Label in app.character_screen.heading_labels:
+		_check(heading.size.y < 40, "character ledger section heading remains one readable horizontal line")
+	await _capture(app, "21-small-character-upgraded")
+	var before_history := JSON.stringify(app.campaign)
+	await _activate_scrolled_button(app, app.character_screen.history_button)
+	_check(app.character_screen.history_box.visible and JSON.stringify(app.campaign) == before_history, "expanding personal history does not claim experience or reroll anything")
+	app._manual_save()
+	var saved: Dictionary = app.campaign.duplicate(true)
+	app._load(app.manual_path)
+	_check(app.campaign == saved, "manual save and reload retain spent growth choices, wounds, XP and equipment exactly")
+	app._show_characters(student_id)
+	await _activate_scrolled_button(app, app.character_screen.equipment_button)
+	_check(app.equipment_open and not app.character_open and app.equipment_unit_id == student_id, "character page opens the same person's equipment")
+	await _activate_scrolled_button(app, app.equipment_screen.character_button)
+	_check(app.character_open and not app.equipment_open and app.character_unit_id == student_id, "equipment returns to the same person's attributes")
+	app.get_window().size = Vector2i(1440, 900)
+	app._show_camp_view()
+
+func _test_character_training_ui(app: Control) -> void:
+	app._new_campaign("hunters", 1950)
+	app.get_window().size = Vector2i(1180, 740)
+	app._show_characters("crew_1")
+	await app.get_tree().process_frame
+	_check(app.character_screen.upgrade_buttons["vitality"].disabled, "a new recruit cannot spend unearned upgrade points")
+	var before_day: int = int(app.campaign.day)
+	var before_food: int = int(app.campaign.food)
+	var before_credit: int = int(app.character_screen.view.training_credits)
+	var training_id := ""
+	for option: Dictionary in app.character_screen.view.get("training_options", []):
+		if str(option.id).contains("vitality"): training_id = str(option.id)
+	_check(not training_id.is_empty() and app.character_screen.training_buttons.has(training_id), "training view exposes the same physique course as the rule layer")
+	if training_id.is_empty(): return
+	var hp_before: int = int(_roster_unit(app.campaign, "crew_1").max_hp)
+	await _activate_scrolled_button(app, app.character_screen.training_buttons[training_id])
+	_check(int(app.campaign.day) == before_day + 1 and int(app.campaign.food) == before_food - 1 and int(app.character_screen.view.training_credits) == before_credit - 1, "training button consumes exactly the advertised day, ration and practice credit")
+	_check(int(_roster_unit(app.campaign, "crew_1").max_hp) > hp_before and not app.character_notice.is_empty(), "training improves the intended person and reports its real result")
+	_check(app.character_screen.training_buttons[training_id].disabled, "spent practice credit prevents indefinite camp training")
+	await _capture(app, "22-small-character-training")
+	await _activate_scrolled_button(app, app.character_screen.unit_buttons["crew_2"])
+	var beast_id := ""
+	for option: Dictionary in app.character_screen.view.get("training_options", []):
+		if str(option.id).contains("beast_handler"): beast_id = str(option.id)
+	_check(not beast_id.is_empty() and bool(app.character_screen.training_buttons.has(beast_id)), "a former spearman can see an explicit beast-handling learning route")
+	if beast_id.is_empty(): return
+	await _activate_scrolled_button(app, app.character_screen.training_buttons[beast_id])
+	_check("beast_handler" in _roster_unit(app.campaign, "crew_2").get("capability_tags", []), "a real training click teaches beast handling outside the hunter background")
+	var bind_id := ""
+	for option: Dictionary in app.character_screen.view.get("training_options", []):
+		if str(option.id) == "bind_dog": bind_id = str(option.id)
+	_check(not bind_id.is_empty(), "trained handler has a visible existing-dog assignment option")
+	if bind_id.is_empty(): return
+	await _activate_scrolled_button(app, app.character_screen.training_buttons[bind_id])
+	_check(str(_roster_unit(app.campaign, "crew_4").get("hunter_id", "")) == "crew_2", "camp assignment binds the one existing dog to the trained spearman")
+	var ledger_parent: Node = app.character_screen.abilities_label.get_parent()
+	while ledger_parent != null:
+		if ledger_parent is ScrollContainer: ledger_parent.ensure_control_visible(app.character_screen.abilities_label)
+		ledger_parent = ledger_parent.get_parent()
+	await app.get_tree().process_frame
+	_check(app.character_screen.abilities_label.text.contains("驯兽指挥"), "character ledger names the newly learned capability")
+	await _capture(app, "23-character-trained-handler")
+	var auto: Dictionary = Saves.load_campaign(app.save_path)
+	_check(bool(auto.get("ok", false)) and auto.campaign == app.campaign, "training and companion assignment are autosaved without duplication")
+	app._show_world_view()
+	await _activate_button(app, app.route_buttons["road"])
+	await _advance_until(app, "event")
+	app._event_choice(str(app.campaign.event.choices[0].id))
+	await _advance_until(app, "ready")
+	app._enter_battle()
+	app._end_turn()
+	_check(str(Battle.active_unit(app.campaign.battle).id) == "crew_2" and app.action_buttons.has("mark") and app.action_buttons.has("command_pin"), "the newly trained spearman can use learned commands in an actual battle HUD")
+	_check(app.battle_hud.actor_stats.text.contains("防御") and app.active_label.text.contains("级"), "battle HUD displays the acting person's level and effective defense")
+	await _capture(app, "24-trained-handler-battle")
+
+func _stat_view(view: Dictionary, stat_id: String) -> Dictionary:
+	for stat: Dictionary in view.get("stats", []):
+		if str(stat.id) == stat_id: return stat
+	return {}
 
 func _check(condition: bool, label: String) -> void:
 	checks += 1

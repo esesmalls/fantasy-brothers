@@ -51,6 +51,10 @@ func build(owner_control: Control) -> void:
 	var phase: String = str(c.phase)
 	if phase == "camp":
 		camp_button = controller._button(actions, "进入营地生活 · 名册与整备", controller._show_camp_view)
+		var training_points := 0
+		for member: Dictionary in c.roster:
+			if int(member.hp) > 0: training_points += int(member.get("progression", {}).get("attribute_points", 0))
+		controller.character_button = controller._button(actions, "人物帐 · %d点待培养" % training_points if training_points > 0 else "人物帐 · 属性与培养", controller._show_characters)
 		controller._text(actions, "整备行囊，再接下一份工作。归来的见闻与伤亡记录留在营地。", 15, controller.MUTED)
 		if bool(c.flags.get("ending_seen", false)):
 			controller._text(actions, "渡桥的钟声已收束 · 可在营地重读团志", 14, controller.GOLD)

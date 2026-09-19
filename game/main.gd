@@ -9,6 +9,8 @@ const Inspection = preload("res://presentation/battle_inspection.gd")
 const WorldScreen = preload("res://presentation/world_screen.gd")
 const Equipment = preload("res://core/equipment_rules.gd")
 const EquipmentScreen = preload("res://presentation/equipment_screen.gd")
+const Characters = preload("res://core/character_rules.gd")
+const CharacterScreen = preload("res://presentation/character_screen.gd")
 const CREAM = Color("e7ddc6")
 const MUTED = Color("9caeaa")
 const GOLD = Color("c8aa6e")
@@ -48,6 +50,11 @@ var equipment_open := false
 var equipment_unit_id := ""
 var equipment_notice := ""
 var equipment_button: Button
+var character_screen: Control
+var character_open := false
+var character_unit_id := ""
+var character_notice := ""
+var character_button: Button
 var world_screen: Control
 var camp_detail := false
 var world_overview := false
@@ -121,7 +128,7 @@ func _build_shell() -> void:
 	_button(heading, "手动保存", _manual_save)
 	_button(heading, "读取手动档", _confirm_load)
 	_button(heading, "主菜单", _confirm_menu)
-	resources = _label("边境佣兵纪事   /   最小可玩验证 0.1.4", 17, MUTED)
+	resources = _label("边境佣兵纪事   /   最小可玩验证 0.1.5", 17, MUTED)
 	screen.add_child(resources)
 	banner = _label("", 16, GOLD)
 	screen.add_child(banner)
@@ -132,6 +139,8 @@ func _build_shell() -> void:
 	screen.add_child(footer)
 
 func _clear_body() -> void:
+	character_screen = null
+	character_button = null
 	equipment_screen = null
 	equipment_button = null
 	world_screen = null
@@ -191,7 +200,7 @@ func _panel(parent: Node, width: float = 0.0, expand: bool = true) -> VBoxContai
 func _show_title() -> void:
 	_clear_body()
 	banner.text = "序章   /   渡桥的钟声"
-	resources.text = "边境佣兵纪事   /   最小可玩验证 0.1.4"
+	resources.text = "边境佣兵纪事   /   最小可玩验证 0.1.5"
 	var columns: HBoxContainer = HBoxContainer.new()
 	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	body.add_child(columns)
@@ -201,6 +210,7 @@ func _show_title() -> void:
 	_text(intro, "每一次远征", 24, GOLD)
 	_text(intro, "整备队伍  →  决定承诺  →  指挥战斗\n承担后果  →  选择成长  →  带着经历回营", 20)
 	_text(intro, "三次远征形成一个短篇结尾，此后仍可继续。试着保住粮仓、让盾卫为长枪制造破绽，或用油火和水汽改变战线。", 18, MUTED)
+	_text(intro, "人物帐 · 四项属性、个人升级与营地训练。决定谁练得更稳、谁转用新武器，让本领随着旅程留下来。", 18, GOLD)
 	_text(intro, "原型边界：两类佣兵团、六个条件事件、一张机制战场、少量成长。当前用于判断玩法，不代表最终内容量与商业美术。", 16, MUTED)
 	var setup: VBoxContainer = _panel(columns, 410, false)
 	_text(setup, "接过这面旗帜", 26, GOLD)
@@ -235,6 +245,9 @@ func _request_new(origin: String, seed_text: String) -> void:
 
 func _new_campaign(origin: String, seed_value: int) -> void:
 	campaign = Campaign.create_campaign(origin, seed_value)
+	character_open = false
+	character_unit_id = ""
+	character_notice = ""
 	equipment_open = false
 	equipment_unit_id = ""
 	equipment_notice = ""
@@ -253,6 +266,9 @@ func _load(path: String) -> void:
 		_popup("读取失败", str(result.reason))
 		return
 	campaign = result.campaign
+	character_open = false
+	character_unit_id = ""
+	character_notice = ""
 	equipment_open = false
 	equipment_notice = ""
 	camp_detail = false
@@ -291,6 +307,11 @@ func _show_campaign() -> void:
 	banner.text = "灰岸边境  /  契约与旅行  /  战术交锋  /  返回营地"
 	if phase == "battle":
 		_show_battle()
+		return
+	if phase == "camp" and character_open:
+		character_screen = CharacterScreen.new()
+		body.add_child(character_screen)
+		character_screen.build(self, character_unit_id)
 		return
 	if phase == "camp" and equipment_open:
 		equipment_screen = EquipmentScreen.new()
@@ -356,6 +377,8 @@ func _show_roster(box: VBoxContainer) -> void:
 	_text(box, "四个出战位 · 伤亡与成长持续保留", 15, MUTED)
 	for unit: Dictionary in campaign.roster:
 		_text(box, "%s  /  %s" % [str(unit.name), str(KINDS.get(unit.kind, unit.kind))], 21)
+		if unit.has("level"):
+			_text(box, "%d级 · %s%s" % [int(unit.level), str(unit.get("background_name", "")), " · 待培养%d点" % int(unit.get("progression", {}).get("attribute_points", 0)) if int(unit.get("progression", {}).get("attribute_points", 0)) > 0 else ""], 14, GOLD)
 		if int(unit.hp) <= 0:
 			_text(box, "已阵亡 · 回营可招募继承者", 16, RED)
 		else:
@@ -387,6 +410,7 @@ func _show_camp(story: VBoxContainer, actions: VBoxContainer) -> void:
 	_button(story, "查看边境地图 · 寻找契约", _show_world_view)
 	_text(story, "队伍已经驻扎在灰岸营地。生活与整备会改变实际资源、日期与队员状态；出征前可在地图上比较路线。", 17, MUTED)
 	_text(actions, "整备与启程", 24, GOLD)
+	character_button = _button(actions, "人物帐 · 属性与培养", _show_characters)
 	equipment_button = _button(actions, "军需帐 · 装备与交易", _show_equipment)
 	_text(actions, "先恢复生命与护甲。\n准备好后回到地图接取契约。", 16, MUTED)
 	_button(actions, "休养一天", func(): _camp_action("rest"), "有粮消耗2粮，每人恢复18生命；缺粮恢复8。")
@@ -421,6 +445,7 @@ func _return_to_camp() -> void:
 
 func _show_camp_view() -> void:
 	if str(campaign.get("phase", "")) != "camp": return
+	character_open = false
 	equipment_open = false
 	camp_detail = true
 	world_overview = false
@@ -428,6 +453,7 @@ func _show_camp_view() -> void:
 
 func _show_world_view() -> void:
 	if not str(campaign.get("phase", "")) in ["camp", "travel", "event", "ready", "returning"]: return
+	character_open = false
 	equipment_open = false
 	camp_detail = false
 	world_overview = true
@@ -509,6 +535,8 @@ func _refresh_battle(events: Array = []) -> void:
 			selected_action = "move"
 	board.set_selected(str(active.get("id", "")))
 	active_label.text = "交锋结束" if done else "%s · %s" % [str(active.get("name", "")), str(KINDS.get(active.get("kind", ""), ""))]
+	if not done and active.has("level"):
+		active_label.text = "%s · %d级" % [str(active.get("name", "")), int(active.level)]
 	for container in [action_box, battle_hud.item_box]:
 		for child in container.get_children():
 			container.remove_child(child)
@@ -709,7 +737,7 @@ func _popup(title: String, message: String) -> void:
 	dialog.popup_centered()
 
 func _show_help() -> void:
-	_popup("行军手册", "地图上比较路线并接约，按“继续行军”逐站前进。\n事件在途中触发，选择后继续赶往粮仓；每一步自动保存。\n战后清点战果、选择成长，再返营休养、补给、修甲和补员。\n点击地图地点仅查看详情，不会出发或扣费。\n\n每人每回合 6 行动点。移动每格 2 点，攻击通常 3 点。\n友军可穿过，不能停在同一格；敌人和障碍仍会挡路。\n金色双环与头顶箭头指示当前行动者。\n点击攻击/技能显示射程，叉号表示遮挡，准星表示合法目标。\n先选择底部动作，再指向棋盘看预览，单击执行。\n鼠标经过敌我、物件和地表查看详情；底部行动队列也可悬停。\n左上角战报可以展开。\n\n盾击命中制造破绽；长枪攻击消耗破绽获得命中优势。\n攻击先损护甲，再损生命；火区直接伤害生命，也伤友军。\n油与火形成火区；水可以灭火，产生遮挡远程的蒸汽。\n主动脱离贴身敌人可能遭反击，推开不触发脱离反击。\n猎人花行动点下令，战犬在自己的回合跟随、牵制或撤回。\n\n消灭敌人获胜，保护粮仓获得额外回报；随时可以撤退。\n空格结束当前队员回合，Esc 切回移动。\n每次行动自动保存；手动存档独立保留，读取不会重抽候选。\n正常 / 加速 / 跳过仅改变表现，不改变结算。")
+	_popup("行军手册", "地图上比较路线并接约，按“继续行军”逐站前进。\n事件在途中触发，选择后继续赶往粮仓；每一步自动保存。\n战后清点战果、选择成长，再返营休养、补给、修甲和补员。\n营地人物帐可分配升级点、训练属性和学习驯兽；武器改变招式，已有本领随人保留。\n体魄提高最大生命，近战/远程决定对应武器命中，防御降低敌人命中。\n点击地图地点仅查看详情，不会出发或扣费。\n\n每人每回合 6 行动点。移动每格 2 点，攻击通常 3 点。\n友军可穿过，不能停在同一格；敌人和障碍仍会挡路。\n金色双环与头顶箭头指示当前行动者。\n点击攻击/技能显示射程，叉号表示遮挡，准星表示合法目标。\n先选择底部动作，再指向棋盘看预览，单击执行。\n鼠标经过敌我、物件和地表查看详情；底部行动队列也可悬停。\n左上角战报可以展开。\n\n盾击命中制造破绽；长枪攻击消耗破绽获得命中优势。\n攻击先损护甲，再损生命；火区直接伤害生命，也伤友军。\n油与火形成火区；水可以灭火，产生遮挡远程的蒸汽。\n主动脱离贴身敌人可能遭反击，推开不触发脱离反击。\n具备驯兽本领的队员花行动点下令，战犬在自己的回合跟随、牵制或撤回。\n\n消灭敌人获胜，保护粮仓获得额外回报；随时可以撤退。\n空格结束当前队员回合，Esc 切回移动。\n每次行动自动保存；手动存档独立保留，读取不会重抽候选。\n正常 / 加速 / 跳过仅改变表现，不改变结算。")
 
 func _run_smoke() -> void:
 	var smoke = load("res://tests/ui_smoke.gd").new()
@@ -717,6 +745,7 @@ func _run_smoke() -> void:
 
 func _show_equipment(unit_id: String = "") -> void:
 	if str(campaign.get("phase", "")) != "camp": return
+	character_open = false
 	equipment_open = true
 	camp_detail = true
 	if not unit_id.is_empty(): equipment_unit_id = unit_id
@@ -733,5 +762,28 @@ func _equipment_action(action: String, item_id: String) -> void:
 		_popup("暂时无法执行", str(result.get("reason", "")))
 		return
 	equipment_notice = str(result.get("reason", "已完成整备。"))
+	_autosave()
+	_show_campaign()
+
+func _show_characters(unit_id: String = "") -> void:
+	if str(campaign.get("phase", "")) != "camp": return
+	if not unit_id.is_empty() and unit_id != character_unit_id: character_notice = ""
+	equipment_open = false
+	character_open = true
+	camp_detail = true
+	world_overview = false
+	if not unit_id.is_empty(): character_unit_id = unit_id
+	_show_campaign()
+
+func _character_action(action: String, target_id: String) -> void:
+	var result: Dictionary
+	match action:
+		"attribute": result = Characters.spend_attribute(campaign, character_unit_id, target_id)
+		"train": result = Characters.train(campaign, character_unit_id, target_id)
+		_: return
+	if not bool(result.get("ok", false)):
+		_popup("暂时无法培养", str(result.get("reason", "")))
+		return
+	character_notice = str(result.get("reason", "已完成培养。"))
 	_autosave()
 	_show_campaign()
