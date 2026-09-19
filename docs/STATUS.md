@@ -48,6 +48,6 @@
 
 GitHub：https://github.com/esesmalls/fantasy-brothers 。0.1.4基线63ed359，分支codex/equipment-inventory；最新文档研究基线0708516，分支codex/character-growth-design。最终提交以Git历史为准。源码/文档入库，构建包、工具、QA存档和个人进度不入库。
 
-本轮设计已提交本地main，GitHub推送被自动审批拦截，正在等待用户确认本轮公开上传；远端仍为0708516。详见 [同步记录](07-github-sync.md)，不要将本机文档完成误认为三机已同步。
+用户已明确允许同步，人物研究文档与状态提交已推送，远端核对为6d9507e；此前推送阻塞解除。用户另授权接入属性、培养并解除原岗位学习限制；高出身高雇佣/维护费用作为后续招募后勤规则，当前不追加隐形工资。0.1.5正在开发，未交付前仍以0.1.4试玩包为准。详见 [同步记录](07-github-sync.md)。
 
 三机统一使用0.1.4继续新装备进度，勿用旧版覆盖新档。个人存档位于 %APPDATA%\FantasyBrothersPrototype\，Git不自动同步；关闭游戏后备份复制，保留较新进度。
