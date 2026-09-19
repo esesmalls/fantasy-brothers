@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fantasy Brothers｜第二轮人物装备美术评审</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --page: #171613;
+      --panel: #22201c;
+      --panel-2: #2a2722;
+      --line: #49443b;
+      --line-soft: #39352f;
+      --text: #eee9df;
+      --muted: #bcb4a6;
+      --accent: #d1a45f;
+      --accent-ink: #241b0e;
+      --danger: #cc8778;
+      --radius: 10px;
+      font-family: "Microsoft YaHei UI", "Noto Sans CJK SC", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--page);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    button, select, textarea, input { font: inherit; }
+    button, select, textarea {
+      color: var(--text);
+      background: #302d27;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+    }
+    button { cursor: pointer; padding: 8px 12px; }
+    button:hover, button:focus-visible, select:focus-visible, textarea:focus-visible {
+      border-color: var(--accent);
+      outline: 2px solid transparent;
+    }
+    button.is-active, .segmented input:checked + label {
+      color: var(--accent-ink);
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    a { color: #e4bd81; }
+    h1, h2, h3, p { margin-top: 0; }
+
+    .page-shell { width: min(1800px, 100%); margin: 0 auto; padding: 24px clamp(14px, 2vw, 34px) 44px; }
+    .topbar { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+    .topbar h1 { margin-bottom: 7px; font-family: Georgia, "Microsoft YaHei UI", serif; font-size: clamp(25px, 2.4vw, 38px); letter-spacing: .015em; }
+    .subtitle { max-width: 920px; color: var(--muted); margin-bottom: 0; }
+    .candidate-badge { flex: 0 0 auto; color: #f1d5a8; border: 1px solid #745d38; background: #302818; padding: 7px 10px; border-radius: 999px; font-size: 13px; }
+
+    .notice {
+      margin: 18px 0;
+      padding: 12px 14px;
+      border-left: 3px solid var(--accent);
+      background: #242017;
+      color: #d7d0c5;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px 18px;
+      padding: 12px;
+      margin-bottom: 18px;
+      background: color-mix(in srgb, var(--panel) 93%, transparent);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius);
+      backdrop-filter: blur(8px);
+    }
+    .control { display: flex; align-items: center; gap: 8px; }
+    .control > span, .control > label { color: var(--muted); font-size: 14px; white-space: nowrap; }
+    select { min-width: 235px; padding: 8px 34px 8px 10px; }
+    .segmented { display: inline-flex; align-items: center; padding: 2px; border: 1px solid var(--line); border-radius: 8px; background: #1b1a17; }
+    .segmented input { position: absolute; opacity: 0; pointer-events: none; }
+    .segmented label { cursor: pointer; padding: 6px 10px; border-radius: 5px; color: var(--muted); font-size: 14px; }
+    #setTabs { display: flex; gap: 6px; }
+
+    .section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin: 4px 0 12px; }
+    .section-head h2 { margin-bottom: 2px; font-size: 20px; }
+    .section-head p { margin: 0; color: var(--muted); font-size: 14px; }
+
+    .gallery { display: grid; gap: 14px; }
+    .gallery.compare { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .gallery.set-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .art-card {
+      min-width: 0;
+      background: var(--panel);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 8px 22px rgba(0,0,0,.16);
+    }
+    .card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding: 11px 12px 9px; border-bottom: 1px solid var(--line-soft); }
+    .card-head h3 { margin: 0; font-size: 16px; }
+    .card-head p { margin: 2px 0 0; color: var(--muted); font-size: 12px; }
+    .style-chip { flex: 0 0 auto; padding: 2px 7px; border-radius: 999px; font-weight: 700; font-size: 12px; color: #15130f; }
+    .image-stage {
+      position: relative;
+      min-height: 310px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      transition: background-color .15s;
+    }
+    .set-grid .image-stage { min-height: 245px; aspect-ratio: 1 / 1; }
+    .bg-gray { background-color: #747474; }
+    .bg-dark { background-color: #181818; }
+    .bg-light { background-color: #e7e4dc; }
+    .image-stage img {
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      display: block;
+      width: 100%;
+      height: 100%;
+      max-height: 100%;
+      min-height: 0;
+      object-fit: contain;
+      cursor: zoom-in;
+    }
+    .gallery.compare .image-stage { aspect-ratio: 1 / 1; }
+    #gallery[data-size="256"] .image-stage img { width:256px; height:256px; max-width:100%; }
+    #gallery[data-size="192"] .image-stage img { width:192px; height:192px; max-width:100%; }
+    #gallery[data-size="128"] .image-stage img { width:128px; height:128px; max-width:100%; }
+    .image-stage img.is-missing { display: none; }
+    .missing {
+      display: none;
+      align-self: center;
+      max-width: 220px;
+      color: #ded7ca;
+      text-align: center;
+      padding: 18px;
+      border: 1px dashed #8e8679;
+      border-radius: 8px;
+      background: rgba(20,20,20,.3);
+    }
+    img.is-missing + .missing { display: block; }
+    .card-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 11px; font-size: 12px; color: var(--muted); }
+    .card-foot a { white-space: nowrap; }
+
+    .style-guide {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 10px;
+      margin: 16px 0 26px;
+    }
+    .style-note { padding: 11px 12px; background: var(--panel); border: 1px solid var(--line-soft); border-radius: 8px; }
+    .style-note strong { display: block; margin-bottom: 3px; }
+    .style-note span { color: var(--muted); font-size: 13px; }
+
+    .reviews { margin-top: 30px; padding-top: 22px; border-top: 1px solid var(--line); }
+    .review-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; }
+    .review-card { background: var(--panel); border: 1px solid var(--line-soft); border-radius: var(--radius); padding: 12px; }
+    .review-card h3 { font-size: 16px; margin-bottom: 10px; }
+    .review-row { display: flex; align-items: center; gap: 9px; margin-bottom: 8px; }
+    .review-row label { color: var(--muted); font-size: 13px; }
+    .review-row select { min-width: 95px; }
+    textarea { width: 100%; min-height: 105px; resize: vertical; padding: 9px; }
+    .review-actions { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+    #saveState { color: var(--muted); font-size: 13px; }
+
+    dialog {
+      width: min(96vw, 1540px);
+      height: min(94vh, 1050px);
+      padding: 0;
+      border: 1px solid #645d51;
+      border-radius: 12px;
+      background: #141310;
+      color: var(--text);
+      box-shadow: 0 25px 90px rgba(0,0,0,.65);
+    }
+    dialog::backdrop { background: rgba(0,0,0,.82); }
+    .lightbox { height: 100%; display: grid; grid-template-rows: auto 1fr auto; }
+    .lightbox-head, .lightbox-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; background: #201e19; }
+    .lightbox-head strong { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .icon-btn { min-width: 42px; }
+    .lightbox-stage { position: relative; display: grid; place-items: center; min-height: 0; overflow: hidden; }
+    .lightbox-stage img { width: 100%; height: 100%; object-fit: contain; }
+    .nav-btn { position: absolute; top: 50%; translate: 0 -50%; font-size: 24px; background: rgba(20,20,20,.7); }
+    .nav-btn.prev { left: 12px; }
+    .nav-btn.next { right: 12px; }
+    .lightbox-foot { color: var(--muted); font-size: 13px; }
+
+    .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .hidden { display: none !important; }
+
+    @media (max-width: 1180px) {
+      .gallery.compare, .gallery.set-grid, .style-guide, .review-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .image-stage { min-height: 360px; }
+    }
+    @media (max-width: 680px) {
+      .page-shell { padding: 16px 10px 30px; }
+      .topbar, .section-head { display: block; }
+      .candidate-badge { display: inline-block; margin-top: 12px; }
+      .toolbar { position: static; gap: 10px; }
+      .control { width: 100%; justify-content: space-between; }
+      .control select { min-width: 0; flex: 1; }
+      .gallery.compare, .gallery.set-grid, .style-guide, .review-grid { grid-template-columns: 1fr; }
+      .image-stage, .set-grid .image-stage { min-height: 300px; }
+      .lightbox-foot { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-shell">
+    <header class="topbar">
+      <div>
+        <h1>第二轮人物装备美术评审</h1>
+        <p class="subtitle">三套融合方向＋一套精细战场兄弟半身风格。重点看双手、出手方向、短腰与底座、倒伏重量感、个性面容。</p>
+      </div>
+      <span class="candidate-badge">风格候选 · 非正式资产库</span>
+    </header>
+
+    <div class="notice">
+      静态风格验证稿，尚未完成正式像素装配或动画。06 是倒地、命运未定；07 是头部分离死亡图。H 的07死亡图，以及四套的12正常身体拆件被工具拦截，明确保留缺项。其余实际限制见卡片和检查记录。
+      <p style="margin:8px 0 0"><a href="../2026-09-19-four-directions/index.html">上一轮 A–D</a> · <a href="FEEDBACK.md">你的上一轮评价</a> · <a href="README.md">本轮交付与限制</a></p>
+    </div>
+
+    <section class="toolbar" aria-label="评审视图控制">
+      <div class="control">
+        <span>视图</span>
+        <div class="segmented">
+          <input id="modeCompare" name="mode" type="radio" value="compare" checked>
+          <label for="modeCompare">同状态比较</label>
+          <input id="modeSet" name="mode" type="radio" value="set">
+          <label for="modeSet">按套查看</label>
+        </div>
+      </div>
+      <div class="control" id="assetControl">
+        <label for="assetSelect">状态</label>
+        <select id="assetSelect"></select>
+      </div>
+      <div class="control hidden" id="setControl">
+        <span>风格</span>
+        <div id="setTabs" role="tablist" aria-label="选择风格套组"></div>
+      </div>
+      <div class="control">
+        <span>透明图底色</span>
+        <div class="segmented">
+          <input id="bgGray" name="background" type="radio" value="gray" checked>
+          <label for="bgGray">灰</label>
+          <input id="bgDark" name="background" type="radio" value="dark">
+          <label for="bgDark">深</label>
+          <input id="bgLight" name="background" type="radio" value="light">
+          <label for="bgLight">浅</label>
+        </div>
+      </div>
+      <div class="control"><label for="sizeSelect">整图显示尺寸</label><select id="sizeSelect"><option value="auto">适应卡片</option><option value="256">256 px</option><option value="192">192 px</option><option value="128">128 px</option></select></div>
+    </section>
+
+    <section aria-labelledby="galleryTitle">
+      <div class="section-head">
+        <div>
+          <h2 id="galleryTitle">04 · 武装角色并排</h2>
+          <p id="galleryHint">默认用完整武装状态判断人物、甲层、武器和风格的综合效果。</p>
+        </div>
+      </div>
+      <div id="gallery" class="gallery compare"></div>
+    </section>
+
+    <section id="styleGuide" class="style-guide" aria-label="风格设计差别"></section>
+
+    <section class="reviews" aria-labelledby="reviewTitle">
+      <div class="section-head">
+        <div>
+          <h2 id="reviewTitle">本地评分与备注</h2>
+          <p>内容只保存在当前浏览器的 localStorage，不会自动上传。</p>
+        </div>
+      </div>
+      <div id="reviewGrid" class="review-grid"></div>
+      <div class="review-actions">
+        <button id="copyReview" type="button">复制评语文本</button>
+        <span id="saveState" role="status" aria-live="polite">输入后自动保存在本机</span>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="lightboxDialog" aria-label="原图灯箱">
+    <div class="lightbox">
+      <div class="lightbox-head">
+        <strong id="lightboxTitle"></strong>
+        <button id="closeLightbox" class="icon-btn" type="button" aria-label="关闭灯箱">×</button>
+      </div>
+      <div id="lightboxStage" class="lightbox-stage bg-gray">
+        <img id="lightboxImage" alt="">
+        <button id="lightboxPrev" class="nav-btn prev" type="button" aria-label="上一张">‹</button>
+        <button id="lightboxNext" class="nav-btn next" type="button" aria-label="下一张">›</button>
+      </div>
+      <div class="lightbox-foot">
+        <span id="lightboxCounter"></span>
+        <span>Esc 关闭 · ← / → 切换</span>
+        <a id="lightboxOriginal" href="" target="_blank" rel="noopener">打开原图</a>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    (() => {
+      "use strict";
+
+      // Actual omissions/notes, kept explicit instead of creating placeholder artwork.
+      const reviewFlags = {"E:12": {missing:true, reason:"正常身体部件被工具拦截；没有生成该文件。"}, "F:12": {missing:true, reason:"正常身体部件被工具拦截；没有生成该文件。"}, "H:07": {missing:true, reason:"图像工具以 violence 拦截；没有生成死亡图。"}, "H:12": {missing:true, reason:"正常身体部件被工具以 sexual 拦截；没有生成该文件。"}, "G:12": {missing:true, reason:"正常身体部件被工具以 sexual 拦截；没有生成该文件。"}};
+      const styles = [
+        {id:"E", folder:"e-weathered-heraldry", name:"风霜纹章水粉", color:"#be9965", diff:"A＋B：风霜面容、土色水粉体积、褪色纹章；黄麻衬甲＋暗红钉甲，双手剑。"},
+        {id:"F", folder:"f-ironwood-ink", name:"铁木边民墨绘", color:"#9ea892", diff:"A＋D：粗粝骨相、不对称铁片、皮革旧化；灰绿衬甲＋皮铁甲，双手战斧。"},
+        {id:"G", folder:"g-roadside-tempera", name:"旅团民俗蛋彩", color:"#c9ad5d", diff:"B＋D：市井面容、靛蓝与赭黄、局部民俗纹样；双手短矛朝右前。"},
+        {id:"H", folder:"h-refined-brothers", name:"精细战场兄弟半身", color:"#b7a88f", diff:"贴近参考的紧凑半身、大头、低底托与棕黑轮廓；暗衬甲＋链甲，双手剑。"}
+      ];
+
+      const assets = [
+        ["01", "bare-character.png", "裸身身份母版"],
+        ["02", "armor-one.png", "第一层甲"],
+        ["03", "armor-layered.png", "两层甲"],
+        ["04", "armed.png", "完整武装"],
+        ["05", "wounded.png", "受伤与装备磨损"],
+        ["06", "downed.png", "倒地 · 命运未定"],
+        ["07", "decapitated.png", "头部分离死亡图"],
+        ["08", "armor-one-isolated.png", "第一层甲独立件"],
+        ["09", "armor-two-isolated.png", "第二层甲独立件"],
+        ["10", "weapon-isolated.png", "武器独立件"],
+        ["11", "head-isolated.png", "正常头部模块"],
+        ["12", "body-isolated.png", "正常身体模块"],
+        ["13", "base-isolated.png", "独立低底座"]
+      ].map(([num, suffix, label]) => ({ num, file: `${num}-${suffix}`, label }));
+
+      const state = { mode: "compare", assetIndex: 3, setIndex: 0, background: "gray", lightboxItems: [], lightboxIndex: 0 };
+      const gallery = document.querySelector("#gallery");
+      const assetSelect = document.querySelector("#assetSelect");
+      const setTabs = document.querySelector("#setTabs");
+      const assetControl = document.querySelector("#assetControl");
+      const setControl = document.querySelector("#setControl");
+      const galleryTitle = document.querySelector("#galleryTitle");
+      const galleryHint = document.querySelector("#galleryHint");
+      const styleGuide = document.querySelector("#styleGuide");
+      const dialog = document.querySelector("#lightboxDialog");
+      const lightboxImage = document.querySelector("#lightboxImage");
+      const lightboxTitle = document.querySelector("#lightboxTitle");
+      const lightboxCounter = document.querySelector("#lightboxCounter");
+      const lightboxOriginal = document.querySelector("#lightboxOriginal");
+      const lightboxStage = document.querySelector("#lightboxStage");
+      const storageKey = "fantasy-brothers-art-review-v2";
+
+      const imagePath = (style, asset) => `${style.folder}/${asset.file}`;
+      const bgClass = () => `bg-${state.background}`;
+
+      const flagFor = (style, asset) => reviewFlags[`${style.id}:${asset.num}`] || {};
+      function actualLabel(style, asset) {
+        return asset.label + (flagFor(style,asset).missing ? " · 未生成" : "");
+      }
+
+      assets.forEach((asset, index) => {
+        const option = document.createElement("option");
+        option.value = String(index);
+        option.textContent = `${asset.num} · ${asset.label}`;
+        assetSelect.append(option);
+      });
+      assetSelect.value = String(state.assetIndex);
+
+      styles.forEach((style, index) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.role = "tab";
+        button.dataset.index = String(index);
+        button.textContent = style.id;
+        button.title = `${style.id} · ${style.name}`;
+        button.addEventListener("click", () => {
+          state.setIndex = index;
+          render();
+        });
+        setTabs.append(button);
+      });
+
+      function cardMarkup(style, asset, itemIndex) {
+        const path = imagePath(style, asset);
+        const label = actualLabel(style, asset);
+        const flag = flagFor(style,asset);
+        if (flag.missing) return `<article class="art-card"><div class="card-head"><h3>${style.id} · ${style.name}</h3></div><div class="image-stage ${bgClass()}"><div class="missing" style="display:block"><strong>${asset.num} · ${label}</strong><p>${flag.reason}</p></div></div><div class="card-foot">明确缺项 · 不计作已生成图片</div></article>`;
+        return `
+          <article class="art-card">
+            <div class="card-head">
+              <div>
+                <h3>${style.id} · ${style.name}</h3>
+                <p>${asset.num} · ${label}</p>
+              </div>
+              <span class="style-chip" style="background:${style.color}">${style.id}</span>
+            </div>
+            <div class="image-stage ${bgClass()}">
+              <img src="${path}" alt="${style.id} ${style.name}，${label}" data-item-index="${itemIndex}" loading="lazy">
+              <div class="missing">图片加载失败，请检查本地文件<br><small>${path}</small></div>
+            </div>
+            <div class="card-foot">
+              <span>${flag.reason || "点击查看原图"}</span>
+              <a href="${path}" target="_blank" rel="noopener">原图链接</a>
+            </div>
+          </article>`;
+      }
+
+      function render() {
+        document.querySelector("#modeCompare").checked = state.mode === "compare";
+        document.querySelector("#modeSet").checked = state.mode === "set";
+        assetControl.classList.toggle("hidden", state.mode !== "compare");
+        setControl.classList.toggle("hidden", state.mode !== "set");
+        [...setTabs.children].forEach((button, index) => {
+          const active = index === state.setIndex;
+          button.classList.toggle("is-active", active);
+          button.setAttribute("aria-selected", String(active));
+        });
+
+        let items;
+        if (state.mode === "compare") {
+          const asset = assets[state.assetIndex];
+          items = styles.map(style => ({ style, asset }));
+          gallery.className = "gallery compare";
+          galleryTitle.textContent = `${asset.num} · ${asset.label}并排`;
+          galleryHint.textContent = asset.num === "06" ? "重点检查是否真失能、双臂是否完整、腰部末端是否自然隐藏。" : asset.num === "07" ? "E 已恢复你认可的原始伤口版本；H 未生成。请比较实体感和倒伏姿势。" : asset.num === "12" ? "四套此项均未生成；正常裸角色和独立头部仍在01/11，身体拆件缺失。" : "可切换128/192/256像素检查整图（含留白）；人物有效高度各异，尚非游戏内统一缩放。灯箱保持原图。";
+          styleGuide.classList.remove("hidden");
+        } else {
+          const style = styles[state.setIndex];
+          items = assets.map(asset => ({ style, asset }));
+          gallery.className = "gallery set-grid";
+          galleryTitle.textContent = `${style.id} · ${style.name}全套 13 个目标槽位`;
+          galleryHint.textContent = style.diff;
+          styleGuide.classList.add("hidden");
+        }
+
+        state.lightboxItems = items;
+        gallery.innerHTML = items.map((item, index) => cardMarkup(item.style, item.asset, index)).join("");
+        gallery.querySelectorAll("img").forEach(img => {
+          img.addEventListener("error", () => img.classList.add("is-missing"));
+          img.addEventListener("click", () => openLightbox(Number(img.dataset.itemIndex)));
+        });
+      }
+
+      styleGuide.innerHTML = styles.map(style => `
+        <div class="style-note">
+          <strong><span class="style-chip" style="background:${style.color};margin-right:6px">${style.id}</span>${style.name}</strong>
+          <span>${style.diff}</span>
+        </div>`).join("");
+
+      function openLightbox(index) {
+        state.lightboxIndex = index;
+        updateLightbox();
+        dialog.showModal();
+      }
+
+      function updateLightbox() {
+        const item = state.lightboxItems[state.lightboxIndex];
+        const path = imagePath(item.style, item.asset);
+        const label = actualLabel(item.style, item.asset);
+        lightboxImage.src = path;
+        lightboxImage.alt = `${item.style.id} ${item.style.name}，${label}`;
+        lightboxTitle.textContent = `${item.style.id} · ${item.style.name}｜${item.asset.num} · ${label}`;
+        lightboxCounter.textContent = `${state.lightboxIndex + 1} / ${state.lightboxItems.length}`;
+        lightboxOriginal.href = path;
+      }
+
+      function stepLightbox(delta) {
+        const length = state.lightboxItems.length;
+        do { state.lightboxIndex = (state.lightboxIndex + delta + length) % length; }
+        while (flagFor(state.lightboxItems[state.lightboxIndex].style,state.lightboxItems[state.lightboxIndex].asset).missing);
+        updateLightbox();
+      }
+
+      document.querySelectorAll('input[name="mode"]').forEach(input => {
+        input.addEventListener("change", event => {
+          state.mode = event.target.value;
+          render();
+        });
+      });
+      assetSelect.addEventListener("change", () => {
+        state.assetIndex = Number(assetSelect.value);
+        render();
+      });
+      document.querySelectorAll('input[name="background"]').forEach(input => {
+        input.addEventListener("change", event => {
+          state.background = event.target.value;
+          document.querySelectorAll(".image-stage, .lightbox-stage").forEach(stage => {
+            stage.classList.remove("bg-gray", "bg-dark", "bg-light");
+            stage.classList.add(bgClass());
+          });
+        });
+      });
+      document.querySelector("#closeLightbox").addEventListener("click", () => dialog.close());
+      document.querySelector("#lightboxPrev").addEventListener("click", () => stepLightbox(-1));
+      document.querySelector("#lightboxNext").addEventListener("click", () => stepLightbox(1));
+      dialog.addEventListener("click", event => {
+        if (event.target === dialog) dialog.close();
+      });
+      document.addEventListener("keydown", event => {
+        if (!dialog.open) return;
+        if (event.key === "ArrowLeft") { event.preventDefault(); stepLightbox(-1); }
+        if (event.key === "ArrowRight") { event.preventDefault(); stepLightbox(1); }
+      });
+
+      function loadReviews() {
+        try { return JSON.parse(localStorage.getItem(storageKey)) || {}; }
+        catch { return {}; }
+      }
+      let reviews = loadReviews();
+
+      function persistReviews() {
+        localStorage.setItem(storageKey, JSON.stringify(reviews));
+        const saveState = document.querySelector("#saveState");
+        saveState.textContent = `已保存在本机 · ${new Date().toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" })}`;
+      }
+
+      const reviewGrid = document.querySelector("#reviewGrid");
+      reviewGrid.innerHTML = styles.map(style => {
+        const saved = reviews[style.id] || {};
+        return `
+          <article class="review-card">
+            <h3><span class="style-chip" style="background:${style.color};margin-right:6px">${style.id}</span>${style.name}</h3>
+            <div class="review-row">
+              <label for="score-${style.id}">综合评分</label>
+              <select id="score-${style.id}" data-review="score" data-style="${style.id}">
+                <option value="">未评分</option>
+                ${[1,2,3,4,5].map(n => `<option value="${n}" ${String(saved.score) === String(n) ? "selected" : ""}>${n} / 5</option>`).join("")}
+              </select>
+            </div>
+            <label class="visually-hidden" for="note-${style.id}">${style.name}备注</label>
+            <textarea id="note-${style.id}" data-review="note" data-style="${style.id}" placeholder="记录双手/武器、底座比例、倒伏、面容个性……"></textarea>
+          </article>`;
+      }).join("");
+      styles.forEach(style => {
+        const area = document.querySelector(`#note-${style.id}`);
+        area.value = (reviews[style.id] && reviews[style.id].note) || "";
+      });
+      reviewGrid.addEventListener("input", event => {
+        const target = event.target;
+        const id = target.dataset.style;
+        const field = target.dataset.review;
+        if (!id || !field) return;
+        reviews[id] = reviews[id] || {};
+        reviews[id][field] = target.value;
+        persistReviews();
+      });
+
+      document.querySelector("#copyReview").addEventListener("click", async () => {
+        const selected = assets[state.assetIndex];
+        const lines = [
+          "Fantasy Brothers 第二轮人物装备美术评审",
+          `当前对照槽位：${selected.num} · ${selected.label}`,
+          "",
+          ...styles.flatMap(style => {
+            const item = reviews[style.id] || {};
+            return [
+              `${style.id} · ${style.name}｜评分：${item.score || "未评分"}/5`,
+              `备注：${(item.note || "").trim() || "无"}`,
+              ""
+            ];
+          }),
+          "评语仅来自本地浏览器，未自动上传。"
+        ];
+        const text = lines.join("\n");
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {
+          const helper = document.createElement("textarea");
+          helper.value = text;
+          helper.style.position = "fixed";
+          helper.style.opacity = "0";
+          document.body.append(helper);
+          helper.select();
+          document.execCommand("copy");
+          helper.remove();
+        }
+        document.querySelector("#saveState").textContent = "评语文本已复制";
+      });
+
+      lightboxImage.addEventListener("error", () => {
+        lightboxImage.alt = "图片加载失败，请检查本地文件";
+      });
+
+      document.querySelector("#sizeSelect").addEventListener("change", e => {gallery.dataset.size = e.target.value;});
+      render();
+    })();
+  </script>
+</body>
+</html>

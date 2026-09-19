@@ -22,7 +22,7 @@
 
 下一批四步范围与整批测试见 [招聘、契约、部署与人物后果](docs/16-next-four-steps.md)，尚未实现。
 
-用户已确认 [美术生产方式](docs/17-art-pipeline-selection.md) 与 [详细美术计划](docs/18-art-production-plan.md)。最新交付 [四套人物装备候选说明](art/validation/2026-09-19-four-directions/README.md)和[离线评审页](art/validation/2026-09-19-four-directions/index.html)：各12张、共48张，包括独立头身与装备，待用户选方向。部分死亡/裸身体要求使用了已注明的替代稿；边缘与装配尚未达到正式资产标准。用户要求上传的[艺术设定集](references/battle-brothers/README.md)保留为第三方参考，研究见[分析记录](docs/research/art-book-findings.md)。本轮不改变游戏/存档/导出包。
+用户已确认 [美术生产方式](docs/17-art-pipeline-selection.md) 与 [详细美术计划](docs/18-art-production-plan.md)。最新是按第一轮反馈制作的 [第二轮E–H候选说明](art/validation/2026-09-20-refined-directions/README.md)和[离线评审页](art/validation/2026-09-20-refined-directions/index.html)：三套融合方向＋一套精细Battle Brothers半身方向，加入低底托、完整双手与自然出手姿势。页面明确标记工具未生成的死亡/身体拆件，候选尚未完成正式装配或动画验收。[第一轮A–D](art/validation/2026-09-19-four-directions/index.html)保留供对照；[艺术设定集](references/battle-brothers/README.md)继续作为第三方参考。游戏、存档和导出包不变。
 
 ## 当前建议
 
