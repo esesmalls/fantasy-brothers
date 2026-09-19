@@ -1,0 +1,23 @@
+{
+  "set_id": "b-illuminated-tempera",
+  "title": "彩绘手抄本／蛋彩人物装备验证集",
+  "generated_at": "2026-09-19/2026-09-20 Asia/Shanghai",
+  "tool": "Codex built-in image_gen",
+  "tool_mode": "built-in reference generation/editing; no CLI/API",
+  "license_source": "AI-generated original validation art; no third-party raster source ingested",
+  "status": "12/12 generated and visually reviewed; concept validation only",
+  "files": [
+    {"file":"01-bare-character.png","role":"identity master","reference":[],"source":"exec-0dde2707-8c35-4a6b-9166-3d0eaf34eb7f.png","width":1199,"height":1312,"pixel_format":"32bpp ARGB","transparent_canvas":true,"bytes":2039627,"sha256":"655e955528db2cddfe9fc15759e3767bddc88faf54402852eef3143d0aa62473","qa":"pass-with-note"},
+    {"file":"02-armor-one.png","role":"first armor layer worn","reference":["01-bare-character.png"],"source":"exec-425d443c-8b86-4b51-9516-8a96f8ad27bc.png","width":1199,"height":1312,"pixel_format":"32bpp ARGB","transparent_canvas":true,"bytes":2054493,"sha256":"e4b7edbe354ea0f77c3256f9fd7d149f5763b1b03b57397ec197eb8ca6ddb791","qa":"pass"},
+    {"file":"03-armor-layered.png","role":"two visible armor layers worn","reference":["02-armor-one.png"],"source":"exec-3e1553eb-fd18-46d0-8e0b-2072274391b2.png","width":1199,"height":1312,"pixel_format":"32bpp ARGB","transparent_canvas":true,"bytes":2030648,"sha256":"dd77b0e9203f3e65cf5dab9adda60b1c0df4d1764217d77d39b81a66d4c3ee83","qa":"pass"},
+    {"file":"04-armed.png","role":"layered armor plus correctly held weapon","reference":["03-armor-layered.png"],"source":"exec-59f3bfaa-e5aa-4e8b-a2a9-d68f9c5b6731.png","width":1199,"height":1312,"pixel_format":"32bpp ARGB","transparent_canvas":true,"bytes":2081709,"sha256":"e2f6c97cd83b96cdbab8e6c9e48b183174bc254bcea7d3f61c498dafdba1b74d","qa":"pass"},
+    {"file":"05-wounded.png","role":"localized injury and matched equipment damage","reference":["04-armed.png"],"source":"exec-0d834dcc-bbb2-4ae1-9758-063bed6fe9cd.png","width":1200,"height":1311,"pixel_format":"32bpp ARGB","transparent_canvas":true,"bytes":1997316,"sha256":"dce9dcf8d74766720847f70614bea3b25a922d7e055402d62ac1c5b9b40971df","qa":"pass-with-note"},
+    {"file":"06-downed.png","role":"incapacitated, fate unresolved","reference":["05-wounded.png"],"source":"exec-d1e01b3f-a8b9-41a1-a35a-42675ab43b8f.png","width":1536,"height":1024,"pixel_format":"32bpp ARGB","transparent_canvas":true,"bytes":2281258,"sha256":"74550a7b8e70bdfbe9c4d8564ea7d44d5b10f09c8ac18b96d1e7e1d9a193502d","qa":"pass-with-note"},
+    {"file":"07-decapitated.png","role":"confirmed death validation","reference":["06-downed.png","04-armed.png"],"source":"exec-987ce90b-44c2-4450-b6ec-fc71ce29a6b0.png","width":1536,"height":1024,"pixel_format":"32bpp ARGB","transparent_canvas":true,"bytes":2261116,"sha256":"e36d0ce7a3dc0361754d9019e032caf7a3bd9b738a98649df20b76db8faccb47","qa":"pass-with-note"},
+    {"file":"08-armor-one-isolated.png","role":"empty first-layer armor module","reference":["02-armor-one.png"],"source":"exec-6f9a2602-d5d8-416b-aad8-689c0ecea3b4.png","width":1199,"height":1312,"pixel_format":"32bpp ARGB","transparent_canvas":true,"bytes":2173438,"sha256":"dc8e659546524e5c68226656b270698304b51b59a1162bf5846c34145b73b10f","qa":"pass"},
+    {"file":"09-armor-two-isolated.png","role":"empty second-layer armor module","reference":["03-armor-layered.png"],"source":"exec-9529521f-cc72-44a0-9914-b5fd8a29aef8.png","width":1199,"height":1312,"pixel_format":"32bpp ARGB","transparent_canvas":true,"bytes":1741279,"sha256":"55d7015f65688c55295a233e388fb690fda37ac8c0768b5d40b73f5d38cd5aaa","qa":"pass-with-note"},
+    {"file":"10-weapon-isolated.png","role":"complete weapon module","reference":["04-armed.png"],"source":"exec-f5791874-f440-43ef-a5ec-a603d0e8634a.png","width":1199,"height":1312,"pixel_format":"32bpp ARGB","transparent_canvas":true,"bytes":437795,"sha256":"47a57ac7704b73e7a7d19929c6ca96a34180f214008a65188e2edaad5dff6821","qa":"pass"},
+    {"file":"11-head-isolated.png","role":"healthy head module","reference":["01-bare-character.png"],"source":"exec-a2fed59a-5bf5-40fc-8039-f254a4ffbb64.png","width":1199,"height":1312,"pixel_format":"32bpp ARGB","transparent_canvas":true,"bytes":748238,"sha256":"2021a81b60b1da239b81f52fc1cfd86045504854f22bbe3e569a74859db23ab5","qa":"pass-with-note"},
+    {"file":"12-body-isolated.png","role":"healthy bare headless body module","reference":["01-bare-character.png"],"source":"exec-4a31722d-89cd-46a8-bb8d-f857ee5d9f3e.png","width":1199,"height":1312,"pixel_format":"32bpp ARGB","transparent_canvas":true,"bytes":1616265,"sha256":"145afb895e2c139ec70c4cc7d06f008c1fae92843bf81e1ef3e8d9276cefda89","qa":"pass-with-note"}
+  ]
+}

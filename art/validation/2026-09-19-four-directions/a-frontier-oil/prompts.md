@@ -1,0 +1,140 @@
+# A：写实战地厚涂 · 生成记录
+
+2026-09-19—20，内置 image_gen，逐张生成与参考编辑；无 CLI/API 后备、无程序绘图或后处理。参考仅为本套生成稿。源文件保留在工具生成目录；项目 PNG 为原样副本。
+
+## 1. 01-bare-character.png
+
+参考：无，原创身份母版
+
+原始输出：C:/Users/esmalls/.codex/generated_images/01a0b3d4-a0e4-78e2-9849-30230a7d52e2/exec-40edccac-5b83-4276-97e5-e7d1464bc791.png
+
+```text
+Use case: stylized-concept. Asset: one original 2D tactical RPG character identity master, direction A "Frontier oil painting". Create ONLY ONE unarmored adult male mercenary bust, no equipment, no weapons, no armor, no jewelry. Nonsexual bare chest, torso stops naturally at waist; no lower body or genitals. Same usable bust logic as a medieval tabletop tactics game, large expressive head, upper torso and upper arms, subtle three-quarter front view seen slightly from above, face looking toward viewer's left. Head visually separate from shoulders with a believable neck junction suitable for modular assembly, but here it is attached normally.
+Adult about 42, broad weathered face, slightly crooked nose, square jaw, pale olive skin with ruddy cheeks, short dark brown hair swept back, short uneven beard, alert tired hazel eyes, strong individual identity. Body ordinary sturdy working soldier, not superhero muscles. Neutral expression.
+ART DIRECTION A: outstanding traditional oil and opaque gouache miniature illustration: tangible broad planes blended with fine face detail, restrained rugged earthy umber/grey-green/linen palette, slightly rough confident painted contours, tactile skin, sober lived-in realism with subtly exaggerated head for readability. Strictly original design, not a copied Battle Brothers person. No photographic skin, no plastic 3D render, no anime, no flat vector drawing, no pixel art. Soft left-upper light with cool reflected shadow, no harsh black outline or black platform base. Clean continuous high quality shapes and natural shaded edge, no cut-and-paste seams, no pixelated shadows.
+Composition: one large centered bust occupies roughly 75% of a square canvas, plenty of padding for later equipment to the sides; consistent full head and torso framing with nothing clipped, no labels or contact sheet. Neutral perfectly uniform matte grey backdrop (#55575a) for art review. High-resolution fine rendering but readable at small game size. No text, no watermark, no border.
+```
+
+## 2. 02-armor-one.png
+
+参考：S:/fantasy brothers/art/validation/2026-09-19-four-directions/a-frontier-oil/01-bare-character.png
+
+原始输出：C:\Users\esmalls\.codex\generated_images\01a0b3d4-a0e4-78e2-9849-30230a7d52e2\exec-7106784e-0a36-4356-b6ee-fe2079f9270a.png
+
+```text
+Use case: identity-preserve. This is frame 02 of a consistent modular medieval tactical-game asset validation set. EDIT the provided identity master. Keep exactly the SAME man, face, eyes, nose, beard, hair, head size/position, torso proportions, camera, oil/gouache brushwork, upper-left light, crop and neutral grey background. Change ONLY clothing: dress the bare torso in a functional late-medieval oatmeal grey padded linen gambeson, lightly weathered fine quilting in vertical narrow channels, short sleeves to upper arms, rounded reinforced collar fitting around the neck, three simple dark leather loop closures down front, handsewn edging and a slightly overlapping hem. No metal outer armor yet, no weapon, no helmet, no cloak, no accessories. Sleeves must connect naturally at shoulders, fabric thickness and contact shadows must hug the same body without pasted collar or clipping beard. Keep high quality painted woven fabric and three-dimensional folds, not geometric line drawings. ONE single equipped bust, full silhouette not clipped, no text or border. Design must later allow a chainmail layer over this same gambeson with collar and sleeve ends visible.
+```
+
+## 3. 03-armor-layered.png
+
+参考：S:/fantasy brothers/art/validation/2026-09-19-four-directions/a-frontier-oil/02-armor-one.png
+
+原始输出：C:\Users\esmalls\.codex\generated_images\01a0b3d4-a0e4-78e2-9849-30230a7d52e2\exec-3477d659-1084-4a71-94c0-43d00cd353a2.png
+
+```text
+Use case: identity-preserve. Edit the provided medieval male mercenary in quilted linen gambeson for asset 03. Lock exactly the same face, hair, beard, head and torso position, proportions, pose, camera, overall canvas framing, grey background, rustic oil/gouache painting style and upper-left light. ADD ONLY the second armor layer: a finely painted realistic short-sleeved iron chainmail shirt OVER the SAME oatmeal padded gambeson. Keep the gambeson collar, short sleeve ends and hem visibly protruding beyond the mail so both layers are unquestionably visible. Chainmail neckline is lower than the padded collar; chainmail shoulders have believable weight and hang over the cloth without being a flat pasted texture. Dark iron rings with restrained pewter highlights follow the chest/shoulder volume, not noisy uniform scale texture. A narrow practical weathered brown belt around the lower torso holds the mail in place; no symbols or new character accessories. No helmet and no weapon yet. Mail protects torso and shoulders, does not cover the face. Fine medieval craft, worn but intact, same ordinary stout adult man with exactly the same recognizable face. No image collage, labels, cropped edges, white fringe, pixelated shadows, or plastic rendering.
+```
+
+## 4. 04-armed.png
+
+参考：S:/fantasy brothers/art/validation/2026-09-19-four-directions/a-frontier-oil/03-armor-layered.png
+
+原始输出：C:\Users\esmalls\.codex\generated_images\01a0b3d4-a0e4-78e2-9849-30230a7d52e2\exec-815cdce5-ab8a-4e79-8258-6203fa0111a9.png
+
+```text
+Use case: identity-preserve. Produce asset 04 by editing this exact same medieval mercenary bust. Preserve identical recognizable face, hair beard eyes expression, camera/head position, natural rustic oil/gouache brushwork, oatmeal padded gambeson UNDER short dark iron mail, same collar/sleeve/hem overlap and single brown belt. Preserve neutral grey backdrop and same scale. Add ONE functional late-medieval single-handed straight sword held naturally by his right hand in front of the lower torso; blade slants upward on viewer's left, staying to the side of face, with tip fully inside the frame. His hand grips a dark brown leather-wrapped hilt behind a simple straight iron crossguard and round disk pommel, anatomically correct fingers and wrist. Unornamented double-edged steel blade, narrow fuller, subtle old nicks, no fantasy glowing edges. Show a small segment of forearm/sleeve reaching from its real shoulder/arm toward the grip; no detached floating hand. Keep all armor unchanged except natural local folds at moving arm. Frame with enough margin that sword and torso are fully visible. No shield, no second weapon, no helmet, no scenery, no text. Premium hand-painted realistic tactical bust, not photo or plastic render.
+```
+
+## 5. 05-wounded.png
+
+参考：S:/fantasy brothers/art/validation/2026-09-19-four-directions/a-frontier-oil/04-armed.png
+
+原始输出：C:\Users\esmalls\.codex\generated_images\01a0b3d4-a0e4-78e2-9849-30230a7d52e2\exec-dfcd40c7-f070-47b3-a3a6-5e38dd44b4ae.png
+
+```text
+Use case: identity-preserve, precise-object-edit. Edit this SAME oil/gouache medieval mercenary into a wounded but upright state for a 2D game asset. Preserve exactly his facial identity, hair beard, head size, all garment designs, chainmail-over-oatmeal-gambeson layering, belt, straight sword, gripping hand, camera, grey background and framing. Change only damage and facial tension: a believable modest fresh cut over his left brow at viewer right with a little blood naturally following cheek planes into beard, a bruised cheek, narrowed painful eyes and tense mouth while still recognizably the same person. A small patch of broken/loosened mail rings at the viewer-right upper chest reveals frayed padded cloth beneath; localized dark blood stains on cloth near injury, some scuffed rings. Keep most armor intact, and preserve collar sleeves belt and original silhouettes. Fine painted anatomical injury and textile abrasion, not straight red slash symbols or uniform black crack lines. No graphic gore, exposed bone, detached parts or blood fountain. He is alive, holding the exact same sword in the exact same grip. No extra objects or text.
+```
+
+## 6. 06-downed.png
+
+参考：S:/fantasy brothers/art/validation/2026-09-19-four-directions/a-frontier-oil/05-wounded.png
+
+原始输出：C:\Users\esmalls\.codex\generated_images\01a0b3d4-a0e4-78e2-9849-30230a7d52e2\exec-6109bd5a-1e53-4759-b8e8-d758762ddf26.png
+
+```text
+Use case: identity-preserve. Create asset 06: a dedicated DOWNED pose of this SAME wounded middle-aged medieval mercenary, preserving his face identity, dark swept-back hair and short beard, oatmeal gambeson under short dark chainmail, brown belt, same exact plain straight sword, cheek cut and small torn patch of mail. He has lost combat ability and lies curled on his right side on an otherwise plain matte grey ground. Head remains attached, all anatomy intact, eyes partly closed with an ambiguous exhausted expression; do not assert death. This is a compact tactical game FALLEN BUST / upper-body token, seen at an elevated three-quarter angle with natural compressed shoulders, foreshortened torso and arms, clothing folds and mail weight responding to the ground. It is NOT a rotated copy of the upright portrait, and not a severed torso; use the same deliberately abbreviated half-body miniature silhouette, no legs are depicted. Head and face visible to one side, one hand rests loose near the same sword laid on the ground, small restrained blood marks at existing facial wound only. Entire fallen figure and sword comfortably fit within square canvas with broad empty margin. Ground contact has a soft painted shadow, not a black ellipse or square pixels. Maintain refined rugged oil/gouache hand-painting and upper-left light, no photo realism, no 3D render, no text, no label, no frame.
+```
+
+## 7. 07-decapitated.png
+
+参考：S:/fantasy brothers/art/validation/2026-09-19-four-directions/a-frontier-oil/06-downed.png
+
+原始输出：未输出
+
+失败：Output moderation_blocked: violence (request ID b2569809-8805-4b4a-b00a-068732320b7b). Original requested casualty version not produced.
+
+```text
+Use case: identity-preserve, precise-object-edit. Create a stylized medieval strategy game CONFIRMED-DEATH asset, distinct from the prior intact downed state. Use the exact fallen adult male bust, same chainmail over oatmeal padded armor, same brown belt, same laid-down straight sword and same oil/gouache painting style. Keep torso compact and foreshortened in a natural side-fallen pose on neutral grey ground. His head is now separated from the neck and lies beside the body on the ground, visible and recognizably the SAME dark-haired, short-bearded middle-aged man with his existing brow wound, eyes closed. One body and one head only. Show physical separation clearly with a small gap. Keep neck opening mainly obscured by collapsed padded collar and shadow, use modest dark red blood at collar and a small localized stain beneath head; NO exposed anatomy detail, organs, protruding bone, spurting blood or gore spectacle. This is a painterly fantasy tabletop casualty token, not a photoreal violent scene. Preserve same equipment design, chain links, damaged chest patch and practical sword. Natural ground contact, garment weight, soft continuous shadow, full objects within canvas. No text, frame, corpse symbols, platform base or extra props.
+```
+
+## 8. 07-decapitated.png
+
+参考：S:/fantasy brothers/art/validation/2026-09-19-four-directions/a-frontier-oil/04-armed.png
+
+原始输出：C:\Users\esmalls\.codex\generated_images\01a0b3d4-a0e4-78e2-9849-30230a7d52e2\exec-10e4eed0-01f3-456f-8cef-ecfa8037e8f8.png
+
+替代说明：Nonviolent clean separated head/body components; no graphic casualty wound. User informed.
+
+```text
+Create a NONVIOLENT modular game-piece assembly illustration using this character design. Show this original adult medieval mercenary as two separate, intact interchangeable painted miniature COMPONENTS resting on a neutral grey work surface: (1) his clothed armored torso component laid on its side with an EMPTY CLEAN collar socket, (2) his matching normal head component resting next to it, like a removable head for a tabletop figurine. The head component has a smooth rounded connection base hidden underneath, no wound or injury; face relaxed neutral, same dark short swept-back hair, same beard and facial features. Completely exclude blood, bruises, cuts, injuries, damaged skin, anatomical cross sections, severing, death or violence. This is a modular assembly demonstration, not a casualty or execution depiction. Both components fully visible with a gap. The torso wears the SAME oatmeal padded jacket under short iron chainmail and narrow brown belt. Place the same plain straight sword neatly beside the torso as the third intact equipment component. Maintain the original painterly oil/gouache artistic style, soft upper-left lighting, clean contacts, believable fabric/mail weight, grey background, no platform, no text, no label. One torso, one head, one sword only. All parts fit comfortably inside the square composition.
+```
+
+## 9. 08-armor-one-isolated.png
+
+参考：S:/fantasy brothers/art/validation/2026-09-19-four-directions/a-frontier-oil/02-armor-one.png
+
+原始输出：C:\Users\esmalls\.codex\generated_images\01a0b3d4-a0e4-78e2-9849-30230a7d52e2\exec-15135945-bc69-4c01-ac1d-38421aacf6c6.png
+
+```text
+Create ONE isolated equipment sprite derived faithfully from the attached reference. Show ONLY the exact oatmeal linen padded gambeson worn by this man: same narrow vertical stitched padded channels, practical three brown leather toggle closures on the front, rounded open neckline, short padded sleeves, slightly worn hem. The wearable item must be EMPTY, absolutely no head, neck, flesh, torso, arms, hands, mannequin or stand. Preserve the original front three-quarter slight top-down camera, wearable shoulder width, chest curvature and rugged medieval oil/gouache painterly style, warm earthy material rendering and fine natural wear. It is the INNER armor alone. No chainmail, no belt from another armor, no weapon. Complete whole garment fully within square canvas, enough margin. A single beautifully painted game equipment asset with authentic cloth seams and thickness at hollow neck/sleeve openings. True transparent alpha background, no colored background, no checkerboard graphic, no ground, no lettering, no border. Do not redesign the garment or turn it into a realistic product photo.
+```
+
+## 10. 09-armor-two-isolated.png
+
+参考：S:/fantasy brothers/art/validation/2026-09-19-four-directions/a-frontier-oil/03-armor-layered.png
+
+原始输出：C:\Users\esmalls\.codex\generated_images\01a0b3d4-a0e4-78e2-9849-30230a7d52e2\exec-f8b1e13b-08da-4d2b-892e-318bd3733d45.png
+
+```text
+Create ONE isolated outer armor game asset derived from attached reference, faithfully matching the steel short-sleeved mail hauberk and its simple single brown leather waist belt. Show this MAIL SHIRT ONLY: absolutely remove the oatmeal quilted undergarment, and remove all head, body, arms, hands and flesh. The round neckline is hollow; both short sleeves are hollow. The mail rings form a flexible heavy woven steel surface, weight and drape clearly readable, modest earthy aged steel sheen with natural small scratches, practical medieval craft. The mail shirt keeps the same wearable shoulder shape and frontal three-quarter slight top-down view as reference. Match its proportions and single brown belt with square buckle along the lower hem. No decorative redesign, no additional armor plates, no base/plinth, no mannequin or support. Isolated complete garment with comfortable margins on all sides. Hand-painted rugged realistic oil/gouache artwork, clear silhouette, fine coherent ringwork and soft painterly volume, not a 3D render, no pixel texture. True transparent alpha background, no checkerboard drawing, no text, no vignette.
+```
+
+## 11. 10-weapon-isolated.png
+
+参考：S:/fantasy brothers/art/validation/2026-09-19-four-directions/a-frontier-oil/04-armed.png
+
+原始输出：C:\Users\esmalls\.codex\generated_images\01a0b3d4-a0e4-78e2-9849-30230a7d52e2\exec-21c2c0ed-ddbe-4566-8232-3b995e80688e.png
+
+```text
+ONE isolated medieval sword equipment sprite. Faithfully extract/re-create the SAME practical straight sword carried in the attached character reference: straight narrow double-edged aged steel blade, subtle central fuller, simple straight crossguard, dark worn brown leather grip, round disc pommel. No hand, fingers, arms, character or clothing at all. Whole sword from tip to pommel clearly visible within canvas, diagonal rising from bottom-right to top-left like reference, ample margin. Consistent rugged oil/gouache hand painted medieval tactical game style, earthy restrained highlights, convincing metal edge and leather binding. Keep the reference sword design and proportions; do not add fantasy embellishments, jewels, gold patterns or a scabbard. True transparent alpha background, no checkerboard pixels, no ground, no drop-shadow plane, no decorative frame and no letters. Only one weapon.
+```
+
+## 12. 11-head-isolated.png
+
+参考：S:/fantasy brothers/art/validation/2026-09-19-four-directions/a-frontier-oil/01-bare-character.png
+
+原始输出：C:\Users\esmalls\.codex\generated_images\01a0b3d4-a0e4-78e2-9849-30230a7d52e2\exec-42d2ade0-61ba-4332-9375-189f0e1549b1.png
+
+```text
+Create a normal healthy HEAD PORTRAIT MODULE for a modular medieval tactical game, using the attached character identity master. This is a character customization component, NOT an injury or death scene. Preserve EXACT same mature man: dark short swept-back hair, short brown beard, broad weathered face, crooked nose, square jaw, hazel eyes, same calm stern expression and gaze and same three-quarter camera. Keep oil/gouache hand painted rugged medieval style and light direction. Include the complete hair, face, ears and a little normal healthy neck below beard; no shoulders or torso, no clothing, no jewelry. Keep head approximately the SAME size and upper-central position as in the original full-canvas character reference, leaving transparent empty space below so this is a normal compositing layer; do not zoom the head to fill frame. True transparent alpha canvas, no checkerboard artwork, no border, no neck wound, no blood, no shadow plane, no lettering. Do not redesign the face or smooth it into a handsome young model.
+```
+
+## 13. 12-body-isolated.png
+
+参考：S:/fantasy brothers/art/validation/2026-09-19-four-directions/a-frontier-oil/01-bare-character.png
+
+原始输出：C:\Users\esmalls\.codex\generated_images\01a0b3d4-a0e4-78e2-9849-30230a7d52e2\exec-f1b59d9c-147a-4941-9f9f-d72d929ca3ac.png
+
+```text
+Produce ONE healthy upper-body character-customization module, derived from the attached medieval male bust. This is a normal modular illustration component for equipping shirts, not a scene or an injury. Keep the same adult masculine shoulders, chest anatomy, skin tone and three-quarter pose, with no armor, shirt or weapons. The composition includes only shoulders and chest above the waist, no lower body and no genitals. Do not include the face, hair or head: the neck ends in a simple clean normal rounded paper-doll joining edge, with no injury, red marks, blood, wound or exposed internal anatomy. Preserve the original body's approximate size and lower-central positioning on the full canvas, leaving the upper region empty for the separate head layer. Warm weathered oil/gouache hand painting, coherent fine brushwork, same soft top-left light and proportion as reference. True transparent alpha outside the body, no checkerboard image, no stand, no lettering. Nonsexual neutral posture, normal game dressing component.
+```

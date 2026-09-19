@@ -1,0 +1,24 @@
+{
+  "set_id": "d-gothic-ink",
+  "date": "2026-09-20",
+  "tool": "Codex built-in image_gen",
+  "workflow": "01 generated as identity master; 02-11 generated as individual reference edits; outputs copied without programmatic image editing",
+  "requested_count": 12,
+  "generated_count": 12,
+  "file_count_complete": true,
+  "brief_complete": false,
+  "files": [
+    {"file":"01-bare-character.png","status":"generated","width":1254,"height":1254,"pixel_format":"Format32bppArgb","corner_alpha":0,"sha256":"d3aa5bf6a91d9022b9dd24797061353d1aa892ec6ba4b22f1ad6de5a26e5d10a"},
+    {"file":"02-armor-one.png","status":"generated","width":1254,"height":1254,"pixel_format":"Format32bppArgb","corner_alpha":0,"sha256":"aca9975be1dad73587af82b1a796740bfca8cfc921974e66704965452828b8fd"},
+    {"file":"03-armor-layered.png","status":"generated","width":1254,"height":1254,"pixel_format":"Format32bppArgb","corner_alpha":0,"sha256":"eb6c4b9161e5ffc9dbebb1760c1982e7774ca0271b907153343f05612d79e114"},
+    {"file":"04-armed.png","status":"generated","width":1254,"height":1254,"pixel_format":"Format32bppArgb","corner_alpha":0,"sha256":"4971ebe86702c8d5711939b96c6808e1f21419226fc194045e41f079d5c42c54"},
+    {"file":"05-wounded.png","status":"generated","width":1254,"height":1254,"pixel_format":"Format32bppArgb","corner_alpha":0,"sha256":"647927a6fa4bcd03c0add6da428bf72dbf5acab922f94bef90f29617bd962571"},
+    {"file":"06-downed.png","status":"generated","width":1536,"height":1024,"pixel_format":"Format32bppArgb","corner_alpha":0,"sha256":"e987f14654917abbede5272a5c7eab42e24dcd69e4ae3fbd92f094948da220c0"},
+    {"file":"07-decapitated.png","status":"generated_non_graphic_substitute","width":1536,"height":1024,"pixel_format":"Format24bppRgb","corner_alpha":255,"sha256":"c4f127a368416f0d6b4f6d344489b28eee23ed6d1988336f7627be1598ca6da5","note":"Non-bloody paper-doll module separation after violence moderation rejected the first restrained-blood request; opaque charcoal background."},
+    {"file":"08-armor-one-isolated.png","status":"generated","width":1254,"height":1254,"pixel_format":"Format32bppArgb","corner_alpha":0,"sha256":"bfd88000cf9b30b49a67e386cf211b078a364969a2deebea1505706fba1908bc"},
+    {"file":"09-armor-two-isolated.png","status":"generated","width":1254,"height":1254,"pixel_format":"Format32bppArgb","corner_alpha":0,"sha256":"07d841a1bd733019a971133325f6e3602b4f2eeaac764ddc476f10140c6b93e6"},
+    {"file":"10-weapon-isolated.png","status":"generated","width":1145,"height":1374,"pixel_format":"Format32bppArgb","corner_alpha":0,"sha256":"9a1315d729b77f8407e0c44093252fcea5a7e37be8d3b9fc825817a0ee478bc7"},
+    {"file":"11-head-isolated.png","status":"generated","width":1254,"height":1254,"pixel_format":"Format32bppArgb","corner_alpha":0,"sha256":"8c15a293b26d41063d7771eb62520e38b48a31e8a9453d721035a3c6810162b5"},
+    {"file":"12-body-isolated.png","status":"generated_clothed_safety_substitute","width":1254,"height":1254,"pixel_format":"Format32bppArgb","corner_alpha":0,"sha256":"3f77f1f47c311550ea8847014452c1f6e50b296868b813c41b0c2aedabd5235c","original_attempts_rejected":3,"note":"Three non-erotic bare-body module edits were rejected at output moderation as sexual. This final safe substitute wears an opaque plain sleeveless linen underlayer and therefore does not satisfy the requested bare/no-equipment body module."}
+  ]
+}

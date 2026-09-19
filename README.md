@@ -4,7 +4,7 @@
 
 当前阶段：最小可玩验证 v0.1.5.1，战场悬浮默认色条与图标、Alt切详细；人物帐接通四项属性、个人升级、营地训练和跨出身学习驯兽；营地军需帐接通装备、库存与交易，人类自由组合武器，营地与战场共用可见装备和伤势的分层人物；六处地点接通地图接约、逐站旅行、途中事件、契约战斗、清点成长与返营生活；保留上一版战场优先的底部HUD与悬浮信息。当前优先搭完整框架与功能，再逐步丰富内容；以下规划仍不代表最终平衡、预算或发售承诺。
 
-更新日期：2026-09-19。
+更新日期：2026-09-20。
 
 双击根目录 `Play.cmd`，或解压 `builds/FantasyBrothers-0.1.5.1-windows.zip` 后运行 `FantasyBrothers.exe`。建议自由佣兵团、种子 `1709`、渡口旧道。完整玩法与边界见 [试玩说明](docs/PLAYTEST.md)，接续顺序见 [框架计划](docs/10-framework-roadmap.md)；当前地图范围见 [大地图闭环](docs/11-world-map-framework.md)。
 
@@ -22,7 +22,7 @@
 
 下一批四步范围与整批测试见 [招聘、契约、部署与人物后果](docs/16-next-four-steps.md)，尚未实现。
 
-用户已确认 [美术生产方式](docs/17-art-pipeline-selection.md)。最新交付 [详细美术计划](docs/18-art-production-plan.md) 与 [设定集研究](docs/research/art-book-findings.md)：模块化手绘人物/装备、伤损/尸体、战场/世界、图标化UI，以及与四步功能合并的顺序与验收。本轮只写计划，游戏和资产尚未改动。
+用户已确认 [美术生产方式](docs/17-art-pipeline-selection.md) 与 [详细美术计划](docs/18-art-production-plan.md)。最新交付 [四套人物装备候选说明](art/validation/2026-09-19-four-directions/README.md)和[离线评审页](art/validation/2026-09-19-four-directions/index.html)：各12张、共48张，包括独立头身与装备，待用户选方向。部分死亡/裸身体要求使用了已注明的替代稿；边缘与装配尚未达到正式资产标准。用户要求上传的[艺术设定集](references/battle-brothers/README.md)保留为第三方参考，研究见[分析记录](docs/research/art-book-findings.md)。本轮不改变游戏/存档/导出包。
 
 ## 当前建议
 

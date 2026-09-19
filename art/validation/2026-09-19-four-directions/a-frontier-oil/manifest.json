@@ -1,0 +1,230 @@
+{
+  "set_id": "a-frontier-oil",
+  "title": "写实战地厚涂",
+  "generated_at": "2026-09-19/2026-09-20 Asia/Shanghai",
+  "tool": "Codex built-in image_gen",
+  "source_type": "AI-generated original validation art, references are self-generated",
+  "status": "12 image files, 07 is a nonviolent modular substitute",
+  "brief_complete": false,
+  "runtime_ready": false,
+  "generation_attempts": 13,
+  "files": [
+    {
+      "file": "01-bare-character.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "has_alpha_channel": false,
+      "alpha_extrema": null,
+      "transparent_canvas": false,
+      "bytes": 1748495,
+      "sha256": "14e4390ae184adea468cfa6d278ce5ab78aaff2e1726e9db64977797657e1a02",
+      "source": "exec-40edccac-5b83-4276-97e5-e7d1464bc791.png",
+      "references": [],
+      "substitution": null,
+      "qa": "concept-only; see QA.md"
+    },
+    {
+      "file": "02-armor-one.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "has_alpha_channel": false,
+      "alpha_extrema": null,
+      "transparent_canvas": false,
+      "bytes": 2156484,
+      "sha256": "6875662d6539c5afbe44ad4f00e5d87ae7041ecfd261f8fa2aa608f8b24a640b",
+      "source": "exec-7106784e-0a36-4356-b6ee-fe2079f9270a.png",
+      "references": [
+        "01-bare-character.png"
+      ],
+      "substitution": null,
+      "qa": "concept-only; see QA.md"
+    },
+    {
+      "file": "03-armor-layered.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "has_alpha_channel": false,
+      "alpha_extrema": null,
+      "transparent_canvas": false,
+      "bytes": 2247613,
+      "sha256": "be4f8ee594f38962298b8a0b8e1c2e797446a65dd83f5d6b838195be52a13b3c",
+      "source": "exec-3477d659-1084-4a71-94c0-43d00cd353a2.png",
+      "references": [
+        "02-armor-one.png"
+      ],
+      "substitution": null,
+      "qa": "concept-only; see QA.md"
+    },
+    {
+      "file": "04-armed.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "has_alpha_channel": false,
+      "alpha_extrema": null,
+      "transparent_canvas": false,
+      "bytes": 2271593,
+      "sha256": "4d4c928ef1ebf22f56228d8cb04678ef0b12e4eb17885f1be5e7a45e7aad4359",
+      "source": "exec-815cdce5-ab8a-4e79-8258-6203fa0111a9.png",
+      "references": [
+        "03-armor-layered.png"
+      ],
+      "substitution": null,
+      "qa": "concept-only; see QA.md"
+    },
+    {
+      "file": "05-wounded.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "has_alpha_channel": false,
+      "alpha_extrema": null,
+      "transparent_canvas": false,
+      "bytes": 2287050,
+      "sha256": "f4dbda9a8d700eab4d43f1a0c6f2965934b8050ea966e6cdf89f3be182ef08cc",
+      "source": "exec-dfcd40c7-f070-47b3-a3a6-5e38dd44b4ae.png",
+      "references": [
+        "04-armed.png"
+      ],
+      "substitution": null,
+      "qa": "concept-only; see QA.md"
+    },
+    {
+      "file": "06-downed.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "has_alpha_channel": false,
+      "alpha_extrema": null,
+      "transparent_canvas": false,
+      "bytes": 1992815,
+      "sha256": "ad95c2bdc0a8c5f676e7cc55048c81c86360206c6aea107eb49b3ac8f6038231",
+      "source": "exec-6109bd5a-1e53-4759-b8e8-d758762ddf26.png",
+      "references": [
+        "05-wounded.png"
+      ],
+      "substitution": null,
+      "qa": "concept-only; see QA.md"
+    },
+    {
+      "file": "07-decapitated.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "has_alpha_channel": false,
+      "alpha_extrema": null,
+      "transparent_canvas": false,
+      "bytes": 2212849,
+      "sha256": "7cba0f4e3b0bffe6610d7478531bfa25b955e5feea1ced5c8c96c523979a1b5d",
+      "source": "exec-10e4eed0-01f3-456f-8cef-ecfa8037e8f8.png",
+      "references": [
+        "04-armed.png"
+      ],
+      "substitution": "Nonviolent clean separated head/body components; no graphic casualty wound. User informed.",
+      "qa": "concept-only; see QA.md"
+    },
+    {
+      "file": "08-armor-one-isolated.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "has_alpha_channel": true,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_canvas": true,
+      "bytes": 2078947,
+      "sha256": "ace943c3f152de154e48e5935ad5a66f1811edb8f47a0f297f79dba95411d41d",
+      "source": "exec-15135945-bc69-4c01-ac1d-38421aacf6c6.png",
+      "references": [
+        "02-armor-one.png"
+      ],
+      "substitution": null,
+      "qa": "concept-only; see QA.md"
+    },
+    {
+      "file": "09-armor-two-isolated.png",
+      "width": 1402,
+      "height": 1122,
+      "mode": "RGBA",
+      "has_alpha_channel": true,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_canvas": true,
+      "bytes": 2287770,
+      "sha256": "a64a4be41fea049dc78847937b1decb003c8ba480cf49ff9219643ebd6781f97",
+      "source": "exec-f8b1e13b-08da-4d2b-892e-318bd3733d45.png",
+      "references": [
+        "03-armor-layered.png"
+      ],
+      "substitution": null,
+      "qa": "concept-only; see QA.md"
+    },
+    {
+      "file": "10-weapon-isolated.png",
+      "width": 1240,
+      "height": 1269,
+      "mode": "RGBA",
+      "has_alpha_channel": true,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_canvas": true,
+      "bytes": 418415,
+      "sha256": "a47cbcd9a4e1c3db38f6626aa8a77c35c8507d9cd34f81e9e0fa638e38648577",
+      "source": "exec-21c2c0ed-ddbe-4566-8232-3b995e80688e.png",
+      "references": [
+        "04-armed.png"
+      ],
+      "substitution": null,
+      "qa": "concept-only; see QA.md"
+    },
+    {
+      "file": "11-head-isolated.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "has_alpha_channel": true,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_canvas": true,
+      "bytes": 953838,
+      "sha256": "87cc98d68937b0bd674f5f56ee61fc709161e321e4a4bcf55f434ce1b51b649f",
+      "source": "exec-42d2ade0-61ba-4332-9375-189f0e1549b1.png",
+      "references": [
+        "01-bare-character.png"
+      ],
+      "substitution": null,
+      "qa": "concept-only; see QA.md"
+    },
+    {
+      "file": "12-body-isolated.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "has_alpha_channel": true,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_canvas": true,
+      "bytes": 1148398,
+      "sha256": "60c673c3051216b4f3960d9335d09d34c327c02edb64ed12b570eceed2215bc9",
+      "source": "exec-f1b59d9c-147a-4941-9f9f-d72d929ca3ac.png",
+      "references": [
+        "01-bare-character.png"
+      ],
+      "substitution": null,
+      "qa": "concept-only; see QA.md"
+    }
+  ]
+}
