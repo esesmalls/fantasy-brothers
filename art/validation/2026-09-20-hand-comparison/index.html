@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fantasy Brothers · 手部表现 A / B 对照</title>
+<style>
+:root{color-scheme:dark;--bg:#101712;--panel:#19241d;--panel2:#202d24;--line:#506047;--ink:#f1eadb;--muted:#b8b7a9;--brass:#d5b36c;--green:#304c36;--danger:#bd765b;font-family:"Microsoft YaHei UI",system-ui,sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 55% -10%,#29402e 0,transparent 35%),var(--bg);color:var(--ink);line-height:1.55}
+button,input,select{font:inherit}button{cursor:pointer;color:var(--ink);background:#26342a;border:1px solid #647057;border-radius:6px;padding:8px 13px}button:hover{border-color:var(--brass)}button:focus-visible,input:focus-visible{outline:2px solid var(--brass);outline-offset:3px}button[aria-pressed=true],button.primary{background:var(--brass);border-color:var(--brass);color:#201a10;font-weight:700}button:disabled{cursor:wait;opacity:.48}
+.shell{max-width:1540px;margin:auto;display:grid;grid-template-columns:250px minmax(0,1fr);gap:22px;padding:24px}.side{position:sticky;top:18px;align-self:start;border:1px solid var(--line);background:#172219e8;border-radius:10px;padding:18px}.brand{font:700 12px Georgia,serif;letter-spacing:.16em;color:var(--brass)}h1{font:700 clamp(27px,3vw,43px)/1.16 Georgia,"Microsoft YaHei UI",serif;margin:8px 0 12px}h2{font:700 22px Georgia,"Microsoft YaHei UI",serif;margin:0 0 11px}h3{margin:0 0 6px;font-size:17px}.side p,.intro,.fine{color:var(--muted)}.side nav{display:grid;gap:7px;margin:22px 0}.side a{color:var(--ink);text-decoration:none;padding:7px 9px;border-left:2px solid #657257}.side a:hover{color:var(--brass);border-color:var(--brass)}.tag{display:inline-block;border:1px solid #79704e;background:#33351f;color:#e5d79e;border-radius:99px;padding:3px 9px;font-size:12px}
+main{min-width:0}.hero{padding:14px 4px 21px}.hero .intro{max-width:900px}.callout{border-left:3px solid var(--brass);background:#24291f;padding:12px 15px;margin-top:16px;color:#ddd3c1}.panel{border:1px solid var(--line);background:linear-gradient(145deg,#1c2a20,#17231b);border-radius:10px;padding:18px;margin-bottom:18px;box-shadow:0 12px 34px #0003}.toolbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:13px 0}.toolbar .label{font-size:13px;color:var(--muted);margin-right:2px}.spacer{flex:1}.sound-state{font-size:12px;color:var(--muted)}
+.viewer{position:relative;background:#0b0f0c;border:1px solid #3f4a3d;border-radius:7px;overflow:hidden;aspect-ratio:1120/440}.viewer img{display:block;width:100%;height:100%;object-fit:contain;background:#101512}.split{position:absolute;inset:0;pointer-events:none}.split::after{content:"";position:absolute;top:0;bottom:0;left:50%;width:1px;background:#e3c67b99}.route-label{position:absolute;top:12px;padding:6px 11px;border:1px solid #a78d58;background:#152019e8;color:#fff1cc;border-radius:4px;font-size:13px;box-shadow:0 2px 10px #0008}.route-label.a{left:12px}.route-label.b{left:calc(50% + 12px)}.empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:#d8c99e;background:#111b15;padding:24px}.empty[hidden]{display:none}.frame-meta{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:13px;margin-top:8px}.timeline{width:100%;accent-color:var(--brass)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:14px}.choice{border:1px solid #4b5947;background:#202c23;border-radius:8px;padding:15px}.choice.a{border-top:3px solid #d5b36c}.choice.b{border-top:3px solid #849a79}.choice ul{padding-left:20px;margin:8px 0 0;color:var(--muted)}
+.battle-frame{position:relative;min-height:210px;background:#0b0f0c;border:1px solid #465143;border-radius:7px;overflow:hidden}.battle-frame img{display:block;width:100%;height:auto}.scale-note{color:var(--muted);font-size:12px;margin:8px 0 0}
+.keyframes{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.key{padding:0;overflow:hidden;background:#111812;text-align:left}.key img{display:block;width:100%;aspect-ratio:1120/440;object-fit:cover;border-bottom:1px solid #465143}.key span{display:block;padding:8px 10px;font-size:12px;color:var(--muted)}.key.missing{opacity:.45}.key.missing img{visibility:hidden}
+.foot{color:var(--muted);font-size:13px;padding:2px 3px 28px}.foot code{color:#dfd1aa}dialog{width:min(1320px,96vw);max-height:94vh;border:1px solid #88714b;border-radius:8px;background:#111812;color:var(--ink);padding:12px}dialog::backdrop{background:#000d}.dialog-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:9px}dialog img{display:block;max-width:100%;max-height:80vh;object-fit:contain;margin:auto;background:#0b0f0c}
+@media(max-width:980px){.shell{grid-template-columns:190px minmax(0,1fr);padding:16px;gap:14px}.keyframes{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.shell{display:block;padding:12px}.side{position:static;margin-bottom:14px;padding:14px}.side nav{display:flex;overflow:auto;margin:12px 0 0}.side nav a{white-space:nowrap;border-left:0;border-bottom:2px solid #657257}.side .fine{display:none}.panel{padding:13px}.choices{grid-template-columns:1fr}.route-label{font-size:11px;top:6px;padding:4px 7px}.route-label.a{left:6px}.route-label.b{left:calc(50% + 6px)}.frame-meta{font-size:11px}.spacer{display:none}}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside class="side">
+  <div class="brand">FANTASY BROTHERS</div>
+  <h2>手部路线对照</h2>
+  <span class="tag">H 标准 · 动作评审</span>
+  <p class="fine">同一人物、护甲与盾牌，同一招式时长和反馈；手部、胸转、握点路径与武器运动方式按两条方案分别表现。</p>
+  <nav aria-label="本页导航"><a href="#review">同步动作</a><a href="#difference">路线差异</a><a href="#battle">训练场尺寸</a><a href="#frames">关键帧</a></nav>
+</aside>
+<main>
+<header class="hero"><div class="brand">HAND TREATMENT REVIEW / 2026-09-20</div><h1>A 自然握持，还是 B 无手抽象？</h1><p class="intro">本页比较两条手部表现路线，不是 A / B / C 材质竞选。左右均为 Godot 实渲染，使用同一人物、甲胄、盾牌、招式时长和反馈；胸转幅度、握点路径与武器运动方式属于各自方案，正是本次要比较的内容。</p><div class="callout">A 使用自然握持与少量局部姿势；B 隐去手部细节，用遮挡与整体轮廓表达持械。两者都尚未获得最终批准。</div></header>
+
+<section class="panel" id="review" aria-labelledby="review-title"><h2 id="review-title">同步动作对照</h2>
+  <div class="toolbar" id="actions"><span class="label">动作</span><button data-action="slash" aria-pressed="true">挥砍 · 0.72s</button><button data-action="shield_bash" aria-pressed="false">盾击 · 0.62s</button><span class="spacer"></span><button id="sound" aria-pressed="false">声音：关</button><span class="sound-state" id="sound-state">默认静音</span></div>
+  <div class="viewer" id="viewer"><img id="sequence" alt="Godot实渲染的A自然握持与B无手抽象同步动作对照"><div class="split"><span class="route-label a">A · 自然握持＋局部姿势</span><span class="route-label b">B · 无手抽象</span></div><div class="empty" id="empty">正在等待 Godot 导出的实际逐帧截图。<br>页面不会以 CSS 摆动代替引擎画面。</div></div>
+  <div class="frame-meta"><span id="phase">准备停留</span><span id="counter">帧 0 / 15</span></div>
+  <input class="timeline" id="timeline" type="range" min="0" max="15" value="0" step="1" aria-label="动作帧进度">
+  <div class="toolbar"><button class="primary" id="play" disabled>载入中</button><button id="restart">回到开头</button><span class="label">速度</span><button data-speed="1" aria-pressed="true">1×</button><button data-speed="2" aria-pressed="false">2×</button><button id="loop" aria-pressed="true">循环：开</button><span class="spacer"></span><button id="zoom">放大当前帧</button></div>
+</section>
+
+<section class="panel" id="difference" aria-labelledby="difference-title"><h2 id="difference-title">只比较这一处差异</h2><div class="choices">
+  <article class="choice a"><h3>A · 自然握持＋局部姿势</h3><ul><li>手指、拳位和腕线直接说明剑如何被握住。</li><li>挥击关键点可替换少量完整手臂姿势，避免肘腕向胸内折。</li><li>需要逐件校准握点、袖口和盾牌遮挡，生产成本更高。</li></ul></article>
+  <article class="choice b"><h3>B · 无手抽象</h3><ul><li>用盾面、剑柄、袖口和轮廓关系暗示持械，不强调手指。</li><li>小尺寸下更整洁，也较少暴露握点偏差。</li><li>若遮挡过多，可能削弱动作方向和人物正在发力的可信度。</li></ul></article>
+</div></section>
+
+<section class="panel" id="battle" aria-labelledby="battle-title"><h2 id="battle-title">训练场与 1× 人物检查</h2><p class="intro">这是独立训练靶评审场景，尚未接入正常战斗。截图右下角由 Godot 场景直接绘制 1× 人物副图，用于检查盾位、剑向和手部在实际人物尺寸下是否仍可辨认。</p><div class="toolbar" id="training-shots"><span class="label">截图尺寸</span><button data-training="hand-style-static-1440x900.png" aria-pressed="true">1440×900</button><button data-training="hand-style-small-1180x740.png" aria-pressed="false">1180×740</button></div><div class="battle-frame"><img id="battle-shot" alt="Godot独立训练靶场景及右下角1×人物副图"><div class="empty" id="battle-empty">等待训练场截图</div></div><p class="scale-note">1×副图属于场景实渲染内容；网页没有把 1120×440 对照条缩小后冒充精确 1×。</p></section>
+
+<section class="panel" id="frames" aria-labelledby="frames-title"><h2 id="frames-title">关键帧</h2><p class="intro">点击查看原始导出尺寸。四格分别对应准备、起势、接触和收势；均从当前动作的 16 张实渲染截图中选取。</p><div class="keyframes" id="keyframes"></div></section>
+
+<footer class="foot"><p>播放顺序：准备停留 0.35 秒 → 动作（挥砍 0.72 秒／盾击 0.62 秒）→ 终态停留 1 秒，然后按默认设置循环。普攻在动作进度 30% 播放挥动声、48% 播放击甲声；盾击在 48% 播放盾挡声。声音默认关闭。</p><p id="asset-note">素材状态：等待打包。</p></footer>
+</main></div>
+<dialog id="lightbox" aria-labelledby="lightbox-title"><div class="dialog-head"><strong id="lightbox-title">当前帧</strong><button id="close">关闭 ×</button></div><img id="large" alt="放大的Godot实渲染截图"></dialog>
+<script>
+const ACTIONS={
+  slash:{label:"挥砍",duration:720,cues:[{p:.30,file:"previews/swing.wav"},{p:.48,file:"previews/armor.wav"}]},
+  shield_bash:{label:"盾击",duration:620,cues:[{p:.48,file:"previews/block.wav"}]}
+};
+const PREP=350,HOLD=1000,COUNT=16,PAD=n=>String(n).padStart(2,"0"),$=s=>document.querySelector(s);
+let action="slash",frame=0,playing=false,ready=false,speed=1,startAt=0,raf=0,soundOn=false,loopOn=true,loadToken=0,audioComplete=false;
+let cueTimers=[],cuePlayers={};
+const pathFor=(a,i)=>`previews/strip-${a}-${PAD(i)}.png`;
+function setImage(i){frame=Math.max(0,Math.min(COUNT-1,i));$("#sequence").src=pathFor(action,frame);$("#timeline").value=frame;$("#counter").textContent=`帧 ${frame} / 15`;$("#phase").textContent=frame===0?"准备停留":frame===15?"终态停留":"动作进行中";}
+function cancelCues(){cueTimers.forEach(clearTimeout);cueTimers=[];Object.values(cuePlayers).forEach(player=>{player.pause();player.currentTime=0})}
+function stop(){playing=false;cancelAnimationFrame(raf);cancelCues();$("#play").textContent=ready?"播放":"载入中";}
+function playCue(file){const player=cuePlayers[file];if(!player)return;player.currentTime=0;player.playbackRate=speed;player.play().catch(()=>{})}
+function scheduleCues(){cancelCues();if(!soundOn)return;const now=performance.now(),cfg=ACTIONS[action];cfg.cues.forEach(cue=>{const eventAt=startAt+(PREP+cue.p*cfg.duration)/speed;if(eventAt<=now)return;cueTimers.push(setTimeout(()=>{if(playing&&soundOn)playCue(cue.file)},eventAt-now))})}
+function animate(now){if(!playing)return;const cfg=ACTIONS[action],total=PREP+cfg.duration+HOLD,elapsed=(now-startAt)*speed;let next=0;if(elapsed<PREP)next=0;else if(elapsed<PREP+cfg.duration)next=Math.min(15,Math.floor(((elapsed-PREP)/cfg.duration)*COUNT));else next=15;setImage(next);if(elapsed>=total){if(loopOn){startAt=now;setImage(0);scheduleCues()}else{stop();return}}raf=requestAnimationFrame(animate)}
+function play(){if(!ready)return;if(playing){stop();return}if(frame===15)setImage(0);playing=true;$("#play").textContent="暂停";startAt=performance.now()-((frame===0?0:PREP+(frame/15)*ACTIONS[action].duration)/speed);scheduleCues();raf=requestAnimationFrame(animate)}
+function audioExists(src){return new Promise(resolve=>{const a=new Audio();let done=false;const finish=value=>{if(done)return;done=true;a.src="";resolve(value)};a.addEventListener("loadedmetadata",()=>finish(true),{once:true});a.addEventListener("error",()=>finish(false),{once:true});a.src=src;a.load();setTimeout(()=>finish(false),1800)})}
+function imageExists(src){return new Promise(resolve=>{const im=new Image();im.onload=()=>resolve({ok:true,w:im.naturalWidth,h:im.naturalHeight});im.onerror=()=>resolve({ok:false,w:0,h:0});im.src=src})}
+async function prepareAudio(target){const files=[...new Set(ACTIONS[target].cues.map(c=>c.file))],states=await Promise.all(files.map(audioExists)),players={};files.forEach((file,i)=>{if(states[i])players[file]=new Audio(file)});return{players,complete:Object.keys(players).length===files.length}}
+async function preloadAction(target){const images=Array.from({length:COUNT},(_,i)=>new Promise(resolve=>{const im=new Image();im.onload=async()=>{try{if(im.decode)await im.decode()}catch{}resolve(true)};im.onerror=()=>resolve(false);im.src=pathFor(target,i)}));return Promise.all(images)}
+async function refreshAction(){const token=++loadToken,target=action;stop();ready=false;$("#play").disabled=true;$("#timeline").disabled=true;$("#sequence").hidden=true;$("#empty").hidden=false;$("#empty").innerHTML=`正在预解码 ${ACTIONS[target].label} 16 帧…<br>完整后才启用播放。`;$("#asset-note").textContent=`素材状态：正在预解码 ${ACTIONS[target].label} 16 帧…`;const [loaded,audio]=await Promise.all([preloadAction(target),prepareAudio(target)]);if(token!==loadToken)return;cuePlayers=audio.players;audioComplete=audio.complete;$("#sound-state").textContent=audioComplete?(soundOn?"完整反馈声已开启":"完整反馈声可用"):"部分反馈声缺失";const count=loaded.filter(Boolean).length,probe=await imageExists(pathFor(target,0));if(token!==loadToken)return;ready=probe.ok&&count===COUNT;buildKeys();if(ready){setImage(0);$("#sequence").hidden=false;$("#empty").hidden=true;$("#play").disabled=false;$("#timeline").disabled=false;$("#play").textContent="播放";$("#asset-note").textContent=`素材状态：${ACTIONS[target].label} ${count}/16 帧已预解码，单帧 ${probe.w}×${probe.h}。`}else{$("#empty").textContent=`${ACTIONS[target].label}序列不完整，暂不启用播放。`;$("#asset-note").textContent=`素材状态：${ACTIONS[target].label}仅 ${count}/16 帧可用。`}}
+function buildKeys(){const picks=[0,4,8,15],names=["准备","起势","接触保持","终态"];const root=$("#keyframes");root.textContent="";picks.forEach((f,i)=>{const b=document.createElement("button");b.className="key";b.innerHTML=`<img src="${pathFor(action,f)}" alt="${ACTIONS[action].label}${names[i]}帧"><span>${PAD(f)} · ${names[i]}</span>`;b.addEventListener("click",()=>openLight(pathFor(action,f),`${ACTIONS[action].label} · ${names[i]} · 帧 ${f}/15`));b.querySelector("img").addEventListener("error",()=>b.classList.add("missing"));root.appendChild(b)})}
+function openLight(src,title){$("#large").src=src;$("#lightbox-title").textContent=title;$("#lightbox").showModal()}
+async function loadTraining(file){const src=`previews/${file}`,result=await imageExists(src);if(result.ok){$("#battle-shot").src=src;$("#battle-shot").hidden=false;$("#battle-empty").hidden=true}else{$("#battle-shot").hidden=true;$("#battle-empty").hidden=false}}
+$("#actions").addEventListener("click",e=>{const b=e.target.closest("button[data-action]");if(!b)return;action=b.dataset.action;$("#actions").querySelectorAll("button[data-action]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));refreshAction()});
+$("#play").addEventListener("click",play);$("#restart").addEventListener("click",()=>{stop();setImage(0)});$("#timeline").addEventListener("input",e=>{stop();setImage(Number(e.target.value))});
+document.querySelectorAll("button[data-speed]").forEach(b=>b.addEventListener("click",()=>{speed=Number(b.dataset.speed);document.querySelectorAll("button[data-speed]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));if(playing){stop();play()}}));
+$("#sound").addEventListener("click",()=>{soundOn=!soundOn;$("#sound").setAttribute("aria-pressed",String(soundOn));$("#sound").textContent=soundOn?"声音：开":"声音：关";$("#sound-state").textContent=audioComplete?(soundOn?"完整反馈声已开启":"完整反馈声可用"):"部分反馈声缺失";if(playing)scheduleCues();else cancelCues()});
+$("#loop").addEventListener("click",()=>{loopOn=!loopOn;$("#loop").setAttribute("aria-pressed",String(loopOn));$("#loop").textContent=loopOn?"循环：开":"循环：关"});
+$("#training-shots").addEventListener("click",e=>{const b=e.target.closest("button[data-training]");if(!b)return;$("#training-shots").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));loadTraining(b.dataset.training)});
+$("#zoom").addEventListener("click",()=>openLight(pathFor(action,frame),`${ACTIONS[action].label} · 帧 ${frame}/15`));$("#close").addEventListener("click",()=>$("#lightbox").close());$("#lightbox").addEventListener("click",e=>{if(e.target===$("#lightbox"))$("#lightbox").close()});
+$("#sequence").addEventListener("error",()=>{$("#empty").hidden=false;$("#empty").textContent="当前帧读取失败。"});
+refreshAction();loadTraining("hand-style-static-1440x900.png");
+</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+{
+  "date": "2026-09-20",
+  "tool": "built-in image_gen",
+  "calls": 2,
+  "selected_outputs": 2,
+  "input": "art/validation/2026-09-20-motion-templates/sources/b-atlas-v2-source.png",
+  "prompts": "prompts.md",
+  "files": [
+    {
+      "source": "sources/arm-poses-shield.png",
+      "runtime": "game/assets/art/motion/hand-style-parts.png",
+      "original_output": "exec-9a57a926-2a05-4129-8286-136b0b5e69a4.png",
+      "sha256": "d6ba4a8e33df2491fdc1d73337e72594e106f70043b5e86a9ce678b74a41a65c",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "used_parts": [
+        "rear_arm_rest",
+        "rear_arm_prepare",
+        "rear_arm_contact",
+        "shield_three_quarter"
+      ],
+      "raw_pixels_unchanged": true
+    },
+    {
+      "source": "sources/closed-shoulder-body-atlas.png",
+      "runtime": "game/assets/art/motion/hand-style-body.png",
+      "original_output": "exec-b9a43e79-087b-4002-90f9-3b344e574597.png",
+      "sha256": "e3771f0c082fce723c33b7451e5bef13ee0973372dd994e86c87a18226ca0371",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "used_parts": [
+        "closed_shoulder_mail_torso_only"
+      ],
+      "raw_pixels_unchanged": true
+    }
+  ],
+  "notes": [
+    "Only the closed-shoulder torso is used from the second atlas. Head, sword and base remain the previous B v2 source.",
+    "Original PNGs retain generated alpha. Runtime uses UV regions and common anchors; no raster retouching.",
+    "H style is approved; these comparison implementations are not yet user-approved.",
+    "Existing project art only; user-provided Battle Brothers image is a design reference, not a runtime asset."
+  ]
+}

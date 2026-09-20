@@ -12,6 +12,7 @@ const EquipmentScreen = preload("res://presentation/equipment_screen.gd")
 const Characters = preload("res://core/character_rules.gd")
 const CharacterScreen = preload("res://presentation/character_screen.gd")
 const MotionReviewScene = preload("res://presentation/motion_review.tscn")
+const HandStyleReviewScene = preload("res://presentation/hand_style_review.tscn")
 const CREAM = Color("e7ddc6")
 const MUTED = Color("9caeaa")
 const GOLD = Color("c8aa6e")
@@ -70,6 +71,18 @@ var motion_review_dir := "user://motion-review"
 func _ready() -> void:
 	_build_theme()
 	var arguments := OS.get_cmdline_user_args()
+	if arguments.has("--hand-style-review") or arguments.has("--hand-style-review-smoke"):
+		var hand_review = HandStyleReviewScene.instantiate()
+		add_child(hand_review)
+		hand_review.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		hand_review.review_closed.connect(func(): get_tree().quit())
+		if arguments.has("--hand-style-review-smoke"):
+			var output_directory := "user://hand-style-review"
+			for flag: String in arguments:
+				if flag.begins_with("--hand-style-review-dir="):
+					output_directory = flag.trim_prefix("--hand-style-review-dir=")
+			hand_review.call_deferred("run_smoke", output_directory)
+		return
 	for index in range(arguments.size()):
 		var argument: String = str(arguments[index])
 		if argument == "--smoke-test":
