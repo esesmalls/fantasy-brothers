@@ -3,9 +3,15 @@ extends RefCounted
 ## No borrowed shoulder/collar patches, limb sprites or gameplay state writes.
 const Motion = preload("res://presentation/static_bust_motion.gd")
 const CATALOG := "res://assets/art/static-bust/catalog.json"
+const V3_CATALOG := "res://assets/art/static-bust/catalog-v3.json"
 static var _catalog: Dictionary = {}
 static var _previous_catalog: Dictionary = {}
 static var _textures: Dictionary = {}
+static var _v3:Dictionary={}
+
+static func v3_catalog() -> Dictionary:
+	if _v3.is_empty():_v3=JSON.parse_string(FileAccess.get_file_as_string(V3_CATALOG))
+	return _v3
 
 static func catalog() -> Dictionary:
 	parts()
@@ -51,11 +57,11 @@ static func draw_bust_part(c:CanvasItem,id:String,origin:Vector2,scale_value:flo
 			uvs.append((Vector2(source[0],source[1])+(point-top_left)/sz*Vector2(source[2],source[3]))/texture.get_size())
 		c.draw_polygon(points,PackedColorArray([tint]),uvs,texture)
 
-static func body_layers(armor: String, damaged: bool, wounded: bool) -> Array[String]:
+static func body_layers(armor: String, damaged: bool, wounded: bool,wear_damage:Dictionary={}) -> Array[String]:
 	var layers: Array[String] = ["base", "body"]
 	if armor != "bare":layers.append("linen")
-	if armor in ["padded", "mail"]:layers.append("padded_damaged" if damaged else "padded")
-	if armor == "mail":layers.append("mail_damaged" if damaged else "mail")
+	if armor in ["padded", "mail"]:layers.append("padded_damaged" if wear_damage.get("padded",damaged) else "padded")
+	if armor == "mail":layers.append("mail_damaged" if wear_damage.get("mail",damaged) else "mail")
 	layers.append("wounded" if wounded else "head")
 	return layers
 
@@ -82,7 +88,7 @@ static func draw_body(c: CanvasItem, origin: Vector2, scale_value: float,
 		armor: String = "mail", damaged: bool = false, wounded: bool = false,
 		catalog_data:Dictionary={},hidden:Array=[],tint:Color=Color.WHITE) -> void:
 	var data:Dictionary=parts() if catalog_data.is_empty() else catalog_data.parts
-	for part in body_layers(armor,damaged,wounded):
+	for part in body_layers(armor,damaged,wounded,catalog_data.get("wear_damage",{})):
 		if part in hidden:continue
 		if part in ["base","head","wounded"]:draw_part(c,part,origin,scale_value,Vector2.ZERO,0,tint,data)
 		else:draw_bust_part(c,part,origin,scale_value,tint,catalog_data)

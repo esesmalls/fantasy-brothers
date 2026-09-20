@@ -1,11 +1,7 @@
 {
   "schema": 1,
   "style": "H-static-bust",
-  "revision": "U50-nested-wear",
-  "compatible_draft_baselines": [
-    "862d93ad989f013500b2a28197ad8bba4244e8075b112d68830666ffff16e45d",
-    "b5f4c53b71af8c1a95b2c1f1adfe22b373abfb78a2436281f48f76d2e42c9688"
-  ],
+  "revision": "U48-fixed-footprint",
   "base_surface_pixels": {
     "center": [
       321,
@@ -85,7 +81,7 @@
       ]
     },
     "linen": {
-      "atlas": "res://assets/art/static-bust/full-garments-nested.png",
+      "atlas": "res://assets/art/static-bust/full-garments.png",
       "rect": [
         726,
         78,
@@ -127,7 +123,7 @@
       ]
     },
     "padded": {
-      "atlas": "res://assets/art/static-bust/full-garments-nested.png",
+      "atlas": "res://assets/art/static-bust/full-garments.png",
       "rect": [
         105,
         644,
@@ -148,7 +144,7 @@
       ]
     },
     "padded_damaged": {
-      "atlas": "res://assets/art/static-bust/full-damaged-nested.png",
+      "atlas": "res://assets/art/static-bust/full-damaged.png",
       "rect": [
         105,
         644,
@@ -169,7 +165,7 @@
       ]
     },
     "mail": {
-      "atlas": "res://assets/art/static-bust/full-garments-nested.png",
+      "atlas": "res://assets/art/static-bust/full-garments.png",
       "rect": [
         731,
         644,
@@ -190,7 +186,7 @@
       ]
     },
     "mail_damaged": {
-      "atlas": "res://assets/art/static-bust/full-damaged-nested.png",
+      "atlas": "res://assets/art/static-bust/full-damaged.png",
       "rect": [
         731,
         644,

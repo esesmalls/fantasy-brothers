@@ -14,6 +14,7 @@ var edits:Dictionary={}
 var history:Array=[]
 var future:Array=[]
 var saved_text:=""
+var migrated_v3:=false
 
 func _init() -> void:
 	baseline=Actor.catalog().duplicate(true)
@@ -69,7 +70,7 @@ func validate(value:Variant) -> Array[String]:
 	var errors:Array[String]=[]
 	if not value is Dictionary:return ["文件必须是装配配置对象。"]
 	if value.get("schema")!=1 or value.get("kind")!="fantasy-brothers-paperdoll":errors.append("不是支持的装配配置版本。")
-	if value.get("baseline_sha256")!=fingerprint:errors.append("参考资产已变化，请先对照原基准；未套用旧调整。")
+	if value.get("baseline_sha256")!=fingerprint and value.get("baseline_sha256") not in baseline.get("compatible_draft_baselines",[]):errors.append("参考资产已变化，请先对照原基准；未套用旧调整。")
 	for key in value:
 		if key not in ["schema","kind","baseline_sha256","edits"]:errors.append("未知字段："+str(key))
 	if not value.get("edits") is Dictionary:return errors+["缺少 edits 配置。"]
@@ -95,6 +96,7 @@ func load_project(path:String) -> String:
 	var errors:=validate(value)
 	if not errors.is_empty():return "\n".join(errors)
 	checkpoint();edits=value.edits.duplicate(true);saved_text=JSON.stringify(edits)
+	migrated_v3=value.baseline_sha256!=fingerprint
 	return ""
 
 static func output_path_error(path:String) -> String:
@@ -132,11 +134,11 @@ static func write_json(path:String,value:Dictionary) -> String:
 
 func save_project(path:String) -> String:
 	var error:=write_json(path,payload())
-	if error.is_empty():saved_text=JSON.stringify(edits)
+	if error.is_empty():saved_text=JSON.stringify(edits);migrated_v3=false
 	return error
 
 func dirty() -> bool:
-	return JSON.stringify(edits)!=saved_text
+	return migrated_v3 or JSON.stringify(edits)!=saved_text
 
 func warnings() -> Array[String]:
 	var result:Array[String]=[]

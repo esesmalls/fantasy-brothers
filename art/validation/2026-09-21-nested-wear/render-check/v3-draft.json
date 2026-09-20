@@ -1,0 +1,14 @@
+{
+	"baseline_sha256": "b5f4c53b71af8c1a95b2c1f1adfe22b373abfb78a2436281f48f76d2e42c9688",
+	"edits": {
+		"linen": {
+			"offset": [
+				-0.5,
+				-2.3
+			],
+			"scale": 1.0
+		}
+	},
+	"kind": "fantasy-brothers-paperdoll",
+	"schema": 1
+}
