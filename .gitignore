@@ -10,6 +10,7 @@ tools/templates/**
 builds/
 **/.godot/
 **/*.import
+!game/assets/art/motion/*.png.import
 
 # Local saves and temporary runtime data.
 **/save/
@@ -34,3 +35,4 @@ builds/
 Thumbs.db
 .idea/
 .vscode/
+**/__pycache__/

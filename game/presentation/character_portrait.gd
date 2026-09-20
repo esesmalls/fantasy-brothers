@@ -8,6 +8,7 @@ class_name CharacterPortrait
 const INK := Color("172225")
 const IVORY := Color("e5dbc0")
 const GOLD := Color("b79b64")
+const ModularActor = preload("res://presentation/modular_actor.gd")
 
 var _unit: Dictionary = {}
 
@@ -16,6 +17,7 @@ func _init() -> void:
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	resized.connect(queue_redraw)
 
 ## Stores a display snapshot only. It never writes equipment, health, or rules.
@@ -33,6 +35,8 @@ func _draw() -> void:
 	draw_character(self, _unit, origin, scale, allied, accent)
 
 static func draw_character(canvas: CanvasItem, unit: Dictionary, origin: Vector2, scale: float = 1.0, allied: bool = true, accent: Color = Color.WHITE) -> void:
+	if ModularActor.draw_actor(canvas, unit, origin, scale):
+		return
 	var kind := str(unit.get("kind", "guard"))
 	if kind == "dog":
 		_draw_dog(canvas, unit, origin, scale, allied, accent)
