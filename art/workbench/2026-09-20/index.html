@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>奇幻兄弟 · 人物装配工作台</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#131c19;color:#e7ddc5;font:16px/1.65 system-ui,"Microsoft YaHei",sans-serif}main{max-width:1320px;margin:auto;padding:28px 30px 50px}.eyebrow{font-size:12px;letter-spacing:2px;color:#bca375}h1{font-size:30px;margin:4px 0 10px}p{margin:8px 0;color:#bfc7b8}.intro{max-width:870px}nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 12px}button{font:inherit;font-size:14px;color:#ddcfaf;background:#27372e;border:1px solid #586550;border-radius:5px;padding:8px 16px;cursor:pointer}button[aria-pressed=true]{color:#171e18;background:#d0b478;border-color:#d0b478}button:focus-visible,a:focus-visible{outline:3px solid #ebe0c6;outline-offset:3px}figure{margin:0;border:1px solid #566049;border-radius:6px;overflow:hidden;background:#0e1512}figure img{width:100%;height:auto;display:block}figcaption{padding:12px 18px;color:#c2c9bc;font-size:14px}.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:24px}.facts h2{font-size:17px;margin:0;color:#e1c68f}.facts p{font-size:14px}a{color:#d8c58c}footer{margin-top:24px;border-top:1px solid #344238;padding-top:18px;font-size:13px;color:#9eac9f}@media(max-width:700px){main{padding:18px 12px}.facts{grid-template-columns:1fr;gap:8px}h1{font-size:25px}button{padding:7px 10px}}
+</style>
+<main>
+<div class="eyebrow">FANTASY BROTHERS · H / V3</div>
+<h1>人物装配工作台</h1>
+<p class="intro">围绕同一块底座调整头部、衣甲和武器。对齐一次，完好与受伤状态一起更新。保留已认可的 v3 作为对照，让每次修改都能比较、保存和撤回。</p>
+<p>使用入口：双击项目根目录 <strong>Paperdoll.cmd</strong>。下面展示的是实际 Windows 程序截图，网页用于查看效果。</p>
+<nav aria-label="工作台视图">
+<button type="button" aria-pressed="true" data-view="fit-green">装配对照</button>
+<button type="button" aria-pressed="false" data-view="matrix-green">穿戴与伤损</button>
+<button type="button" aria-pressed="false" data-view="field-earth">战场尺寸</button>
+<button type="button" aria-pressed="false" data-view="fit-light">浅底检查</button>
+<button type="button" aria-pressed="false" data-view="adjusted-overlay">调整前后叠图</button>
+<button type="button" aria-pressed="false" data-view="bow-scrub">弓箭逐帧</button>
+</nav>
+<figure><img id="screen" src="captures/fit-green.png" alt="人物装配台：左侧选择部件，中央显示人物，右侧微调位置与大小" width="1440" height="960"><figcaption id="caption" aria-live="polite">锁定底座和盘面截取线；拖动或输入数值。下方保留1×、2×以及 v3 基准。</figcaption></figure>
+<div class="facts">
+<section><h2>人和 agent 共用</h2><p>同一套定位与检查规则。你可以直接拖动；agent 可以读取、修改和校验保存的配置。</p></section>
+<section><h2>调整有来路</h2><p>正常与脸伤、完好与甲损配对。保存草案、另存候选，随时撤销或复原，不修改原画。</p></section>
+<section><h2>以实际尺寸验收</h2><p>放大检查领口和遮挡，再回到1×与2×看阅读效果。工具提示不能代替美术判断。</p></section>
+</div>
+<footer>当前覆盖一名 H 人物及现有衣甲、剑盾／矛／弓；尚未扩新面容和盔帽，也未替换正式战役。<a href="../../../docs/25-paperdoll-workbench.md">操作与 agent 使用说明</a> · <a href="QA.md">验证记录</a> · <a href="../../validation/2026-09-20-static-bust-v3/index.html">原 v3 评审</a></footer>
+</main>
+<script>
+const captions={
+ 'fit-green':['锁定底座和盘面截取线；拖动或输入数值。下方保留1×、2×以及 v3 基准。','默认装配视图'],
+ 'matrix-green':['同一面容与三种衣甲，检查完好、甲损与脸伤。亚麻没有甲损变体，已单独标示。','穿戴与伤损组合表'],
+ 'field-earth':['以相邻棋子检查原尺寸与两倍尺寸的轮廓和武器遮挡。这里只是检查底图。','战场尺寸对照'],
+ 'fit-light':['浅色背景有助于发现暗边、漏缝和轮廓问题。原画与固定截取规则保持不变。','浅底装配检查'],
+ 'adjusted-overlay':['临时示例：头部右移2、上移1、缩小至95%，叠加蓝色 v3 基准。未采用这项试调。','临时头部调整与基准叠图'],
+ 'bow-scrub':['1180×740实际窗口：右栏滚动后可播放、暂停与逐帧检查弓箭。底部小图保持待机便于比较。','小窗口弓箭逐帧检查']
+};
+for(const button of document.querySelectorAll('button[data-view]'))button.addEventListener('click',()=>{
+ for(const item of document.querySelectorAll('button[data-view]'))item.setAttribute('aria-pressed',String(item===button));
+ const [text,alt]=captions[button.dataset.view];const img=document.getElementById('screen');img.src='captures/'+button.dataset.view+'.png';img.alt=alt;
+ img.width=button.dataset.view==='bow-scrub'?1180:1440;img.height=button.dataset.view==='bow-scrub'?740:960;document.getElementById('caption').textContent=text;
+});
+</script>
+</html>

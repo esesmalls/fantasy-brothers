@@ -7,6 +7,10 @@ static var _catalog: Dictionary = {}
 static var _previous_catalog: Dictionary = {}
 static var _textures: Dictionary = {}
 
+static func catalog() -> Dictionary:
+	parts()
+	return _catalog
+
 static func parts() -> Dictionary:
 	if _catalog.is_empty():_catalog = JSON.parse_string(FileAccess.get_file_as_string(CATALOG))
 	return _catalog.parts
@@ -18,9 +22,9 @@ static func previous_parts() -> Dictionary:
 
 ## One base-driven footprint shared by every torso layer/state. This is a
 ## visibility boundary, not a painted replacement edge or a sleeve patch.
-static func bust_window() -> PackedVector2Array:
+static func bust_window(catalog_data:Dictionary={}) -> PackedVector2Array:
 	parts()
-	var spec:Dictionary=_catalog.bust_crop
+	var spec:Dictionary=(_catalog if catalog_data.is_empty() else catalog_data).bust_crop
 	var center:=Vector2(spec.center[0],spec.center[1])
 	var radius:=Vector2(spec.radius[0],spec.radius[1])
 	var polygon:=PackedVector2Array([Vector2(center.x-radius.x,spec.top),Vector2(center.x+radius.x,spec.top)])
@@ -30,8 +34,8 @@ static func bust_window() -> PackedVector2Array:
 	return polygon
 
 static func draw_bust_part(c:CanvasItem,id:String,origin:Vector2,scale_value:float,
-		tint:Color=Color.WHITE) -> void:
-	var part:Dictionary=parts()[id]
+		tint:Color=Color.WHITE,catalog_data:Dictionary={}) -> void:
+	var part:Dictionary=(parts() if catalog_data.is_empty() else catalog_data.parts)[id]
 	var path:String=part.atlas
 	if not _textures.has(path):_textures[path]=load(path)
 	var texture:Texture2D=_textures[path]
@@ -39,7 +43,7 @@ static func draw_bust_part(c:CanvasItem,id:String,origin:Vector2,scale_value:flo
 	var top_left:=Vector2(part.position[0],part.position[1])-Vector2(part.pivot[0],part.pivot[1])*sz
 	var rectangle:=PackedVector2Array([top_left,top_left+Vector2(sz.x,0),top_left+sz,top_left+Vector2(0,sz.y)])
 	var source:Array=part.rect
-	for region:PackedVector2Array in Geometry2D.intersect_polygons(rectangle,bust_window()):
+	for region:PackedVector2Array in Geometry2D.intersect_polygons(rectangle,bust_window(catalog_data)):
 		var points:=PackedVector2Array()
 		var uvs:=PackedVector2Array()
 		for point in region:
@@ -75,32 +79,53 @@ static func draw_part(c: CanvasItem, id: String, origin: Vector2, scale_value: f
 		uv,uv+Vector2(uv_size.x,0),uv+uv_size,uv+Vector2(0,uv_size.y)]),texture)
 
 static func draw_body(c: CanvasItem, origin: Vector2, scale_value: float,
-		armor: String = "mail", damaged: bool = false, wounded: bool = false) -> void:
+		armor: String = "mail", damaged: bool = false, wounded: bool = false,
+		catalog_data:Dictionary={},hidden:Array=[],tint:Color=Color.WHITE) -> void:
+	var data:Dictionary=parts() if catalog_data.is_empty() else catalog_data.parts
 	for part in body_layers(armor,damaged,wounded):
-		if part in ["base","head","wounded"]:draw_part(c,part,origin,scale_value)
-		else:draw_bust_part(c,part,origin,scale_value)
+		if part in hidden:continue
+		if part in ["base","head","wounded"]:draw_part(c,part,origin,scale_value,Vector2.ZERO,0,tint,data)
+		else:draw_bust_part(c,part,origin,scale_value,tint,catalog_data)
 
 static func draw_weapon(c: CanvasItem, weapon: String, origin: Vector2, scale_value: float,
-		p: float = 0.0, outcome: String = "hit", with_shield: bool = true) -> void:
+		p: float = 0.0, outcome: String = "hit", with_shield: bool = true,
+		catalog_data:Dictionary={},hidden:Array=[],tint:Color=Color.WHITE) -> void:
 	if weapon == "none":return
-	if weapon == "sword" and with_shield:draw_part(c,"shield",origin,scale_value)
+	var data:Dictionary=parts() if catalog_data.is_empty() else catalog_data.parts
+	if weapon == "sword" and with_shield and not "shield" in hidden:draw_part(c,"shield",origin,scale_value,Vector2.ZERO,0,tint,data)
+	if weapon in hidden:return
 	var state := Motion.sample(weapon,p,outcome)
-	draw_part(c,weapon,origin,scale_value,state.position,state.angle)
+	draw_part(c,weapon,origin,scale_value,state.position,state.angle,tint,data)
 	if weapon == "bow" and p < Motion.release(weapon):
-		var arrow:=Motion.nocked_arrow(p)
-		draw_part(c,"arrow",origin,scale_value,arrow.position,arrow.angle,Color(1,1,1,arrow.opacity))
+		var arrow:=nocked_arrow(p,catalog_data)
+		draw_part(c,"arrow",origin,scale_value,arrow.position,arrow.angle,Color(tint,tint.a*arrow.opacity),data)
 
 static func draw_actor(c: CanvasItem, origin: Vector2, scale_value: float,
 		armor: String = "mail", weapon: String = "sword", damaged: bool = false,
-		wounded: bool = false, p: float = 0.0, outcome: String = "hit") -> void:
-	draw_body(c,origin,scale_value,armor,damaged,wounded)
-	draw_weapon(c,weapon,origin,scale_value,p,outcome)
+		wounded: bool = false, p: float = 0.0, outcome: String = "hit",
+		catalog_data:Dictionary={},hidden:Array=[],tint:Color=Color.WHITE) -> void:
+	draw_body(c,origin,scale_value,armor,damaged,wounded,catalog_data,hidden,tint)
+	draw_weapon(c,weapon,origin,scale_value,p,outcome,true,catalog_data,hidden,tint)
 
-static func contact_point(weapon: String) -> Vector2:
+## A fitted bow carries its nocked arrow with it. No gameplay state is involved.
+static func nocked_arrow(p:float,catalog_data:Dictionary={}) -> Dictionary:
+	var arrow:=Motion.nocked_arrow(p)
+	if catalog_data.is_empty():return arrow
+	var base:Dictionary=parts().bow
+	var bow:Dictionary=catalog_data.parts.bow
+	var pose:=Motion.sample("bow",p)
+	var delta:=Vector2(bow.position[0]-base.position[0],bow.position[1]-base.position[1])
+	arrow.position=pose.position+delta+(arrow.position-pose.position)*(float(bow.size[0])/float(base.size[0]))
+	return arrow
+
+static func arrow_sample(p:float,outcome:String="hit",catalog_data:Dictionary={}) -> Dictionary:
+	return Motion.arrow_sample(p,outcome,nocked_arrow(Motion.release("bow"),catalog_data))
+
+static func contact_point(weapon: String,catalog_data:Dictionary={}) -> Vector2:
 	if weapon == "bow":return Motion.ARROW_TARGET
-	var part: Dictionary = parts()[weapon]
+	var part: Dictionary = (parts() if catalog_data.is_empty() else catalog_data.parts)[weapon]
 	var state := Motion.sample(weapon,Motion.contact(weapon))
-	return state.position+Vector2(0,-float(part.size[1])*float(part.pivot[1])).rotated(state.angle)
+	return Vector2(part.position[0],part.position[1])+state.position+Vector2(0,-float(part.size[1])*float(part.pivot[1])).rotated(state.angle)
 
 ## Read-only U47 reference at identical camera scale; no temporary catalog swap.
 static func draw_previous(c: CanvasItem, origin: Vector2, scale_value: float, armor: String,

@@ -51,8 +51,8 @@ static func nocked_arrow(p:float) -> Dictionary:
 
 ## Fixed visual parabola: deterministic scrubbing, tip follows tangent. Rules
 ## still decide the result; the projectile never performs a gameplay collision.
-static func arrow_sample(p:float,outcome:String="hit") -> Dictionary:
-	var launch:=nocked_arrow(release("bow"))
+static func arrow_sample(p:float,outcome:String="hit",launch_override:Dictionary={}) -> Dictionary:
+	var launch:=nocked_arrow(release("bow")) if launch_override.is_empty() else launch_override
 	var start:Vector2=launch.position
 	var finish:Vector2=ARROW_MISS if outcome=="miss" else ARROW_TARGET
 	var span:=finish-start

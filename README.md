@@ -6,7 +6,7 @@
 
 更新日期：2026-09-20。
 
-最新美术状态：用户已选定**无手静态短胸＋独立武器反馈**。主AI独立完成[H固定盘面评审页](art/validation/2026-09-20-static-bust-v3/index.html)和Windows样板；双击`Review-Static-Bust.cmd`可检查一人、两甲、剑盾／枪／弓、伤损与分层。见[24现行标准](docs/24-static-bust-standard.md)。U48按底座→身体衣甲→头部→统一截取定标，去掉外露袖口与明显长颈；长矛平持突刺，弓近身下垂后抬起瞄准、箭沿弧线飞行。尚待用户复评，正常战役未批量替换。旧[A资产](art/production/2026-09-20-a-standard/index.html)已经退回，原因见[23复审](docs/23-equipment-motion-audit.md)。
+最新美术状态：用户已基本认可**H无手静态短胸＋独立武器反馈 v3**。[H固定盘面评审页](art/validation/2026-09-20-static-bust-v3/index.html)和`Review-Static-Bust.cmd`可检查一人、配套衣甲、剑盾／枪／弓和伤损。新增 **`Paperdoll.cmd` 人物装配工作台**：拖动校准、配套状态同步、v3对照、1×／2×和动作检查，人和agent共用配置。见[实际窗口](art/workbench/2026-09-20/index.html)、[使用说明](docs/25-paperdoll-workbench.md)与[24现行标准](docs/24-static-bust-standard.md)。原画／目录保持不变，正常战役未批量替换。旧[A资产](art/production/2026-09-20-a-standard/index.html)已退回，原因见[23复审](docs/23-equipment-motion-audit.md)。
 
 双击根目录 `Play.cmd`，或解压 `builds/FantasyBrothers-0.1.5.1-windows.zip` 后运行 `FantasyBrothers.exe`。建议自由佣兵团、种子 `1709`、渡口旧道。完整玩法与边界见 [试玩说明](docs/PLAYTEST.md)，接续顺序见 [框架计划](docs/10-framework-roadmap.md)；当前地图范围见 [大地图闭环](docs/11-world-map-framework.md)。
 
