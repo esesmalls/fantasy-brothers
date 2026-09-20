@@ -6,6 +6,8 @@
 
 更新日期：2026-09-20。
 
+最新美术交付：[A 标准人物、10武器、4护甲与套层动作评审](art/production/2026-09-20-a-standard/index.html)。双击 `Review-A-Standard.cmd` 可运行独立评审包；这是右向生产库，尚未替换正常战役全部人物，范围与限制见 [22生产规范](docs/22-a-standard-production.md)。
+
 双击根目录 `Play.cmd`，或解压 `builds/FantasyBrothers-0.1.5.1-windows.zip` 后运行 `FantasyBrothers.exe`。建议自由佣兵团、种子 `1709`、渡口旧道。完整玩法与边界见 [试玩说明](docs/PLAYTEST.md)，接续顺序见 [框架计划](docs/10-framework-roadmap.md)；当前地图范围见 [大地图闭环](docs/11-world-map-framework.md)。
 
 源码仓库：[esesmalls/fantasy-brothers](https://github.com/esesmalls/fantasy-brothers)。源码不包含本地构建包；另一台 Windows 电脑按下方步骤重新准备工具和构建。

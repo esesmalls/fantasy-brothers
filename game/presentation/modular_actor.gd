@@ -188,4 +188,4 @@ static func _draw_part(canvas: CanvasItem, texture: Texture2D, part: Dictionary,
 	var uv_origin := Vector2(float(source[0]), float(source[1])) / tex_size
 	var uv_size := Vector2(float(source[2]), float(source[3])) / tex_size
 	var uvs := PackedVector2Array([uv_origin, uv_origin + Vector2(uv_size.x, 0), uv_origin + uv_size, uv_origin + Vector2(0, uv_size.y)])
-	canvas.draw_polygon(points, PackedColorArray([Color.WHITE]), uvs, texture)
+	canvas.draw_polygon(points, PackedColorArray([part.get("modulate", Color.WHITE)]), uvs, texture)

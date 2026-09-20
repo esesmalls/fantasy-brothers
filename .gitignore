@@ -11,6 +11,7 @@ builds/
 **/.godot/
 **/*.import
 !game/assets/art/motion/*.png.import
+!game/assets/art/a-standard/*.png.import
 
 # Local saves and temporary runtime data.
 **/save/

@@ -1,0 +1,21 @@
+{
+  "tool": "OpenAI built-in image_gen",
+  "generated_root": "$CODEX_HOME/generated_images/01a0bc98-dd48-7343-8575-b7b4007cc4df",
+  "outputs": {
+    "weapons.png": "exec-2e1cb286-31eb-4d3e-8eeb-765619fdcd83.png",
+    "armor-reference.png": "exec-a791f51a-acef-4ab7-afd2-ef90c39a1217.png",
+    "armor-shells.png": "exec-0e56998d-2ffc-4221-9bc0-25ba1bb7bb39.png",
+    "faces-01-06.png": "exec-fe525dbe-4258-42b0-aebd-e2b5a9651738.png",
+    "faces-07-12.png": "exec-e434d524-cf4b-4b94-b8f0-546e56603306.png",
+    "grip-arms.png": "exec-a39edc80-adec-4f6b-bc72-8df71dc724e8.png",
+    "warhound.png": "exec-9413b5d2-f217-4de1-8b02-cfa174cba19e.png",
+    "terminal-bodies.png": "exec-4b4bdf47-3307-434a-9791-b5c944273abc.png",
+    "bow-string-arms.png": "exec-fd847d2f-8cd5-4b03-96fb-933d88c9ba99.png",
+    "terminal-intact.png": "exec-5f647fd6-df86-4cd4-91fa-950bee07411c.png",
+    "inner-linen.png": "exec-943ddc46-4193-4153-8710-b2e13071da54.png",
+    "terminal-damaged.png": "exec-af0585c5-a91f-4830-b602-88ff28cc06e3.png"
+  },
+  "runtime_aliases": {"armor-reference.png": "armor-underlayers.png"},
+  "failed_calls": ["initial referenced armor edit: connection failure", "same armor edit retry: network failure"],
+  "notes": "Every successful output is preserved without raster edits. Source alpha, anchors and actual rendered views take precedence over prompt wishes or tool RGB previews."
+}
