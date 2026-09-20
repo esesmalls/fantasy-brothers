@@ -6,7 +6,7 @@
 
 更新日期：2026-09-20。
 
-最新美术状态：用户已退回[A人物与装备动作样板](art/production/2026-09-20-a-standard/index.html)，主AI确认穿戴和动作存在结构问题，详见[23复审与路线建议](docs/23-equipment-motion-audit.md)。`Review-A-Standard.cmd`保留作旧方案对照；它未替换正常战役全部人物，也不作为正式库放行。[22规范](docs/22-a-standard-production.md)记录当时实现，最新审阅结论优先。
+最新美术状态：用户已选定**无手静态短胸＋独立武器反馈**。主AI独立完成[H新穿戴评审页](art/validation/2026-09-20-static-bust/index.html)和Windows样板；双击`Review-Static-Bust.cmd`可检查一人、两甲、剑盾／枪／弓、伤损与分层。见[24现行标准](docs/24-static-bust-standard.md)。本轮尚待用户美术评审，正常战役未批量替换。旧[A资产](art/production/2026-09-20-a-standard/index.html)已经退回，原因见[23复审](docs/23-equipment-motion-audit.md)。
 
 双击根目录 `Play.cmd`，或解压 `builds/FantasyBrothers-0.1.5.1-windows.zip` 后运行 `FantasyBrothers.exe`。建议自由佣兵团、种子 `1709`、渡口旧道。完整玩法与边界见 [试玩说明](docs/PLAYTEST.md)，接续顺序见 [框架计划](docs/10-framework-roadmap.md)；当前地图范围见 [大地图闭环](docs/11-world-map-framework.md)。
 
@@ -24,9 +24,9 @@
 
 下一批四步范围与整批测试见 [招聘、契约、部署与人物后果](docs/16-next-four-steps.md)，尚未实现。
 
-用户已确认 [美术生产方式](docs/17-art-pipeline-selection.md)、[详细美术计划](docs/18-art-production-plan.md)与 **[H主导标准风格](docs/19-art-style-standard.md)**：保留H人物大小、完整双手和腰底贴合，少量融合E/G写实与油画；倒地/死亡不带底座。[最新三状态修订对照页](art/validation/2026-09-20-h-standard/index.html)可离线打开，提供武装、倒地、死亡新图及旧稿对照；三张均有真实透明alpha，边缘、装备精确对应、像素装配与动画仍待校准。[第二轮E–H](art/validation/2026-09-20-refined-directions/index.html)及[第一轮A–D](art/validation/2026-09-19-four-directions/index.html)保留供回看；[艺术设定集](references/battle-brothers/README.md)继续作为第三方参考。正式可玩版仍为0.1.5.1；本轮另有独立动作评审包。
+用户已确认 [美术生产方式](docs/17-art-pipeline-selection.md)、[详细美术计划](docs/18-art-production-plan.md)与 **[H主导标准风格](docs/19-art-style-standard.md)**。最新U46取消站立双手，保留大头、侧向短胸与低底座；少量融合E/G写实与油画，倒地／死亡仍不带底座。[旧三状态页](art/validation/2026-09-20-h-standard/index.html)、[第二轮E–H](art/validation/2026-09-20-refined-directions/index.html)及[第一轮A–D](art/validation/2026-09-19-four-directions/index.html)保留回看，不覆盖当前标准；[艺术设定集](references/battle-brothers/README.md)继续作为第三方参考。正式可玩版仍为0.1.5.1。
 
-最新为[有手／无手同步比较页](art/validation/2026-09-20-hand-comparison/index.html)，可离线打开并播放普攻、盾击与声音示意，或双击 `Review-Hands.cmd` 启动独立Windows评审。A自然握持与少量局部换姿势，B无手抽象；人物、链甲、剑盾、底座、时长与反馈共用。腰底、迎敌盾位与袖口已重做，原“完整双手”进入用户授权的比较范围。当前只评审右向链甲剑盾，不自动替换正常战斗资产。见[说明与验证边界](art/validation/2026-09-20-hand-comparison/README.md)。
+历史[有手／无手同步比较页](art/validation/2026-09-20-hand-comparison/index.html)和`Review-Hands.cmd`保留比较；现行新样板以本页顶部的静态短胸评审入口为准。
 
 旧三套H动作v2仍可双击 `Review-Motion.cmd` 回看，用户复评指出腰底、盾位和锁肘动作问题，三套未通过用户视觉验收。见[复评意见](docs/21-motion-design-review.md)、[本批说明](art/validation/2026-09-20-motion-templates/README.md)与[装配生产规范](docs/20-motion-template-production.md)。
 

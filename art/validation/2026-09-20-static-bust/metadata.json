@@ -1,0 +1,257 @@
+{
+  "head": {
+    "rect": [
+      68,
+      40,
+      477,
+      516
+    ],
+    "source_sha256": "c6e08f6464e945ad31737bb1398299a04b8e31ad44ddf4bd3186011237c4c5c4",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "size": [
+      1254,
+      1254
+    ]
+  },
+  "wounded": {
+    "rect": [
+      682,
+      655,
+      477,
+      516
+    ],
+    "source_sha256": "c6e08f6464e945ad31737bb1398299a04b8e31ad44ddf4bd3186011237c4c5c4",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "size": [
+      1254,
+      1254
+    ]
+  },
+  "body": {
+    "rect": [
+      584,
+      282,
+      660,
+      369
+    ],
+    "source_sha256": "c6e08f6464e945ad31737bb1398299a04b8e31ad44ddf4bd3186011237c4c5c4",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "size": [
+      1254,
+      1254
+    ]
+  },
+  "linen": {
+    "rect": [
+      584,
+      203,
+      670,
+      360
+    ],
+    "source_sha256": "31597055fae25590baaea0da922a694679d6934cec1e742f53798006fa6afcfb",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "size": [
+      1254,
+      1254
+    ]
+  },
+  "base": {
+    "rect": [
+      17,
+      918,
+      643,
+      260
+    ],
+    "source_sha256": "31597055fae25590baaea0da922a694679d6934cec1e742f53798006fa6afcfb",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "size": [
+      1254,
+      1254
+    ]
+  },
+  "padded": {
+    "rect": [
+      56,
+      219,
+      542,
+      302
+    ],
+    "source_sha256": "19f76bbf9191c0bda4a564a821a84ca83be90687a291f6a816f3b9864cfe68a1",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "size": [
+      1254,
+      1254
+    ]
+  },
+  "padded_damaged": {
+    "rect": [
+      656,
+      219,
+      542,
+      302
+    ],
+    "source_sha256": "19f76bbf9191c0bda4a564a821a84ca83be90687a291f6a816f3b9864cfe68a1",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "size": [
+      1254,
+      1254
+    ]
+  },
+  "mail": {
+    "rect": [
+      61,
+      763,
+      540,
+      303
+    ],
+    "source_sha256": "19f76bbf9191c0bda4a564a821a84ca83be90687a291f6a816f3b9864cfe68a1",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "size": [
+      1254,
+      1254
+    ]
+  },
+  "mail_damaged": {
+    "rect": [
+      656,
+      767,
+      540,
+      303
+    ],
+    "source_sha256": "19f76bbf9191c0bda4a564a821a84ca83be90687a291f6a816f3b9864cfe68a1",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "size": [
+      1254,
+      1254
+    ]
+  },
+  "sword": {
+    "rect": [
+      141,
+      75,
+      185,
+      596
+    ],
+    "source_sha256": "74847bd0aee0bf5ae753e90863b8ddb2d94ab32acb7e4c87833310fee5fdc4c9",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "size": [
+      1254,
+      1254
+    ]
+  },
+  "spear": {
+    "rect": [
+      600,
+      42,
+      55,
+      630
+    ],
+    "source_sha256": "74847bd0aee0bf5ae753e90863b8ddb2d94ab32acb7e4c87833310fee5fdc4c9",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "size": [
+      1254,
+      1254
+    ]
+  },
+  "bow": {
+    "rect": [
+      990,
+      87,
+      134,
+      580
+    ],
+    "source_sha256": "74847bd0aee0bf5ae753e90863b8ddb2d94ab32acb7e4c87833310fee5fdc4c9",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "size": [
+      1254,
+      1254
+    ]
+  },
+  "shield": {
+    "rect": [
+      81,
+      737,
+      305,
+      455
+    ],
+    "source_sha256": "74847bd0aee0bf5ae753e90863b8ddb2d94ab32acb7e4c87833310fee5fdc4c9",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "size": [
+      1254,
+      1254
+    ]
+  },
+  "arrow": {
+    "rect": [
+      591,
+      730,
+      75,
+      460
+    ],
+    "source_sha256": "74847bd0aee0bf5ae753e90863b8ddb2d94ab32acb7e4c87833310fee5fdc4c9",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "size": [
+      1254,
+      1254
+    ]
+  },
+  "impact": {
+    "rect": [
+      883,
+      812,
+      313,
+      297
+    ],
+    "source_sha256": "74847bd0aee0bf5ae753e90863b8ddb2d94ab32acb7e4c87833310fee5fdc4c9",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "size": [
+      1254,
+      1254
+    ]
+  }
+}
