@@ -53,16 +53,36 @@ func run() -> void:
 		check(Actor.contact_point(weapon).x>60,"weapon reaches target outside own silhouette")
 		if weapon=="bow":check(Motion.release(weapon)<Motion.contact(weapon),"arrow flight precedes impact")
 	check(JSON.stringify(parts)==original,"sampling cannot mutate layer catalog")
-	# A larger bow must clear the face even at maximum anticipation, not just rest.
+	# The base drives one shared footprint, including every damage variant.
+	var crop:=Actor.bust_window()
+	var inside_base:=true
+	for point in crop:inside_base=inside_base and absf(point.x)<float(parts.base.size[0])*.5
+	check(inside_base,"clipped bodies and clothes remain inside fixed base width")
+	check(not Geometry2D.is_point_in_polygon(Vector2(0,3),crop),"lower torso/cuffs are outside bust display")
+	check(Geometry2D.is_point_in_polygon(Vector2(0,-20),crop),"chest above base remains visible")
+	check(Motion.sample("spear",0).angle>1.2,"spear rests close to horizontal")
+	check(Motion.sample("bow",0).position.x<25 and Motion.sample("bow",0).angle>.8,"rest bow lowered near chest")
+	check(Motion.sample("bow",.4).angle<0,"bow raises to an upward aim")
 	var bow_size:=Vector2(parts.bow.size[0],parts.bow.size[1])
 	var bow_pivot:=Vector2(parts.bow.pivot[0],parts.bow.pivot[1])*bow_size
-	var face_right:float=parts.head.position[0]+parts.head.size[0]*.5
-	var nearest_bow:=INF
+	var lowest_bow:float=-INF
 	for i in range(1001):
-		var pose:=Motion.sample("bow",float(i)/1000)
+		var bow_pose:=Motion.sample("bow",float(i)/1000)
 		for corner:Vector2 in [Vector2.ZERO,Vector2(bow_size.x,0),bow_size,Vector2(0,bow_size.y)]:
-			nearest_bow=minf(nearest_bow,((corner-bow_pivot).rotated(pose.angle)+pose.position).x)
-	check(nearest_bow>face_right,"enlarged bow never crosses facial silhouette")
+			lowest_bow=maxf(lowest_bow,((corner-bow_pivot).rotated(bow_pose.angle)+bow_pose.position).y)
+	check(lowest_bow<=0,"bow never passes below the ground while lifting/lowering")
+	var launch:=Motion.nocked_arrow(Motion.release("bow"))
+	for result in ["hit","block","miss"]:
+		var first_arrow:=Motion.arrow_sample(Motion.release("bow"),result)
+		var middle_arrow:=Motion.arrow_sample((Motion.release("bow")+Motion.contact("bow"))*.5,result)
+		var last_arrow:=Motion.arrow_sample(Motion.contact("bow"),result)
+		check(first_arrow.position.distance_to(launch.position)<.0001,"no nock-to-flight positional jump")
+		check(absf(first_arrow.angle-launch.angle)<.0001,"arrow tangent matches release aim")
+		check(middle_arrow.position.y<(first_arrow.position.y+last_arrow.position.y)*.5-1,"arrow follows elevated parabola")
+		check(last_arrow.position.distance_to(Motion.ARROW_MISS if result=="miss" else Motion.ARROW_TARGET)<.0001,"arrow tip lands at declared result")
+		check(first_arrow.angle<last_arrow.angle,"arrow turns along flight tangent")
+	check(not Motion.arrow_sample(Motion.release("bow")-.001).visible,"no projectile before release")
+	check(not Motion.arrow_sample(.95).visible,"projectile removed before next shot")
 	var review:=Review.new();root.add_child(review)
 	await process_frame
 	review.paused=true;review.mode="motion";review.weapon="bow";review.progress=.3

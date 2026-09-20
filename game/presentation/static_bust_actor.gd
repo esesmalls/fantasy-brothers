@@ -13,8 +13,39 @@ static func parts() -> Dictionary:
 
 static func previous_parts() -> Dictionary:
 	if _previous_catalog.is_empty():
-		_previous_catalog=JSON.parse_string(FileAccess.get_file_as_string("res://assets/art/static-bust/catalog-v1.json"))
+		_previous_catalog=JSON.parse_string(FileAccess.get_file_as_string("res://assets/art/static-bust/catalog-v2.json"))
 	return _previous_catalog.parts
+
+## One base-driven footprint shared by every torso layer/state. This is a
+## visibility boundary, not a painted replacement edge or a sleeve patch.
+static func bust_window() -> PackedVector2Array:
+	parts()
+	var spec:Dictionary=_catalog.bust_crop
+	var center:=Vector2(spec.center[0],spec.center[1])
+	var radius:=Vector2(spec.radius[0],spec.radius[1])
+	var polygon:=PackedVector2Array([Vector2(center.x-radius.x,spec.top),Vector2(center.x+radius.x,spec.top)])
+	for i in range(65):
+		var angle:=PI*float(i)/64
+		polygon.append(center+Vector2(cos(angle)*radius.x,sin(angle)*radius.y))
+	return polygon
+
+static func draw_bust_part(c:CanvasItem,id:String,origin:Vector2,scale_value:float,
+		tint:Color=Color.WHITE) -> void:
+	var part:Dictionary=parts()[id]
+	var path:String=part.atlas
+	if not _textures.has(path):_textures[path]=load(path)
+	var texture:Texture2D=_textures[path]
+	var sz:=Vector2(part.size[0],part.size[1])
+	var top_left:=Vector2(part.position[0],part.position[1])-Vector2(part.pivot[0],part.pivot[1])*sz
+	var rectangle:=PackedVector2Array([top_left,top_left+Vector2(sz.x,0),top_left+sz,top_left+Vector2(0,sz.y)])
+	var source:Array=part.rect
+	for region:PackedVector2Array in Geometry2D.intersect_polygons(rectangle,bust_window()):
+		var points:=PackedVector2Array()
+		var uvs:=PackedVector2Array()
+		for point in region:
+			points.append(origin+point*scale_value)
+			uvs.append((Vector2(source[0],source[1])+(point-top_left)/sz*Vector2(source[2],source[3]))/texture.get_size())
+		c.draw_polygon(points,PackedColorArray([tint]),uvs,texture)
 
 static func body_layers(armor: String, damaged: bool, wounded: bool) -> Array[String]:
 	var layers: Array[String] = ["base", "body"]
@@ -45,7 +76,9 @@ static func draw_part(c: CanvasItem, id: String, origin: Vector2, scale_value: f
 
 static func draw_body(c: CanvasItem, origin: Vector2, scale_value: float,
 		armor: String = "mail", damaged: bool = false, wounded: bool = false) -> void:
-	for part in body_layers(armor,damaged,wounded):draw_part(c,part,origin,scale_value)
+	for part in body_layers(armor,damaged,wounded):
+		if part in ["base","head","wounded"]:draw_part(c,part,origin,scale_value)
+		else:draw_bust_part(c,part,origin,scale_value)
 
 static func draw_weapon(c: CanvasItem, weapon: String, origin: Vector2, scale_value: float,
 		p: float = 0.0, outcome: String = "hit", with_shield: bool = true) -> void:
@@ -53,9 +86,9 @@ static func draw_weapon(c: CanvasItem, weapon: String, origin: Vector2, scale_va
 	if weapon == "sword" and with_shield:draw_part(c,"shield",origin,scale_value)
 	var state := Motion.sample(weapon,p,outcome)
 	draw_part(c,weapon,origin,scale_value,state.position,state.angle)
-	if weapon == "bow" and (p < Motion.release(weapon) or p > .94):
-		var pull := 5.0*smoothstep(0.0,Motion.release(weapon),p) if p < .94 else 0.0
-		draw_part(c,"arrow",origin,scale_value,Vector2(57-pull,-42),PI/2)
+	if weapon == "bow" and p < Motion.release(weapon):
+		var arrow:=Motion.nocked_arrow(p)
+		draw_part(c,"arrow",origin,scale_value,arrow.position,arrow.angle,Color(1,1,1,arrow.opacity))
 
 static func draw_actor(c: CanvasItem, origin: Vector2, scale_value: float,
 		armor: String = "mail", weapon: String = "sword", damaged: bool = false,
@@ -64,12 +97,12 @@ static func draw_actor(c: CanvasItem, origin: Vector2, scale_value: float,
 	draw_weapon(c,weapon,origin,scale_value,p,outcome)
 
 static func contact_point(weapon: String) -> Vector2:
-	if weapon == "bow":return Vector2(111,-42)
+	if weapon == "bow":return Motion.ARROW_TARGET
 	var part: Dictionary = parts()[weapon]
 	var state := Motion.sample(weapon,Motion.contact(weapon))
 	return state.position+Vector2(0,-float(part.size[1])*float(part.pivot[1])).rotated(state.angle)
 
-## Read-only U46 reference at identical camera scale; no temporary catalog swap.
+## Read-only U47 reference at identical camera scale; no temporary catalog swap.
 static func draw_previous(c: CanvasItem, origin: Vector2, scale_value: float, armor: String,
 		weapon: String, damaged: bool = false, wounded: bool = false) -> void:
 	var old:=previous_parts()
@@ -77,6 +110,6 @@ static func draw_previous(c: CanvasItem, origin: Vector2, scale_value: float, ar
 		draw_part(c,id,origin,scale_value,Vector2.ZERO,0,Color.WHITE,old)
 	if weapon=="none":return
 	if weapon=="sword":draw_part(c,"shield",origin,scale_value,Vector2.ZERO,0,Color.WHITE,old)
-	var rest:Dictionary={"sword":[Vector2(8,-12),.62],"spear":[Vector2(20,-19),.52],"bow":[Vector2(40,-31),0]}
+	var rest:Dictionary={"sword":[Vector2(8,-12),.62],"spear":[Vector2(23,-26),.52],"bow":[Vector2(48,-38),0]}
 	draw_part(c,weapon,origin,scale_value,rest[weapon][0],rest[weapon][1],Color.WHITE,old)
-	if weapon=="bow":draw_part(c,"arrow",origin,scale_value,Vector2(49,-35),PI/2,Color.WHITE,old)
+	if weapon=="bow":draw_part(c,"arrow",origin,scale_value,Vector2(57,-42),PI/2,Color.WHITE,old)

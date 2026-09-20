@@ -6,7 +6,7 @@
 
 更新日期：2026-09-20。
 
-最新美术状态：用户已选定**无手静态短胸＋独立武器反馈**。主AI独立完成[H侧身比例评审页](art/validation/2026-09-20-static-bust-v2/index.html)和Windows样板；双击`Review-Static-Bust.cmd`可检查一人、两甲、剑盾／枪／弓、伤损与分层。见[24现行标准](docs/24-static-bust-standard.md)。U47缩小头/底座，重绘与脸同向的肩胸和自然短袖，放大武器，新增同尺寸前后对照；尚待用户复评，正常战役未批量替换。旧[A资产](art/production/2026-09-20-a-standard/index.html)已经退回，原因见[23复审](docs/23-equipment-motion-audit.md)。
+最新美术状态：用户已选定**无手静态短胸＋独立武器反馈**。主AI独立完成[H固定盘面评审页](art/validation/2026-09-20-static-bust-v3/index.html)和Windows样板；双击`Review-Static-Bust.cmd`可检查一人、两甲、剑盾／枪／弓、伤损与分层。见[24现行标准](docs/24-static-bust-standard.md)。U48按底座→身体衣甲→头部→统一截取定标，去掉外露袖口与明显长颈；长矛平持突刺，弓近身下垂后抬起瞄准、箭沿弧线飞行。尚待用户复评，正常战役未批量替换。旧[A资产](art/production/2026-09-20-a-standard/index.html)已经退回，原因见[23复审](docs/23-equipment-motion-audit.md)。
 
 双击根目录 `Play.cmd`，或解压 `builds/FantasyBrothers-0.1.5.1-windows.zip` 后运行 `FantasyBrothers.exe`。建议自由佣兵团、种子 `1709`、渡口旧道。完整玩法与边界见 [试玩说明](docs/PLAYTEST.md)，接续顺序见 [框架计划](docs/10-framework-roadmap.md)；当前地图范围见 [大地图闭环](docs/11-world-map-framework.md)。
 
@@ -24,7 +24,7 @@
 
 下一批四步范围与整批测试见 [招聘、契约、部署与人物后果](docs/16-next-four-steps.md)，尚未实现。
 
-用户已确认 [美术生产方式](docs/17-art-pipeline-selection.md)、[详细美术计划](docs/18-art-production-plan.md)与 **[H主导标准风格](docs/19-art-style-standard.md)**。最新U47在取消站立双手的基础上缩小头部，肩胸同向、保留自然短上臂，减轻底座并放大武器；少量融合E/G写实与油画，倒地／死亡仍不带底座。[旧三状态页](art/validation/2026-09-20-h-standard/index.html)、[第二轮E–H](art/validation/2026-09-20-refined-directions/index.html)及[第一轮A–D](art/validation/2026-09-19-four-directions/index.html)保留回看，不覆盖当前标准；[艺术设定集](references/battle-brothers/README.md)继续作为第三方参考。正式可玩版仍为0.1.5.1。
+用户已确认 [美术生产方式](docs/17-art-pipeline-selection.md)、[详细美术计划](docs/18-art-production-plan.md)与 **[H主导标准风格](docs/19-art-style-standard.md)**。最新U48以固定底座定标身体/完整衣甲和低落头部，统一截取盘面范围内的胸肩；不露袖口、超出盘面的上臂或明显长颈；少量融合E/G写实与油画，倒地／死亡仍不带底座。[旧三状态页](art/validation/2026-09-20-h-standard/index.html)、[第二轮E–H](art/validation/2026-09-20-refined-directions/index.html)及[第一轮A–D](art/validation/2026-09-19-four-directions/index.html)保留回看，不覆盖当前标准；[艺术设定集](references/battle-brothers/README.md)继续作为第三方参考。正式可玩版仍为0.1.5.1。
 
 历史[有手／无手同步比较页](art/validation/2026-09-20-hand-comparison/index.html)和`Review-Hands.cmd`保留比较；现行新样板以本页顶部的静态短胸评审入口为准。
 

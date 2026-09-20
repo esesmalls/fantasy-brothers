@@ -40,9 +40,9 @@ func _ready() -> void:
 	outer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(outer)
 	_toolbar=VBoxContainer.new();outer.add_child(_toolbar)
-	var title := Label.new();title.text="H · 侧身与比例修订";title.add_theme_font_size_override("font_size",24);_toolbar.add_child(title)
+	var title := Label.new();title.text="H · 固定盘面与武器姿态";title.add_theme_font_size_override("font_size",24);_toolbar.add_child(title)
 	var row := HFlowContainer.new();_toolbar.add_child(row)
-	_choice(row,["穿戴总览","分层展开","武器回放","前后对照"],["gallery","layers","motion","comparison"],func(v):mode=v;replay(),"gallery")
+	_choice(row,["穿戴总览","分层展开","武器回放","前后对照","盘面与截取"],["gallery","layers","motion","comparison","fitting"],func(v):mode=v;replay(),"gallery")
 	_choice(row,["剑盾","长枪","短弓"],["sword","spear","bow"],func(v):weapon=v;replay(),weapon)
 	_choice(row,["基础内衣","亚麻内衬","绗缝甲","绗缝＋链甲"],["bare","linen","padded","mail"],func(v):armor=v;_refresh(),armor)
 	_toggle(row,"装备破损",func(v):damaged=v;_refresh())
@@ -109,6 +109,7 @@ func draw_scene(c:Control) -> void:
 	if mode=="motion":_draw_motion(c);return
 	if mode=="layers":_draw_layers(c);return
 	if mode=="comparison":_draw_comparison(c);return
+	if mode=="fitting":_draw_fitting(c);return
 	var cols:=3
 	var cell:=Vector2(c.size.x/cols,(c.size.y-42)/2)
 	for i in range(6):
@@ -120,7 +121,7 @@ func draw_scene(c:Control) -> void:
 		var shown_weapon:String="none" if row==0 else ["sword","spear","bow"][column]
 		Actor.draw_actor(c,at,scale_value,shown_armor,shown_weapon,damaged,wounded)
 		_text(c,(["内衬 · 头身分离","一层 · 绗缝甲","两层 · 绗缝＋链甲"] if row==0 else ["剑盾","长枪","短弓"])[column],Vector2(column*cell.x+22,row*cell.y+28))
-	_text(c,"H · 同向侧身 / 自然短袖 / 独立武器",Vector2(22,c.size.y-13),16)
+	_text(c,"H · 固定盘面 / 统一截取 / 低头领衔接",Vector2(22,c.size.y-13),16)
 
 func _draw_comparison(c:Control) -> void:
 	var cell:=Vector2(c.size.x/4,(c.size.y-42)/2)
@@ -134,6 +135,27 @@ func _draw_comparison(c:Control) -> void:
 			_text(c,("上一版 · " if row==0 else "本次 · ")+["无武器","剑盾","长枪","短弓"][column],Vector2(column*cell.x+18,row*cell.y+28),17)
 	_text(c,"上下两排采用相同镜头倍率与地面基准，不分别放大填满格子。",Vector2(18,c.size.y-14),16)
 
+func _draw_fitting(c:Control) -> void:
+	var cell:=c.size.x/4
+	var s:=minf(cell/108,(c.size.y-125)/126)
+	var origin_y:=c.size.y*.58
+	var labels:=["① 固定底座","② 完整衣甲 · 对齐底座","③ 头部定标 · 低落领口","④ 最终盘面截取"]
+	var garment:String=("mail_damaged" if damaged else "mail") if armor=="mail" else (("padded_damaged" if damaged else "padded") if armor=="padded" else ("body" if armor=="bare" else "linen"))
+	for i in range(4):
+		var at:=Vector2((i+.5)*cell,origin_y)
+		Actor.draw_part(c,"base",at,s)
+		if i in [1,2]:Actor.draw_part(c,garment,at,s,Vector2.ZERO,0,Color(1,1,1,.75))
+		if i==2:
+			Actor.draw_part(c,"wounded" if wounded else "head",at,s)
+		if i==3:Actor.draw_actor(c,at,s,armor,"none",damaged,wounded)
+		# Guide only in this inspection view, never drawn on the actual pawn.
+		if i in [0,1,2]:
+			var curve:=PackedVector2Array()
+			for point in Actor.bust_window().slice(2):curve.append(at+point*s)
+			c.draw_polyline(curve,Color("d8b56d"),1.0,true)
+		_text(c,labels[i],Vector2(i*cell+10,36),16)
+	_text(c,"底座规格固定 → 身体与衣甲围绕盘面设计 → 头部定标 → 同一边界截取；完整袖口与衣摆保留在原画中。",Vector2(18,c.size.y-22),15)
+
 func _draw_layers(c:Control) -> void:
 	var ids:Array[String]=["base","body","wounded" if wounded else "head","linen","padded_damaged" if damaged else "padded","mail_damaged" if damaged else "mail"]
 	var labels:=["低底座","基础内衣身体","独立头部","侧身内衬","绗缝甲","外层链甲"]
@@ -141,11 +163,12 @@ func _draw_layers(c:Control) -> void:
 	var scale_value:=minf(cell/91,(c.size.y-100)/110)
 	for i in range(6):
 		var at:=Vector2((i+.5)*cell,c.size.y*.72)
-		Actor.draw_part(c,ids[i],at,scale_value)
+		if ids[i] in ["base","head","wounded"]:Actor.draw_part(c,ids[i],at,scale_value)
+		else:Actor.draw_bust_part(c,ids[i],at,scale_value)
 		_text(c,labels[i],Vector2(i*cell+12,40),17)
 	Actor.draw_actor(c,Vector2(6.5*cell,c.size.y*.72),scale_value,armor,"none",damaged,wounded)
 	_text(c,"实际合成",Vector2(6*cell+12,40),17)
-	_text(c,"身体承托头颈，衣甲包住胸肩；整张衣甲套层，无补丁盖缝。",Vector2(20,c.size.y-24),16)
+	_text(c,"独立身体/衣甲共用盘面边界；不显示袖口和长颈。完整原画见“盘面与截取”。",Vector2(20,c.size.y-24),16)
 
 func _draw_motion(c:Control) -> void:
 	var scale_value:=minf(c.size.x/335,(c.size.y-85)/112)
@@ -160,16 +183,15 @@ func _draw_motion(c:Control) -> void:
 	if outcome=="block":Actor.draw_part(c,"shield",shifted,scale_value,Vector2(-49,-4))
 	Actor.draw_actor(c,origin,scale_value,armor,weapon,damaged,wounded,progress,outcome)
 	var hit_point:=origin+contact_at*scale_value
-	if weapon=="bow" and progress>=Motion.release(weapon) and progress<.94:
-		var flight:=clampf(inverse_lerp(Motion.release(weapon),Motion.contact(weapon),progress),0,1)
-		var destination:=contact_at if outcome!="miss" else contact_at+Vector2(47,-13)
-		var arrow_at:=Vector2(52,-42).lerp(destination,flight)
-		if outcome!="miss" or progress<Motion.contact(weapon):
-			Actor.draw_part(c,"arrow",origin,scale_value,arrow_at,PI/2)
+	if weapon=="bow":
+		var arrow:=Motion.arrow_sample(progress,outcome)
+		if arrow.visible:
+			var lodging:=Vector2(reaction*2.0,0) if progress>=Motion.contact(weapon) and outcome!="miss" else Vector2.ZERO
+			Actor.draw_part(c,"arrow",origin,scale_value,arrow.position+lodging,arrow.angle)
 	var fx_time:=progress-Motion.contact(weapon)
 	if fx and outcome!="miss" and fx_time>=0 and fx_time<.16:
 		Actor.draw_part(c,"impact",hit_point,scale_value*(.6+.5*fx_time/.16),Vector2.ZERO,0,Color(1,1,1,1-fx_time/.16))
-	_text(c,"%s  /  %s"%[{"sword":"剑盾 · 短挥斩","spear":"长枪 · 前刺","bow":"短弓 · 离弦"}[weapon],Motion.phase(weapon,progress,outcome)],Vector2(22,32),22)
+	_text(c,"%s  /  %s"%[{"sword":"剑盾 · 短挥斩","spear":"长枪 · 平持突刺","bow":"短弓 · 提弓与弧线"}[weapon],Motion.phase(weapon,progress,outcome)],Vector2(22,32),22)
 	_text(c,"身体静止 · 武器独立运动",Vector2(22,60),16)
 	var small:=Vector2(c.size.x-151,c.size.y-26)
 	Actor.draw_actor(c,small,1.0,armor,weapon,damaged,wounded,progress,outcome)
@@ -192,6 +214,7 @@ func capture(output:String) -> void:
 	mode="comparison"
 	await _save(output.path_join("comparison.png"));background="light"
 	await _save(output.path_join("comparison-light.png"));background="battle"
+	mode="fitting";await _save(output.path_join("fitting.png"))
 	damaged=false;wounded=false;mode="layers"
 	get_window().size=Vector2i(1500,530);get_window().content_scale_size=get_window().size
 	await _save(output.path_join("layers.png"))
