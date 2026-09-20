@@ -30,10 +30,10 @@ func run() -> void:
 	check(not d.change("bust",Vector2.ZERO,.9),"cannot scale whole group")
 	check(not d.change("head",Vector2(INF,0),1),"reject infinite position")
 	check(not d.change("head",Vector2.ZERO,NAN),"reject nan scale")
-	check(not d.change("head",Vector2(21,0),1),"reject excessive movement")
+	check(not d.change("head",Vector2(129,0),1),"reject excessive movement")
 	for invalid in [null,[],{}, {"schema":99}, {"kind":"fantasy-brothers-paperdoll","schema":1,"baseline_sha256":"old","edits":{}}]:
 		check(not d.validate(invalid).is_empty(),"malformed or incompatible file rejected")
-	for invalid_edit in [{"offset":["x",0],"scale":1},{"offset":[0],"scale":1},{"offset":[0,0],"scale":2},{"offset":[0,0],"scale":1,"atlas":"x"}]:
+	for invalid_edit in [{"offset":["x",0],"scale":1},{"offset":[0],"scale":1},{"offset":[0,0],"scale":3.01},{"offset":[0,0],"scale":1,"atlas":"x"}]:
 		var payload:Dictionary=d.payload();payload.edits={"head":invalid_edit};check(not d.validate(payload).is_empty(),"invalid edit rejected")
 	var payload:Dictionary=d.payload();payload.edits.base={"offset":[1,0],"scale":1};check(not d.validate(payload).is_empty(),"file cannot bypass locked base")
 	var dir:="user://paperdoll-qa";DirAccess.make_dir_recursive_absolute(dir)

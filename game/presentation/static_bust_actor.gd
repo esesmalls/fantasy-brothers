@@ -8,6 +8,7 @@ static var _catalog: Dictionary = {}
 static var _previous_catalog: Dictionary = {}
 static var _textures: Dictionary = {}
 static var _v3:Dictionary={}
+static var _outlines:Dictionary={}
 
 static func v3_catalog() -> Dictionary:
 	if _v3.is_empty():_v3=JSON.parse_string(FileAccess.get_file_as_string(V3_CATALOG))
@@ -41,20 +42,59 @@ static func bust_window(catalog_data:Dictionary={}) -> PackedVector2Array:
 
 static func draw_bust_part(c:CanvasItem,id:String,origin:Vector2,scale_value:float,
 		tint:Color=Color.WHITE,catalog_data:Dictionary={}) -> void:
-	var part:Dictionary=(parts() if catalog_data.is_empty() else catalog_data.parts)[id]
+	draw_clipped_part(c,id,origin,scale_value,tint,catalog_data,true)
+
+static func part_point(part:Dictionary,point:Vector2) -> Vector2:
+	var sz:=Vector2(part.size[0],part.size[1])
+	return (point-Vector2(part.pivot[0],part.pivot[1])*sz).rotated(part.get("rotation",0.0))+Vector2(part.position[0],part.position[1])
+
+static func part_uv(part:Dictionary,point:Vector2) -> Vector2:
+	var sz:=Vector2(part.size[0],part.size[1])
+	return ((point-Vector2(part.position[0],part.position[1])).rotated(-part.get("rotation",0.0))+Vector2(part.pivot[0],part.pivot[1])*sz)/sz
+
+## Owner silhouettes mask skin details. Cached source alpha is used only for
+## display clipping; generated pixels and reference atlases are never rewritten.
+static func owner_regions(part:Dictionary) -> Array[PackedVector2Array]:
+	var key:String=part.atlas+str(part.rect)
+	if not _outlines.has(key):
+		var texture:Texture2D=load(part.atlas)
+		var source:Array=part.rect
+		var region:=texture.get_image().get_region(Rect2i(source[0],source[1],source[2],source[3]))
+		var bitmap:=BitMap.new();bitmap.create_from_image_alpha(region,.3)
+		_outlines[key]=bitmap.opaque_to_polygons(Rect2i(Vector2i.ZERO,region.get_size()),1.0)
+	var result:Array[PackedVector2Array]=[]
+	for outline:PackedVector2Array in _outlines[key]:
+		var polygon:=PackedVector2Array()
+		for p in outline:polygon.append(part_point(part,p/Vector2(part.rect[2],part.rect[3])*Vector2(part.size[0],part.size[1])))
+		result.append(polygon)
+	return result
+
+static func draw_clipped_part(c:CanvasItem,id:String,origin:Vector2,scale_value:float,
+		tint:Color,catalog_data:Dictionary,clip_bust:bool) -> void:
+	var data:Dictionary=parts() if catalog_data.is_empty() else catalog_data.parts
+	var part:Dictionary=data[id]
 	var path:String=part.atlas
 	if not _textures.has(path):_textures[path]=load(path)
 	var texture:Texture2D=_textures[path]
 	var sz:=Vector2(part.size[0],part.size[1])
-	var top_left:=Vector2(part.position[0],part.position[1])-Vector2(part.pivot[0],part.pivot[1])*sz
-	var rectangle:=PackedVector2Array([top_left,top_left+Vector2(sz.x,0),top_left+sz,top_left+Vector2(0,sz.y)])
+	var rectangle:=PackedVector2Array()
+	for p in [Vector2.ZERO,Vector2(sz.x,0),sz,Vector2(0,sz.y)]:rectangle.append(part_point(part,p))
+	var regions:Array[PackedVector2Array]=[rectangle]
+	if clip_bust:regions=Geometry2D.intersect_polygons(rectangle,bust_window(catalog_data))
+	if part.has("clip_to"):
+		var owner:String=part.clip_to
+		if owner=="face" and catalog_data.get("assembly",{}).get("head","legacy")=="legacy":owner="head"
+		var clipped:Array[PackedVector2Array]=[]
+		for region in regions:
+			for silhouette in owner_regions(data[owner]):clipped.append_array(Geometry2D.intersect_polygons(region,silhouette))
+		regions=clipped
 	var source:Array=part.rect
-	for region:PackedVector2Array in Geometry2D.intersect_polygons(rectangle,bust_window(catalog_data)):
+	for region:PackedVector2Array in regions:
 		var points:=PackedVector2Array()
 		var uvs:=PackedVector2Array()
 		for point in region:
 			points.append(origin+point*scale_value)
-			uvs.append((Vector2(source[0],source[1])+(point-top_left)/sz*Vector2(source[2],source[3]))/texture.get_size())
+			uvs.append((Vector2(source[0],source[1])+part_uv(part,point)*Vector2(source[2],source[3]))/texture.get_size())
 		c.draw_polygon(points,PackedColorArray([tint]),uvs,texture)
 
 static func body_layers(armor: String, damaged: bool, wounded: bool,wear_damage:Dictionary={}) -> Array[String]:
@@ -69,6 +109,7 @@ static func draw_part(c: CanvasItem, id: String, origin: Vector2, scale_value: f
 		offset: Vector2 = Vector2.ZERO, angle: float = 0.0, tint: Color = Color.WHITE,
 		catalog_parts: Dictionary = {}) -> void:
 	var part: Dictionary = (parts() if catalog_parts.is_empty() else catalog_parts)[id]
+	angle+=part.get("rotation",0.0)
 	var path: String = part.atlas
 	if not _textures.has(path):_textures[path]=load(path)
 	var texture: Texture2D = _textures[path]
@@ -88,9 +129,26 @@ static func draw_body(c: CanvasItem, origin: Vector2, scale_value: float,
 		armor: String = "mail", damaged: bool = false, wounded: bool = false,
 		catalog_data:Dictionary={},hidden:Array=[],tint:Color=Color.WHITE) -> void:
 	var data:Dictionary=parts() if catalog_data.is_empty() else catalog_data.parts
-	for part in body_layers(armor,damaged,wounded,catalog_data.get("wear_damage",{})):
+	var layers:=body_layers(armor,damaged,wounded,catalog_data.get("wear_damage",{}))
+	var assembly:Dictionary=catalog_data.get("assembly",{})
+	if not assembly.is_empty():
+		if armor=="nude":layers=["base","wounded" if wounded else "head"]
+		if assembly.get("skin",true):
+			layers.insert(1,"skin")
+			if assembly.get("blood",false):layers.insert(2,"blood")
+		if assembly.get("head","legacy")=="modular":
+			layers[-1]="face"
+			if assembly.get("scar",false) or wounded:layers.append("scar")
+			if assembly.get("beard",true):layers.append("beard")
+			if assembly.get("hair",true):layers.append("hair")
+		elif assembly.get("scar",false):layers.append("scar")
+		if assembly.get("bandage",false):layers.append("bandage")
+	for part in layers:
 		if part in hidden:continue
-		if part in ["base","head","wounded"]:draw_part(c,part,origin,scale_value,Vector2.ZERO,0,tint,data)
+		if part in ["face","hair","beard","scar","bandage"] and "head" in hidden:continue
+		if part=="blood" and "skin" in hidden:continue
+		if part=="scar":draw_clipped_part(c,part,origin,scale_value,tint,catalog_data,false)
+		elif part in ["base","head","wounded","face","hair","beard","bandage"]:draw_part(c,part,origin,scale_value,Vector2.ZERO,0,tint,data)
 		else:draw_bust_part(c,part,origin,scale_value,tint,catalog_data)
 
 static func draw_weapon(c: CanvasItem, weapon: String, origin: Vector2, scale_value: float,
@@ -121,7 +179,9 @@ static func nocked_arrow(p:float,catalog_data:Dictionary={}) -> Dictionary:
 	var bow:Dictionary=catalog_data.parts.bow
 	var pose:=Motion.sample("bow",p)
 	var delta:=Vector2(bow.position[0]-base.position[0],bow.position[1]-base.position[1])
-	arrow.position=pose.position+delta+(arrow.position-pose.position)*(float(bow.size[0])/float(base.size[0]))
+	var rotation:float=bow.get("rotation",0.0)
+	arrow.position=pose.position+delta+((arrow.position-pose.position)*(float(bow.size[0])/float(base.size[0]))).rotated(rotation)
+	arrow.angle+=rotation
 	return arrow
 
 static func arrow_sample(p:float,outcome:String="hit",catalog_data:Dictionary={}) -> Dictionary:
@@ -131,7 +191,7 @@ static func contact_point(weapon: String,catalog_data:Dictionary={}) -> Vector2:
 	if weapon == "bow":return Motion.ARROW_TARGET
 	var part: Dictionary = (parts() if catalog_data.is_empty() else catalog_data.parts)[weapon]
 	var state := Motion.sample(weapon,Motion.contact(weapon))
-	return Vector2(part.position[0],part.position[1])+state.position+Vector2(0,-float(part.size[1])*float(part.pivot[1])).rotated(state.angle)
+	return Vector2(part.position[0],part.position[1])+state.position+Vector2(0,-float(part.size[1])*float(part.pivot[1])).rotated(state.angle+part.get("rotation",0.0))
 
 ## Read-only U47 reference at identical camera scale; no temporary catalog swap.
 static func draw_previous(c: CanvasItem, origin: Vector2, scale_value: float, armor: String,

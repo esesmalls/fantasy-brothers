@@ -30,6 +30,16 @@ var notes:Label
 var x_field:SpinBox
 var y_field:SpinBox
 var size_field:SpinBox
+var angle_field:SpinBox
+var head_choice:OptionButton
+var appearance_checks:Dictionary={}
+var pan:=Vector2.ZERO
+var _panning:=false
+var _rotating:=false
+var _rotation_start:=0.0
+var _rotation_mouse:=0.0
+var _pan_start:=Vector2.ZERO
+var source_view:=false
 var slider:HSlider
 var play_button:Button
 var undo_button:Button
@@ -71,42 +81,55 @@ func _ready() -> void:
 	_button(header,"关闭",request_close)
 	var toolbar:=HFlowContainer.new();root.add_child(toolbar)
 	view_choice=_choice(toolbar,["装配与对照","穿戴组合检查","战场尺寸检查","内外层检查"],["fit","matrix","field","nesting"],func(v):view=v;playing=false;refresh(),"fit")
-	armor_choice=_choice(toolbar,["基础内衣","亚麻","绗缝甲","绗缝＋链甲"],["bare","linen","padded","mail"],func(v):armor=v;refresh(),armor)
+	armor_choice=_choice(toolbar,["基础内衣","亚麻","绗缝甲","绗缝＋链甲","裸身"],["bare","linen","padded","mail","nude"],func(v):armor=v;refresh(),armor)
 	weapon_choice=_choice(toolbar,["无武器","剑盾","长矛","弓"],["none","sword","spear","bow"],func(v):weapon=v;progress=0;elapsed=0;refresh(),weapon)
 	_toggle(toolbar,"甲损",func(v):damaged=v;refresh())
 	_choice(toolbar,["损外层","损衬甲","全损"],["outer","padding","all"],func(v):damage_scope=v;refresh(),damage_scope)
 	_toggle(toolbar,"脸伤",func(v):wounded=v;refresh())
 	background_choice=_choice(toolbar,["苔绿底","泥土底","浅底","深底"],["green","earth","light","dark"],func(v):backdrop=v;refresh(),backdrop)
+	head_choice=_choice(toolbar,["H 原整头","H 拆件试样"],["legacy","modular"],func(v):document.set_appearance("head",v);refresh(),document.appearance.head)
 	var body:=HBoxContainer.new();body.size_flags_vertical=Control.SIZE_EXPAND_FILL;body.add_theme_constant_override("separation",12);root.add_child(body)
 	var left:=VBoxContainer.new();left.custom_minimum_size.x=218;body.add_child(left)
 	_label(left,"装配部件",19)
-	layer_list=ItemList.new();layer_list.size_flags_vertical=Control.SIZE_EXPAND_FILL;layer_list.custom_minimum_size.y=265;left.add_child(layer_list)
-	for group in Document.GROUPS:layer_list.add_item(Document.LABELS[group])
+	layer_list=ItemList.new();layer_list.size_flags_vertical=Control.SIZE_EXPAND_FILL;layer_list.custom_minimum_size.y=180;left.add_child(layer_list)
+	for group in Document.GROUPS:layer_list.add_item(Document.label_for(group))
 	layer_list.select(0);layer_list.item_selected.connect(func(i):select_group(Document.GROUPS.keys()[i]))
-	_label(left,"查看图层",17)
-	var layers:=GridContainer.new();layers.columns=2;left.add_child(layers)
+	var layer_scroll:=ScrollContainer.new();layer_scroll.custom_minimum_size.y=210;layer_scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL;layer_scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;left.add_child(layer_scroll)
+	var layer_panel:=VBoxContainer.new();layer_panel.size_flags_horizontal=Control.SIZE_EXPAND_FILL;layer_scroll.add_child(layer_panel)
+	_label(layer_panel,"启用部件 · 随配置保存",15)
+	var details:=GridContainer.new();details.columns=2;layer_panel.add_child(details)
+	for id in ["skin","hair","beard","scar","bandage","blood"]:
+		var label:String={"skin":"身体","hair":"发型","beard":"胡须","scar":"伤痕","bandage":"绷带","blood":"血迹"}[id]
+		var checkbox:=CheckBox.new();checkbox.text=label;checkbox.button_pressed=document.appearance[id];details.add_child(checkbox);appearance_checks[id]=checkbox
+		checkbox.toggled.connect(func(on):document.set_appearance(id,on);refresh())
+	_label(layer_panel,"临时隐藏 · 仅检查",15)
+	var layers:=GridContainer.new();layers.columns=2;layer_panel.add_child(layers)
 	for id in ["base","head","body","linen","padded","mail","shield"]:
 		var label:String={"base":"底座","head":"头部","body":"内衣","linen":"亚麻","padded":"绗缝","mail":"链甲","shield":"盾"}[id]
 		_toggle(layers,label,func(on):set_layer_visible(id,on),true)
-	var hint:=_label(left,"完好与破损同步调整\n底座、盘面和层序锁定\n图层开关仅用于检查",14);hint.modulate=Color("a8b4a4")
+	var hint:=_label(layer_panel,"发须需切到 H 拆件试样\n血迹在皮肤上、衣物下\n底座与裁取弧线锁定",13);hint.modulate=Color("a8b4a4")
 	stage=Stage.new();stage.owner_ui=self;stage.size_flags_horizontal=Control.SIZE_EXPAND_FILL;stage.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	stage.clip_contents=true;stage.focus_mode=Control.FOCUS_ALL;stage.mouse_default_cursor_shape=Control.CURSOR_MOVE;body.add_child(stage)
 	var right_scroll:=ScrollContainer.new();right_scroll.custom_minimum_size.x=234;right_scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;body.add_child(right_scroll)
 	var right:=VBoxContainer.new();right.size_flags_horizontal=Control.SIZE_EXPAND_FILL;right.add_theme_constant_override("separation",9);right_scroll.add_child(right)
 	selection_label=_label(right,"人物整体",18)
-	x_field=_number(right,"左右",-20,20,.25,func(_v):numbers_changed())
-	y_field=_number(right,"上下",-20,20,.25,func(_v):numbers_changed())
-	size_field=_number(right,"等比大小 %",70,130,1,func(_v):numbers_changed())
+	x_field=_number(right,"左右 · ±128",-128,128,.25,func(_v):numbers_changed())
+	y_field=_number(right,"上下 · ±128",-128,128,.25,func(_v):numbers_changed())
+	size_field=_number(right,"等比大小 % · 25–300",25,300,1,func(_v):numbers_changed())
+	angle_field=_number(right,"旋转 ° · 绕锚点",-180,180,.5,func(_v):numbers_changed())
 	var undos:=HBoxContainer.new();right.add_child(undos)
 	undo_button=_button(undos,"撤销",func():document.undo();refresh())
 	redo_button=_button(undos,"重做",func():document.redo();refresh())
-	_button(right,"复原此部件",func():document.change(selected,Vector2.ZERO,1);refresh())
+	_button(right,"复原此部件",func():document.change(selected,Vector2.ZERO,1,true,0);refresh())
 	_button(right,"复原全部调整",func():document.reset_all();refresh())
 	_label(right,"对照与视图",18)
 	_toggle(right,"盘面与锚点",func(v):guides=v;refresh(),true)
+	_toggle(right,"查看选中部件原图",func(v):source_view=v;refresh())
+	_button(right,"定位选中部件",focus_selected)
+	_button(right,"视图归位",func():pan=Vector2.ZERO;zoom=4;refresh())
 	_toggle(right,"叠加 v3 基准",func(v):ghost=v;refresh())
 	var alpha:=HSlider.new();alpha.min_value=.05;alpha.max_value=.7;alpha.step=.05;alpha.value=ghost_alpha;alpha.tooltip_text="基准叠图透明度";right.add_child(alpha);alpha.value_changed.connect(func(v):ghost_alpha=v;refresh())
-	_choice(right,["放大 3×","放大 4×","放大 5×","放大 6×"],[3.0,4.0,5.0,6.0],func(v):zoom=v;refresh(),4.0)
+	_choice(right,["放大 1×","放大 2×","放大 3×","放大 4×","放大 5×","放大 6×"],[1.0,2.0,3.0,4.0,5.0,6.0],func(v):zoom=v;refresh(),4.0)
 	_label(right,"动作检查",18)
 	play_button=_button(right,"播放动作",func():playing=not playing;elapsed=progress*Motion.duration(weapon);refresh())
 	slider=HSlider.new();slider.min_value=0;slider.max_value=1;slider.step=.001;right.add_child(slider)
@@ -149,12 +172,12 @@ func select_group(group:String) -> void:
 	selected=group;layer_list.select(Document.GROUPS.keys().find(group))
 	if group in ["sword","spear","bow"]:weapon=group
 	elif group=="shield":weapon="sword"
-	elif group in ["body","linen","padded","mail"]:armor="bare" if group=="body" else group
+	elif group in ["body","linen","padded","mail","skin"]:armor={"body":"bare","skin":"nude"}.get(group,group)
 	playing=false;progress=0;refresh()
 
 func numbers_changed() -> void:
 	if size_field==null:return
-	document.change(selected,Vector2(x_field.value,y_field.value),size_field.value/100.0)
+	document.change(selected,Vector2(x_field.value,y_field.value),size_field.value/100.0,true,angle_field.value)
 	refresh()
 
 func set_layer_visible(group:String,on:bool) -> void:
@@ -168,21 +191,25 @@ func refresh() -> void:
 	if stage==null:return
 	catalog_data=document.composed()
 	var t:Dictionary=document.transform_for(selected)
-	selection_label.text=Document.LABELS[selected]
-	armor_choice.select(["bare","linen","padded","mail"].find(armor))
+	selection_label.text=Document.label_for(selected)
+	armor_choice.select(["bare","linen","padded","mail","nude"].find(armor))
+	head_choice.select(["legacy","modular"].find(document.appearance.head))
+	for id in appearance_checks:appearance_checks[id].set_pressed_no_signal(document.appearance[id])
 	weapon_choice.select(["none","sword","spear","bow"].find(weapon))
 	view_choice.select(["fit","matrix","field","nesting"].find(view))
 	background_choice.select(["green","earth","light","dark"].find(backdrop))
 	x_field.set_value_no_signal(t.offset[0]);y_field.set_value_no_signal(t.offset[1]);size_field.set_value_no_signal(t.scale*100)
+	angle_field.set_value_no_signal(t.angle);angle_field.editable=selected!="bust"
 	size_field.editable=selected!="bust";size_field.modulate=Color.WHITE if selected!="bust" else Color(.6,.6,.6)
 	slider.set_value_no_signal(progress);play_button.text="暂停动作" if playing else "播放动作"
 	play_button.disabled=weapon=="none" or view!="fit"
 	slider.editable=not play_button.disabled
 	undo_button.disabled=document.history.is_empty();redo_button.disabled=document.future.is_empty()
+	undo_button.text="撤销 (%d)"%document.history.size();redo_button.text="重做 (%d)"%document.future.size()
 	var warnings:Array[String]=document.warnings()
 	notes.text="\n".join(warnings) if not warnings.is_empty() else "配置有效\n仍需目视检查领口、遮挡和原尺寸效果。"
 	notes.modulate=Color("e1b178") if not warnings.is_empty() else Color("a8b4a4")
-	status.text=("● 未保存  " if document.dirty() else "H 嵌套穿戴  ")+_notice
+	status.text=("● 未保存  " if document.dirty() else "H 装配台  ")+_notice
 	stage.queue_redraw()
 
 func _process(delta:float) -> void:
@@ -195,33 +222,68 @@ func _process(delta:float) -> void:
 
 func camera() -> Dictionary:
 	var scale_value:=minf(zoom,minf(stage.size.x/(230.0 if weapon=="bow" else 135.0),(stage.size.y-150)/100.0))
-	return {"origin":Vector2(stage.size.x*(.30 if weapon=="bow" else .43),stage.size.y*.63),"scale":maxf(scale_value,1.0)}
+	return {"origin":Vector2(stage.size.x*(.30 if weapon=="bow" else .43),stage.size.y*.63)+pan,"scale":maxf(scale_value,1.0)}
+
+func selected_id() -> String:
+	if selected=="head" and document.appearance.head=="modular":return "face"
+	return "head" if selected=="bust" else Document.GROUPS[selected][0]
+
+func selected_anchor() -> Vector2:
+	var id:=selected_id();var part:Dictionary=catalog_data.parts[id]
+	var pos:=Vector2(part.position[0],part.position[1])
+	if id in ["sword","spear","bow"]:pos+=Motion.sample(id,progress).position
+	return pos
+
+func focus_selected() -> void:
+	var cam:=camera();pan+=stage.size*Vector2(.5,.5)-(cam.origin+selected_anchor()*cam.scale);refresh()
+
+func local_delta(delta:Vector2) -> Vector2:
+	# Child offsets are local to their head/skin. Drag stays under the pointer.
+	var parent:String=catalog_data.parts[selected_id()].get("parent","")
+	if not parent.is_empty():
+		var t:Dictionary=document.transform_for(parent)
+		delta=delta.rotated(-deg_to_rad(t.angle))/t.scale
+	return delta
 
 func stage_input(event:InputEvent) -> void:
 	if view!="fit" or _modal_open():return
+	if event is InputEventMouseButton and event.button_index==MOUSE_BUTTON_MIDDLE:
+		_panning=event.pressed;_drag_start=event.position;_pan_start=pan;stage.accept_event();return
+	if event is InputEventMouseMotion and _panning:pan=_pan_start+event.position-_drag_start;stage.queue_redraw();stage.accept_event();return
 	if event is InputEventMouseButton and event.button_index==MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			stage.grab_focus();playing=false;progress=0;_dragging=true;_drag_start=event.position
 			var t:Dictionary=document.transform_for(selected);_drag_offset=Vector2(t.offset[0],t.offset[1]);_drag_recorded=false
-		else:_dragging=false
+			_rotating=event.alt_pressed and selected!="bust";_rotation_start=t.angle
+			_rotation_mouse=(event.position-camera().origin-selected_anchor()*camera().scale).angle()
+		else:_dragging=false;_rotating=false
 		stage.accept_event()
 	if event is InputEventMouseMotion and _dragging:
-		var delta:Vector2=(event.position-_drag_start)/camera().scale
-		var offset:=(_drag_offset+delta).snapped(Vector2(.25,.25)).clamp(Vector2(-20,-20),Vector2(20,20))
+		if _rotating:
+			var angle:=rad_to_deg(wrapf((event.position-camera().origin-selected_anchor()*camera().scale).angle()-_rotation_mouse,-PI,PI))+_rotation_start
+			angle=snappedf(clampf(angle,-180,180),.5)
+			if document.change(selected,_drag_offset,document.transform_for(selected).scale,not _drag_recorded,angle):_drag_recorded=true
+			refresh();stage.accept_event();return
+		var delta:Vector2=local_delta((event.position-_drag_start)/camera().scale)
+		var offset:=(_drag_offset+delta).snapped(Vector2(.25,.25)).clamp(Vector2(-128,-128),Vector2(128,128))
 		if offset!=_drag_offset or _drag_recorded:
 			if document.change(selected,offset,document.transform_for(selected).scale,not _drag_recorded):_drag_recorded=true
 		refresh();stage.accept_event()
 
 func _input(event:InputEvent) -> void:
 	if event is InputEventMouseButton and not event.pressed and event.button_index==MOUSE_BUTTON_LEFT:_dragging=false
+	if event is InputEventMouseButton and not event.pressed and event.button_index==MOUSE_BUTTON_MIDDLE:_panning=false
 	if event is InputEventKey and event.pressed and not event.echo and not _modal_open():
 		if event.ctrl_pressed and event.keycode==KEY_S:save_current();get_viewport().set_input_as_handled()
-		elif event.ctrl_pressed and event.keycode==KEY_Z:document.undo();refresh();get_viewport().set_input_as_handled()
+		elif event.ctrl_pressed and event.keycode==KEY_Z:
+			if event.shift_pressed:document.redo()
+			else:document.undo()
+			refresh();get_viewport().set_input_as_handled()
 		elif event.ctrl_pressed and event.keycode==KEY_Y:document.redo();refresh();get_viewport().set_input_as_handled()
 		elif stage.has_focus() and view=="fit" and event.keycode in [KEY_LEFT,KEY_RIGHT,KEY_UP,KEY_DOWN]:
 			var delta:Vector2={KEY_LEFT:Vector2.LEFT,KEY_RIGHT:Vector2.RIGHT,KEY_UP:Vector2.UP,KEY_DOWN:Vector2.DOWN}[event.keycode]
 			var t:Dictionary=document.transform_for(selected);delta*=1.0 if event.shift_pressed else .25
-			document.change(selected,Vector2(t.offset[0],t.offset[1])+delta,t.scale);refresh();get_viewport().set_input_as_handled()
+			document.change(selected,Vector2(t.offset[0],t.offset[1])+local_delta(delta),t.scale);refresh();get_viewport().set_input_as_handled()
 
 func _modal_open() -> bool:
 	if _close_dialog!=null and _close_dialog.visible:return true
@@ -253,13 +315,16 @@ func draw_stage(c:Control) -> void:
 		for x in range(-40,61,10):c.draw_line(at+Vector2(x,-95)*s,at+Vector2(x,10)*s,Color(.6,.7,.6,.10))
 		for y in range(-90,11,10):c.draw_line(at+Vector2(-45,y)*s,at+Vector2(65,y)*s,Color(.6,.7,.6,.10))
 	Actor.draw_actor(c,at,s,armor,weapon,damaged,wounded,progress,"hit",rendered,hidden_layers)
+	if source_view and selected!="bust":
+		var id:=selected_id();var pose:Dictionary=Motion.sample(id,progress) if id in ["sword","spear","bow"] else {"position":Vector2.ZERO,"angle":0.0}
+		Actor.draw_part(c,id,at,s,pose.position,pose.angle,Color(1,1,1,.42),catalog_data.parts)
 	if weapon=="bow" and "bow" not in hidden_layers:
 		var arrow:=Actor.arrow_sample(progress,"hit",catalog_data)
 		if arrow.visible:Actor.draw_part(c,"arrow",at,s,arrow.position,arrow.angle,Color.WHITE,catalog_data.parts)
 	if ghost:Actor.draw_actor(c,at,s,armor,weapon,damaged,wounded,progress,"hit",reference,[],Color(.6,.85,1,ghost_alpha))
 	if guides:_draw_guides(c,at,s)
-	_text(c,"当前调整  ·  拖动 / 方向键微调",Vector2(18,29),18)
-	_text(c,"底座与截取线固定；原画保持完整。",Vector2(18,52),14)
+	_text(c,"拖动平移 · Alt 拖动旋转 · 中键平移视图",Vector2(18,29),16)
+	_text(c,"方向键微调 / Shift 加速 · Ctrl Z 撤销 / Ctrl Shift Z 重做",Vector2(18,52),13)
 	var small_y:=c.size.y-28
 	Actor.draw_actor(c,Vector2(64,small_y),1,armor,weapon,damaged,wounded,0,"hit",rendered)
 	Actor.draw_actor(c,Vector2(215,small_y),2,armor,weapon,damaged,wounded,0,"hit",rendered)
@@ -272,11 +337,7 @@ func _draw_guides(c:Control,at:Vector2,s:float) -> void:
 	for i in range(arc.size()):arc[i]=at+arc[i]*s
 	c.draw_polyline(arc,Color("c8aa6e"),1.5,true)
 	c.draw_line(at+Vector2(-38,0)*s,at+Vector2(38,0)*s,Color("c8aa6e"),1)
-	var id:String="head" if selected=="bust" else Document.GROUPS[selected][0]
-	var part:Dictionary=catalog_data.parts[id]
-	var pos:=Vector2(part.position[0],part.position[1])
-	if id in ["sword","spear","bow"]:pos+=Motion.sample(id,progress).position
-	var anchor:=at+pos*s
+	var anchor:=at+selected_anchor()*s
 	c.draw_circle(anchor,4,Color("f2d08a"));c.draw_line(anchor-Vector2(9,0),anchor+Vector2(9,0),Color("f2d08a"));c.draw_line(anchor-Vector2(0,9),anchor+Vector2(0,9),Color("f2d08a"))
 
 func _draw_matrix(c:Control) -> void:
@@ -317,9 +378,9 @@ func _draw_nesting(c:Control) -> void:
 		var data:Dictionary=Actor.v3_catalog() if i==0 else catalog_data.duplicate(true)
 		data=data.duplicate(true);data.wear_damage={"mail":true,"padded":false}
 		var hidden:Array=["head","wounded","base"]
-		if i==2:hidden.append("body")
+		if i==2:hidden.append_array(["body","skin","blood"])
 		if i>=4:hidden.append_array(["padded","padded_damaged"])
-		if i==5:hidden.append_array(["linen","body"])
+		if i==5:hidden.append_array(["linen","body","skin","blood"])
 		var at:=Vector2((col+.50)*cell.x,80+(row+.82)*cell.y)
 		Actor.draw_body(c,at,s,"linen" if row==0 else "mail",false,false,data,hidden)
 		_text(c,labels[i],Vector2(col*cell.x+12,80+row*cell.y),13)
@@ -342,7 +403,9 @@ func _save_project(path:String) -> void:
 func open_project(path:String) -> bool:
 	var error:String=document.load_project(path)
 	if error.is_empty():
-		project_path=path;_notice=("已保留 v3 定位，衣甲已更新，请复看并另存：" if document.migrated_v3 else "已载入：")+path
+		project_path=path
+		if document.migrated_v3:project_path=path.get_basename()+"-v2.json"
+		_notice=("旧配置已无损载入；保存将写入新副本：" if document.migrated_v3 else "已载入：")+project_path
 	else:_notice=error
 	refresh();return error.is_empty()
 
@@ -395,3 +458,6 @@ func run_smoke(output:String) -> void:
 
 func run_nesting_test(output:String) -> void:
 	await preload("res://tests/nested_wear_smoke.gd").new().run(self,output)
+
+func run_modular_test(output:String) -> void:
+	await preload("res://tests/paperdoll_modular_smoke.gd").new().run(self,output)

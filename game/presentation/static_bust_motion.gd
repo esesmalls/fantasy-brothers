@@ -57,6 +57,14 @@ static func arrow_sample(p:float,outcome:String="hit",launch_override:Dictionary
 	var finish:Vector2=ARROW_MISS if outcome=="miss" else ARROW_TARGET
 	var span:=finish-start
 	var t:=clampf(inverse_lerp(release("bow"),contact("bow"),p),0,1)
+	# Free editor rotations can aim vertically/backwards. Keep the departure
+	# continuous without tan(90deg) or an instantaneous flip to the target.
+	var direction:=Vector2.UP.rotated(launch.angle)
+	if absf(direction.x)<.2 or span.x*direction.x<=0:
+		var control:=start+direction*maxf(span.length()*.55,12)
+		var curved:=start*(1-t)*(1-t)+control*2*(1-t)*t+finish*t*t
+		var velocity:Vector2=(control-start)*2*(1-t)+(finish-control)*2*t
+		return {"position":curved,"angle":velocity.angle()+PI/2,"visible":p>=release("bow") and p<.94,"flight":t,"rise":start.y-control.y}
 	var rise:float=(span.y-span.x*tan(launch.angle-PI/2))*.25
 	var point:=start.lerp(finish,t)+Vector2(0,-4*rise*t*(1-t))
 	var tangent:=Vector2(span.x,span.y-4*rise*(1-2*t))

@@ -6,6 +6,8 @@
 
 更新日期：2026-09-21。
 
+最新：**装配台 v2** 已保留用户校准，支持旋转、更大位移／缩放、撤销重做、定位部件，并加入独立身体、发须、伤痕、绷带、血迹试样。双击 `Paperdoll.cmd`，或将配置JSON拖到启动器。[修正身体过大后的实际窗口](art/workbench/2026-09-21-modular/index.html) · [操作与人物重制入口](docs/27-modular-paperdoll.md)。身体已按最新参考回调为轻侧身、短颈，并保持缩小后的比例；当前仍为单体型试样，不视为全人物库已验收。
+
 2026-09-21补充：按最新反馈修复[衣甲嵌套与内层露出](art/validation/2026-09-21-nested-wear/index.html)，领口／破口不再盖死或预画固定衬料。`Paperdoll.cmd`新增“内外层检查”及各层甲损选择；旧v3坐标保留、草案兼容迁移，详见[26穿戴规范](docs/26-nested-wear-standard.md)。下方v3认可指原构图与比例，真实套层以本次修订为准。
 
 最新美术状态：用户已基本认可**H无手静态短胸＋独立武器反馈 v3**。[H固定盘面评审页](art/validation/2026-09-20-static-bust-v3/index.html)和`Review-Static-Bust.cmd`可检查一人、配套衣甲、剑盾／枪／弓和伤损。新增 **`Paperdoll.cmd` 人物装配工作台**：拖动校准、配套状态同步、v3对照、1×／2×和动作检查，人和agent共用配置。见[实际窗口](art/workbench/2026-09-20/index.html)、[使用说明](docs/25-paperdoll-workbench.md)与[24现行标准](docs/24-static-bust-standard.md)。原画／目录保持不变，正常战役未批量替换。旧[A资产](art/production/2026-09-20-a-standard/index.html)已退回，原因见[23复审](docs/23-equipment-motion-audit.md)。

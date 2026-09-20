@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>奇幻兄弟 · 装配台 v2</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#14201b;color:#e7deca;font:16px/1.65 system-ui,"Microsoft YaHei",sans-serif}main{max-width:1440px;margin:auto;padding:28px}header{display:flex;gap:24px;align-items:center;justify-content:space-between;flex-wrap:wrap}h1{font-size:30px;margin:0}p{margin:8px 0 20px;color:#b9c6b7}a{color:#e5c587}nav{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}button{cursor:pointer;background:#2a3b32;border:1px solid #667054;border-radius:5px;color:inherit;padding:10px 15px;font:inherit}button[aria-pressed=true]{background:#6a5735;border-color:#d8b975}figure{margin:0;background:#0c1410;border:1px solid #485746;border-radius:8px;text-align:center;overflow:hidden}img{display:block;width:100%;height:70vh;min-height:360px;object-fit:contain}figcaption{padding:15px 22px;color:#d2c5a8;border-top:1px solid #485746}section{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:20px 0}article{padding:18px;background:#233329;border-radius:6px}article strong{color:#ecd59f}article p{margin:8px 0 0}footer{font-size:14px;color:#a5b5a7}details{margin:20px 0;padding:16px;border:1px solid #485746}summary{cursor:pointer;color:#e5c587}@media(max-width:750px){main{padding:16px}h1{font-size:24px}section{grid-template-columns:1fr}img{height:52vh;min-height:260px}button{padding:8px 10px;font-size:14px}}
+</style>
+<main><header><div><h1>装配台 v2 · 身体与附着部件</h1><p>你的校准已保留。先验结构，再用工具开展人物资产重制。</p></div><a href="../../../docs/27-modular-paperdoll.md">操作说明与重制顺序 ↗</a></header>
+<nav aria-label="实际窗口与细节"></nav>
+<figure><img id="shot" src="captures/dressed-details.png" alt="身体缩小后不再露出衣服肩线的实际装配台"><figcaption id="caption"></figcaption></figure>
+<section><article><strong>旋转与调整</strong><p>±128 位移 · 25%–300% 缩放 · ±180° 旋转。Alt 拖动旋转，中键平移视图，可定位移远的部件。</p></article><article><strong>独立部件</strong><p>身体、净面头、发型、胡须、伤痕、绷带、皮肤血迹。发须跟随头部，血迹在衣物下，启用与调整都能撤销。</p></article><article><strong>你的调整</strong><p>原 my_test.json 保持不变。启动 Paperdoll.cmd 自动读取本机调整；旧版保存到 -v2.json 新副本。</p></article></section>
+<details><summary>当前样件的边界与下一步</summary><p>这是一名人物的拆件验证，保留 H 原整头对照。工具可用于重制首套母版，尚不代表整个人物库已验收。</p><p>身体已从宽63缩为52；按最后提供的胸肩参考回调为轻侧身，并移除明显颈柱。两侧不再伸出衣服。先复评这一结构母版，再扩头型、头盔、衣甲与成套伤损。</p><p>本页全部画面来自实际 Windows 导出，页面本身不是装配编辑器。<a href="QA.md">验证记录</a> · <a href="prompts.md">生成记录</a> · <a href="../projects/h-user-calibrated-v2.json" download>下载你的校准副本</a> · <a href="../projects/h-modular-sample.json" download>下载拆件示例</a></p></details>
+<footer>Fantasy Brothers · 2026-09-21 · 原固定底座、盘面裁取与静态武器路线保留。</footer></main>
+<script>
+const cases=[
+['身体修正','dressed-details','身体缩小并压低肩线，穿亚麻后不再从两侧露出裸肩。'],
+['你的校准','user-calibration','使用你的原始位移和缩放，保留长矛(-20,13)等调整；原整头仍可用。'],
+['轻侧身与短颈','body-and-head','按最后参考回调为轻微右侧向，双侧胸肩可见、颈部收短；维持宽52的身体规格。'],
+['伤痕','scar-only','伤痕是独立部件，随头部变换并限制在脸部轮廓内。'],
+['发须与绷带','body-details','发型、胡须、绷带可分别开关，皮肤血迹位于身体上。'],
+['穿甲','armed-details','同一头型与现有链甲、剑盾装配；衣物遮住皮肤血迹。'],
+['旋转联动','parent-rotation','旋转头部时，发须、伤痕与绷带一起跟随；各件仍有自己的局部调整。'],
+['小窗口','small-window','1180×740 实际窗口；两侧面板可滚动，撤销仍直接可见。'],
+['血迹近看','skin-blood-closeup','实际渲染局部：透明血迹贴在裸身表面，移出身体会被遮掉。']
+];
+const nav=document.querySelector('nav'),shot=document.querySelector('#shot'),caption=document.querySelector('#caption');
+function show(i){shot.src=`captures/${cases[i][1]}.png`;shot.alt=cases[i][2];caption.textContent=cases[i][2];[...nav.children].forEach((b,j)=>b.setAttribute('aria-pressed',i===j));}
+cases.forEach((c,i)=>{let b=document.createElement('button');b.textContent=c[0];b.addEventListener('click',()=>show(i));nav.append(b)});show(2);
+</script></html>

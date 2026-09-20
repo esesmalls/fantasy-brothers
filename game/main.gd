@@ -74,7 +74,7 @@ var motion_review_dir := "user://motion-review"
 func _ready() -> void:
 	_build_theme()
 	var arguments := OS.get_cmdline_user_args()
-	if arguments.has("--paperdoll") or arguments.has("--paperdoll-capture") or arguments.has("--paperdoll-smoke") or arguments.has("--paperdoll-nesting-test"):
+	if arguments.has("--paperdoll") or arguments.has("--paperdoll-capture") or arguments.has("--paperdoll-smoke") or arguments.has("--paperdoll-nesting-test") or arguments.has("--paperdoll-modular-test"):
 		var workbench=PaperdollWorkbench.new();add_child(workbench)
 		workbench.closed.connect(func():get_tree().quit())
 		var output:="user://paperdoll-captures"
@@ -84,6 +84,7 @@ func _ready() -> void:
 		if arguments.has("--paperdoll-capture"):workbench.call_deferred("capture_all",ProjectSettings.globalize_path(output))
 		elif arguments.has("--paperdoll-smoke"):workbench.call_deferred("run_smoke",ProjectSettings.globalize_path(output))
 		elif arguments.has("--paperdoll-nesting-test"):workbench.call_deferred("run_nesting_test",ProjectSettings.globalize_path(output))
+		elif arguments.has("--paperdoll-modular-test"):workbench.call_deferred("run_modular_test",ProjectSettings.globalize_path(output))
 		return
 	if arguments.has("--static-bust-review") or arguments.has("--static-bust-capture"):
 		var bust_review = StaticBustReview.new()

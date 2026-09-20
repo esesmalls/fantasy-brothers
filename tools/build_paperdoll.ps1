@@ -17,6 +17,8 @@ try {
     if (-not $SkipTests) {
         & $engine --headless --path game --script res://tests/test_paperdoll.gd
         if ($LASTEXITCODE -ne 0) { throw 'Paperdoll checks failed.' }
+        & $engine --headless --path game --script res://tests/test_paperdoll_modules.gd
+        if ($LASTEXITCODE -ne 0) { throw 'Paperdoll module checks failed.' }
         & $engine --headless --path game --script res://tests/test_static_bust.gd
         if ($LASTEXITCODE -ne 0) { throw 'Static bust regression failed.' }
     }
