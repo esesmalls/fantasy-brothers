@@ -19,7 +19,7 @@
 3. [首个 12 周执行计划](docs/02-first-12-weeks.md)：每两周交付什么、如何试玩、何时继续或缩减。
 4. [假设、决策与官方资料](docs/03-decisions-and-sources.md)：哪些已由用户提出，哪些仍是建议，以及 Steam、Godot 资料来源。
 5. [肉鸽、技能与场景扩展](docs/04-systems-expansion.md)：持续战役、随机成长、技能联动、元素反应、结算与验证。
-6. 研究依据：[PTR](docs/research/ptr-findings.md)、[肉鸽叙事](docs/research/roguelite-findings.md)、[元素与场景](docs/research/elements-findings.md)。
+6. 研究依据：[PTR](docs/research/ptr-findings.md)、[肉鸽叙事](docs/research/roguelite-findings.md)、[元素与场景](docs/research/elements-findings.md)、[模组社区资产制作](docs/research/modding-art-workflow-findings.md)。
 7. 最新人物方案：[属性、培养与命运](docs/13-character-progression.md)、[开发日志研究](docs/research/character-development-findings.md)、[家庭与代际传承](docs/14-family-and-legacy.md)。已实现部分见[0.1.5人物属性](docs/15-character-attributes.md)；伤残性格仍为后续方案，繁衍先作长期预留。
 
 下一批四步范围与整批测试见 [招聘、契约、部署与人物后果](docs/16-next-four-steps.md)，尚未实现。
