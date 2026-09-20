@@ -9,24 +9,24 @@ DEST = ROOT / 'game/assets/art/static-bust'
 # Artist-selected isolated regions. Width is the fitting specification, not an
 # automatic fit to arbitrary visible edges. Each part uses uniform scaling.
 PARTS = {
-    'head': ('body-head', [68, 40, 477, 516], 51.0, [3, -34]),
-    'wounded': ('body-head', [682, 655, 477, 516], 51.0, [3, -34]),
-    'body': ('body-head', [584, 282, 660, 369], 74.0, [0, -10]),
-    'linen': ('anatomy', [584, 203, 670, 360], 76.0, [0, -10]),
-    'base': ('anatomy', [17, 918, 643, 260], 75.0, [0, 0]),
-    'padded': ('armor', [56, 219, 542, 302], 78.0, [0, -10]),
-    'padded_damaged': ('armor', [656, 219, 542, 302], 78.0, [0, -10]),
-    'mail': ('armor', [61, 763, 540, 303], 79.0, [0, -10]),
-    'mail_damaged': ('armor', [656, 767, 540, 303], 79.0, [0, -10]),
-    'sword': ('weapons', [141, 75, 185, 596], 19.0, [0, 0]),
-    'spear': ('weapons', [600, 42, 55, 630], 7.0, [0, 0]),
-    'bow': ('weapons', [990, 87, 134, 580], 14.0, [0, 0]),
-    'shield': ('weapons', [81, 737, 305, 455], 30.0, [24, -4]),
-    'arrow': ('weapons', [591, 730, 75, 460], 3.4, [0, 0]),
+    'head': ('body-head', [68, 40, 477, 516], 37.0, [9, -43]),
+    'wounded': ('body-head', [682, 655, 477, 516], 37.0, [9, -43]),
+    'body': ('side-layers', [116, 186, 410, 306], 68.33333, [0, -6]),
+    'linen': ('side-layers', [718, 216, 416, 280], 69.33333, [0, -6]),
+    'base': ('anatomy', [17, 918, 643, 260], 56.0, [7, 0]),
+    'padded': ('side-layers', [100, 772, 451, 292], 72.0, [0, -6]),
+    'padded_damaged': ('side-damage', [100, 772, 451, 292], 72.0, [0, -6]),
+    'mail': ('side-layers', [718, 776, 436, 290], 72.0, [1, -6]),
+    'mail_damaged': ('side-damage', [718, 776, 436, 290], 72.0, [1, -6]),
+    'sword': ('weapons', [141, 75, 185, 596], 22.5, [0, 0]),
+    'spear': ('weapons', [600, 42, 55, 630], 8.4, [0, 0]),
+    'bow': ('weapons', [990, 87, 134, 580], 17.5, [0, 0]),
+    'shield': ('weapons', [81, 737, 305, 455], 32.0, [29, -2]),
+    'arrow': ('weapons', [591, 730, 75, 460], 4.0, [0, 0]),
     'impact': ('weapons', [883, 812, 313, 297], 20.0, [0, 0]),
 }
 
-catalog = {'schema': 1, 'style': 'H-static-bust', 'parts': {}}
+catalog = {'schema': 1, 'style': 'H-static-bust', 'revision': 'U47-side-proportions', 'parts': {}}
 report = {}
 for name, (atlas, rect, width, position) in PARTS.items():
     path = DEST / (atlas + '.png')
@@ -49,5 +49,5 @@ catalog['parts']['bow']['pivot'] = [0.8, 0.51]
 catalog['parts']['arrow']['pivot'] = [0.5, 0.0]
 catalog['parts']['impact']['pivot'] = [0.5, 0.5]
 (DEST / 'catalog.json').write_text(json.dumps(catalog, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
-(ROOT / 'art/validation/2026-09-20-static-bust/metadata.json').write_text(json.dumps(report, indent=2)+'\n', encoding='utf-8')
+(ROOT / 'art/validation/2026-09-20-static-bust-v2/metadata.json').write_text(json.dumps(report, indent=2)+'\n', encoding='utf-8')
 print('Indexed 15 painted parts; alpha checked; no image pixels changed.')

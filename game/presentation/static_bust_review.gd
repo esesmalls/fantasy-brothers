@@ -40,11 +40,11 @@ func _ready() -> void:
 	outer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(outer)
 	_toolbar=VBoxContainer.new();outer.add_child(_toolbar)
-	var title := Label.new();title.text="H · 静态半身穿戴评审";title.add_theme_font_size_override("font_size",24);_toolbar.add_child(title)
+	var title := Label.new();title.text="H · 侧身与比例修订";title.add_theme_font_size_override("font_size",24);_toolbar.add_child(title)
 	var row := HFlowContainer.new();_toolbar.add_child(row)
-	_choice(row,["穿戴总览","分层展开","武器回放"],["gallery","layers","motion"],func(v):mode=v;replay(),"gallery")
+	_choice(row,["穿戴总览","分层展开","武器回放","前后对照"],["gallery","layers","motion","comparison"],func(v):mode=v;replay(),"gallery")
 	_choice(row,["剑盾","长枪","短弓"],["sword","spear","bow"],func(v):weapon=v;replay(),weapon)
-	_choice(row,["裸身模板","亚麻内衬","绗缝甲","绗缝＋链甲"],["bare","linen","padded","mail"],func(v):armor=v;_refresh(),armor)
+	_choice(row,["基础内衣","亚麻内衬","绗缝甲","绗缝＋链甲"],["bare","linen","padded","mail"],func(v):armor=v;_refresh(),armor)
 	_toggle(row,"装备破损",func(v):damaged=v;_refresh())
 	_toggle(row,"脸部受伤",func(v):wounded=v;_refresh())
 	_choice(row,["苔绿底","浅底","深底"],["battle","light","deep"],func(v):background=v;_refresh(),background)
@@ -108,6 +108,7 @@ func draw_scene(c:Control) -> void:
 	c.draw_rect(Rect2(Vector2.ZERO,c.size),{"battle":Color("293930"),"light":Color("e7e0d2"),"deep":Color("141b1c")}[background])
 	if mode=="motion":_draw_motion(c);return
 	if mode=="layers":_draw_layers(c);return
+	if mode=="comparison":_draw_comparison(c);return
 	var cols:=3
 	var cell:=Vector2(c.size.x/cols,(c.size.y-42)/2)
 	for i in range(6):
@@ -119,11 +120,23 @@ func draw_scene(c:Control) -> void:
 		var shown_weapon:String="none" if row==0 else ["sword","spear","bow"][column]
 		Actor.draw_actor(c,at,scale_value,shown_armor,shown_weapon,damaged,wounded)
 		_text(c,(["内衬 · 头身分离","一层 · 绗缝甲","两层 · 绗缝＋链甲"] if row==0 else ["剑盾","长枪","短弓"])[column],Vector2(column*cell.x+22,row*cell.y+28))
-	_text(c,"H · 无手短胸样板     /     所有组合共用头、躯干与底座位置",Vector2(22,c.size.y-13),16)
+	_text(c,"H · 同向侧身 / 自然短袖 / 独立武器",Vector2(22,c.size.y-13),16)
+
+func _draw_comparison(c:Control) -> void:
+	var cell:=Vector2(c.size.x/4,(c.size.y-42)/2)
+	var camera_scale:=minf(cell.x/139,cell.y/113)
+	for row in range(2):
+		for column in range(4):
+			var at:=Vector2((column+.43)*cell.x,(row+.94)*cell.y)
+			var item:String=["none","sword","spear","bow"][column]
+			if row==0:Actor.draw_previous(c,at,camera_scale,armor,item,damaged,wounded)
+			else:Actor.draw_actor(c,at,camera_scale,armor,item,damaged,wounded)
+			_text(c,("上一版 · " if row==0 else "本次 · ")+["无武器","剑盾","长枪","短弓"][column],Vector2(column*cell.x+18,row*cell.y+28),17)
+	_text(c,"上下两排采用相同镜头倍率与地面基准，不分别放大填满格子。",Vector2(18,c.size.y-14),16)
 
 func _draw_layers(c:Control) -> void:
 	var ids:Array[String]=["base","body","wounded" if wounded else "head","linen","padded_damaged" if damaged else "padded","mail_damaged" if damaged else "mail"]
-	var labels:=["低底座","肩胸身体","独立头部","短胸内衬","绗缝甲","外层链甲"]
+	var labels:=["低底座","基础内衣身体","独立头部","侧身内衬","绗缝甲","外层链甲"]
 	var cell:=c.size.x/7.0
 	var scale_value:=minf(cell/91,(c.size.y-100)/110)
 	for i in range(6):
@@ -150,7 +163,7 @@ func _draw_motion(c:Control) -> void:
 	if weapon=="bow" and progress>=Motion.release(weapon) and progress<.94:
 		var flight:=clampf(inverse_lerp(Motion.release(weapon),Motion.contact(weapon),progress),0,1)
 		var destination:=contact_at if outcome!="miss" else contact_at+Vector2(47,-13)
-		var arrow_at:=Vector2(44,-35).lerp(destination,flight)
+		var arrow_at:=Vector2(52,-42).lerp(destination,flight)
 		if outcome!="miss" or progress<Motion.contact(weapon):
 			Actor.draw_part(c,"arrow",origin,scale_value,arrow_at,PI/2)
 	var fx_time:=progress-Motion.contact(weapon)
@@ -173,9 +186,12 @@ func capture(output:String) -> void:
 		background=bg;await _save(output.path_join("overview-"+bg+".png"))
 	background="battle";damaged=true;wounded=true
 	await _save(output.path_join("overview-damaged.png"))
-	# Bare/linen/padded/mail registration at the same anchor, without a weapon.
+	# Covered foundation body, linen and armor at the same registration.
 	damaged=false;wounded=false;mode="layers";armor="bare"
-	await _save(output.path_join("bare-template.png"));armor="mail"
+	await _save(output.path_join("body-template.png"));armor="mail"
+	mode="comparison"
+	await _save(output.path_join("comparison.png"));background="light"
+	await _save(output.path_join("comparison-light.png"));background="battle"
 	damaged=false;wounded=false;mode="layers"
 	get_window().size=Vector2i(1500,530);get_window().content_scale_size=get_window().size
 	await _save(output.path_join("layers.png"))

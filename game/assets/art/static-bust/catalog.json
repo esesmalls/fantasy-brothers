@@ -1,6 +1,7 @@
 {
   "schema": 1,
   "style": "H-static-bust",
+  "revision": "U47-side-proportions",
   "parts": {
     "head": {
       "atlas": "res://assets/art/static-bust/body-head.png",
@@ -11,12 +12,12 @@
         516
       ],
       "size": [
-        51.0,
-        55.16981
+        37.0,
+        40.02516
       ],
       "position": [
-        3,
-        -34
+        9,
+        -43
       ],
       "pivot": [
         0.5,
@@ -32,12 +33,12 @@
         516
       ],
       "size": [
-        51.0,
-        55.16981
+        37.0,
+        40.02516
       ],
       "position": [
-        3,
-        -34
+        9,
+        -43
       ],
       "pivot": [
         0.5,
@@ -45,20 +46,20 @@
       ]
     },
     "body": {
-      "atlas": "res://assets/art/static-bust/body-head.png",
+      "atlas": "res://assets/art/static-bust/side-layers.png",
       "rect": [
-        584,
-        282,
-        660,
-        369
+        116,
+        186,
+        410,
+        306
       ],
       "size": [
-        74.0,
-        41.37273
+        68.33333,
+        51.0
       ],
       "position": [
         0,
-        -10
+        -6
       ],
       "pivot": [
         0.5,
@@ -66,20 +67,20 @@
       ]
     },
     "linen": {
-      "atlas": "res://assets/art/static-bust/anatomy.png",
+      "atlas": "res://assets/art/static-bust/side-layers.png",
       "rect": [
-        584,
-        203,
-        670,
-        360
+        718,
+        216,
+        416,
+        280
       ],
       "size": [
-        76.0,
-        40.83582
+        69.33333,
+        46.66666
       ],
       "position": [
         0,
-        -10
+        -6
       ],
       "pivot": [
         0.5,
@@ -95,11 +96,11 @@
         260
       ],
       "size": [
-        75.0,
-        30.32659
+        56.0,
+        22.64386
       ],
       "position": [
-        0,
+        7,
         0
       ],
       "pivot": [
@@ -108,20 +109,20 @@
       ]
     },
     "padded": {
-      "atlas": "res://assets/art/static-bust/armor.png",
+      "atlas": "res://assets/art/static-bust/side-layers.png",
       "rect": [
-        56,
-        219,
-        542,
-        302
+        100,
+        772,
+        451,
+        292
       ],
       "size": [
-        78.0,
-        43.46125
+        72.0,
+        46.61641
       ],
       "position": [
         0,
-        -10
+        -6
       ],
       "pivot": [
         0.5,
@@ -129,20 +130,20 @@
       ]
     },
     "padded_damaged": {
-      "atlas": "res://assets/art/static-bust/armor.png",
+      "atlas": "res://assets/art/static-bust/side-damage.png",
       "rect": [
-        656,
-        219,
-        542,
-        302
+        100,
+        772,
+        451,
+        292
       ],
       "size": [
-        78.0,
-        43.46125
+        72.0,
+        46.61641
       ],
       "position": [
         0,
-        -10
+        -6
       ],
       "pivot": [
         0.5,
@@ -150,20 +151,20 @@
       ]
     },
     "mail": {
-      "atlas": "res://assets/art/static-bust/armor.png",
+      "atlas": "res://assets/art/static-bust/side-layers.png",
       "rect": [
-        61,
-        763,
-        540,
-        303
+        718,
+        776,
+        436,
+        290
       ],
       "size": [
-        79.0,
-        44.32778
+        72.0,
+        47.88991
       ],
       "position": [
-        0,
-        -10
+        1,
+        -6
       ],
       "pivot": [
         0.5,
@@ -171,20 +172,20 @@
       ]
     },
     "mail_damaged": {
-      "atlas": "res://assets/art/static-bust/armor.png",
+      "atlas": "res://assets/art/static-bust/side-damage.png",
       "rect": [
-        656,
-        767,
-        540,
-        303
+        718,
+        776,
+        436,
+        290
       ],
       "size": [
-        79.0,
-        44.32778
+        72.0,
+        47.88991
       ],
       "position": [
-        0,
-        -10
+        1,
+        -6
       ],
       "pivot": [
         0.5,
@@ -200,8 +201,8 @@
         596
       ],
       "size": [
-        19.0,
-        61.21081
+        22.5,
+        72.48649
       ],
       "position": [
         0,
@@ -221,8 +222,8 @@
         630
       ],
       "size": [
-        7.0,
-        80.18182
+        8.4,
+        96.21818
       ],
       "position": [
         0,
@@ -242,8 +243,8 @@
         580
       ],
       "size": [
-        14.0,
-        60.59701
+        17.5,
+        75.74627
       ],
       "position": [
         0,
@@ -263,12 +264,12 @@
         455
       ],
       "size": [
-        30.0,
-        44.7541
+        32.0,
+        47.7377
       ],
       "position": [
-        24,
-        -4
+        29,
+        -2
       ],
       "pivot": [
         0.5,
@@ -284,8 +285,8 @@
         460
       ],
       "size": [
-        3.4,
-        20.85333
+        4.0,
+        24.53333
       ],
       "position": [
         0,

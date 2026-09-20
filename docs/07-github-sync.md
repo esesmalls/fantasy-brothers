@@ -1,5 +1,9 @@
 # GitHub 同步记录
 
+## 2026-09-20 · U47静态半身比例修订
+
+从既有 `codex/h-motion-templates` 的 `8d2046b` 接续，推送前核对远端同分支仍为该基线；不覆盖其他电脑历史。同步新侧身图集、冻结旧比例的对照配置、实际导出帧、提示/哈希与标准。根目录入口仍为 `Review-Static-Bust.cmd`；构建EXE不进入Git，已有旧包的电脑拉取后运行 `tools/build_static_bust_review.ps1` 重建。正常战役与个人存档不变，本轮不合main、不发布Release。最终提交以Git历史为准。
+
 更新：2026-09-19。
 
 ## 第三台电脑 0.1.2 接续

@@ -21,7 +21,7 @@ func run() -> void:
 		check(absf(float(part.size[0])/float(part.rect[2])-float(part.size[1])/float(part.rect[3]))<.00001,name+": no stretched geometry")
 	for pair in [["head","wounded"],["padded","padded_damaged"],["mail","mail_damaged"]]:
 		check(parts[pair[0]].size==parts[pair[1]].size and parts[pair[0]].position==parts[pair[1]].position,"state changes preserve anchor and scale")
-	check(Actor.body_layers("bare",false,false)==["base","body","head"],"bare body is real beneath clothes")
+	check(Actor.body_layers("bare",false,false)==["base","body","head"],"foundation body remains beneath clothes")
 	check(Actor.body_layers("mail",false,false)==["base","body","linen","padded","mail","head"],"layer stack and face occlusion")
 	check(Actor.body_layers("mail",true,false).has("head"),"armor damage does not injure face")
 	check(Actor.body_layers("mail",false,true).has("mail"),"face injury does not damage armor")
@@ -53,6 +53,16 @@ func run() -> void:
 		check(Actor.contact_point(weapon).x>60,"weapon reaches target outside own silhouette")
 		if weapon=="bow":check(Motion.release(weapon)<Motion.contact(weapon),"arrow flight precedes impact")
 	check(JSON.stringify(parts)==original,"sampling cannot mutate layer catalog")
+	# A larger bow must clear the face even at maximum anticipation, not just rest.
+	var bow_size:=Vector2(parts.bow.size[0],parts.bow.size[1])
+	var bow_pivot:=Vector2(parts.bow.pivot[0],parts.bow.pivot[1])*bow_size
+	var face_right:float=parts.head.position[0]+parts.head.size[0]*.5
+	var nearest_bow:=INF
+	for i in range(1001):
+		var pose:=Motion.sample("bow",float(i)/1000)
+		for corner:Vector2 in [Vector2.ZERO,Vector2(bow_size.x,0),bow_size,Vector2(0,bow_size.y)]:
+			nearest_bow=minf(nearest_bow,((corner-bow_pivot).rotated(pose.angle)+pose.position).x)
+	check(nearest_bow>face_right,"enlarged bow never crosses facial silhouette")
 	var review:=Review.new();root.add_child(review)
 	await process_frame
 	review.paused=true;review.mode="motion";review.weapon="bow";review.progress=.3

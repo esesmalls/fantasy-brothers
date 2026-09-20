@@ -4,11 +4,17 @@ extends RefCounted
 const Motion = preload("res://presentation/static_bust_motion.gd")
 const CATALOG := "res://assets/art/static-bust/catalog.json"
 static var _catalog: Dictionary = {}
+static var _previous_catalog: Dictionary = {}
 static var _textures: Dictionary = {}
 
 static func parts() -> Dictionary:
 	if _catalog.is_empty():_catalog = JSON.parse_string(FileAccess.get_file_as_string(CATALOG))
 	return _catalog.parts
+
+static func previous_parts() -> Dictionary:
+	if _previous_catalog.is_empty():
+		_previous_catalog=JSON.parse_string(FileAccess.get_file_as_string("res://assets/art/static-bust/catalog-v1.json"))
+	return _previous_catalog.parts
 
 static func body_layers(armor: String, damaged: bool, wounded: bool) -> Array[String]:
 	var layers: Array[String] = ["base", "body"]
@@ -19,8 +25,9 @@ static func body_layers(armor: String, damaged: bool, wounded: bool) -> Array[St
 	return layers
 
 static func draw_part(c: CanvasItem, id: String, origin: Vector2, scale_value: float,
-		offset: Vector2 = Vector2.ZERO, angle: float = 0.0, tint: Color = Color.WHITE) -> void:
-	var part: Dictionary = parts()[id]
+		offset: Vector2 = Vector2.ZERO, angle: float = 0.0, tint: Color = Color.WHITE,
+		catalog_parts: Dictionary = {}) -> void:
+	var part: Dictionary = (parts() if catalog_parts.is_empty() else catalog_parts)[id]
 	var path: String = part.atlas
 	if not _textures.has(path):_textures[path]=load(path)
 	var texture: Texture2D = _textures[path]
@@ -48,7 +55,7 @@ static func draw_weapon(c: CanvasItem, weapon: String, origin: Vector2, scale_va
 	draw_part(c,weapon,origin,scale_value,state.position,state.angle)
 	if weapon == "bow" and (p < Motion.release(weapon) or p > .94):
 		var pull := 5.0*smoothstep(0.0,Motion.release(weapon),p) if p < .94 else 0.0
-		draw_part(c,"arrow",origin,scale_value,Vector2(49-pull,-35),PI/2)
+		draw_part(c,"arrow",origin,scale_value,Vector2(57-pull,-42),PI/2)
 
 static func draw_actor(c: CanvasItem, origin: Vector2, scale_value: float,
 		armor: String = "mail", weapon: String = "sword", damaged: bool = false,
@@ -57,7 +64,19 @@ static func draw_actor(c: CanvasItem, origin: Vector2, scale_value: float,
 	draw_weapon(c,weapon,origin,scale_value,p,outcome)
 
 static func contact_point(weapon: String) -> Vector2:
-	if weapon == "bow":return Vector2(111,-35)
+	if weapon == "bow":return Vector2(111,-42)
 	var part: Dictionary = parts()[weapon]
 	var state := Motion.sample(weapon,Motion.contact(weapon))
 	return state.position+Vector2(0,-float(part.size[1])*float(part.pivot[1])).rotated(state.angle)
+
+## Read-only U46 reference at identical camera scale; no temporary catalog swap.
+static func draw_previous(c: CanvasItem, origin: Vector2, scale_value: float, armor: String,
+		weapon: String, damaged: bool = false, wounded: bool = false) -> void:
+	var old:=previous_parts()
+	for id in body_layers(armor,damaged,wounded):
+		draw_part(c,id,origin,scale_value,Vector2.ZERO,0,Color.WHITE,old)
+	if weapon=="none":return
+	if weapon=="sword":draw_part(c,"shield",origin,scale_value,Vector2.ZERO,0,Color.WHITE,old)
+	var rest:Dictionary={"sword":[Vector2(8,-12),.62],"spear":[Vector2(20,-19),.52],"bow":[Vector2(40,-31),0]}
+	draw_part(c,weapon,origin,scale_value,rest[weapon][0],rest[weapon][1],Color.WHITE,old)
+	if weapon=="bow":draw_part(c,"arrow",origin,scale_value,Vector2(49,-35),PI/2,Color.WHITE,old)
