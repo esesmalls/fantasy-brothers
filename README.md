@@ -22,7 +22,7 @@
 
 下一批四步范围与整批测试见 [招聘、契约、部署与人物后果](docs/16-next-four-steps.md)，尚未实现。
 
-用户已确认 [美术生产方式](docs/17-art-pipeline-selection.md) 与 [详细美术计划](docs/18-art-production-plan.md)。最新是按第一轮反馈制作的 [第二轮E–H候选说明](art/validation/2026-09-20-refined-directions/README.md)和[离线评审页](art/validation/2026-09-20-refined-directions/index.html)：三套融合方向＋一套精细Battle Brothers半身方向，加入低底托、完整双手与自然出手姿势。页面明确标记工具未生成的死亡/身体拆件，候选尚未完成正式装配或动画验收。[第一轮A–D](art/validation/2026-09-19-four-directions/index.html)保留供对照；[艺术设定集](references/battle-brothers/README.md)继续作为第三方参考。游戏、存档和导出包不变。
+用户已确认 [美术生产方式](docs/17-art-pipeline-selection.md)、[详细美术计划](docs/18-art-production-plan.md)与 **[H主导标准风格](docs/19-art-style-standard.md)**：保留H人物大小、完整双手和腰底贴合，少量融合E/G写实与油画；倒地/死亡不带底座。[最新三状态修订对照页](art/validation/2026-09-20-h-standard/index.html)可离线打开，提供武装、倒地、死亡新图及旧稿对照；三张均有真实透明alpha，边缘、装备精确对应、像素装配与动画仍待校准。[第二轮E–H](art/validation/2026-09-20-refined-directions/index.html)及[第一轮A–D](art/validation/2026-09-19-four-directions/index.html)保留供回看；[艺术设定集](references/battle-brothers/README.md)继续作为第三方参考。游戏、存档和导出包不变。
 
 ## 当前建议
 

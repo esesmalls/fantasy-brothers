@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fantasy Brothers · H 标准风格修订</title>
+<style>
+:root{color-scheme:dark;--ink:#eee6d8;--muted:#b8b0a4;--gold:#d8b779;--line:#474239;--surface:#23221e;font-family:"Microsoft YaHei UI",system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:#171916;color:var(--ink);line-height:1.6}main{max-width:1440px;margin:auto;padding:32px 24px 64px}
+a{color:var(--gold)}h1{font-family:Georgia,"Microsoft YaHei UI",serif;font-size:clamp(26px,3vw,42px);line-height:1.2;margin:12px 0 16px}h2{font-size:24px;margin:32px 0 12px}h3{font-size:19px;margin:0}
+p{margin:8px 0}.eyebrow{color:var(--gold);letter-spacing:.15em;font-size:12px}.intro{color:var(--muted);max-width:840px}.badge{display:inline-block;font-size:13px;background:#343524;color:#e0d6ae;border:1px solid #636140;padding:4px 10px;border-radius:20px}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}.card{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.caption{padding:16px}.caption p{color:var(--muted);font-size:14px;margin-bottom:0}.stage{background:#303630;background-image:linear-gradient(45deg,#ffffff05 25%,transparent 25%),linear-gradient(-45deg,#ffffff05 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#ffffff05 75%),linear-gradient(-45deg,transparent 75%,#ffffff05 75%);background-size:24px 24px;background-position:0 0,0 12px,12px -12px,-12px 0;display:flex;justify-content:center;align-items:center;min-width:0}
+.stage.light{background:#efebe2}.stage.dark{background:#131713}.stage.earth{background:#696149}
+button{font:inherit;cursor:pointer;color:var(--ink);border:1px solid #696052;background:#2c2b24;border-radius:7px;padding:8px 13px}button:hover{border-color:var(--gold)}button:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:3px}button[aria-pressed=true]{background:var(--gold);color:#231e16;border-color:var(--gold)}
+.image-button{width:100%;padding:0;border:0;border-radius:0;background:transparent;display:block}.image-button img{display:block;width:100%;height:350px;object-fit:contain}
+.toolbar{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin:16px 0}.group{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.group span{font-size:13px;color:var(--muted);margin-right:4px}.compare{display:grid;grid-template-columns:1fr 1fr;gap:16px}.compare img{height:460px}
+.note{padding:14px 18px;border-left:3px solid var(--gold);background:#27271e;color:#d2cbbe;margin:20px 0}.note small{display:block;color:var(--muted)}
+.thumbs{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}.thumb{margin:0;text-align:center;max-width:100%}.thumb .stage{width:192px;height:192px;max-width:100%}.thumb img{width:100%;height:100%;object-fit:contain}.thumb figcaption{font-size:13px;margin-top:8px;color:var(--muted)}
+footer{border-top:1px solid var(--line);padding-top:18px;margin-top:36px;color:var(--muted);font-size:13px}footer a{margin-right:14px}
+dialog{width:min(1240px,95vw);max-height:95vh;background:#1b1e1a;color:var(--ink);border:1px solid #756347;border-radius:10px;padding:14px}dialog::backdrop{background:#000c}.dialog-bar{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:10px}dialog img{display:block;max-width:100%;max-height:80vh;object-fit:contain;margin:auto}
+@media(max-width:850px){.summary{grid-template-columns:1fr}.summary .image-button img{height:360px}.compare img{height:320px}}
+@media(max-width:550px){main{padding:22px 14px 40px}.compare{grid-template-columns:1fr}.compare img{height:350px}.toolbar{gap:10px}button{padding:7px 10px}.thumbs{gap:10px}.summary .image-button img{height:320px}}
+</style>
+</head>
+<body><main>
+<header><div class="eyebrow">FANTASY BROTHERS / ART STANDARD 01</div><h1>H · 精细半身，克制的绘画质感</h1><span class="badge">风格方向已确认</span><p class="intro">以 H 的人物比例、表情、双手位置和贴身底座为基准，少量吸收 E / G 的写实材质与油画笔触。以下是本轮三张修订样板，尚未完成游戏内装配与动画验收。</p></header>
+<section class="summary" aria-label="本轮修订样板">
+<article class="card"><button class="image-button" data-title="04 · 完整武装" aria-label="放大完整武装"><span class="stage"><img src="04-armed.png" alt="H标准站立人物，双手握剑，腰身贴合低底座"></span></button><div class="caption"><h3>04 · 完整武装</h3><p>保留 H 的短身比例和高位握持，轻量增加面部、布料与金属笔触。</p></div></article>
+<article class="card"><button class="image-button" data-title="06 · 倒地待清点" aria-label="放大倒地待清点"><span class="stage"><img src="06-downed.png" alt="同一人物无力倒伏，双手自然落地，没有底座"></span></button><div class="caption"><h3>06 · 倒地待清点</h3><p>移除整个翻倒底座；保留完整头颈、双手与原 H 倒姿，命运尚未确定。</p></div></article>
+<article class="card"><button class="image-button" data-title="07 · 确认死亡" aria-label="放大确认死亡"><span class="stage"><img src="07-dead.png" alt="H人物确认死亡样板，无底座，采用已认可E07死亡姿态与伤口处理"></span></button><div class="caption"><h3>07 · 确认死亡</h3><p>延续已认可的 E07 死亡表现，统一 H 的深色衣甲与面容；不带底座。</p></div></article>
+</section>
+<div class="toolbar" aria-label="背景查看"><div class="group" id="backgrounds"><span>检查背景</span><button data-bg="" aria-pressed="true">棋格</button><button data-bg="light" aria-pressed="false">浅底</button><button data-bg="dark" aria-pressed="false">深底</button><button data-bg="earth" aria-pressed="false">地表色</button></div></div>
+<section aria-labelledby="compare-title"><h2 id="compare-title">保留了什么，修正了什么</h2><div class="toolbar"><div class="group" id="states"><button data-state="04" aria-pressed="false">04 · 站立</button><button data-state="06" aria-pressed="true">06 · 倒地</button><button data-state="07" aria-pressed="false">07 · 死亡</button></div></div>
+<div class="compare">
+<article class="card"><button class="image-button" id="before-button" data-title="旧 H06 · 倒地参考" aria-label="放大修改前参考"><span class="stage"><img id="before" src="../2026-09-20-refined-directions/h-refined-brothers/06-downed.png" alt="旧H06倒地，背后仍有金属底座"></span></button><div class="caption"><h3 id="before-label">原 H06</h3><p id="before-note">保留用户认可的倒姿；需要移除背后翻起的金属底座。</p></div></article>
+<article class="card"><button class="image-button" id="after-button" data-title="新 H06 · 去底座修订" aria-label="放大本轮修订"><span class="stage"><img id="after" src="06-downed.png" alt="新H06倒地，不带底座"></span></button><div class="caption"><h3 id="after-label">H 标准 · 倒地修订</h3><p id="after-note">底座整体移除，后缘收为衣甲轮廓，头和双手自然落地。</p></div></article>
+</div><div class="note" id="state-note">倒地不等于死亡。06 仅表示本场失能；战后是否幸存由规则决定。当前游戏尚未接入这一伤亡流程。</div>
+</section>
+<section aria-labelledby="small-title"><h2 id="small-title">缩小后仍然看得清</h2><div class="toolbar"><div class="group" id="sizes"><span>整张画布显示尺寸</span><button data-size="128" aria-pressed="false">128 px</button><button data-size="192" aria-pressed="true">192 px</button><button data-size="256" aria-pressed="false">256 px</button></div></div><p class="intro">静态缩小预览，不代表已校准的游戏内大小。三张画布留白与姿态不同，尚未统一人物锚点。</p>
+<div class="thumbs"><figure class="thumb"><div class="stage"><img src="04-armed.png" alt="缩小后的完整武装"></div><figcaption>04 · 完整武装</figcaption></figure><figure class="thumb"><div class="stage"><img src="06-downed.png" alt="缩小后的倒地"></div><figcaption>06 · 倒地待清点</figcaption></figure><figure class="thumb"><div class="stage"><img src="07-dead.png" alt="缩小后的确认死亡"></div><figcaption>07 · 确认死亡</figcaption></figure></div></section>
+<footer><p>本轮评审已记录：E 4/5 · F 1/5 · G 4/5 · H 4/5。H 为后续制作标准，F 不再发展；E / G 仅补充少量材质语言。</p><p>新样板使用内置 image_gen 制作。透明边缘、同一装备的部件精确对应、头身拆分与动态握持仍需生产校准。</p><a href="../../../docs/19-art-style-standard.md">标准规范</a><a href="README.md">制作与验证说明</a><a href="prompts.md">生成记录</a><a href="../2026-09-20-refined-directions/index.html">第二轮原稿</a></footer>
+</main>
+<dialog id="lightbox" aria-labelledby="lightbox-title"><div class="dialog-bar"><strong id="lightbox-title"></strong><button id="close">关闭 ×</button></div><div class="stage"><img id="large" alt=""></div></dialog>
+<script>
+const configs={
+"04":{before:"../2026-09-20-refined-directions/h-refined-brothers/04-armed.png",after:"04-armed.png",beforeLabel:"原 H04",afterLabel:"H 标准 · 武装修订",beforeNote:"已认可的人物大小、腰底贴合与双手位置，是后续不变的基准。",afterNote:"少量增强自然材质笔触，保留H的轮廓与紧凑比例。",note:"站立保留低底座。腰身必须贴合底座，双手保持可见且高于腰线。"},
+"06":{before:"../2026-09-20-refined-directions/h-refined-brothers/06-downed.png",after:"06-downed.png",beforeLabel:"原 H06",afterLabel:"H 标准 · 倒地修订",beforeNote:"保留用户认可的倒姿；需要移除背后翻起的金属底座。",afterNote:"底座整体移除，后缘收为衣甲轮廓，头和双手自然落地。",note:"倒地不等于死亡。06 仅表示本场失能；战后是否幸存由规则决定。当前游戏尚未接入这一伤亡流程。"},
+"07":{before:"../2026-09-20-refined-directions/e-weathered-heraldry/07-decapitated.png",after:"07-dead.png",beforeLabel:"已认可的 E07 · 死亡表现参考",afterLabel:"H 标准 · 死亡修订",beforeNote:"原H07缺失，本处对照用户认可的E07死亡表现，并非旧H死亡稿。",afterNote:"改为H人物与深色锁甲配装，保留实体死亡表现；无底座。",note:"07 只用于已确认死亡。它是死亡样式之一，不能把所有失能都画成断首，也不能用空甲或常规模块堆替代。"}
+};
+const $=s=>document.querySelector(s);
+$("#states").addEventListener("click",e=>{const button=e.target.closest("button");if(!button)return;const c=configs[button.dataset.state];$("#states").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b===button)));$("#before").src=c.before;$("#after").src=c.after;$("#before").alt=c.beforeLabel;$("#after").alt=c.afterLabel;$("#before-label").textContent=c.beforeLabel;$("#after-label").textContent=c.afterLabel;$("#before-note").textContent=c.beforeNote;$("#after-note").textContent=c.afterNote;$("#state-note").textContent=c.note;$("#before-button").dataset.title=c.beforeLabel;$("#after-button").dataset.title=c.afterLabel;});
+$("#backgrounds").addEventListener("click",e=>{const button=e.target.closest("button");if(!button)return;$("#backgrounds").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b===button)));document.querySelectorAll(".stage").forEach(s=>s.className="stage"+(button.dataset.bg?" "+button.dataset.bg:""));});
+$("#sizes").addEventListener("click",e=>{const button=e.target.closest("button");if(!button)return;$("#sizes").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b===button)));document.querySelectorAll(".thumb .stage").forEach(s=>{s.style.width=button.dataset.size+"px";s.style.height=button.dataset.size+"px";});});
+document.querySelectorAll(".image-button").forEach(b=>b.addEventListener("click",()=>{const img=b.querySelector("img");$("#large").src=img.src;$("#large").alt=img.alt;$("#lightbox-title").textContent=b.dataset.title;$("#lightbox").showModal();}));
+$("#close").addEventListener("click",()=>$("#lightbox").close());
+$("#lightbox").addEventListener("click",e=>{if(e.target===$("#lightbox"))$("#lightbox").close();});
+document.querySelectorAll("img").forEach(img=>img.addEventListener("error",()=>{img.alt="图片未能加载："+img.getAttribute("src");}));
+</script>
+</body></html>

@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "audited_at": "2026-09-20T11:32:51+08:00",
+  "audit_tool": "Pillow 12.2.0 read-only + hashlib.sha256",
+  "root": "art/validation/2026-09-20-h-standard",
+  "scope": [
+    "04-armed.png",
+    "06-downed.png",
+    "07-dead.png"
+  ],
+  "scope_note": "Only current final 04/06/07 files are audited. Superseded and process attempts are excluded.",
+  "alpha_note": "All three files contain a real alpha channel. RGB values stored under alpha 0 may be shown by alpha-ignoring viewers and do not constitute an opaque background.",
+  "files": [
+    {
+      "file": "04-armed.png",
+      "dimensions": [1254, 1254],
+      "bytes": 1285103,
+      "sha256": "cba1b7b892a3592424fa0ebed9b24b2cadfd1c9fa061baa94c34642118ec6d26",
+      "mode": "RGBA",
+      "alpha_extrema": [0, 255],
+      "alpha_counts": {
+        "transparent_0": 1055599,
+        "partial_1_254": 516624,
+        "opaque_255": 293
+      },
+      "alpha_corners_tl_tr_bl_br": [0, 0, 0, 0],
+      "bbox_alpha_ge_1": [49, 33, 1218, 1198],
+      "bbox_alpha_ge_2": [171, 33, 1216, 1194],
+      "bbox_alpha_ge_250": [177, 37, 1212, 1189],
+      "readable": true,
+      "transparent_alpha_present": true,
+      "canvas_edge_note": "No nonzero-alpha pixel touches a canvas edge."
+    },
+    {
+      "file": "06-downed.png",
+      "dimensions": [1254, 1254],
+      "bytes": 1095645,
+      "sha256": "bb1e1e8af6bcdc3854ceecdfa6c5295c39e2563a5fd7e846f6b50a7ab9ade3b8",
+      "mode": "RGBA",
+      "alpha_extrema": [0, 255],
+      "alpha_counts": {
+        "transparent_0": 1113413,
+        "partial_1_254": 458670,
+        "opaque_255": 433
+      },
+      "alpha_corners_tl_tr_bl_br": [0, 0, 0, 0],
+      "bbox_alpha_ge_1": [15, 40, 1238, 1254],
+      "bbox_alpha_ge_2": [19, 300, 1236, 1135],
+      "bbox_alpha_ge_250": [30, 304, 1218, 1123],
+      "readable": true,
+      "transparent_alpha_present": true,
+      "canvas_edge_note": "Only alpha=1 residual pixels reach the bottom edge; alpha>=2 content retains a 119 px bottom margin."
+    },
+    {
+      "file": "07-dead.png",
+      "dimensions": [1254, 1254],
+      "bytes": 1093357,
+      "sha256": "1fd30ab33a3fe3c2c23a7a90318fc02d7d78e55f3f1b482b035b82588ff00e93",
+      "mode": "RGBA",
+      "alpha_extrema": [0, 255],
+      "alpha_counts": {
+        "transparent_0": 1124179,
+        "partial_1_254": 447725,
+        "opaque_255": 612
+      },
+      "alpha_corners_tl_tr_bl_br": [0, 0, 0, 0],
+      "bbox_alpha_ge_1": [0, 47, 1249, 1254],
+      "bbox_alpha_ge_2": [19, 323, 1247, 1142],
+      "bbox_alpha_ge_250": [24, 327, 1241, 1133],
+      "readable": true,
+      "transparent_alpha_present": true,
+      "canvas_edge_note": "Alpha=1 residual pixels touch the left and bottom edges. Alpha>=2 content does not touch an edge, but the right margin is 7 px; alpha>=250 content has a 13 px right margin."
+    }
+  ],
+  "summary": {
+    "png_count": 3,
+    "total_bytes": 3474105,
+    "all_png_readable": true,
+    "all_rgba": true,
+    "all_have_transparent_pixels": true,
+    "all_corners_fully_transparent": true,
+    "uniform_dimensions": true,
+    "all_have_fully_opaque_pixels": true,
+    "godot_import_tested": false,
+    "black_white_battlefield_composites_tested": false,
+    "animation_or_gameplay_tested": false
+  }
+}

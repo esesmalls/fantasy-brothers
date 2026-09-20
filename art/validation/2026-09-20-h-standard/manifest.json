@@ -1,0 +1,72 @@
+{
+  "set_id": "h-standard-v1",
+  "date": "2026-09-20",
+  "tool": "Codex built-in image_gen",
+  "approved_direction": "U36: H dominant, slight E/G painterly realism",
+  "user_approved_new_images": false,
+  "runtime_ready": false,
+  "selected_count": 3,
+  "generation_attempts": 6,
+  "bytes": 3474105,
+  "files": [
+    {
+      "file": "04-armed.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixels": 1055599,
+      "bytes": 1285103,
+      "sha256": "cba1b7b892a3592424fa0ebed9b24b2cadfd1c9fa061baa94c34642118ec6d26",
+      "source": "C:\\Users\\esmalls\\.codex\\generated_images\\01a0bc98-dd48-7343-8575-b7b4007cc4df\\exec-3071807b-5669-46dc-9cac-423c2b708573.png",
+      "generation_attempt": "04",
+      "status": "style-revision-sample",
+      "runtime_ready": false
+    },
+    {
+      "file": "06-downed.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixels": 1113413,
+      "bytes": 1095645,
+      "sha256": "bb1e1e8af6bcdc3854ceecdfa6c5295c39e2563a5fd7e846f6b50a7ab9ade3b8",
+      "source": "C:\\Users\\esmalls\\.codex\\generated_images\\01a0bc98-dd48-7343-8575-b7b4007cc4df\\exec-9aa0fddd-58a9-4eb3-b525-e192d1d1e919.png",
+      "generation_attempt": "06",
+      "status": "style-revision-sample",
+      "runtime_ready": false
+    },
+    {
+      "file": "07-dead.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixels": 1124179,
+      "bytes": 1093357,
+      "sha256": "1fd30ab33a3fe3c2c23a7a90318fc02d7d78e55f3f1b482b035b82588ff00e93",
+      "source": "C:\\Users\\esmalls\\.codex\\generated_images\\01a0bc98-dd48-7343-8575-b7b4007cc4df\\exec-d12218dd-94c2-4dcd-93d9-1fe33298763f.png",
+      "generation_attempt": "07-d",
+      "status": "style-revision-sample",
+      "runtime_ready": false
+    }
+  ],
+  "references": [
+    "../2026-09-20-refined-directions/h-refined-brothers/04-armed.png",
+    "../2026-09-20-refined-directions/h-refined-brothers/06-downed.png",
+    "../2026-09-20-refined-directions/e-weathered-heraldry/04-armed.png",
+    "../2026-09-20-refined-directions/e-weathered-heraldry/07-decapitated.png",
+    "../2026-09-20-refined-directions/g-roadside-tempera/04-armed.png"
+  ],
+  "license_note": "AI-generated project samples. Prior user-supplied third-party artbook is reference only, not runtime content."
+}
