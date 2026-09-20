@@ -1,0 +1,774 @@
+{
+  "schema": 2,
+  "body_template": "h-human-bust-v2",
+  "identity": "h-veteran-01",
+  "status": "review-candidate",
+  "logical_ground": [
+    0,
+    0
+  ],
+  "logical_bounds": [
+    -48,
+    -82,
+    110,
+    99
+  ],
+  "templates": {
+    "a": {
+      "name": "A · 简练利落",
+      "atlas": "res://assets/art/motion/a-atlas-v2.png",
+      "parts": {
+        "head": {
+          "rect": [
+            44,
+            29,
+            300,
+            391
+          ],
+          "size": [
+            27.5,
+            35
+          ],
+          "pivot": [
+            0.51,
+            0.81
+          ],
+          "position": [
+            0,
+            0
+          ]
+        },
+        "head_hit": {
+          "rect": [
+            885,
+            876,
+            285,
+            358
+          ],
+          "size": [
+            27.5,
+            35
+          ],
+          "pivot": [
+            0.51,
+            0.81
+          ],
+          "position": [
+            0,
+            0
+          ]
+        },
+        "armor_padded": {
+          "rect": [
+            418,
+            25,
+            387,
+            408
+          ],
+          "size": [
+            42,
+            40
+          ],
+          "pivot": [
+            0.5,
+            1
+          ],
+          "position": [
+            0,
+            0
+          ]
+        },
+        "armor_mail": {
+          "rect": [
+            834,
+            32,
+            396,
+            405
+          ],
+          "size": [
+            42,
+            40
+          ],
+          "pivot": [
+            0.5,
+            1
+          ],
+          "position": [
+            0,
+            0
+          ]
+        },
+        "right_arm": {
+          "rect": [
+            474,
+            457,
+            269,
+            368
+          ],
+          "size": [
+            19,
+            26
+          ],
+          "pivot": [
+            0.28,
+            0.1
+          ],
+          "position": [
+            0,
+            0
+          ],
+          "grip": [
+            0.2,
+            0.82
+          ],
+          "hand_region": [
+            0,
+            0.7,
+            0.43,
+            0.3
+          ]
+        },
+        "left_arm": {
+          "rect": [
+            92,
+            457,
+            280,
+            376
+          ],
+          "size": [
+            19,
+            26
+          ],
+          "pivot": [
+            0.67,
+            0.1
+          ],
+          "position": [
+            0,
+            0
+          ],
+          "grip": [
+            0.8,
+            0.85
+          ]
+        },
+        "sword": {
+          "rect": [
+            942,
+            437,
+            182,
+            440
+          ],
+          "size": [
+            13.1,
+            36
+          ],
+          "pivot": [
+            0.445,
+            0.825
+          ],
+          "position": [
+            0,
+            0
+          ]
+        },
+        "shield": {
+          "rect": [
+            52,
+            864,
+            319,
+            337
+          ],
+          "size": [
+            25,
+            27
+          ],
+          "pivot": [
+            0.94,
+            0.5
+          ],
+          "position": [
+            0,
+            0
+          ]
+        },
+        "base": {
+          "rect": [
+            417,
+            1007,
+            421,
+            185
+          ],
+          "size": [
+            46,
+            13
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "position": [
+            0,
+            0
+          ]
+        }
+      },
+      "motion": {
+        "slash": 0.42,
+        "shield_bash": 0.4,
+        "contact": 0.42,
+        "amplitude": 0.72,
+        "breathing": 0.16,
+        "strike_span": 0.11,
+        "hold": 0.04
+      },
+      "rig_version": 2,
+      "anchors": {
+        "waist": [
+          0,
+          -2
+        ],
+        "neck": [
+          0,
+          -34
+        ],
+        "right_shoulder": [
+          17,
+          -31
+        ],
+        "left_shoulder": [
+          -17,
+          -31
+        ],
+        "sword_angle": 0.35,
+        "shield_angle": -0.06,
+        "collar_front_fraction": 0.26,
+        "base_front_fraction": 0.55
+      }
+    },
+    "b": {
+      "name": "B · 重量明确",
+      "atlas": "res://assets/art/motion/b-atlas-v2.png",
+      "parts": {
+        "head": {
+          "rect": [
+            47,
+            30,
+            295,
+            386
+          ],
+          "size": [
+            27.5,
+            35
+          ],
+          "pivot": [
+            0.51,
+            0.81
+          ],
+          "position": [
+            0,
+            0
+          ]
+        },
+        "head_hit": {
+          "rect": [
+            888,
+            878,
+            279,
+            353
+          ],
+          "size": [
+            27.5,
+            35
+          ],
+          "pivot": [
+            0.51,
+            0.81
+          ],
+          "position": [
+            0,
+            0
+          ]
+        },
+        "armor_padded": {
+          "rect": [
+            419,
+            26,
+            385,
+            405
+          ],
+          "size": [
+            42,
+            40
+          ],
+          "pivot": [
+            0.5,
+            1
+          ],
+          "position": [
+            0,
+            0
+          ]
+        },
+        "armor_mail": {
+          "rect": [
+            835,
+            34,
+            392,
+            401
+          ],
+          "size": [
+            42,
+            40
+          ],
+          "pivot": [
+            0.5,
+            1
+          ],
+          "position": [
+            0,
+            0
+          ]
+        },
+        "right_arm": {
+          "rect": [
+            475,
+            457,
+            268,
+            366
+          ],
+          "size": [
+            19,
+            26
+          ],
+          "pivot": [
+            0.28,
+            0.1
+          ],
+          "position": [
+            0,
+            0
+          ],
+          "grip": [
+            0.2,
+            0.82
+          ],
+          "hand_region": [
+            0,
+            0.7,
+            0.43,
+            0.3
+          ]
+        },
+        "left_arm": {
+          "rect": [
+            92,
+            457,
+            279,
+            373
+          ],
+          "size": [
+            19,
+            26
+          ],
+          "pivot": [
+            0.67,
+            0.1
+          ],
+          "position": [
+            0,
+            0
+          ],
+          "grip": [
+            0.8,
+            0.85
+          ]
+        },
+        "sword": {
+          "rect": [
+            943,
+            437,
+            179,
+            438
+          ],
+          "size": [
+            13.1,
+            36
+          ],
+          "pivot": [
+            0.445,
+            0.825
+          ],
+          "position": [
+            0,
+            0
+          ]
+        },
+        "shield": {
+          "rect": [
+            53,
+            864,
+            318,
+            335
+          ],
+          "size": [
+            25,
+            27
+          ],
+          "pivot": [
+            0.94,
+            0.5
+          ],
+          "position": [
+            0,
+            0
+          ]
+        },
+        "base": {
+          "rect": [
+            417,
+            1008,
+            421,
+            181
+          ],
+          "size": [
+            46,
+            13
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "position": [
+            0,
+            0
+          ]
+        }
+      },
+      "motion": {
+        "slash": 0.68,
+        "shield_bash": 0.6,
+        "contact": 0.5,
+        "amplitude": 1.0,
+        "breathing": 0.3,
+        "strike_span": 0.15,
+        "hold": 0.09
+      },
+      "rig_version": 2,
+      "anchors": {
+        "waist": [
+          0,
+          -2
+        ],
+        "neck": [
+          0,
+          -34
+        ],
+        "right_shoulder": [
+          17,
+          -31
+        ],
+        "left_shoulder": [
+          -17,
+          -31
+        ],
+        "sword_angle": 0.35,
+        "shield_angle": -0.06,
+        "collar_front_fraction": 0.26,
+        "base_front_fraction": 0.55
+      }
+    },
+    "c": {
+      "name": "C · 细腻舒展",
+      "atlas": "res://assets/art/motion/c-atlas-v2.png",
+      "parts": {
+        "head": {
+          "rect": [
+            42,
+            29,
+            303,
+            391
+          ],
+          "size": [
+            27.5,
+            35
+          ],
+          "pivot": [
+            0.51,
+            0.81
+          ],
+          "position": [
+            0,
+            0
+          ]
+        },
+        "head_hit": {
+          "rect": [
+            885,
+            878,
+            285,
+            356
+          ],
+          "size": [
+            27.5,
+            35
+          ],
+          "pivot": [
+            0.51,
+            0.81
+          ],
+          "position": [
+            0,
+            0
+          ]
+        },
+        "armor_padded": {
+          "rect": [
+            418,
+            25,
+            388,
+            409
+          ],
+          "size": [
+            42,
+            40
+          ],
+          "pivot": [
+            0.5,
+            1
+          ],
+          "position": [
+            0,
+            0
+          ]
+        },
+        "armor_mail": {
+          "rect": [
+            834,
+            32,
+            397,
+            406
+          ],
+          "size": [
+            42,
+            40
+          ],
+          "pivot": [
+            0.5,
+            1
+          ],
+          "position": [
+            0,
+            0
+          ]
+        },
+        "right_arm": {
+          "rect": [
+            472,
+            456,
+            272,
+            370
+          ],
+          "size": [
+            19,
+            26
+          ],
+          "pivot": [
+            0.28,
+            0.1
+          ],
+          "position": [
+            0,
+            0
+          ],
+          "grip": [
+            0.2,
+            0.82
+          ],
+          "hand_region": [
+            0,
+            0.7,
+            0.43,
+            0.3
+          ]
+        },
+        "left_arm": {
+          "rect": [
+            91,
+            456,
+            282,
+            376
+          ],
+          "size": [
+            19,
+            26
+          ],
+          "pivot": [
+            0.67,
+            0.1
+          ],
+          "position": [
+            0,
+            0
+          ],
+          "grip": [
+            0.8,
+            0.85
+          ]
+        },
+        "sword": {
+          "rect": [
+            942,
+            437,
+            182,
+            440
+          ],
+          "size": [
+            13.1,
+            36
+          ],
+          "pivot": [
+            0.445,
+            0.825
+          ],
+          "position": [
+            0,
+            0
+          ]
+        },
+        "shield": {
+          "rect": [
+            52,
+            864,
+            320,
+            337
+          ],
+          "size": [
+            25,
+            27
+          ],
+          "pivot": [
+            0.94,
+            0.5
+          ],
+          "position": [
+            0,
+            0
+          ]
+        },
+        "base": {
+          "rect": [
+            416,
+            1007,
+            423,
+            184
+          ],
+          "size": [
+            46,
+            13
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "position": [
+            0,
+            0
+          ]
+        }
+      },
+      "motion": {
+        "slash": 0.92,
+        "shield_bash": 0.78,
+        "contact": 0.52,
+        "amplitude": 1.18,
+        "breathing": 0.45,
+        "strike_span": 0.15,
+        "hold": 0.09
+      },
+      "rig_version": 2,
+      "anchors": {
+        "waist": [
+          0,
+          -2
+        ],
+        "neck": [
+          0,
+          -34
+        ],
+        "right_shoulder": [
+          17,
+          -31
+        ],
+        "left_shoulder": [
+          -17,
+          -31
+        ],
+        "sword_angle": 0.35,
+        "shield_angle": -0.06,
+        "collar_front_fraction": 0.26,
+        "base_front_fraction": 0.55
+      }
+    }
+  },
+  "terminal": {
+    "atlas": "res://assets/art/motion/terminal-atlas.png",
+    "shared_by": [
+      "a",
+      "b",
+      "c"
+    ],
+    "parts": {
+      "armor_padded": {
+        "rect": [
+          9,
+          226,
+          868,
+          605
+        ],
+        "size": [
+          72,
+          50.2
+        ],
+        "pivot": [
+          0.5,
+          0.58
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      "armor_mail": {
+        "rect": [
+          895,
+          226,
+          869,
+          605
+        ],
+        "size": [
+          72,
+          50.2
+        ],
+        "pivot": [
+          0.5,
+          0.58
+        ],
+        "position": [
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "sample_unit_ids": [
+    "crew_1"
+  ],
+  "compatible_armor_ids": [
+    "armor_padded",
+    "armor_mail"
+  ],
+  "weapon_parts": {
+    "weapon_guard_sword": "sword"
+  }
+}

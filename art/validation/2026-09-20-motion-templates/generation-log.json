@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-20",
+  "tool": "Codex built-in image_gen",
+  "model": "unknown (not reported by tool)",
+  "cli_or_external_api_used": false,
+  "assets": [
+    {
+      "id": "b-atlas",
+      "status": "rejected_assembly_retained_for_traceability",
+      "source_output": "C:/Users/esmalls/.codex/generated_images/01a0bd16-21c4-7440-9916-972303f52565/exec-df98f1cd-3ac5-4009-9bd7-f7dd15cbb954.png",
+      "workspace_source": "sources/b-atlas-source.png",
+      "runtime": "game/assets/art/motion/b-atlas.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "74C3213E994D4E3BB9210FBCDD431A072BEF837556AD2D25D8AB20DE3960AE08",
+      "prompt_record": "unavailable; known requirements only are recorded in prompts.md",
+      "alpha_check": "Format32bppArgb; corner alpha 0,0,1,0",
+      "rejection": "User reported poor head/body, body/base, arm/body fit and awkward weapon grip; excluded from current export."
+    },
+    {
+      "id": "a-atlas",
+      "status": "rejected_assembly_retained_for_traceability",
+      "edit_target": "sources/b-atlas-source.png",
+      "source_output": "C:/Users/esmalls/.codex/generated_images/01a0bd1c-2f60-7aa3-a289-1190f4683be4/exec-c08ec124-8402-44d6-8ad2-e80e6caf2629.png",
+      "workspace_source": "sources/a-atlas-source.png",
+      "runtime": "game/assets/art/motion/a-atlas.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1554078,
+      "sha256": "8F608A91489DDC7931E06360D68738D37B914FAE9C1317065E573420B447C80E",
+      "alpha_check": "Format32bppArgb; corner alpha 0,0,0,0",
+      "visual_check": "nine parts present; identity/layout preserved; cleaner color masses; sword close to right edge but not cropped",
+      "rejection": "User reported poor head/body, body/base, arm/body fit and awkward weapon grip; excluded from current export."
+    },
+    {
+      "id": "c-atlas",
+      "status": "rejected_assembly_retained_for_traceability",
+      "edit_target": "sources/b-atlas-source.png",
+      "source_output": "C:/Users/esmalls/.codex/generated_images/01a0bd1c-2f60-7aa3-a289-1190f4683be4/exec-4137a6d6-1a71-41a4-b400-916791148356.png",
+      "workspace_source": "sources/c-atlas-source.png",
+      "runtime": "game/assets/art/motion/c-atlas.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1740755,
+      "sha256": "DC0C91E7B96AF7414AA925B026105879ED0BC1C445886CFA6404F0D844329569",
+      "alpha_check": "Format32bppArgb; corner alpha 0,0,1,0",
+      "visual_check": "nine parts present; H proportions/layout preserved; richer cloth/leather/wood/steel brushwork; injured head adds light forehead and cheek marks",
+      "failed_attempts": [
+        "network error from built-in image edit endpoint; no output"
+      ],
+      "rejection": "User reported poor head/body, body/base, arm/body fit and awkward weapon grip; excluded from current export."
+    },
+    {
+      "id": "terminal-atlas-v1",
+      "status": "rejected_source_only",
+      "source_output": "C:/Users/esmalls/.codex/generated_images/01a0bd1c-2f60-7aa3-a289-1190f4683be4/exec-b863d61e-f746-4772-b7ad-226e421c2c86.png",
+      "workspace_source": "sources/terminal-atlas-v1-source.png",
+      "width": 1983,
+      "height": 793,
+      "bytes": 1457310,
+      "sha256": "495E71B09389897062EC208939BACD75951CC11CF41CAC1B1C6A68BA03D7447B",
+      "alpha_check": "Format32bppArgb; corner alpha 0,0,0,0",
+      "rejection": "both heads rest on forearms like sleeping poses; also introduces long-legged full bodies instead of established H half-body piece proportion"
+    },
+    {
+      "id": "terminal-atlas-v2",
+      "status": "rejected_source_only",
+      "edit_target": "sources/terminal-atlas-v1-source.png",
+      "source_output": "C:/Users/esmalls/.codex/generated_images/01a0bd1c-2f60-7aa3-a289-1190f4683be4/exec-9899cb13-1b52-4fc2-ba70-e7539c754f56.png",
+      "workspace_source": "sources/terminal-atlas-v2-source.png",
+      "width": 1983,
+      "height": 793,
+      "bytes": 1366912,
+      "sha256": "0F4FDECB3A9910DC5AEF53F75D748B63E80D84D9EEE2BA50F064BB577D3641F8",
+      "alpha_check": "Format32bppArgb; corner alpha 0,0,0,0",
+      "rejection": "head/arm gravity readability improved, but long-legged full-body anatomy still violates established H half-body piece proportion"
+    },
+    {
+      "id": "terminal-atlas",
+      "status": "generated_and_selected_after_authorized_structural_correction",
+      "references": [
+        "sources/b-atlas-source.png",
+        "../2026-09-20-h-standard/06-downed.png"
+      ],
+      "source_output": "C:/Users/esmalls/.codex/generated_images/01a0bd1c-2f60-7aa3-a289-1190f4683be4/exec-65cc9d61-4428-462d-acae-601bbe2098b5.png",
+      "workspace_source": "sources/terminal-atlas-source.png",
+      "runtime": "game/assets/art/motion/terminal-atlas.png",
+      "width": 1774,
+      "height": 887,
+      "bytes": 1331363,
+      "sha256": "02D3BE8DDE711CAD48337E614DA0714BC12306C01C9B6B7160617B60AC21E0E7",
+      "alpha_check": "Format32bppArgb; corner alpha 0,0,0,0",
+      "visual_check": "two matching-scale padded/mail frames; approved H short half-body anatomy with complete head and arms; no legs, boots or base; closed eyes; cheek on ground; slack arms away from face; dropped sword and shield; waist ends as a clean armor/garment hem without gore"
+    },
+    {
+      "id": "b-assembled-v2",
+      "version": 2,
+      "status": "technical_structure_reference_not_user_approved",
+      "references": [
+        "../2026-09-20-h-standard/04-armed.png",
+        "sources/b-atlas-source.png"
+      ],
+      "source_output": "C:/Users/esmalls/.codex/generated_images/01a0bd1c-2f60-7aa3-a289-1190f4683be4/exec-7e638ec5-14f9-458f-ac60-b2fe4740e29b.png",
+      "workspace_source": "sources/b-assembled-v2.png",
+      "runtime": null,
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1641194,
+      "sha256": "B31AD7787D9D52F918864BE8FEA2EF99F6DBF06DB6553E748113BD9339744C77",
+      "alpha_check": "Format32bppArgb; corner alpha 0,0,0,0",
+      "purpose": "lock coherent neck/collar, shoulder-elbow-wrist, one-handed grip, waist/base overlap before rig-layer extraction"
+    },
+    {
+      "id": "b-atlas-v2",
+      "version": 2,
+      "status": "engine_integrated_review_candidate_not_user_approved",
+      "references": [
+        "sources/b-assembled-v2.png",
+        "../2026-09-20-h-standard/04-armed.png"
+      ],
+      "source_output": "C:/Users/esmalls/.codex/generated_images/01a0bd1c-2f60-7aa3-a289-1190f4683be4/exec-b0bc94de-373f-439e-bb6d-a089cdd2a7de.png",
+      "workspace_source": "sources/b-atlas-v2-source.png",
+      "runtime": "game/assets/art/motion/b-atlas-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1774581,
+      "sha256": "F06F3768040ABF4820014B358C75488848669502D46CA9BB094A3AF35DE6244A",
+      "alpha_check": "Format32bppArgb; corner alpha 0,0,0,0",
+      "v1_rejection": "independently designed pieces produced disconnected head/collar and waist/base joins, incomplete shoulder-elbow-wrist continuity, and awkward weapon holding",
+      "visual_check": "nine-part 3x3 layout; armless padded and mail torsos; two full bent arms with rounded shoulder overlap ends; separate shortened sword and smaller shield; no new blood on hit head; the two middle-row arm poses appear reversed relative to the requested screen-right/screen-left cell semantics and fists are visually closed, so region mapping and grip insertion require actual rig test",
+      "engine_validation": "Common shoulder/neck/waist/grip rig; two armors and six action phases rendered in Godot; source pixels preserved."
+    },
+    {
+      "id": "a-atlas-v2",
+      "version": 2,
+      "status": "engine_integrated_review_candidate_not_user_approved",
+      "edit_target": "sources/b-atlas-v2-source.png",
+      "source_output": "C:/Users/esmalls/.codex/generated_images/01a0bd1c-2f60-7aa3-a289-1190f4683be4/exec-9c1cbbae-2b58-4231-8789-3e79bb9f7014.png",
+      "workspace_source": "sources/a-atlas-v2.png",
+      "runtime": "game/assets/art/motion/a-atlas-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1653618,
+      "sha256": "881E622E37A2A841650E3FECB59455489A06F0470AAB7239C158D8445C9F7BCE",
+      "alpha_check": "Format32bppArgb; corner alpha 0,0,0,0",
+      "visual_check": "nine components and full-arm poses retained; armless torsos retained; surface noise reduced; no new injury or clothing; exact calibrated assembly still pending",
+      "engine_validation": "Common shoulder/neck/waist/grip rig; two armors and six action phases rendered in Godot; source pixels preserved."
+    },
+    {
+      "id": "c-atlas-v2",
+      "version": 2,
+      "status": "engine_integrated_review_candidate_not_user_approved",
+      "edit_target": "sources/b-atlas-v2-source.png",
+      "source_output": "C:/Users/esmalls/.codex/generated_images/01a0bd1c-2f60-7aa3-a289-1190f4683be4/exec-2295a75b-343e-4ffb-ab8f-de48c1e1c710.png",
+      "workspace_source": "sources/c-atlas-v2.png",
+      "runtime": "game/assets/art/motion/c-atlas-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1790816,
+      "sha256": "C8B359222D6BFC4AF6F6BB36ADEC9087AC840B16C9E81BD532C7E1C3B244D22A",
+      "alpha_check": "Format32bppArgb; corner alpha 0,0,0,0",
+      "visual_check": "nine components and full-arm poses retained; armless torsos retained; restrained material texture added without new injury or clothing; exact calibrated assembly still pending",
+      "engine_validation": "Common shoulder/neck/waist/grip rig; two armors and six action phases rendered in Godot; source pixels preserved."
+    }
+  ]
+}

@@ -1,0 +1,2382 @@
+{
+  "schema": 1,
+  "version": "a-standard-1",
+  "status": "production-review",
+  "weapons": {
+    "weapon_guard_sword": {
+      "atlas": "res://assets/art/a-standard/weapons.png",
+      "rect": [
+        128,
+        4,
+        132,
+        416
+      ],
+      "size": [
+        14.596153846153847,
+        46
+      ],
+      "pivot": [
+        0.5,
+        0.8269230769230769
+      ],
+      "position": [
+        0,
+        0
+      ]
+    },
+    "weapon_guard_cleaver": {
+      "atlas": "res://assets/art/a-standard/weapons.png",
+      "rect": [
+        412,
+        4,
+        108,
+        416
+      ],
+      "size": [
+        11.942307692307692,
+        46
+      ],
+      "pivot": [
+        0.5,
+        0.8125
+      ],
+      "position": [
+        0,
+        0
+      ]
+    },
+    "weapon_skirmisher_blade": {
+      "atlas": "res://assets/art/a-standard/weapons.png",
+      "rect": [
+        711,
+        87,
+        94,
+        333
+      ],
+      "size": [
+        9.033033033033034,
+        32
+      ],
+      "pivot": [
+        0.48936170212765956,
+        0.7807807807807807
+      ],
+      "position": [
+        0,
+        0
+      ]
+    },
+    "weapon_skirmisher_axe": {
+      "atlas": "res://assets/art/a-standard/weapons.png",
+      "rect": [
+        986,
+        26,
+        183,
+        394
+      ],
+      "size": [
+        17.185279187817258,
+        37
+      ],
+      "pivot": [
+        0.18032786885245902,
+        0.7588832487309645
+      ],
+      "position": [
+        0,
+        0
+      ]
+    },
+    "weapon_spear_long": {
+      "atlas": "res://assets/art/a-standard/weapons.png",
+      "rect": [
+        155,
+        424,
+        56,
+        430
+      ],
+      "size": [
+        10.027906976744186,
+        77
+      ],
+      "pivot": [
+        0.5178571428571429,
+        0.6744186046511628
+      ],
+      "position": [
+        0,
+        0
+      ]
+    },
+    "weapon_spear_hooked": {
+      "atlas": "res://assets/art/a-standard/weapons.png",
+      "rect": [
+        438,
+        424,
+        87,
+        430
+      ],
+      "size": [
+        15.57906976744186,
+        77
+      ],
+      "pivot": [
+        0.3103448275862069,
+        0.6744186046511628
+      ],
+      "position": [
+        0,
+        0
+      ]
+    },
+    "weapon_archer_bow": {
+      "atlas": "res://assets/art/a-standard/weapons.png",
+      "rect": [
+        720,
+        465,
+        107,
+        370
+      ],
+      "size": [
+        14.17027027027027,
+        49
+      ],
+      "pivot": [
+        0.7289719626168224,
+        0.5
+      ],
+      "position": [
+        0,
+        0
+      ],
+      "string_ends": [
+        [
+          -7.945945945945946,
+          -22.778378378378378
+        ],
+        [
+          -7.945945945945946,
+          22.778378378378378
+        ]
+      ]
+    },
+    "weapon_archer_longbow": {
+      "atlas": "res://assets/art/a-standard/weapons.png",
+      "rect": [
+        1035,
+        424,
+        94,
+        428
+      ],
+      "size": [
+        13.616822429906541,
+        62
+      ],
+      "pivot": [
+        0.7021276595744681,
+        0.5233644859813084
+      ],
+      "position": [
+        0,
+        0
+      ],
+      "string_ends": [
+        [
+          -6.373831775700935,
+          -31.0
+        ],
+        [
+          -6.518691588785047,
+          27.66822429906542
+        ]
+      ]
+    },
+    "weapon_hunter_bow": {
+      "atlas": "res://assets/art/a-standard/weapons.png",
+      "rect": [
+        130,
+        862,
+        126,
+        395
+      ],
+      "size": [
+        16.5873417721519,
+        52
+      ],
+      "pivot": [
+        0.7619047619047619,
+        0.48860759493670886
+      ],
+      "position": [
+        0,
+        0
+      ],
+      "string_ends": [
+        [
+          -9.478481012658229,
+          -23.169620253164556
+        ],
+        [
+          -10.136708860759494,
+          24.354430379746834
+        ]
+      ]
+    },
+    "weapon_hunter_recurve": {
+      "atlas": "res://assets/art/a-standard/weapons.png",
+      "rect": [
+        431,
+        867,
+        102,
+        393
+      ],
+      "size": [
+        12.458015267175572,
+        48
+      ],
+      "pivot": [
+        0.6078431372549019,
+        0.47837150127226463
+      ],
+      "position": [
+        0,
+        0
+      ],
+      "string_ends": [
+        [
+          -3.1755725190839694,
+          -21.374045801526716
+        ],
+        [
+          -5.374045801526718,
+          23.328244274809162
+        ]
+      ]
+    }
+  },
+  "shields": {
+    "round": {
+      "atlas": "res://assets/art/a-standard/weapons.png",
+      "rect": [
+        646,
+        891,
+        256,
+        343
+      ],
+      "size": [
+        23.88338192419825,
+        32
+      ],
+      "pivot": [
+        0.6015625,
+        0.49271137026239065
+      ],
+      "position": [
+        0,
+        0
+      ]
+    },
+    "heavy": {
+      "atlas": "res://assets/art/a-standard/weapons.png",
+      "rect": [
+        970,
+        852,
+        226,
+        405
+      ],
+      "size": [
+        20.08888888888889,
+        36
+      ],
+      "pivot": [
+        0.6504424778761062,
+        0.5382716049382716
+      ],
+      "position": [
+        0,
+        0
+      ]
+    }
+  },
+  "armors": {
+    "armor_padded": [
+      {
+        "atlas": "res://assets/art/a-standard/armor-shells.png",
+        "rect": [
+          0.0,
+          0.0,
+          313.5,
+          313.5
+        ],
+        "size": [
+          46,
+          44
+        ],
+        "pivot": [
+          0.5,
+          0.95
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/armor-shells.png",
+        "rect": [
+          313.5,
+          0.0,
+          313.5,
+          313.5
+        ],
+        "size": [
+          46,
+          44
+        ],
+        "pivot": [
+          0.5,
+          0.95
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/armor-shells.png",
+        "rect": [
+          627.0,
+          0.0,
+          313.5,
+          313.5
+        ],
+        "size": [
+          46,
+          44
+        ],
+        "pivot": [
+          0.5,
+          0.95
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/armor-shells.png",
+        "rect": [
+          940.5,
+          0.0,
+          313.5,
+          313.5
+        ],
+        "size": [
+          46,
+          44
+        ],
+        "pivot": [
+          0.5,
+          0.95
+        ],
+        "position": [
+          0,
+          0
+        ]
+      }
+    ],
+    "armor_leather": [
+      {
+        "atlas": "res://assets/art/a-standard/armor-shells.png",
+        "rect": [
+          0.0,
+          313.5,
+          313.5,
+          313.5
+        ],
+        "size": [
+          46,
+          44
+        ],
+        "pivot": [
+          0.5,
+          0.95
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/armor-shells.png",
+        "rect": [
+          313.5,
+          313.5,
+          313.5,
+          313.5
+        ],
+        "size": [
+          46,
+          44
+        ],
+        "pivot": [
+          0.5,
+          0.95
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/armor-shells.png",
+        "rect": [
+          627.0,
+          313.5,
+          313.5,
+          313.5
+        ],
+        "size": [
+          46,
+          44
+        ],
+        "pivot": [
+          0.5,
+          0.95
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/armor-shells.png",
+        "rect": [
+          940.5,
+          313.5,
+          313.5,
+          313.5
+        ],
+        "size": [
+          46,
+          44
+        ],
+        "pivot": [
+          0.5,
+          0.95
+        ],
+        "position": [
+          0,
+          0
+        ]
+      }
+    ],
+    "armor_brigandine": [
+      {
+        "atlas": "res://assets/art/a-standard/armor-shells.png",
+        "rect": [
+          0.0,
+          627.0,
+          313.5,
+          313.5
+        ],
+        "size": [
+          46,
+          44
+        ],
+        "pivot": [
+          0.5,
+          0.95
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/armor-shells.png",
+        "rect": [
+          313.5,
+          627.0,
+          313.5,
+          313.5
+        ],
+        "size": [
+          46,
+          44
+        ],
+        "pivot": [
+          0.5,
+          0.95
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/armor-shells.png",
+        "rect": [
+          627.0,
+          627.0,
+          313.5,
+          313.5
+        ],
+        "size": [
+          46,
+          44
+        ],
+        "pivot": [
+          0.5,
+          0.95
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/armor-shells.png",
+        "rect": [
+          940.5,
+          627.0,
+          313.5,
+          313.5
+        ],
+        "size": [
+          46,
+          44
+        ],
+        "pivot": [
+          0.5,
+          0.95
+        ],
+        "position": [
+          0,
+          0
+        ]
+      }
+    ],
+    "armor_mail": [
+      {
+        "atlas": "res://assets/art/a-standard/armor-shells.png",
+        "rect": [
+          0.0,
+          940.5,
+          313.5,
+          313.5
+        ],
+        "size": [
+          46,
+          44
+        ],
+        "pivot": [
+          0.5,
+          0.95
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/armor-shells.png",
+        "rect": [
+          313.5,
+          940.5,
+          313.5,
+          313.5
+        ],
+        "size": [
+          46,
+          44
+        ],
+        "pivot": [
+          0.5,
+          0.95
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/armor-shells.png",
+        "rect": [
+          627.0,
+          940.5,
+          313.5,
+          313.5
+        ],
+        "size": [
+          46,
+          44
+        ],
+        "pivot": [
+          0.5,
+          0.95
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/armor-shells.png",
+        "rect": [
+          940.5,
+          940.5,
+          313.5,
+          313.5
+        ],
+        "size": [
+          46,
+          44
+        ],
+        "pivot": [
+          0.5,
+          0.95
+        ],
+        "position": [
+          0,
+          0
+        ]
+      }
+    ]
+  },
+  "faces": [
+    [
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          0,
+          0,
+          256,
+          241
+        ],
+        "size": [
+          37,
+          34.83203125
+        ],
+        "pivot": [
+          0.653327639335477,
+          0.970954356846473
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          256,
+          0,
+          256,
+          241
+        ],
+        "size": [
+          37,
+          34.83203125
+        ],
+        "pivot": [
+          0.5574842087765958,
+          0.9626556016597511
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          512,
+          0,
+          256,
+          241
+        ],
+        "size": [
+          37,
+          34.83203125
+        ],
+        "pivot": [
+          0.4486232342750533,
+          0.970954356846473
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          768,
+          0,
+          256,
+          241
+        ],
+        "size": [
+          37,
+          34.83203125
+        ],
+        "pivot": [
+          0.37935046254512633,
+          0.975103734439834
+        ],
+        "position": [
+          0,
+          0
+        ]
+      }
+    ],
+    [
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          0,
+          241,
+          256,
+          241
+        ],
+        "size": [
+          37,
+          34.83203125
+        ],
+        "pivot": [
+          0.6149518982438017,
+          0.970954356846473
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          256,
+          241,
+          256,
+          241
+        ],
+        "size": [
+          37,
+          34.83203125
+        ],
+        "pivot": [
+          0.5281714835594989,
+          0.970954356846473
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          512,
+          241,
+          256,
+          241
+        ],
+        "size": [
+          37,
+          34.83203125
+        ],
+        "pivot": [
+          0.4206733860596708,
+          0.970954356846473
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          768,
+          241,
+          256,
+          241
+        ],
+        "size": [
+          37,
+          34.83203125
+        ],
+        "pivot": [
+          0.3483556937172775,
+          0.975103734439834
+        ],
+        "position": [
+          0,
+          0
+        ]
+      }
+    ],
+    [
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          0,
+          482,
+          256,
+          248
+        ],
+        "size": [
+          37,
+          35.84375
+        ],
+        "pivot": [
+          0.5369382646014207,
+          0.9556451612903226
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          256,
+          482,
+          256,
+          248
+        ],
+        "size": [
+          37,
+          35.84375
+        ],
+        "pivot": [
+          0.43053536821705424,
+          0.9516129032258065
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          512,
+          482,
+          256,
+          248
+        ],
+        "size": [
+          37,
+          35.84375
+        ],
+        "pivot": [
+          0.3348752204153605,
+          0.9556451612903226
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          768,
+          482,
+          256,
+          248
+        ],
+        "size": [
+          37,
+          35.84375
+        ],
+        "pivot": [
+          0.26762139514896865,
+          0.9556451612903226
+        ],
+        "position": [
+          0,
+          0
+        ]
+      }
+    ],
+    [
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          0,
+          730,
+          256,
+          239
+        ],
+        "size": [
+          37,
+          34.54296875
+        ],
+        "pivot": [
+          0.629275318770903,
+          0.9497907949790795
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          256,
+          730,
+          256,
+          239
+        ],
+        "size": [
+          37,
+          34.54296875
+        ],
+        "pivot": [
+          0.5365518162393162,
+          0.9456066945606695
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          512,
+          730,
+          256,
+          239
+        ],
+        "size": [
+          37,
+          34.54296875
+        ],
+        "pivot": [
+          0.4359609766277129,
+          0.9456066945606695
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          768,
+          730,
+          256,
+          239
+        ],
+        "size": [
+          37,
+          34.54296875
+        ],
+        "pivot": [
+          0.3554960876749611,
+          0.9539748953974896
+        ],
+        "position": [
+          0,
+          0
+        ]
+      }
+    ],
+    [
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          0,
+          969,
+          256,
+          263
+        ],
+        "size": [
+          37,
+          38.01171875
+        ],
+        "pivot": [
+          0.5889404512356575,
+          0.9543726235741445
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          256,
+          969,
+          256,
+          263
+        ],
+        "size": [
+          37,
+          38.01171875
+        ],
+        "pivot": [
+          0.5060793910573123,
+          0.9467680608365019
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          512,
+          969,
+          256,
+          263
+        ],
+        "size": [
+          37,
+          38.01171875
+        ],
+        "pivot": [
+          0.4100973987758945,
+          0.9581749049429658
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          768,
+          969,
+          256,
+          263
+        ],
+        "size": [
+          37,
+          38.01171875
+        ],
+        "pivot": [
+          0.34331636715195635,
+          0.9543726235741445
+        ],
+        "position": [
+          0,
+          0
+        ]
+      }
+    ],
+    [
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          0,
+          1232,
+          256,
+          304
+        ],
+        "size": [
+          37,
+          43.9375
+        ],
+        "pivot": [
+          0.6192830182263329,
+          0.868421052631579
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          256,
+          1232,
+          256,
+          304
+        ],
+        "size": [
+          37,
+          43.9375
+        ],
+        "pivot": [
+          0.5321670819490587,
+          0.8717105263157895
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          512,
+          1232,
+          256,
+          304
+        ],
+        "size": [
+          37,
+          43.9375
+        ],
+        "pivot": [
+          0.4306392985115766,
+          0.8717105263157895
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-01-06.png",
+        "rect": [
+          768,
+          1232,
+          256,
+          304
+        ],
+        "size": [
+          37,
+          43.9375
+        ],
+        "pivot": [
+          0.360529752803262,
+          0.875
+        ],
+        "position": [
+          0,
+          0
+        ]
+      }
+    ],
+    [
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          0,
+          0,
+          256,
+          240
+        ],
+        "size": [
+          37,
+          34.6875
+        ],
+        "pivot": [
+          0.4924326621338912,
+          0.9791666666666666
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          256,
+          0,
+          256,
+          240
+        ],
+        "size": [
+          37,
+          34.6875
+        ],
+        "pivot": [
+          0.49006355374077976,
+          0.9791666666666666
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          512,
+          0,
+          256,
+          240
+        ],
+        "size": [
+          37,
+          34.6875
+        ],
+        "pivot": [
+          0.4864711362447699,
+          0.9791666666666666
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          768,
+          0,
+          256,
+          240
+        ],
+        "size": [
+          37,
+          34.6875
+        ],
+        "pivot": [
+          0.48485765706806283,
+          0.9791666666666666
+        ],
+        "position": [
+          0,
+          0
+        ]
+      }
+    ],
+    [
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          0,
+          240,
+          256,
+          248
+        ],
+        "size": [
+          37,
+          35.84375
+        ],
+        "pivot": [
+          0.5017633476720648,
+          0.9717741935483871
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          256,
+          240,
+          256,
+          248
+        ],
+        "size": [
+          37,
+          35.84375
+        ],
+        "pivot": [
+          0.5001488095238096,
+          0.9758064516129032
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          512,
+          240,
+          256,
+          248
+        ],
+        "size": [
+          37,
+          35.84375
+        ],
+        "pivot": [
+          0.49229497354497354,
+          0.9758064516129032
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          768,
+          240,
+          256,
+          248
+        ],
+        "size": [
+          37,
+          35.84375
+        ],
+        "pivot": [
+          0.49101978058510637,
+          0.9758064516129032
+        ],
+        "position": [
+          0,
+          0
+        ]
+      }
+    ],
+    [
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          0,
+          488,
+          256,
+          247
+        ],
+        "size": [
+          37,
+          35.69921875
+        ],
+        "pivot": [
+          0.49928756116548045,
+          0.97165991902834
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          256,
+          488,
+          256,
+          247
+        ],
+        "size": [
+          37,
+          35.69921875
+        ],
+        "pivot": [
+          0.49827981651376146,
+          0.9757085020242915
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          512,
+          488,
+          256,
+          247
+        ],
+        "size": [
+          37,
+          35.69921875
+        ],
+        "pivot": [
+          0.4924634461009174,
+          0.9757085020242915
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          768,
+          488,
+          256,
+          247
+        ],
+        "size": [
+          37,
+          35.69921875
+        ],
+        "pivot": [
+          0.4946443721719457,
+          0.97165991902834
+        ],
+        "position": [
+          0,
+          0
+        ]
+      }
+    ],
+    [
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          0,
+          735,
+          256,
+          255
+        ],
+        "size": [
+          37,
+          36.85546875
+        ],
+        "pivot": [
+          0.524455132885514,
+          0.984313725490196
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          256,
+          735,
+          256,
+          255
+        ],
+        "size": [
+          37,
+          36.85546875
+        ],
+        "pivot": [
+          0.525089105702765,
+          0.984313725490196
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          512,
+          735,
+          256,
+          255
+        ],
+        "size": [
+          37,
+          36.85546875
+        ],
+        "pivot": [
+          0.5201673595183486,
+          0.984313725490196
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          768,
+          735,
+          256,
+          255
+        ],
+        "size": [
+          37,
+          36.85546875
+        ],
+        "pivot": [
+          0.5215724349710983,
+          0.984313725490196
+        ],
+        "position": [
+          0,
+          0
+        ]
+      }
+    ],
+    [
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          0,
+          990,
+          256,
+          248
+        ],
+        "size": [
+          37,
+          35.84375
+        ],
+        "pivot": [
+          0.4884837080792683,
+          0.967741935483871
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          256,
+          990,
+          256,
+          248
+        ],
+        "size": [
+          37,
+          35.84375
+        ],
+        "pivot": [
+          0.4860991653924567,
+          0.967741935483871
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          512,
+          990,
+          256,
+          248
+        ],
+        "size": [
+          37,
+          35.84375
+        ],
+        "pivot": [
+          0.48142449238578683,
+          0.967741935483871
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          768,
+          990,
+          256,
+          248
+        ],
+        "size": [
+          37,
+          35.84375
+        ],
+        "pivot": [
+          0.4825914517364658,
+          0.967741935483871
+        ],
+        "position": [
+          0,
+          0
+        ]
+      }
+    ],
+    [
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          0,
+          1238,
+          256,
+          298
+        ],
+        "size": [
+          37,
+          43.0703125
+        ],
+        "pivot": [
+          0.5127956510681587,
+          0.889261744966443
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          256,
+          1238,
+          256,
+          298
+        ],
+        "size": [
+          37,
+          43.0703125
+        ],
+        "pivot": [
+          0.5085267173135853,
+          0.889261744966443
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          512,
+          1238,
+          256,
+          298
+        ],
+        "size": [
+          37,
+          43.0703125
+        ],
+        "pivot": [
+          0.503831289978678,
+          0.8926174496644296
+        ],
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "atlas": "res://assets/art/a-standard/faces-07-12.png",
+        "rect": [
+          768,
+          1238,
+          256,
+          298
+        ],
+        "size": [
+          37,
+          43.0703125
+        ],
+        "pivot": [
+          0.5014421212512926,
+          0.889261744966443
+        ],
+        "position": [
+          0,
+          0
+        ]
+      }
+    ]
+  ],
+  "arms": {
+    "bow_front": {
+      "atlas": "res://assets/art/a-standard/grip-arms.png",
+      "rect": [
+        4,
+        199,
+        461,
+        308
+      ],
+      "size": [
+        21.206,
+        14.168
+      ],
+      "pivot": [
+        0.1822125813449024,
+        0.21753246753246752
+      ],
+      "position": [
+        0,
+        0
+      ],
+      "grip": [
+        15.456,
+        6.072
+      ]
+    },
+    "bow_rest": {
+      "atlas": "res://assets/art/a-standard/grip-arms.png",
+      "rect": [
+        466,
+        192,
+        395,
+        318
+      ],
+      "size": [
+        18.169999999999998,
+        14.628
+      ],
+      "pivot": [
+        0.21772151898734177,
+        0.23270440251572327
+      ],
+      "position": [
+        0,
+        0
+      ],
+      "grip": [
+        12.282,
+        1.8399999999999999
+      ]
+    },
+    "bow_pull": {
+      "atlas": "res://assets/art/a-standard/grip-arms.png",
+      "rect": [
+        887,
+        196,
+        339,
+        258
+      ],
+      "size": [
+        15.594,
+        11.868
+      ],
+      "pivot": [
+        0.25663716814159293,
+        0.32945736434108525
+      ],
+      "position": [
+        0,
+        0
+      ],
+      "grip": [
+        8.556,
+        -0.736
+      ]
+    },
+    "spear_rear": {
+      "atlas": "res://assets/art/a-standard/grip-arms.png",
+      "rect": [
+        7,
+        697,
+        433,
+        300
+      ],
+      "size": [
+        19.918,
+        13.799999999999999
+      ],
+      "pivot": [
+        0.18244803695150116,
+        0.22333333333333333
+      ],
+      "position": [
+        0,
+        0
+      ],
+      "grip": [
+        14.398,
+        7.498
+      ]
+    },
+    "spear_front": {
+      "atlas": "res://assets/art/a-standard/grip-arms.png",
+      "rect": [
+        447,
+        691,
+        436,
+        316
+      ],
+      "size": [
+        20.056,
+        14.536
+      ],
+      "pivot": [
+        0.1834862385321101,
+        0.2120253164556962
+      ],
+      "position": [
+        0,
+        0
+      ],
+      "grip": [
+        13.616,
+        7.176
+      ]
+    },
+    "command": {
+      "atlas": "res://assets/art/a-standard/grip-arms.png",
+      "rect": [
+        887,
+        697,
+        364,
+        306
+      ],
+      "size": [
+        16.744,
+        14.076
+      ],
+      "pivot": [
+        0.23901098901098902,
+        0.21895424836601307
+      ],
+      "position": [
+        0,
+        0
+      ],
+      "grip": [
+        9.384,
+        2.024
+      ]
+    },
+    "bow_string_rest": {
+      "atlas": "res://assets/art/a-standard/bow-string-arms.png",
+      "rect": [
+        15,
+        200,
+        990,
+        310
+      ],
+      "size": [
+        33.660000000000004,
+        10.540000000000001
+      ],
+      "pivot": [
+        0.11616161616161616,
+        0.532258064516129
+      ],
+      "position": [
+        0,
+        0
+      ],
+      "grip": [
+        26.928,
+        -0.51
+      ]
+    },
+    "bow_string_half": {
+      "atlas": "res://assets/art/a-standard/bow-string-arms.png",
+      "rect": [
+        1080,
+        200,
+        570,
+        330
+      ],
+      "size": [
+        19.380000000000003,
+        11.22
+      ],
+      "pivot": [
+        0.17543859649122806,
+        0.5
+      ],
+      "position": [
+        0,
+        0
+      ],
+      "grip": [
+        13.736,
+        -0.47600000000000003
+      ]
+    },
+    "bow_string_full": {
+      "atlas": "res://assets/art/a-standard/bow-string-arms.png",
+      "rect": [
+        1680,
+        200,
+        475,
+        330
+      ],
+      "size": [
+        16.150000000000002,
+        11.22
+      ],
+      "pivot": [
+        0.5894736842105263,
+        0.5060606060606061
+      ],
+      "position": [
+        0,
+        0
+      ],
+      "grip": [
+        4.760000000000001,
+        -0.17
+      ]
+    }
+  },
+  "terminal": {
+    "armor_padded": [
+      {
+        "atlas": "res://assets/art/a-standard/terminal-bodies.png",
+        "rect": [
+          0,
+          99,
+          512,
+          317
+        ],
+        "size": [
+          70,
+          43.33984375
+        ],
+        "pivot": [
+          0.52,
+          0.74
+        ],
+        "position": [
+          0,
+          0
+        ],
+        "neck": [
+          -24,
+          -24
+        ],
+        "intact_atlas": "res://assets/art/a-standard/terminal-intact.png"
+      },
+      {
+        "atlas": "res://assets/art/a-standard/terminal-bodies.png",
+        "rect": [
+          512,
+          99,
+          512,
+          317
+        ],
+        "size": [
+          70,
+          43.33984375
+        ],
+        "pivot": [
+          0.52,
+          0.74
+        ],
+        "position": [
+          0,
+          0
+        ],
+        "neck": [
+          -24,
+          -20
+        ],
+        "intact_atlas": "res://assets/art/a-standard/terminal-intact.png"
+      }
+    ],
+    "armor_leather": [
+      {
+        "atlas": "res://assets/art/a-standard/terminal-bodies.png",
+        "rect": [
+          0,
+          428,
+          512,
+          334
+        ],
+        "size": [
+          70,
+          45.6640625
+        ],
+        "pivot": [
+          0.52,
+          0.74
+        ],
+        "position": [
+          0,
+          0
+        ],
+        "neck": [
+          -24,
+          -24
+        ],
+        "intact_atlas": "res://assets/art/a-standard/terminal-intact.png"
+      },
+      {
+        "atlas": "res://assets/art/a-standard/terminal-bodies.png",
+        "rect": [
+          512,
+          428,
+          512,
+          334
+        ],
+        "size": [
+          70,
+          45.6640625
+        ],
+        "pivot": [
+          0.52,
+          0.74
+        ],
+        "position": [
+          0,
+          0
+        ],
+        "neck": [
+          -24,
+          -20
+        ],
+        "intact_atlas": "res://assets/art/a-standard/terminal-intact.png"
+      }
+    ],
+    "armor_brigandine": [
+      {
+        "atlas": "res://assets/art/a-standard/terminal-bodies.png",
+        "rect": [
+          0,
+          765,
+          512,
+          362
+        ],
+        "size": [
+          70,
+          49.4921875
+        ],
+        "pivot": [
+          0.52,
+          0.74
+        ],
+        "position": [
+          0,
+          0
+        ],
+        "neck": [
+          -24,
+          -24
+        ],
+        "intact_atlas": "res://assets/art/a-standard/terminal-intact.png"
+      },
+      {
+        "atlas": "res://assets/art/a-standard/terminal-bodies.png",
+        "rect": [
+          512,
+          765,
+          512,
+          362
+        ],
+        "size": [
+          70,
+          49.4921875
+        ],
+        "pivot": [
+          0.52,
+          0.74
+        ],
+        "position": [
+          0,
+          0
+        ],
+        "neck": [
+          -24,
+          -20
+        ],
+        "intact_atlas": "res://assets/art/a-standard/terminal-intact.png"
+      }
+    ],
+    "armor_mail": [
+      {
+        "atlas": "res://assets/art/a-standard/terminal-bodies.png",
+        "rect": [
+          0,
+          1140,
+          512,
+          362
+        ],
+        "size": [
+          70,
+          49.4921875
+        ],
+        "pivot": [
+          0.52,
+          0.74
+        ],
+        "position": [
+          0,
+          0
+        ],
+        "neck": [
+          -24,
+          -24
+        ],
+        "intact_atlas": "res://assets/art/a-standard/terminal-intact.png"
+      },
+      {
+        "atlas": "res://assets/art/a-standard/terminal-bodies.png",
+        "rect": [
+          512,
+          1140,
+          512,
+          362
+        ],
+        "size": [
+          70,
+          49.4921875
+        ],
+        "pivot": [
+          0.52,
+          0.74
+        ],
+        "position": [
+          0,
+          0
+        ],
+        "neck": [
+          -24,
+          -20
+        ],
+        "intact_atlas": "res://assets/art/a-standard/terminal-intact.png"
+      }
+    ]
+  },
+  "dog": [
+    {
+      "atlas": "res://assets/art/a-standard/warhound.png",
+      "rect": [
+        0.0,
+        0.0,
+        512.0,
+        512.0
+      ],
+      "size": [
+        60,
+        60
+      ],
+      "pivot": [
+        0.5,
+        0.92
+      ],
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "atlas": "res://assets/art/a-standard/warhound.png",
+      "rect": [
+        512.0,
+        0.0,
+        512.0,
+        512.0
+      ],
+      "size": [
+        60,
+        60
+      ],
+      "pivot": [
+        0.5,
+        0.92
+      ],
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "atlas": "res://assets/art/a-standard/warhound.png",
+      "rect": [
+        1024.0,
+        0.0,
+        512.0,
+        512.0
+      ],
+      "size": [
+        60,
+        60
+      ],
+      "pivot": [
+        0.5,
+        0.92
+      ],
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "atlas": "res://assets/art/a-standard/warhound.png",
+      "rect": [
+        0.0,
+        512.0,
+        512.0,
+        512.0
+      ],
+      "size": [
+        60,
+        60
+      ],
+      "pivot": [
+        0.5,
+        0.92
+      ],
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "atlas": "res://assets/art/a-standard/warhound.png",
+      "rect": [
+        512.0,
+        512.0,
+        512.0,
+        512.0
+      ],
+      "size": [
+        60,
+        60
+      ],
+      "pivot": [
+        0.5,
+        0.92
+      ],
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "atlas": "res://assets/art/a-standard/warhound.png",
+      "rect": [
+        1024.0,
+        512.0,
+        512.0,
+        512.0
+      ],
+      "size": [
+        60,
+        60
+      ],
+      "pivot": [
+        0.5,
+        0.92
+      ],
+      "position": [
+        0,
+        0
+      ]
+    }
+  ],
+  "underlayer": {
+    "atlas": "res://assets/art/a-standard/armor-underlayers.png",
+    "rect": [
+      0.0,
+      0.0,
+      313.5,
+      313.5
+    ],
+    "size": [
+      46,
+      44
+    ],
+    "pivot": [
+      0.5,
+      0.95
+    ],
+    "position": [
+      0,
+      0
+    ]
+  },
+  "linen": {
+    "atlas": "res://assets/art/a-standard/inner-linen.png",
+    "rect": [
+      124,
+      97,
+      1074,
+      1022
+    ],
+    "size": [
+      38,
+      38
+    ],
+    "pivot": [
+      0.5,
+      1.0
+    ],
+    "position": [
+      0,
+      0
+    ]
+  },
+  "trim": {
+    "armor_padded": {
+      "atlas": "res://assets/art/a-standard/armor-underlayers.png",
+      "rect": [
+        0.0,
+        0.0,
+        313.5,
+        313.5
+      ],
+      "size": [
+        46,
+        44
+      ],
+      "pivot": [
+        0.5,
+        0.95
+      ],
+      "position": [
+        0,
+        0
+      ]
+    },
+    "armor_leather": {
+      "atlas": "res://assets/art/a-standard/armor-underlayers.png",
+      "rect": [
+        0.0,
+        313.5,
+        313.5,
+        313.5
+      ],
+      "size": [
+        46,
+        44
+      ],
+      "pivot": [
+        0.5,
+        0.95
+      ],
+      "position": [
+        0,
+        0
+      ]
+    },
+    "armor_brigandine": {
+      "atlas": "res://assets/art/a-standard/armor-underlayers.png",
+      "rect": [
+        0.0,
+        627.0,
+        313.5,
+        313.5
+      ],
+      "size": [
+        46,
+        44
+      ],
+      "pivot": [
+        0.5,
+        0.95
+      ],
+      "position": [
+        0,
+        0
+      ]
+    },
+    "armor_mail": {
+      "atlas": "res://assets/art/a-standard/armor-underlayers.png",
+      "rect": [
+        0.0,
+        940.5,
+        313.5,
+        313.5
+      ],
+      "size": [
+        46,
+        44
+      ],
+      "pivot": [
+        0.5,
+        0.95
+      ],
+      "position": [
+        0,
+        0
+      ]
+    }
+  }
+}

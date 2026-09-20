@@ -11,6 +11,9 @@ const Equipment = preload("res://core/equipment_rules.gd")
 const EquipmentScreen = preload("res://presentation/equipment_screen.gd")
 const Characters = preload("res://core/character_rules.gd")
 const CharacterScreen = preload("res://presentation/character_screen.gd")
+const MotionReviewScene = preload("res://presentation/motion_review.tscn")
+const HandStyleReviewScene = preload("res://presentation/hand_style_review.tscn")
+const AStandardReview = preload("res://presentation/a_standard_review.gd")
 const CREAM = Color("e7ddc6")
 const MUTED = Color("9caeaa")
 const GOLD = Color("c8aa6e")
@@ -61,17 +64,56 @@ var world_overview := false
 var battle_hud: Control
 var hovered_unit_id: String = ""
 var hovered_cell := Vector2i(-1, -1)
+var motion_review: Control
+var motion_review_mode := false
+var motion_review_smoke := false
+var motion_review_dir := "user://motion-review"
 
 func _ready() -> void:
 	_build_theme()
-	for argument: String in OS.get_cmdline_user_args():
+	var arguments := OS.get_cmdline_user_args()
+	if arguments.has("--a-standard-review") or arguments.has("--a-standard-capture"):
+		var production_review = AStandardReview.new()
+		add_child(production_review)
+		production_review.review_closed.connect(func():get_tree().quit())
+		if arguments.has("--a-standard-capture"):
+			var capture_output := "user://a-standard"
+			for flag: String in arguments:
+				if flag.begins_with("--a-standard-dir="):capture_output=flag.trim_prefix("--a-standard-dir=")
+			production_review.call_deferred("capture",ProjectSettings.globalize_path(capture_output))
+		return
+	if arguments.has("--hand-style-review") or arguments.has("--hand-style-review-smoke"):
+		var hand_review = HandStyleReviewScene.instantiate()
+		add_child(hand_review)
+		hand_review.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		hand_review.review_closed.connect(func(): get_tree().quit())
+		if arguments.has("--hand-style-review-smoke"):
+			var output_directory := "user://hand-style-review"
+			for flag: String in arguments:
+				if flag.begins_with("--hand-style-review-dir="):
+					output_directory = flag.trim_prefix("--hand-style-review-dir=")
+			hand_review.call_deferred("run_smoke", output_directory)
+		return
+	for index in range(arguments.size()):
+		var argument: String = str(arguments[index])
 		if argument == "--smoke-test":
 			smoke_mode = true
 			save_path = "user://qa/campaign.json"
 			manual_path = "user://qa/manual.json"
+		elif argument == "--motion-review":
+			motion_review_mode = true
+		elif argument == "--motion-review-smoke":
+			motion_review_mode = true
+			motion_review_smoke = true
+		elif argument.begins_with("--motion-review-dir="):
+			motion_review_dir = argument.trim_prefix("--motion-review-dir=")
+		elif argument == "--motion-review-dir" and index + 1 < arguments.size():
+			motion_review_dir = str(arguments[index + 1])
 	_build_shell()
 	_show_title()
-	if smoke_mode:
+	if motion_review_mode:
+		call_deferred("_open_motion_review", motion_review_smoke)
+	elif smoke_mode:
 		call_deferred("_run_smoke")
 
 func _build_theme() -> void:
@@ -230,7 +272,26 @@ func _show_title() -> void:
 	_text(setup, "四名佣兵直接听从指挥。盾击破绽与长枪配合，远程牵制后排。", 16, MUTED)
 	_button(setup, "雾林猎团  ·  盾 / 枪 / 猎人 / 犬", func(): _request_new("hunters", seed_input.text))
 	_text(setup, "战犬占一个出战位，按猎人指令在自身回合行动；也需要口粮，并承担伤亡。", 16, MUTED)
+	_button(setup, "动作样板评审", func(): _open_motion_review(false), "比较A/B/C节奏、两套护甲和真实战场动作。")
 	_text(setup, "操作：选择动作，再点击目标格。\n空格结束当前回合，Esc 取消动作。\n事件、动作、结算与成长后自动保存。", 16, MUTED)
+
+func _open_motion_review(run_smoke: bool = false) -> void:
+	if is_instance_valid(motion_review):
+		return
+	screen.hide()
+	motion_review = MotionReviewScene.instantiate()
+	add_child(motion_review)
+	motion_review.review_closed.connect(_close_motion_review)
+	if run_smoke:
+		await get_tree().process_frame
+		await get_tree().process_frame
+		motion_review.run_smoke(motion_review_dir)
+
+func _close_motion_review() -> void:
+	if is_instance_valid(motion_review):
+		motion_review.queue_free()
+	motion_review = null
+	_show_title()
 
 func _request_new(origin: String, seed_text: String) -> void:
 	seed_text = seed_text.strip_edges()
@@ -599,6 +660,8 @@ func _choose_action(action: String) -> void:
 func _can_command() -> bool:
 	if campaign.is_empty() or str(campaign.phase) != "battle" or board == null or modal_open or busy:
 		return false
+	if board.has_pending_animation():
+		return false
 	var active: Dictionary = Battle.active_unit(campaign.battle)
 	return not active.is_empty() and str(active.team) == "player" and str(active.kind) != "dog"
 
@@ -663,6 +726,8 @@ func _process(delta: float) -> void:
 	if is_instance_valid(battle_hud):
 		battle_hud.position_inspection()
 	if board == null or campaign.is_empty() or str(campaign.phase) != "battle" or modal_open or smoke_mode:
+		return
+	if board.has_pending_animation():
 		return
 	ai_timer -= delta
 	if ai_timer > 0.0:

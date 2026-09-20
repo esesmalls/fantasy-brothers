@@ -6,6 +6,8 @@
 
 更新日期：2026-09-20。
 
+最新美术交付：[A 标准人物、10武器、4护甲与套层动作评审](art/production/2026-09-20-a-standard/index.html)。双击 `Review-A-Standard.cmd` 可运行独立评审包；这是右向生产库，尚未替换正常战役全部人物，范围与限制见 [22生产规范](docs/22-a-standard-production.md)。
+
 双击根目录 `Play.cmd`，或解压 `builds/FantasyBrothers-0.1.5.1-windows.zip` 后运行 `FantasyBrothers.exe`。建议自由佣兵团、种子 `1709`、渡口旧道。完整玩法与边界见 [试玩说明](docs/PLAYTEST.md)，接续顺序见 [框架计划](docs/10-framework-roadmap.md)；当前地图范围见 [大地图闭环](docs/11-world-map-framework.md)。
 
 源码仓库：[esesmalls/fantasy-brothers](https://github.com/esesmalls/fantasy-brothers)。源码不包含本地构建包；另一台 Windows 电脑按下方步骤重新准备工具和构建。
@@ -22,7 +24,11 @@
 
 下一批四步范围与整批测试见 [招聘、契约、部署与人物后果](docs/16-next-four-steps.md)，尚未实现。
 
-用户已确认 [美术生产方式](docs/17-art-pipeline-selection.md)、[详细美术计划](docs/18-art-production-plan.md)与 **[H主导标准风格](docs/19-art-style-standard.md)**：保留H人物大小、完整双手和腰底贴合，少量融合E/G写实与油画；倒地/死亡不带底座。[最新三状态修订对照页](art/validation/2026-09-20-h-standard/index.html)可离线打开，提供武装、倒地、死亡新图及旧稿对照；三张均有真实透明alpha，边缘、装备精确对应、像素装配与动画仍待校准。[第二轮E–H](art/validation/2026-09-20-refined-directions/index.html)及[第一轮A–D](art/validation/2026-09-19-four-directions/index.html)保留供回看；[艺术设定集](references/battle-brothers/README.md)继续作为第三方参考。游戏、存档和导出包不变。
+用户已确认 [美术生产方式](docs/17-art-pipeline-selection.md)、[详细美术计划](docs/18-art-production-plan.md)与 **[H主导标准风格](docs/19-art-style-standard.md)**：保留H人物大小、完整双手和腰底贴合，少量融合E/G写实与油画；倒地/死亡不带底座。[最新三状态修订对照页](art/validation/2026-09-20-h-standard/index.html)可离线打开，提供武装、倒地、死亡新图及旧稿对照；三张均有真实透明alpha，边缘、装备精确对应、像素装配与动画仍待校准。[第二轮E–H](art/validation/2026-09-20-refined-directions/index.html)及[第一轮A–D](art/validation/2026-09-19-four-directions/index.html)保留供回看；[艺术设定集](references/battle-brothers/README.md)继续作为第三方参考。正式可玩版仍为0.1.5.1；本轮另有独立动作评审包。
+
+最新为[有手／无手同步比较页](art/validation/2026-09-20-hand-comparison/index.html)，可离线打开并播放普攻、盾击与声音示意，或双击 `Review-Hands.cmd` 启动独立Windows评审。A自然握持与少量局部换姿势，B无手抽象；人物、链甲、剑盾、底座、时长与反馈共用。腰底、迎敌盾位与袖口已重做，原“完整双手”进入用户授权的比较范围。当前只评审右向链甲剑盾，不自动替换正常战斗资产。见[说明与验证边界](art/validation/2026-09-20-hand-comparison/README.md)。
+
+旧三套H动作v2仍可双击 `Review-Motion.cmd` 回看，用户复评指出腰底、盾位和锁肘动作问题，三套未通过用户视觉验收。见[复评意见](docs/21-motion-design-review.md)、[本批说明](art/validation/2026-09-20-motion-templates/README.md)与[装配生产规范](docs/20-motion-template-production.md)。
 
 ## 当前建议
 
@@ -52,7 +58,7 @@
 .\tools\build.ps1 -SkipTests
 ```
 
-准备工具需要网络，以及 Python 3（用于取得 Windows 导出模板）。Godot 固定版本从官方发布下载，编辑器归档做 SHA-512 校验；已有工具会复用。源码包无需安装额外插件。原型素材为程序绘图，系统中文字体运行时调用；引擎及第三方许可随导出包提供。
+准备工具需要网络，以及 Python 3（用于取得 Windows 导出模板）。Godot 固定版本从官方发布下载，编辑器归档做 SHA-512 校验；已有工具会复用。源码包无需安装额外插件。原型多数素材仍为程序绘图，H样板使用生成的模块PNG；系统中文字体运行时调用；引擎及第三方许可随导出包提供。
 
 ## 下一次项目接力
 
