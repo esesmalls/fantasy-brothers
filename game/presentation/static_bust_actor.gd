@@ -151,16 +151,20 @@ static func draw_body(c: CanvasItem, origin: Vector2, scale_value: float,
 		elif part in ["base","head","wounded","face","hair","beard","bandage"]:draw_part(c,part,origin,scale_value,Vector2.ZERO,0,tint,data)
 		else:draw_bust_part(c,part,origin,scale_value,tint,catalog_data)
 
+static func motion_action(weapon: String, catalog_data: Dictionary = {}) -> Dictionary:
+	return catalog_data.get("actions", {}).get(weapon, {})
+
 static func draw_weapon(c: CanvasItem, weapon: String, origin: Vector2, scale_value: float,
 		p: float = 0.0, outcome: String = "hit", with_shield: bool = true,
 		catalog_data:Dictionary={},hidden:Array=[],tint:Color=Color.WHITE) -> void:
 	if weapon == "none":return
 	var data:Dictionary=parts() if catalog_data.is_empty() else catalog_data.parts
+	var action:=motion_action(weapon,catalog_data)
 	if weapon == "sword" and with_shield and not "shield" in hidden:draw_part(c,"shield",origin,scale_value,Vector2.ZERO,0,tint,data)
 	if weapon in hidden:return
-	var state := Motion.sample(weapon,p,outcome)
+	var state := Motion.sample(weapon,p,outcome,action)
 	draw_part(c,weapon,origin,scale_value,state.position,state.angle,tint,data)
-	if weapon == "bow" and p < Motion.release(weapon):
+	if weapon == "bow" and p < Motion.release(weapon,action):
 		var arrow:=nocked_arrow(p,catalog_data)
 		draw_part(c,"arrow",origin,scale_value,arrow.position,arrow.angle,Color(tint,tint.a*arrow.opacity),data)
 
@@ -173,11 +177,12 @@ static func draw_actor(c: CanvasItem, origin: Vector2, scale_value: float,
 
 ## A fitted bow carries its nocked arrow with it. No gameplay state is involved.
 static func nocked_arrow(p:float,catalog_data:Dictionary={}) -> Dictionary:
-	var arrow:=Motion.nocked_arrow(p)
+	var action:=motion_action("bow",catalog_data)
+	var arrow:=Motion.nocked_arrow(p,action)
 	if catalog_data.is_empty():return arrow
 	var base:Dictionary=parts().bow
 	var bow:Dictionary=catalog_data.parts.bow
-	var pose:=Motion.sample("bow",p)
+	var pose:=Motion.sample("bow",p,"hit",action)
 	var delta:=Vector2(bow.position[0]-base.position[0],bow.position[1]-base.position[1])
 	var rotation:float=bow.get("rotation",0.0)
 	arrow.position=pose.position+delta+((arrow.position-pose.position)*(float(bow.size[0])/float(base.size[0]))).rotated(rotation)
@@ -185,12 +190,14 @@ static func nocked_arrow(p:float,catalog_data:Dictionary={}) -> Dictionary:
 	return arrow
 
 static func arrow_sample(p:float,outcome:String="hit",catalog_data:Dictionary={}) -> Dictionary:
-	return Motion.arrow_sample(p,outcome,nocked_arrow(Motion.release("bow"),catalog_data))
+	var action:=motion_action("bow",catalog_data)
+	return Motion.arrow_sample(p,outcome,nocked_arrow(Motion.release("bow",action),catalog_data),action)
 
 static func contact_point(weapon: String,catalog_data:Dictionary={}) -> Vector2:
 	if weapon == "bow":return Motion.ARROW_TARGET
+	var action:=motion_action(weapon,catalog_data)
 	var part: Dictionary = (parts() if catalog_data.is_empty() else catalog_data.parts)[weapon]
-	var state := Motion.sample(weapon,Motion.contact(weapon))
+	var state := Motion.sample(weapon,Motion.contact(weapon,action),"hit",action)
 	return Vector2(part.position[0],part.position[1])+state.position+Vector2(0,-float(part.size[1])*float(part.pivot[1])).rotated(state.angle+part.get("rotation",0.0))
 
 ## Read-only U47 reference at identical camera scale; no temporary catalog swap.

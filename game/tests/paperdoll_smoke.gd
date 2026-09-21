@@ -42,7 +42,8 @@ func run(workbench:Control,output:String) -> void:
 	for resolution in [Vector2i(1440,960),Vector2i(1180,740)]:
 		ui.get_window().size=resolution;ui.get_window().content_scale_size=resolution;await settle()
 		check(ui.stage.size.x>=600 and ui.stage.size.y>=570,"usable canvas "+str(resolution))
-		var rect:Rect2=ui.layer_list.get_item_rect(1)
+		var head_index:int=ui.Document.SELECT_ORDER.find("head")
+		var rect:Rect2=ui.layer_list.get_item_rect(head_index)
 		await click(ui.layer_list.global_position+rect.get_center())
 		check(ui.selected=="head","pointer selects head "+str(resolution))
 		var start:Vector2=ui.stage.global_position+ui.camera().origin+Vector2(0,-45)*ui.camera().scale

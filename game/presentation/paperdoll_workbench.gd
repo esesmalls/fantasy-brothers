@@ -31,8 +31,26 @@ var x_field:SpinBox
 var y_field:SpinBox
 var size_field:SpinBox
 var angle_field:SpinBox
+var crop_x:SpinBox
+var crop_y:SpinBox
+var crop_rx:SpinBox
+var crop_ry:SpinBox
+var crop_top:SpinBox
+var transform_box:VBoxContainer
+var crop_box:VBoxContainer
+var action_box:VBoxContainer
+var duration_field:SpinBox
+var release_field:SpinBox
+var contact_field:SpinBox
+var key_list:ItemList
+var key_t:SpinBox
+var key_x:SpinBox
+var key_y:SpinBox
+var key_angle:SpinBox
 var head_choice:OptionButton
 var appearance_checks:Dictionary={}
+var selected_groups:Array[String]=["bust"]
+var selected_key:=""
 var pan:=Vector2.ZERO
 var _panning:=false
 var _rotating:=false
@@ -54,9 +72,10 @@ var _dragging:=false
 var _drag_start:=Vector2.ZERO
 var _drag_offset:=Vector2.ZERO
 var _drag_recorded:=false
+var _syncing:=false
 var _dialogs:Array=[]
 var _close_dialog:ConfirmationDialog
-var _notice:="选择左侧部件，拖动人物或用右侧数值微调。"
+var _notice:="选择左侧部件，Ctrl 多选后可统一改大小和旋转。"
 
 class Stage extends Control:
 	var owner_ui:Control
@@ -90,10 +109,13 @@ func _ready() -> void:
 	head_choice=_choice(toolbar,["H 原整头","H 拆件试样"],["legacy","modular"],func(v):document.set_appearance("head",v);refresh(),document.appearance.head)
 	var body:=HBoxContainer.new();body.size_flags_vertical=Control.SIZE_EXPAND_FILL;body.add_theme_constant_override("separation",12);root.add_child(body)
 	var left:=VBoxContainer.new();left.custom_minimum_size.x=218;body.add_child(left)
-	_label(left,"装配部件",19)
+	_label(left,"装配部件 · Ctrl 多选",19)
 	layer_list=ItemList.new();layer_list.size_flags_vertical=Control.SIZE_EXPAND_FILL;layer_list.custom_minimum_size.y=180;left.add_child(layer_list)
-	for group in Document.GROUPS:layer_list.add_item(Document.label_for(group))
-	layer_list.select(0);layer_list.item_selected.connect(func(i):select_group(Document.GROUPS.keys()[i]))
+	layer_list.select_mode=ItemList.SELECT_MULTI
+	for group in Document.SELECT_ORDER:layer_list.add_item(Document.label_for(group))
+	layer_list.select(0,true)
+	layer_list.item_selected.connect(func(_i):sync_layer_selection())
+	layer_list.multi_selected.connect(func(_i,_on):sync_layer_selection())
 	var layer_scroll:=ScrollContainer.new();layer_scroll.custom_minimum_size.y=210;layer_scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL;layer_scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;left.add_child(layer_scroll)
 	var layer_panel:=VBoxContainer.new();layer_panel.size_flags_horizontal=Control.SIZE_EXPAND_FILL;layer_scroll.add_child(layer_panel)
 	_label(layer_panel,"启用部件 · 随配置保存",15)
@@ -107,20 +129,28 @@ func _ready() -> void:
 	for id in ["base","head","body","linen","padded","mail","shield"]:
 		var label:String={"base":"底座","head":"头部","body":"内衣","linen":"亚麻","padded":"绗缝","mail":"链甲","shield":"盾"}[id]
 		_toggle(layers,label,func(on):set_layer_visible(id,on),true)
-	var hint:=_label(layer_panel,"发须需切到 H 拆件试样\n血迹在皮肤上、衣物下\n底座与裁取弧线锁定",13);hint.modulate=Color("a8b4a4")
+	var hint:=_label(layer_panel,"发须需切到 H 拆件试样\n血迹在皮肤上、衣物下\n盘面裁取与底座锚点可调\n默认保持现行范围",13);hint.modulate=Color("a8b4a4")
 	stage=Stage.new();stage.owner_ui=self;stage.size_flags_horizontal=Control.SIZE_EXPAND_FILL;stage.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	stage.clip_contents=true;stage.focus_mode=Control.FOCUS_ALL;stage.mouse_default_cursor_shape=Control.CURSOR_MOVE;body.add_child(stage)
 	var right_scroll:=ScrollContainer.new();right_scroll.custom_minimum_size.x=234;right_scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;body.add_child(right_scroll)
 	var right:=VBoxContainer.new();right.size_flags_horizontal=Control.SIZE_EXPAND_FILL;right.add_theme_constant_override("separation",9);right_scroll.add_child(right)
 	selection_label=_label(right,"人物整体",18)
-	x_field=_number(right,"左右 · ±128",-128,128,.25,func(_v):numbers_changed())
-	y_field=_number(right,"上下 · ±128",-128,128,.25,func(_v):numbers_changed())
-	size_field=_number(right,"等比大小 % · 25–300",25,300,1,func(_v):numbers_changed())
-	angle_field=_number(right,"旋转 ° · 绕锚点",-180,180,.5,func(_v):numbers_changed())
+	transform_box=VBoxContainer.new();transform_box.add_theme_constant_override("separation",9);right.add_child(transform_box)
+	x_field=_number(transform_box,"左右 · ±128",-128,128,.25,func(_v):numbers_changed())
+	y_field=_number(transform_box,"上下 · ±128",-128,128,.25,func(_v):numbers_changed())
+	size_field=_number(transform_box,"等比大小 % · 25–300",25,300,1,func(_v):numbers_changed())
+	angle_field=_number(transform_box,"旋转 ° · 绕锚点",-180,180,.5,func(_v):numbers_changed())
+	crop_box=VBoxContainer.new();crop_box.add_theme_constant_override("separation",9);right.add_child(crop_box)
+	crop_x=_number(crop_box,"裁取中心左右",-80,80,.25,func(_v):crop_changed())
+	crop_y=_number(crop_box,"裁取中心上下",-80,80,.25,func(_v):crop_changed())
+	crop_rx=_number(crop_box,"裁取半径横向 · 8–80",8,80,.25,func(_v):crop_changed())
+	crop_ry=_number(crop_box,"裁取半径纵向 · 2–40",2,40,.25,func(_v):crop_changed())
+	crop_top=_number(crop_box,"裁取顶边",-240,-20,1,func(_v):crop_changed())
+	_button(crop_box,"恢复现行盘面",func():var d:=document.default_crop();document.change_crop(Vector2(d.center[0],d.center[1]),Vector2(d.radius[0],d.radius[1]),d.top);refresh())
 	var undos:=HBoxContainer.new();right.add_child(undos)
 	undo_button=_button(undos,"撤销",func():document.undo();refresh())
 	redo_button=_button(undos,"重做",func():document.redo();refresh())
-	_button(right,"复原此部件",func():document.change(selected,Vector2.ZERO,1,true,0);refresh())
+	_button(right,"复原此部件",reset_selected)
 	_button(right,"复原全部调整",func():document.reset_all();refresh())
 	_label(right,"对照与视图",18)
 	_toggle(right,"盘面与锚点",func(v):guides=v;refresh(),true)
@@ -130,11 +160,26 @@ func _ready() -> void:
 	_toggle(right,"叠加 v3 基准",func(v):ghost=v;refresh())
 	var alpha:=HSlider.new();alpha.min_value=.05;alpha.max_value=.7;alpha.step=.05;alpha.value=ghost_alpha;alpha.tooltip_text="基准叠图透明度";right.add_child(alpha);alpha.value_changed.connect(func(v):ghost_alpha=v;refresh())
 	_choice(right,["放大 1×","放大 2×","放大 3×","放大 4×","放大 5×","放大 6×"],[1.0,2.0,3.0,4.0,5.0,6.0],func(v):zoom=v;refresh(),4.0)
-	_label(right,"动作检查",18)
-	play_button=_button(right,"播放动作",func():playing=not playing;elapsed=progress*Motion.duration(weapon);refresh())
+	_label(right,"武器动作 · 可编辑",18)
+	play_button=_button(right,"播放动作",func():playing=not playing;elapsed=progress*Motion.duration(weapon,current_action());refresh())
 	slider=HSlider.new();slider.min_value=0;slider.max_value=1;slider.step=.001;right.add_child(slider)
-	slider.value_changed.connect(func(v):playing=false;progress=v;elapsed=v*Motion.duration(weapon);refresh())
+	slider.value_changed.connect(func(v):playing=false;progress=v;elapsed=v*Motion.duration(weapon,current_action());refresh())
 	_button(right,"回到待机",func():playing=false;progress=0;refresh())
+	action_box=VBoxContainer.new();action_box.add_theme_constant_override("separation",7);right.add_child(action_box)
+	duration_field=_number(action_box,"时长 · 秒",.2,4,.01,func(_v):action_timing_changed())
+	release_field=_number(action_box,"出手 / 离弦",.02,.9,.001,func(_v):action_timing_changed())
+	contact_field=_number(action_box,"接触 / 结果",.05,.98,.001,func(_v):action_timing_changed())
+	_label(action_box,"关键帧 · 稳定编号",14)
+	key_list=ItemList.new();key_list.custom_minimum_size.y=140;action_box.add_child(key_list)
+	key_list.item_selected.connect(func(i):select_keyframe(i))
+	key_t=_number(action_box,"帧时间 0–1",0,1,.001,func(_v):keyframe_changed())
+	key_x=_number(action_box,"武器左右",-80,80,.25,func(_v):keyframe_changed())
+	key_y=_number(action_box,"武器上下",-80,80,.25,func(_v):keyframe_changed())
+	key_angle=_number(action_box,"武器角度 °",-180,180,.5,func(_v):keyframe_changed())
+	var keys:=HBoxContainer.new();action_box.add_child(keys)
+	_button(keys,"加帧",add_keyframe)
+	_button(keys,"删帧",remove_keyframe)
+	_button(action_box,"恢复默认动作",func():document.reset_action(weapon);selected_key="";refresh())
 	notes=_label(right,"",14);notes.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;notes.custom_minimum_size.x=216
 	status=_label(root,"",14);status.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	_close_dialog=ConfirmationDialog.new();_close_dialog.title="保留你的调整";_close_dialog.dialog_text="有尚未保存的调整。关闭会丢弃本次修改。";_close_dialog.ok_button_text="丢弃并关闭";_close_dialog.cancel_button_text="返回保存";add_child(_close_dialog);_close_dialog.confirmed.connect(func():closed.emit())
@@ -168,17 +213,140 @@ func _choice(parent:Node,labels:Array,values:Array,callback:Callable,initial:Var
 func _number(parent:Node,label:String,low:float,high:float,step:float,callback:Callable) -> SpinBox:
 	_label(parent,label,14);var field:=SpinBox.new();field.min_value=low;field.max_value=high;field.step=step;field.allow_greater=false;field.allow_lesser=false;field.value_changed.connect(callback);parent.add_child(field);return field
 
+func select_order() -> Array:
+	return Document.SELECT_ORDER
+
+func transform_targets() -> Array[String]:
+	var result:Array[String]=[]
+	for group in selected_groups:
+		if group!="crop" and group in Document.GROUPS:result.append(group)
+	return result
+
+func current_action() -> Dictionary:
+	return document.action_for(weapon) if weapon!="none" else {}
+
+func sync_layer_selection() -> void:
+	if _syncing or layer_list==null:return
+	var next:Array[String]=[]
+	for index in layer_list.get_selected_items():
+		next.append(Document.SELECT_ORDER[index])
+	if next.is_empty():next=["bust"]
+	selected_groups=next;selected=selected_groups[-1]
+	if selected in ["sword","spear","bow"]:weapon=selected
+	elif selected=="shield":weapon="sword"
+	elif selected in ["body","linen","padded","mail","skin"]:armor={"body":"bare","skin":"nude"}.get(selected,selected)
+	playing=false;progress=0;refresh()
+
 func select_group(group:String) -> void:
-	selected=group;layer_list.select(Document.GROUPS.keys().find(group))
-	if group in ["sword","spear","bow"]:weapon=group
-	elif group=="shield":weapon="sword"
-	elif group in ["body","linen","padded","mail","skin"]:armor={"body":"bare","skin":"nude"}.get(group,group)
+	select_groups([group])
+
+func select_groups(groups:Array) -> void:
+	if groups.is_empty():groups=["bust"]
+	selected_groups=[]
+	for group in groups:
+		if group in Document.SELECT_ORDER:selected_groups.append(str(group))
+	if selected_groups.is_empty():selected_groups=["bust"]
+	selected=selected_groups[-1]
+	_syncing=true
+	if layer_list!=null:
+		layer_list.deselect_all()
+		for group in selected_groups:layer_list.select(Document.SELECT_ORDER.find(group),false)
+	_syncing=false
+	if selected in ["sword","spear","bow"]:weapon=selected
+	elif selected=="shield":weapon="sword"
+	elif selected in ["body","linen","padded","mail","skin"]:armor={"body":"bare","skin":"nude"}.get(selected,selected)
 	playing=false;progress=0;refresh()
 
 func numbers_changed() -> void:
-	if size_field==null:return
-	document.change(selected,Vector2(x_field.value,y_field.value),size_field.value/100.0,true,angle_field.value)
+	if size_field==null or _syncing:return
+	var targets:=transform_targets()
+	if targets.is_empty():return
+	if targets.size()==1:document.change(targets[0],Vector2(x_field.value,y_field.value),size_field.value/100.0,true,angle_field.value)
+	else:document.change_shared(targets,Vector2(x_field.value,y_field.value),size_field.value/100.0,angle_field.value)
 	refresh()
+
+func crop_changed() -> void:
+	if crop_x==null or _syncing:return
+	document.change_crop(Vector2(crop_x.value,crop_y.value),Vector2(crop_rx.value,crop_ry.value),crop_top.value)
+	refresh()
+
+func reset_selected() -> void:
+	if selected=="crop":
+		var spec:=document.default_crop()
+		document.change_crop(Vector2(spec.center[0],spec.center[1]),Vector2(spec.radius[0],spec.radius[1]),spec.top)
+	elif selected_groups.size()>1:
+		for group in transform_targets():document.change(group,Vector2.ZERO,1,group==transform_targets()[0],0)
+	else:document.change(selected,Vector2.ZERO,1,true,0)
+	refresh()
+
+func refresh_action_fields() -> void:
+	if action_box==null or weapon=="none":return
+	var action:=current_action()
+	duration_field.set_value_no_signal(action.duration)
+	release_field.set_value_no_signal(action.release)
+	contact_field.set_value_no_signal(action.contact)
+	key_list.clear()
+	var selected_index:=0
+	for i in range(action.keyframes.size()):
+		var key:Dictionary=action.keyframes[i]
+		key_list.add_item("%s  t=%.2f"%[key.id,key.t])
+		if key.id==selected_key:selected_index=i
+	if action.keyframes.is_empty():return
+	if selected_key.is_empty() or not action.keyframes.any(func(key):return key.id==selected_key):
+		selected_key=action.keyframes[0].id;selected_index=0
+	key_list.select(selected_index)
+	var current:Dictionary=action.keyframes[selected_index]
+	key_t.editable=selected_index>0 and selected_index<action.keyframes.size()-1
+	key_t.set_value_no_signal(current.t)
+	key_x.set_value_no_signal(current.x);key_y.set_value_no_signal(current.y)
+	key_angle.set_value_no_signal(snappedf(rad_to_deg(current.angle),.1))
+
+func select_keyframe(index:int) -> void:
+	var action:=current_action()
+	if index<0 or index>=action.keyframes.size():return
+	selected_key=action.keyframes[index].id
+	progress=action.keyframes[index].t;playing=false
+	refresh()
+
+func action_timing_changed() -> void:
+	if _syncing or weapon=="none":return
+	var action:=current_action()
+	action.duration=duration_field.value;action.release=release_field.value;action.contact=contact_field.value
+	document.set_action(weapon,action);refresh()
+
+func keyframe_changed() -> void:
+	if _syncing or weapon=="none" or selected_key.is_empty():return
+	var action:=current_action()
+	for key in action.keyframes:
+		if key.id!=selected_key:continue
+		key.t=key_t.value;key.x=key_x.value;key.y=key_y.value;key.angle=deg_to_rad(key_angle.value)
+	document.set_action(weapon,action);refresh()
+
+func add_keyframe() -> void:
+	if weapon=="none":return
+	var action:=current_action()
+	var index:=0
+	for i in range(action.keyframes.size()):
+		if action.keyframes[i].id==selected_key:index=i
+	var left:Dictionary=action.keyframes[index]
+	var right:Dictionary=action.keyframes[mini(index+1,action.keyframes.size()-1)]
+	if left.id==right.id and index>0:left=action.keyframes[index-1]
+	var inserted:={"id":Motion.next_key_id(weapon,action.keyframes),"t":lerpf(left.t,right.t,.5) if left.t!=right.t else clampf(left.t+.05,0.02,.98),
+		"x":lerpf(left.x,right.x,.5),"y":lerpf(left.y,right.y,.5),"angle":lerpf(left.angle,right.angle,.5)}
+	action.keyframes.insert(mini(index+1,action.keyframes.size()-1),inserted)
+	selected_key=inserted.id
+	document.set_action(weapon,action);refresh()
+
+func remove_keyframe() -> void:
+	if weapon=="none" or selected_key.is_empty():return
+	var action:=current_action()
+	if action.keyframes.size()<=2:return
+	for i in range(action.keyframes.size()):
+		if action.keyframes[i].id!=selected_key:continue
+		if i==0 or i==action.keyframes.size()-1:return
+		action.keyframes.remove_at(i)
+		selected_key=action.keyframes[maxi(i-1,0)].id
+		document.set_action(weapon,action);refresh();return
 
 func set_layer_visible(group:String,on:bool) -> void:
 	var ids:Array=Document.GROUPS.get(group,[group])
@@ -189,33 +357,52 @@ func set_layer_visible(group:String,on:bool) -> void:
 
 func refresh() -> void:
 	if stage==null:return
+	_syncing=true
 	catalog_data=document.composed()
-	var t:Dictionary=document.transform_for(selected)
-	selection_label.text=Document.label_for(selected)
+	var editing_crop:=selected=="crop" and selected_groups.size()==1
+	if transform_box!=null:transform_box.visible=not editing_crop
+	if crop_box!=null:crop_box.visible=editing_crop
+	if selected_groups.size()>1:
+		var names:Array[String]=[]
+		for group in selected_groups:names.append(Document.label_for(group))
+		selection_label.text="多选 · "+str(selected_groups.size())+" 项"
+	else:selection_label.text=Document.label_for(selected)
 	armor_choice.select(["bare","linen","padded","mail","nude"].find(armor))
 	head_choice.select(["legacy","modular"].find(document.appearance.head))
 	for id in appearance_checks:appearance_checks[id].set_pressed_no_signal(document.appearance[id])
 	weapon_choice.select(["none","sword","spear","bow"].find(weapon))
 	view_choice.select(["fit","matrix","field","nesting"].find(view))
 	background_choice.select(["green","earth","light","dark"].find(backdrop))
+	var t:Dictionary=document.transform_for(selected if selected!="crop" else "bust")
 	x_field.set_value_no_signal(t.offset[0]);y_field.set_value_no_signal(t.offset[1]);size_field.set_value_no_signal(t.scale*100)
-	angle_field.set_value_no_signal(t.angle);angle_field.editable=selected!="bust"
-	size_field.editable=selected!="bust";size_field.modulate=Color.WHITE if selected!="bust" else Color(.6,.6,.6)
+	angle_field.set_value_no_signal(t.angle)
+	var can_scale:=false
+	for group in transform_targets():
+		if Document.allows_scale(group):can_scale=true
+	angle_field.editable=can_scale;size_field.editable=can_scale
+	size_field.modulate=Color.WHITE if can_scale else Color(.6,.6,.6)
+	var spec:=document.crop_spec()
+	if crop_x!=null:
+		crop_x.set_value_no_signal(spec.center[0]);crop_y.set_value_no_signal(spec.center[1])
+		crop_rx.set_value_no_signal(spec.radius[0]);crop_ry.set_value_no_signal(spec.radius[1]);crop_top.set_value_no_signal(spec.top)
 	slider.set_value_no_signal(progress);play_button.text="暂停动作" if playing else "播放动作"
 	play_button.disabled=weapon=="none" or view!="fit"
 	slider.editable=not play_button.disabled
+	if action_box!=null:action_box.visible=weapon!="none" and view=="fit"
+	refresh_action_fields()
 	undo_button.disabled=document.history.is_empty();redo_button.disabled=document.future.is_empty()
 	undo_button.text="撤销 (%d)"%document.history.size();redo_button.text="重做 (%d)"%document.future.size()
 	var warnings:Array[String]=document.warnings()
 	notes.text="\n".join(warnings) if not warnings.is_empty() else "配置有效\n仍需目视检查领口、遮挡和原尺寸效果。"
 	notes.modulate=Color("e1b178") if not warnings.is_empty() else Color("a8b4a4")
 	status.text=("● 未保存  " if document.dirty() else "H 装配台  ")+_notice
+	_syncing=false
 	stage.queue_redraw()
 
 func _process(delta:float) -> void:
 	if not playing or weapon=="none" or view!="fit":return
 	elapsed+=delta
-	var duration:=Motion.duration(weapon)
+	var duration:=Motion.duration(weapon,current_action())
 	if elapsed>duration+.6:elapsed=0
 	progress=clampf(elapsed/duration,0,1)
 	slider.set_value_no_signal(progress);stage.queue_redraw()
@@ -225,21 +412,31 @@ func camera() -> Dictionary:
 	return {"origin":Vector2(stage.size.x*(.30 if weapon=="bow" else .43),stage.size.y*.63)+pan,"scale":maxf(scale_value,1.0)}
 
 func selected_id() -> String:
+	if selected=="crop":return "base"
 	if selected=="head" and document.appearance.head=="modular":return "face"
-	return "head" if selected=="bust" else Document.GROUPS[selected][0]
+	if selected=="bust":return "head"
+	if selected in Document.GROUPS:return Document.GROUPS[selected][0]
+	return "head"
 
 func selected_anchor() -> Vector2:
+	if selected=="crop":
+		var spec:=document.crop_spec()
+		return Vector2(spec.center[0],spec.center[1])
 	var id:=selected_id();var part:Dictionary=catalog_data.parts[id]
 	var pos:=Vector2(part.position[0],part.position[1])
-	if id in ["sword","spear","bow"]:pos+=Motion.sample(id,progress).position
+	if id in ["sword","spear","bow"]:pos+=Motion.sample(id,progress,"hit",current_action()).position
 	return pos
 
 func focus_selected() -> void:
 	var cam:=camera();pan+=stage.size*Vector2(.5,.5)-(cam.origin+selected_anchor()*cam.scale);refresh()
 
-func local_delta(delta:Vector2) -> Vector2:
+func local_delta(delta:Vector2,group:String="") -> Vector2:
 	# Child offsets are local to their head/skin. Drag stays under the pointer.
-	var parent:String=catalog_data.parts[selected_id()].get("parent","")
+	if group.is_empty():group=selected
+	if group=="crop" or not group in Document.GROUPS:return delta
+	var id:String=Document.GROUPS[group][0]
+	if group=="head" and document.appearance.head=="modular":id="face"
+	var parent:String=catalog_data.parts[id].get("parent","")
 	if not parent.is_empty():
 		var t:Dictionary=document.transform_for(parent)
 		delta=delta.rotated(-deg_to_rad(t.angle))/t.scale
@@ -253,8 +450,13 @@ func stage_input(event:InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index==MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			stage.grab_focus();playing=false;progress=0;_dragging=true;_drag_start=event.position
-			var t:Dictionary=document.transform_for(selected);_drag_offset=Vector2(t.offset[0],t.offset[1]);_drag_recorded=false
-			_rotating=event.alt_pressed and selected!="bust";_rotation_start=t.angle
+			if selected=="crop":
+				var spec:=document.crop_spec();_drag_offset=Vector2(spec.center[0],spec.center[1])
+			else:
+				var t:Dictionary=document.transform_for(selected);_drag_offset=Vector2(t.offset[0],t.offset[1])
+			_drag_recorded=false
+			_rotating=event.alt_pressed and selected!="crop" and transform_targets().any(func(group):return Document.allows_scale(group))
+			_rotation_start=document.transform_for(selected).angle if selected!="crop" else 0.0
 			_rotation_mouse=(event.position-camera().origin-selected_anchor()*camera().scale).angle()
 		else:_dragging=false;_rotating=false
 		stage.accept_event()
@@ -262,12 +464,24 @@ func stage_input(event:InputEvent) -> void:
 		if _rotating:
 			var angle:=rad_to_deg(wrapf((event.position-camera().origin-selected_anchor()*camera().scale).angle()-_rotation_mouse,-PI,PI))+_rotation_start
 			angle=snappedf(clampf(angle,-180,180),.5)
-			if document.change(selected,_drag_offset,document.transform_for(selected).scale,not _drag_recorded,angle):_drag_recorded=true
+			var targets:=transform_targets()
+			var ok:=false
+			if targets.size()>1:ok=document.rotate_shared(targets,angle,not _drag_recorded)
+			elif not targets.is_empty():ok=document.change(targets[0],_drag_offset,document.transform_for(targets[0]).scale,not _drag_recorded,angle)
+			if ok:_drag_recorded=true
 			refresh();stage.accept_event();return
 		var delta:Vector2=local_delta((event.position-_drag_start)/camera().scale)
-		var offset:=(_drag_offset+delta).snapped(Vector2(.25,.25)).clamp(Vector2(-128,-128),Vector2(128,128))
-		if offset!=_drag_offset or _drag_recorded:
-			if document.change(selected,offset,document.transform_for(selected).scale,not _drag_recorded):_drag_recorded=true
+		if selected=="crop":
+			var spec:=document.crop_spec()
+			var center:=(_drag_offset+delta).snapped(Vector2(.25,.25))
+			if document.change_crop(center,Vector2(spec.radius[0],spec.radius[1]),spec.top,not _drag_recorded):_drag_recorded=true
+		elif selected_groups.size()>1:
+			if document.nudge_shared(transform_targets(),delta.snapped(Vector2(.25,.25)),not _drag_recorded):_drag_recorded=true
+			_drag_start=event.position
+		else:
+			var offset:=(_drag_offset+delta).snapped(Vector2(.25,.25)).clamp(Vector2(-128,-128),Vector2(128,128))
+			if offset!=_drag_offset or _drag_recorded:
+				if document.change(selected,offset,document.transform_for(selected).scale,not _drag_recorded):_drag_recorded=true
 		refresh();stage.accept_event()
 
 func _input(event:InputEvent) -> void:
@@ -282,8 +496,15 @@ func _input(event:InputEvent) -> void:
 		elif event.ctrl_pressed and event.keycode==KEY_Y:document.redo();refresh();get_viewport().set_input_as_handled()
 		elif stage.has_focus() and view=="fit" and event.keycode in [KEY_LEFT,KEY_RIGHT,KEY_UP,KEY_DOWN]:
 			var delta:Vector2={KEY_LEFT:Vector2.LEFT,KEY_RIGHT:Vector2.RIGHT,KEY_UP:Vector2.UP,KEY_DOWN:Vector2.DOWN}[event.keycode]
-			var t:Dictionary=document.transform_for(selected);delta*=1.0 if event.shift_pressed else .25
-			document.change(selected,Vector2(t.offset[0],t.offset[1])+local_delta(delta),t.scale);refresh();get_viewport().set_input_as_handled()
+			delta*=1.0 if event.shift_pressed else .25
+			if selected=="crop":
+				var spec:=document.crop_spec()
+				document.change_crop(Vector2(spec.center[0],spec.center[1])+delta,Vector2(spec.radius[0],spec.radius[1]),spec.top)
+			elif selected_groups.size()>1:document.nudge_shared(transform_targets(),delta)
+			else:
+				var t:Dictionary=document.transform_for(selected)
+				document.change(selected,Vector2(t.offset[0],t.offset[1])+local_delta(delta),t.scale)
+			refresh();get_viewport().set_input_as_handled()
 
 func _modal_open() -> bool:
 	if _close_dialog!=null and _close_dialog.visible:return true
@@ -315,16 +536,16 @@ func draw_stage(c:Control) -> void:
 		for x in range(-40,61,10):c.draw_line(at+Vector2(x,-95)*s,at+Vector2(x,10)*s,Color(.6,.7,.6,.10))
 		for y in range(-90,11,10):c.draw_line(at+Vector2(-45,y)*s,at+Vector2(65,y)*s,Color(.6,.7,.6,.10))
 	Actor.draw_actor(c,at,s,armor,weapon,damaged,wounded,progress,"hit",rendered,hidden_layers)
-	if source_view and selected!="bust":
-		var id:=selected_id();var pose:Dictionary=Motion.sample(id,progress) if id in ["sword","spear","bow"] else {"position":Vector2.ZERO,"angle":0.0}
+	if source_view and selected not in ["bust","crop"]:
+		var id:=selected_id();var pose:Dictionary=Motion.sample(id,progress,"hit",current_action()) if id in ["sword","spear","bow"] else {"position":Vector2.ZERO,"angle":0.0}
 		Actor.draw_part(c,id,at,s,pose.position,pose.angle,Color(1,1,1,.42),catalog_data.parts)
 	if weapon=="bow" and "bow" not in hidden_layers:
 		var arrow:=Actor.arrow_sample(progress,"hit",catalog_data)
 		if arrow.visible:Actor.draw_part(c,"arrow",at,s,arrow.position,arrow.angle,Color.WHITE,catalog_data.parts)
 	if ghost:Actor.draw_actor(c,at,s,armor,weapon,damaged,wounded,progress,"hit",reference,[],Color(.6,.85,1,ghost_alpha))
 	if guides:_draw_guides(c,at,s)
-	_text(c,"拖动平移 · Alt 拖动旋转 · 中键平移视图",Vector2(18,29),16)
-	_text(c,"方向键微调 / Shift 加速 · Ctrl Z 撤销 / Ctrl Shift Z 重做",Vector2(18,52),13)
+	_text(c,"拖动平移 · Alt 拖动旋转 · Ctrl 多选统一变换",Vector2(18,29),16)
+	_text(c,"方向键微调 / Shift 加速 · Ctrl Z 撤销 · 盘面可调",Vector2(18,52),13)
 	var small_y:=c.size.y-28
 	Actor.draw_actor(c,Vector2(64,small_y),1,armor,weapon,damaged,wounded,0,"hit",rendered)
 	Actor.draw_actor(c,Vector2(215,small_y),2,armor,weapon,damaged,wounded,0,"hit",rendered)
@@ -333,10 +554,15 @@ func draw_stage(c:Control) -> void:
 	_text(c,"2× v3 基准",Vector2(c.size.x-183,small_y-156),13)
 
 func _draw_guides(c:Control,at:Vector2,s:float) -> void:
-	var arc:=Actor.bust_window(catalog_data).slice(2)
-	for i in range(arc.size()):arc[i]=at+arc[i]*s
-	c.draw_polyline(arc,Color("c8aa6e"),1.5,true)
+	var window:=Actor.bust_window(catalog_data)
+	var outline:=PackedVector2Array()
+	for point in window:outline.append(at+point*s)
+	if outline.size()>1:outline.append(outline[0])
+	c.draw_polyline(outline,Color("7d9ec8") if selected=="crop" else Color("c8aa6e"),2.0 if selected=="crop" else 1.5,true)
 	c.draw_line(at+Vector2(-38,0)*s,at+Vector2(38,0)*s,Color("c8aa6e"),1)
+	var spec:=document.crop_spec()
+	var crop_center:=at+Vector2(spec.center[0],spec.center[1])*s
+	c.draw_circle(crop_center,3,Color("7d9ec8"))
 	var anchor:=at+selected_anchor()*s
 	c.draw_circle(anchor,4,Color("f2d08a"));c.draw_line(anchor-Vector2(9,0),anchor+Vector2(9,0),Color("f2d08a"));c.draw_line(anchor-Vector2(0,9),anchor+Vector2(0,9),Color("f2d08a"))
 
