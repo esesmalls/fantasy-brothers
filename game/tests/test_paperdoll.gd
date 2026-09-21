@@ -26,7 +26,11 @@ func run() -> void:
 	d.undo();check(d.edits.size()==1,"undo one edit");d.redo();check(d.edits.size()==2,"redo one edit")
 	d.undo();d.change("mail",Vector2.ONE,1.02);check(d.future.is_empty(),"new branch clears redo")
 	d.reset_all();check(d.edits.is_empty(),"reset all");d.undo();check(d.edits.size()==2,"reset undoable")
-	check(not d.change("base",Vector2.ONE,1),"cannot move base")
+	check(d.change("base",Vector2.ONE,1),"move base anchor")
+	check(is_equal_approx(d.composed().parts.base.position[0],d.baseline.parts.base.position[0]+1),"base offset applied")
+	check(d.composed().bust_crop==d.baseline.bust_crop,"moving base does not change default crop")
+	check(not d.change("base",Vector2.ONE,1.1),"cannot scale base")
+	d.undo()
 	check(not d.change("bust",Vector2.ZERO,.9),"cannot scale whole group")
 	check(not d.change("head",Vector2(INF,0),1),"reject infinite position")
 	check(not d.change("head",Vector2.ZERO,NAN),"reject nan scale")
@@ -35,7 +39,7 @@ func run() -> void:
 		check(not d.validate(invalid).is_empty(),"malformed or incompatible file rejected")
 	for invalid_edit in [{"offset":["x",0],"scale":1},{"offset":[0],"scale":1},{"offset":[0,0],"scale":3.01},{"offset":[0,0],"scale":1,"atlas":"x"}]:
 		var payload:Dictionary=d.payload();payload.edits={"head":invalid_edit};check(not d.validate(payload).is_empty(),"invalid edit rejected")
-	var payload:Dictionary=d.payload();payload.edits.base={"offset":[1,0],"scale":1};check(not d.validate(payload).is_empty(),"file cannot bypass locked base")
+	var payload:Dictionary=d.payload();payload.edits.base={"offset":[1,0],"scale":1.1};check(not d.validate(payload).is_empty(),"file cannot scale base")
 	var dir:="user://paperdoll-qa";DirAccess.make_dir_recursive_absolute(dir)
 	var path:=dir+"/roundtrip.json"
 	check(d.save_project(path)=="","save draft")
