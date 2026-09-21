@@ -1,0 +1,56 @@
+{
+  "batch": "H fixed footprint U48",
+  "generation_calls": 2,
+  "successful_calls": 2,
+  "selected_new_atlases": 2,
+  "active_atlases": 5,
+  "parts": 15,
+  "files": [
+    {
+      "file": "sources\\01-full-garments.png",
+      "sha256": "1de50fae31aa09261cf462318e2a88f2b73cc97affb90b7cb90675dc1969402c",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha": [
+        0,
+        255
+      ],
+      "tool": "Codex built-in image_gen",
+      "raw_output_preserved": true
+    },
+    {
+      "file": "sources\\02-full-damaged.png",
+      "sha256": "b0b4203ae6e213e7b9eb705e4ca0f5b38ff4ec3355fc49322fc82e840e4bd030",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha": [
+        0,
+        255
+      ],
+      "tool": "Codex built-in image_gen",
+      "raw_output_preserved": true
+    }
+  ],
+  "selected_runtime_copies": {
+    "01-full-garments.png": "full-garments.png",
+    "02-full-damaged.png": "full-damaged.png"
+  },
+  "reused_atlases": [
+    "body-head.png",
+    "anatomy.png",
+    "weapons.png"
+  ],
+  "previous_catalog": "game/assets/art/static-bust/catalog-v2.json",
+  "composition_order": [
+    "fixed_base",
+    "body_and_clothes",
+    "head_scale_and_position",
+    "shared_crop"
+  ]
+}

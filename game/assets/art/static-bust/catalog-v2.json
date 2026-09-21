@@ -1,0 +1,322 @@
+{
+  "schema": 1,
+  "style": "H-static-bust",
+  "revision": "U47-side-proportions",
+  "parts": {
+    "head": {
+      "atlas": "res://assets/art/static-bust/body-head.png",
+      "rect": [
+        68,
+        40,
+        477,
+        516
+      ],
+      "size": [
+        37.0,
+        40.02516
+      ],
+      "position": [
+        9,
+        -43
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ]
+    },
+    "wounded": {
+      "atlas": "res://assets/art/static-bust/body-head.png",
+      "rect": [
+        682,
+        655,
+        477,
+        516
+      ],
+      "size": [
+        37.0,
+        40.02516
+      ],
+      "position": [
+        9,
+        -43
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ]
+    },
+    "body": {
+      "atlas": "res://assets/art/static-bust/side-layers.png",
+      "rect": [
+        116,
+        186,
+        410,
+        306
+      ],
+      "size": [
+        68.33333,
+        51.0
+      ],
+      "position": [
+        0,
+        -6
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ]
+    },
+    "linen": {
+      "atlas": "res://assets/art/static-bust/side-layers.png",
+      "rect": [
+        718,
+        216,
+        416,
+        280
+      ],
+      "size": [
+        69.33333,
+        46.66666
+      ],
+      "position": [
+        0,
+        -6
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ]
+    },
+    "base": {
+      "atlas": "res://assets/art/static-bust/anatomy.png",
+      "rect": [
+        17,
+        918,
+        643,
+        260
+      ],
+      "size": [
+        56.0,
+        22.64386
+      ],
+      "position": [
+        7,
+        0
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ]
+    },
+    "padded": {
+      "atlas": "res://assets/art/static-bust/side-layers.png",
+      "rect": [
+        100,
+        772,
+        451,
+        292
+      ],
+      "size": [
+        72.0,
+        46.61641
+      ],
+      "position": [
+        0,
+        -6
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ]
+    },
+    "padded_damaged": {
+      "atlas": "res://assets/art/static-bust/side-damage.png",
+      "rect": [
+        100,
+        772,
+        451,
+        292
+      ],
+      "size": [
+        72.0,
+        46.61641
+      ],
+      "position": [
+        0,
+        -6
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ]
+    },
+    "mail": {
+      "atlas": "res://assets/art/static-bust/side-layers.png",
+      "rect": [
+        718,
+        776,
+        436,
+        290
+      ],
+      "size": [
+        72.0,
+        47.88991
+      ],
+      "position": [
+        1,
+        -6
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ]
+    },
+    "mail_damaged": {
+      "atlas": "res://assets/art/static-bust/side-damage.png",
+      "rect": [
+        718,
+        776,
+        436,
+        290
+      ],
+      "size": [
+        72.0,
+        47.88991
+      ],
+      "position": [
+        1,
+        -6
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ]
+    },
+    "sword": {
+      "atlas": "res://assets/art/static-bust/weapons.png",
+      "rect": [
+        141,
+        75,
+        185,
+        596
+      ],
+      "size": [
+        22.5,
+        72.48649
+      ],
+      "position": [
+        0,
+        0
+      ],
+      "pivot": [
+        0.5,
+        0.82
+      ]
+    },
+    "spear": {
+      "atlas": "res://assets/art/static-bust/weapons.png",
+      "rect": [
+        600,
+        42,
+        55,
+        630
+      ],
+      "size": [
+        8.4,
+        96.21818
+      ],
+      "position": [
+        0,
+        0
+      ],
+      "pivot": [
+        0.5,
+        0.7
+      ]
+    },
+    "bow": {
+      "atlas": "res://assets/art/static-bust/weapons.png",
+      "rect": [
+        990,
+        87,
+        134,
+        580
+      ],
+      "size": [
+        17.5,
+        75.74627
+      ],
+      "position": [
+        0,
+        0
+      ],
+      "pivot": [
+        0.8,
+        0.51
+      ]
+    },
+    "shield": {
+      "atlas": "res://assets/art/static-bust/weapons.png",
+      "rect": [
+        81,
+        737,
+        305,
+        455
+      ],
+      "size": [
+        32.0,
+        47.7377
+      ],
+      "position": [
+        29,
+        -2
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ]
+    },
+    "arrow": {
+      "atlas": "res://assets/art/static-bust/weapons.png",
+      "rect": [
+        591,
+        730,
+        75,
+        460
+      ],
+      "size": [
+        4.0,
+        24.53333
+      ],
+      "position": [
+        0,
+        0
+      ],
+      "pivot": [
+        0.5,
+        0.0
+      ]
+    },
+    "impact": {
+      "atlas": "res://assets/art/static-bust/weapons.png",
+      "rect": [
+        883,
+        812,
+        313,
+        297
+      ],
+      "size": [
+        20.0,
+        18.97764
+      ],
+      "position": [
+        0,
+        0
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    }
+  }
+}

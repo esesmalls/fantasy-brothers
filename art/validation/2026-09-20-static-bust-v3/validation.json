@@ -1,0 +1,235 @@
+{
+  "batch": "U48 fixed footprint and weapon motion",
+  "engine": "Godot 4.7.2 stable ed1daf0bf",
+  "capture_source": "Actual exported Windows executable",
+  "capture_exit_code": 0,
+  "executable_sha256": "1908e4567d8e51c822a26fc7a574323681c6028b84e30ab92a221e7f02e4b498",
+  "specialist_checks": {
+    "passed": 147,
+    "failed": 0
+  },
+  "main_ui_checks": {
+    "passed": 301,
+    "failed": 0,
+    "log": "builds/static-bust/ui-v3.log"
+  },
+  "pixel_checks": [
+    {
+      "weapon": "sword",
+      "region": "face",
+      "rectangle": [
+        320,
+        235,
+        399,
+        310
+      ],
+      "frames": 32,
+      "identical": true
+    },
+    {
+      "weapon": "sword",
+      "region": "base",
+      "rectangle": [
+        239,
+        419,
+        250,
+        436
+      ],
+      "frames": 32,
+      "identical": true
+    },
+    {
+      "weapon": "spear",
+      "region": "face",
+      "rectangle": [
+        320,
+        235,
+        399,
+        310
+      ],
+      "frames": 32,
+      "identical": true
+    },
+    {
+      "weapon": "spear",
+      "region": "base",
+      "rectangle": [
+        239,
+        419,
+        250,
+        436
+      ],
+      "frames": 32,
+      "identical": true
+    },
+    {
+      "weapon": "bow",
+      "region": "face",
+      "rectangle": [
+        320,
+        235,
+        399,
+        310
+      ],
+      "frames": 32,
+      "identical": true
+    },
+    {
+      "weapon": "bow",
+      "region": "base",
+      "rectangle": [
+        239,
+        419,
+        250,
+        436
+      ],
+      "frames": 32,
+      "identical": true
+    }
+  ],
+  "sources_unchanged": true,
+  "screenshots": {
+    "body-template.png": "8f79054d001e345fb334bc09640cc7d5b5da7601c48138949b11e2ec217f4673",
+    "bow-00.png": "3ec0cae19b8e0b8fa37acc86114922bae4c26e6a6d4fd56e7b6ec5ebcdbf6041",
+    "bow-01.png": "be747be36f5475ae531357a4f191eb5adddc6f81404b7bc7b5e3a3d69010e5cd",
+    "bow-02.png": "dcec6944d3962eb2cf64cd5d5031c4dbec9fac72fde8a6ca0db4a45050cd14c8",
+    "bow-03.png": "23bf3b7c3abe176fd202a067cc3dc7d039bd1d67b7e113626bb25ac80ca8a438",
+    "bow-04.png": "80f4c1921d693289137a0e8e3402a7726645c385599eb541b14ebe18828428ad",
+    "bow-05.png": "9b47241d76d56e067f2e5ca32e5290965fc8a49a041bcf38f0d7e08f839b68d4",
+    "bow-06.png": "bbceb2d06ef091003340f3d33b5f9d354348da8d547d9dc60481e3b94ff9a6da",
+    "bow-07.png": "1b6a2fdcb5284338b1f95cdb75281235700af9f9ca95e6f80c77111d93e6c06a",
+    "bow-08.png": "4a0a132dc68c7b0e95eedb6b15c532606d5e858b9af7b6ccb94910b82a1c6521",
+    "bow-09.png": "37e48d5687edad90e72b17b4e114f13cee47a62395ce64764d8930d5291ff188",
+    "bow-10.png": "d3b710c17b19e96a0f0aaef938789c56812bcc765b465571481eed777cef429c",
+    "bow-11.png": "23f71e12d94f611a8c1010060ea035970e04d1d2669e192bef3c2f001c1f2f3b",
+    "bow-12.png": "23f71e12d94f611a8c1010060ea035970e04d1d2669e192bef3c2f001c1f2f3b",
+    "bow-13.png": "23f71e12d94f611a8c1010060ea035970e04d1d2669e192bef3c2f001c1f2f3b",
+    "bow-14.png": "8ba22183641c08c5173a60e0c7f746785f4dfb8d36bf1910c22b3637b8dc67ab",
+    "bow-15.png": "210aba44fbef709c58729ac4f4fda25656b8724e5e85d85374790cba39caff2e",
+    "bow-16.png": "4294a7698b59948fe88c968296853c1a69de80d5de8a5c9c7a5e2c7f075f7458",
+    "bow-17.png": "1a80797663b76dc9bff8a04722b7c331748831551b19a39055eb6caf83eb1193",
+    "bow-18.png": "5e9ed5fd1aea47249c7e092fb99f9c15dba8f0be55babeb8309174be58f32096",
+    "bow-19.png": "982f3d256545b987d9d01cbabbf4f421057e94dc0987ac10922ff4d3b5d87bb8",
+    "bow-20.png": "5ea67248ae20486a496208c3b980fb3683c854caefcfb15b94d5fa0ec3d0b11f",
+    "bow-21.png": "88ae5e30f5109ded12628bf6532c22712e08ebda995339419f17802811c59d00",
+    "bow-22.png": "0bcade2df7ae36e8a8c8646b0c8398495d4ba8338b808f738dcb57b343aa6eab",
+    "bow-23.png": "c9e61911ac774ad22ef9383f511fe7dea59c4a0b3c9dc9d3ca0e8f4d5f8c86ab",
+    "bow-24.png": "ba109031e6a803ec13b53588af90ef39759b016b17187e6e138858dc753cf988",
+    "bow-25.png": "735fd0cba0ce78a6227ea1629c37aa63a526d640716c329293d59c2b686328c7",
+    "bow-26.png": "8f43b101eb61b8a52997b2b10ffede95618cb3996ef40ebbb766ac8bf06392b9",
+    "bow-27.png": "5599f1991cb81d7f3571dcf409b15f10351ea06fe672ded9a5a6819c353f96c1",
+    "bow-28.png": "ae650e97befa0bb9aae5cdfadd365474d4674b7db946279edcaaadb6a9c940d2",
+    "bow-29.png": "c6011395bb41b8ea123f8e02fb50a226dffac6b0cf5295455ea97a09beb5f196",
+    "bow-30.png": "4a5130421ecd38f169d8c510477fef1704e4c10056106a1f7b823598b064c299",
+    "bow-31.png": "28d96944c920a9f3d2a0b2f9b3c8f0ce3d2f9b0aaffc61505e9c79bbc9a06926",
+    "bow-block.png": "dd144e74c1b0d1201126334e7c67b69623404d93eceda1a892b6efd0f489fd5e",
+    "bow-miss.png": "c5e012cb4b09485a86594f33b101d295403a70fb6e440ba972fc61528de7ff56",
+    "comparison-light.png": "65ccf6f7b00739fe31f3ee3d6d33af499a9b90780ee9ebe3dec68f372a84a00b",
+    "comparison.png": "eaf320c2a8250d463fd97ac882144c304f2f43585a9ceeec1fe6d0aafa6d7468",
+    "fitting.png": "a81a599e760dcbd3e9fb0e801c9dbe692613cb5e806bd29dacc2afa9d5513522",
+    "interactive.png": "42acb46c8cdb3e9e4ce8ad14c5dd52fcb3fa979976e07c992f0b78f260ad6f22",
+    "layers-damaged.png": "aa61d00c96eea7225aebfe79aac6ca2609704e55164554bb1354f7a47d7bda94",
+    "layers.png": "eb960f4695c0878c6ddc80d2169a897d720a275f1aee562ee9c23da4e63053cd",
+    "overview-battle.png": "b7c1f42fcedb0c3f8bbd77ce79be482c4afc3dfbbfa423fd7c5c6617a98ae97c",
+    "overview-damaged.png": "92418cc502ec1bd4fc215a991de136a8d71c9fca3e04a927372edafeac3c7bdc",
+    "overview-deep.png": "f64b0c7f3528f33d5c74cda32a70a79325a8236ad777f3a68cff6d4d8f383bb7",
+    "overview-light.png": "928971cf57d12ef3ac70d2a6732917fc7fce8fea8ddf757ec525f25cac7778bc",
+    "spear-00.png": "b61ef523fa0f1592bebd27ee7041173c0bbc1ba8f2808961847e4792f37a8135",
+    "spear-01.png": "a9d68ba7702b486bf1af57ca21b0e894960869ea390fe4c87cbe305d5d9ede14",
+    "spear-02.png": "d56f1a04b9cf6133931cdd660ebaf5deebf9dd26eb4790a705e584fda7cc1437",
+    "spear-03.png": "13531b517ec0ed8834c55f3fd2842dce3b1229c1aaffe715c3ada45864330c5c",
+    "spear-04.png": "48ae65324b301d7a8054258a729d84f392739ac616ef5312e16fc637fb79e308",
+    "spear-05.png": "75bb4a0c15b5248e527d98d8b3e4ec456a6920fdaa0dc620966f7576a8be40b9",
+    "spear-06.png": "20de1354846d4b70ab001b0276f59f6393f9223b417420f8c9ae282c27f160c6",
+    "spear-07.png": "dd055404ed9cddb32db6675227e48a0fc52dadde2c54e169d9704805589e5712",
+    "spear-08.png": "94c923c33d65939b11eab29d428bb425a595ad0ea95813de74556231baa66076",
+    "spear-09.png": "9a00bd7460ba2dbb864e561c4eee34e3ac2dc7afa7426ea7b809f7415e4e5c88",
+    "spear-10.png": "cd214324a230f0dcc5c8bd77fdcaa4182b2fa3a183b6e4d9e4f3e0e767c529d5",
+    "spear-11.png": "453bfb809fc6c3e59eac25a5c9a9fb39c7d42930eed98d6a1116309660ada097",
+    "spear-12.png": "9738a2f649111a80119bfe4943db9d46e508efbf1a29ccc20c89ac106ce7f1e8",
+    "spear-13.png": "24d0ee3f174429ea34aa9e31a547fffdd4306503695c33a45b22be760b48fc6b",
+    "spear-14.png": "266c8b23df441c3ad0f5fdad82808f7ae2a8b184a4a73f19f2c356123c2afb6c",
+    "spear-15.png": "7443607547571b0e165ae93e128e86bfd3228f2d9cb142713fae48257ba89f4d",
+    "spear-16.png": "9aed3a947fcabcffe0617d3e96e498d9658c3e572d7eeafb9b39518c50578a95",
+    "spear-17.png": "2a0586b80c1a7a66edfa5ab483fb37048f7bfe1845042e02f04bc3eeda03ac12",
+    "spear-18.png": "ea428a7eb0e4ee67b1f4ba897e05515efbfbd5924c6b9148315e523ca70d2e7c",
+    "spear-19.png": "200d94fd6558644e7424d85a9d846f82d598a832bbfbbcb191272bb1e314434d",
+    "spear-20.png": "ddb6f51c146b4f10addfc2f6ab48ddabbac902959f4819e61f1430e19a7ca5ba",
+    "spear-21.png": "ccaebe25ff3bd5a13359d5d36e2ca077e9f920fb90b08a5200314b465fc127d0",
+    "spear-22.png": "929ac50dddf1133fa81b0bae16adb79762ef2f455844bf64008b2bb04fcfaa9a",
+    "spear-23.png": "c806021f1e2734ba5957d7cf2564f73ee41a9c98514a8ec9ef540596ba715d0a",
+    "spear-24.png": "f11920cef9fe9c1bd3391fdde3393c5748aadca6c76ae2acc1e7de4b54b26e7a",
+    "spear-25.png": "ac4faf9df1c5944439e4098a82f42a1680df2118f4844d87019c7b5a7c4bc315",
+    "spear-26.png": "47d09264e60c5031ebc8f3a67d8d37e6c0fc8b57ba6702e80779bfeae6dc374d",
+    "spear-27.png": "65eae4d0832cd763ef69af50b7a7bbf2b1eb78fa38d42a58596cc413887cf31d",
+    "spear-28.png": "fc583b182e40e9851d235623a57cb7b9813e2f36f2bd3dee63e3aa225fb0cabf",
+    "spear-29.png": "5c2c0f9e5b4d25ae3f2af9a32db92be6e80d5d6ead666c0a464f3aa5b7361372",
+    "spear-30.png": "e9a494c1e5e5e3eb935b29da9cc81cff7d0e6b369366b3f6fd839658ecebc15b",
+    "spear-31.png": "9212fb5bc76e9f328de5d2fafcd7abe7cba6fbd3698dc40bb36e83e91b3dfc7c",
+    "spear-block.png": "feee500220a0f9478de084c9d5afa946b134202f5f1d7bef82cbd318918f4db9",
+    "spear-miss.png": "123c8d4ab1dad1e7c26a83291ad6450efe10e7785a79f46a453a0c64acfb97b4",
+    "sword-00.png": "6304ffdc19171bf97e8098efab0dfbf8d92a98031f1a393c45a7b633d9126f40",
+    "sword-01.png": "dd51d6ce3374c920fad508ee8ce675157e56534f867effc29521413d2e6bade8",
+    "sword-02.png": "00aa2ce13ffbf79811c39c9141340fc142c1c984298443feec09a30e81c6e787",
+    "sword-03.png": "9dc51a9d2951fe48d254d96307b476a3429577325722b103854f49076410f744",
+    "sword-04.png": "72e02a6576a0b9ac4e7e0fdbe88648e1ce18d228c367f59a122415132dbf0b07",
+    "sword-05.png": "b191c38afeacc29254240f8a446d90614b25b4e3403a1f49e93631d62f5c6140",
+    "sword-06.png": "b5465054d3b2c96cca8f16b1cce20bf9148e0f30d121d82c059c932546c8b8b1",
+    "sword-07.png": "b7072cb2df413c60fed3396dc9775f9566bedc4c8b7cb4599fb0950fe5ad5312",
+    "sword-08.png": "3a85b4db79adea9ba8ca741fbbb1962a28754f4e4a14c91e88a4d19c4bf88bf4",
+    "sword-09.png": "50a8b48496519fc2b9a92c768d6e9cc29bf6a20f0af8d4c0dc74abc95fcf51a9",
+    "sword-10.png": "0e5fd6ccd995fb46cedf5c2d1282fb5730aa04b0000d417524e731017a7f3c59",
+    "sword-11.png": "b4e3565006333658d07cfe5761b1aa16144cda9f7c5279f8b9d50ed601892e2d",
+    "sword-12.png": "78623272873186796071fc44291b9f53209f4ee7cf4da34c1b1fdbcfe81754cc",
+    "sword-13.png": "059dc2297eb930614ff5686061e1adf4c3c7f78ba1f652aa23ec722ba3938195",
+    "sword-14.png": "9ba3ba72dd00716d2917b23bc883def69384626c4cfab8296d08e9a1e28b62f2",
+    "sword-15.png": "acd49541de42c251a013bbe251f91fffc723026c0f5926457dccefe765a26c30",
+    "sword-16.png": "780d545e428db267a39015ca78d0eba1f215a3db227760465371fecb9dc6f3dc",
+    "sword-17.png": "390cc5984663991fb2d036cb12be8f9b7a32dc91439fa66b161878a66acdc226",
+    "sword-18.png": "600c36ddb1cdf1ba0a90e0c50179d5a17d4c86d6076405c58415d9c7317541a4",
+    "sword-19.png": "045e4b0bda434c15b2d9506e3b6e212c53866ac17ec745d2caec111ae29178f1",
+    "sword-20.png": "ed5e4d1227987fea668fdd938fe8f4b80a682a86bd2c2239a6e64c3e9669280f",
+    "sword-21.png": "0ab6368cee67390ccd7c62d478f95a4f39d441ddb9011b7e43746e540fd9594e",
+    "sword-22.png": "3c3989c432e0b3ded9cc89fa859b8ef8d45f312d4e53eb1a441dd9beb5097ce1",
+    "sword-23.png": "2a311af7459acfa9ab02d547fafd2377a74c002686d3ea1533abc9c2b92a380c",
+    "sword-24.png": "dc389fd4acc0aee8952e1e1a9affe7c750df90f6b7a88211fa408b95c5b0ec0f",
+    "sword-25.png": "4074f85051d309d3740edad5535ee9a96c1c622d7c0e7bd8f892037ecbe81598",
+    "sword-26.png": "c5174bc13bcce2f43186ba56916283c8cbaa7fb2488a3869e51cdd8136b17e11",
+    "sword-27.png": "8ba1089afbe9e9f01996907045072a2c1313095900395c5e8034c809785fb5d3",
+    "sword-28.png": "7c09abeefa7354188979cd00ed5566fb50f8605afe3e97ad4054e3138d784c91",
+    "sword-29.png": "4add7b73868c5f951db4e64fc5e611afa520603fc646e8ce6c5c75a1d2fc474f",
+    "sword-30.png": "7a0e78d8f6657e68202296e6fe4412bd42465ac9a10126573fcc01a16c1f4c79",
+    "sword-31.png": "5e0fd7d33c6de016a30bd13a158463d83aa9f5bfb0197ba4de1a0d24f6cb5391",
+    "sword-block.png": "1b0048fd66cc9479a12a6a73dd658e76f48fba455ccc81cfaed2ec04d3b0c8e1",
+    "sword-miss.png": "607904bcc531762bb4521ce1ccce032a110234c3becf3fb3bb245cfed28963b0"
+  },
+  "crop_and_alignment": {
+    "center": [
+      -0.049767,
+      -17.219285
+    ],
+    "radius": [
+      28.765163,
+      7.166407
+    ],
+    "top": -120.0
+  },
+  "bust_shift": [
+    2,
+    0
+  ],
+  "limitations": [
+    "One body type and matched clothing set; user visual review still pending.",
+    "Pixel regions verify stationary face and base only, not all visual quality.",
+    "Weapon paths are presentation; no gameplay trajectory or save rules changed."
+  ],
+  "browser": {
+    "checks": 28,
+    "errors": [],
+    "offline": true,
+    "viewports": [
+      1440,
+      560
+    ]
+  }
+}

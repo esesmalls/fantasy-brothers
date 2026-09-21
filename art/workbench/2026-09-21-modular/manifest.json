@@ -1,0 +1,37 @@
+{
+  "version": "U51",
+  "tool": "built-in imagegen",
+  "generation_calls": {
+    "successful": 3,
+    "blocked": 1
+  },
+  "catalog_sha256": "b411dfd57a4efb9bbf1c866f2d37f8dbfbc351d838431da5403719e1c678123e",
+  "modules_sha256": "9976573dc1f5fbcbfe1936cbb261970a5b49ae24569ef3e961cff71cd9e017b5",
+  "user_original_sha256": "9f4c1a16a80204e424171d621ec18acffc217bc78a896485d979a56aea4382d4",
+  "source_user_draft": "my_test.json (unchanged)",
+  "generated_atlas": {
+    "path": "game/assets/art/static-bust/modular-proof.png",
+    "sha256": "932e0d5b21b2002f82ca42d549598517715938bc708d1012697b74650baa52bc",
+    "mode": "RGBA",
+    "size": [
+      1536,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "generated_file": "exec-db7a2391-237e-4ae8-be82-bc736cde60b4.png",
+    "reference": "existing project H body-head.png",
+    "status": "tooling proof; face, hair, beard, scar, bandage, skin blood each one sample"
+  },
+  "body": {
+    "source": "game/assets/art/static-bust/body-mild-proof.png",
+    "sha256": "579423add4e0e8e635f05d35ea17c88cc1e53a526b09aa139d5b39904316590a",
+    "generated_file": "exec-0a449ca2-306d-453b-a664-e297ac0b322f.png",
+    "status": "upper-right torso only adopted; mild right-facing, shortened neck following final user reference; width52; other regions unused",
+    "previous_rejected_angle": "body-turn-proof.png / exec-5a1f1d23-6d7f-4f9d-871e-c44be25e841a.png"
+  },
+  "export_sha256": "b0f81996c04db9fd705d8b4c794d040650f880b6143d8a760afa73655afe8599",
+  "captures_source": "Windows exported application --paperdoll-modular-test, corrected v4"
+}

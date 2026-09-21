@@ -1,0 +1,8 @@
+{
+	"baseline_sha256": "862d93ad989f013500b2a28197ad8bba4244e8075b112d68830666ffff16e45d",
+	"checks": 29,
+	"engine": "4.7.2-stable (official)",
+	"executable": "S:/fantasy brothers/builds/paperdoll/windows/FantasyBrothers-Paperdoll.exe",
+	"failed": 0,
+	"failures": []
+}

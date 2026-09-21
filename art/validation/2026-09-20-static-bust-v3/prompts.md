@@ -1,0 +1,21 @@
+# U48 · 固定盘面裁取与武器动作
+
+## 02 · 对应甲损
+
+Edit the two BOTTOM ROW armor garments in this transparent 2x2 atlas to damaged versions, preserving EXACT scale, location, full outer contour, sleeves, neckline, drawing perspective and transparent background. Do not move any sprite. Leave both TOP ROW garments unchanged. Padded armor bottom-left: a small irregular tear with pale stuffing and broken stitching on the UPPER NEAR-SIDE CHEST just below the left collarbone, around x300 y805 in this 1254 square sheet; keep damage above the breast-line crop used in a bust. Chainmail bottom-right: corresponding small patch of broken links exposing ochre quilted fabric on UPPER NEAR-SIDE CHEST around x905 y810, some loose links and scratched trim. No blood, no wounds or skin. Keep the rest of each garment intact. No extra background or symbols. State variants of the same equipment, no reshaping.
+
+工具：内置 image_gen。原图不作程序重绘；Godot按盘面边界显示完整衣甲中的胸肩部分。
+
+用户追加：不留明显长颈；先固定底座→身体衣甲→头部大小与落位→统一截取。选定现有H底座原画、宽64逻辑像素、中心(0,0)，本批所有状态/装备共用，不随部件重新缩放。
+
+## 01 · 完整衣甲与基础身体
+
+Production game clothing atlas on true transparent alpha. Reference 1 is our H handpainted equipment MATERIAL and 40-degree RIGHT-facing torso orientation. Reference 2 explains complete source garments later cropped onto a Battle Brothers bust token. Generate ONE 2x2 sheet of FOUR isolated COMPLETE headless upper-body garments, not bust-cut pieces. Each sprite entirely inside its quadrant with at least 75px clear gutter, sprite about 390px wide and 440px tall on a 1254 square canvas. Same scale, same shoulders, same neckline registration and three-quarter RIGHT facing, near shoulder on image left, far shoulder receding on right. Torso front opening right of center. NO head, hair, hands, weapons, base, labels, grid or background.
+Top-left: human foundation torso, wears a plain dark brown close-fitting LONG-SLEEVED undershirt extending down to hips, only a VERY LOW healthy neck root barely above collar, no long neck column. ALL shoulder/arm/chest skin covered, no bare upper arms. Long sleeves hang relaxed close to sides, cuffs down at hips. No hands. The separate head will sit LOW overlapping the collar: the neck is only an internal connection, NOT a displayed long neck. Compact Battle Brothers shoulder-and-head composition.
+Top-right: loose charcoal linen LONG-SLEEVED tunic garment ONLY with truly empty transparent neck hole. Full torso to hip and long sleeves. Natural gravity folds, subtle worn seams, neckline and shoulder position match foundation. NO skin.
+Bottom-left: ochre quilted padded armor garment ONLY, complete hip-length gambeson and long sleeves, matching side-facing torso and shoulder pose. Diamond quilting, small asymmetric repairs. Empty neck hole, no skin.
+Bottom-right: steel chainmail garment ONLY, complete hip-length shirt with long sleeves, subtle dark brown leather neckline trim, matching pose and proportions; a little ochre underlining may show inside collar. Empty neck hole, no skin.
+The UPPER SHOULDER SILHOUETTE of all four is a compact asymmetric dome following the same oblique elliptical token footprint, NOT flat broad frontal shoulders or projecting shoulder balls. Upper arms descend naturally INSIDE the shoulder envelope. Garments do NOT end or turn into sleeve openings at the chest! All cuffs and hems are far BELOW the breast line so a chest crop contains only continuous cloth/mail.
+Preserve H refined medieval handpainting, clear irregular brown-black silhouette edges, matte worn material, upper-left light. No photorealistic 3D studio finish. No armor shoulder plates. True transparent surroundings and garment neck holes, generous space between parts.
+
+Sizing contract established BEFORE anatomy: all four garments are designed for ONE fixed oval token base, 64 units wide. Their chest/shoulder envelope is about 62 units wide, narrowing naturally upward into an oblique domed shoulder line. Cuffs below the chest are not part of the token. Low separate head will later be sized relative to these shoulders, not used to enlarge the base. Reference 3 is the fixed-base structural reference, do NOT reproduce its ornament; reference 1 remains the H paint style. Respect this design sequence.

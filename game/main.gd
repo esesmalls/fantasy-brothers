@@ -14,6 +14,8 @@ const CharacterScreen = preload("res://presentation/character_screen.gd")
 const MotionReviewScene = preload("res://presentation/motion_review.tscn")
 const HandStyleReviewScene = preload("res://presentation/hand_style_review.tscn")
 const AStandardReview = preload("res://presentation/a_standard_review.gd")
+const StaticBustReview = preload("res://presentation/static_bust_review.gd")
+const PaperdollWorkbench = preload("res://presentation/paperdoll_workbench.gd")
 const CREAM = Color("e7ddc6")
 const MUTED = Color("9caeaa")
 const GOLD = Color("c8aa6e")
@@ -72,6 +74,28 @@ var motion_review_dir := "user://motion-review"
 func _ready() -> void:
 	_build_theme()
 	var arguments := OS.get_cmdline_user_args()
+	if arguments.has("--paperdoll") or arguments.has("--paperdoll-capture") or arguments.has("--paperdoll-smoke") or arguments.has("--paperdoll-nesting-test") or arguments.has("--paperdoll-modular-test"):
+		var workbench=PaperdollWorkbench.new();add_child(workbench)
+		workbench.closed.connect(func():get_tree().quit())
+		var output:="user://paperdoll-captures"
+		for flag:String in arguments:
+			if flag.begins_with("--paperdoll-project="):workbench.open_project(flag.trim_prefix("--paperdoll-project="))
+			if flag.begins_with("--paperdoll-dir="):output=flag.trim_prefix("--paperdoll-dir=")
+		if arguments.has("--paperdoll-capture"):workbench.call_deferred("capture_all",ProjectSettings.globalize_path(output))
+		elif arguments.has("--paperdoll-smoke"):workbench.call_deferred("run_smoke",ProjectSettings.globalize_path(output))
+		elif arguments.has("--paperdoll-nesting-test"):workbench.call_deferred("run_nesting_test",ProjectSettings.globalize_path(output))
+		elif arguments.has("--paperdoll-modular-test"):workbench.call_deferred("run_modular_test",ProjectSettings.globalize_path(output))
+		return
+	if arguments.has("--static-bust-review") or arguments.has("--static-bust-capture"):
+		var bust_review = StaticBustReview.new()
+		add_child(bust_review)
+		bust_review.review_closed.connect(func():get_tree().quit())
+		if arguments.has("--static-bust-capture"):
+			var output := "user://static-bust"
+			for flag: String in arguments:
+				if flag.begins_with("--static-bust-dir="):output=flag.trim_prefix("--static-bust-dir=")
+			bust_review.call_deferred("capture",ProjectSettings.globalize_path(output))
+		return
 	if arguments.has("--a-standard-review") or arguments.has("--a-standard-capture"):
 		var production_review = AStandardReview.new()
 		add_child(production_review)

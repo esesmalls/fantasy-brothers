@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "revision": "U51-modular-proof",
+  "status": "tooling-proof-not-approved-library",
+  "parts": {
+    "skin": {"atlas":"res://assets/art/static-bust/body-mild-proof.png","rect":[583,301,647,353],"size":[52,28.370943],"position":[1.5,-39.5],"pivot":[0.5,0]},
+    "face": {"atlas":"res://assets/art/static-bust/modular-proof.png","rect":[50,80,415,480],"size":[31,35.855422],"position":[3,-28],"pivot":[0.5,1]},
+    "hair": {"atlas":"res://assets/art/static-bust/modular-proof.png","rect":[497,54,515,490],"size":[39,37.106796],"position":[0,-66.5],"pivot":[0.5,0],"parent":"head"},
+    "beard": {"atlas":"res://assets/art/static-bust/modular-proof.png","rect":[1150,303,350,280],"size":[25.5,20.4],"position":[7,-47],"pivot":[0.5,0],"parent":"head"},
+    "scar": {"atlas":"res://assets/art/static-bust/modular-proof.png","rect":[210,680,150,140],"size":[7,6.533333],"position":[8,-55],"pivot":[0.5,0],"parent":"head","clip_to":"face"},
+    "bandage": {"atlas":"res://assets/art/static-bust/modular-proof.png","rect":[510,630,510,288],"size":[38,21.458824],"position":[1,-58],"pivot":[0.5,0],"parent":"head"},
+    "blood": {"atlas":"res://assets/art/static-bust/modular-proof.png","rect":[1130,680,305,280],"size":[17,15.606557],"position":[13,-22],"pivot":[0.5,0.5],"parent":"skin","clip_to":"skin"}
+  }
+}

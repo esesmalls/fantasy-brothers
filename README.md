@@ -4,9 +4,13 @@
 
 当前阶段：最小可玩验证 v0.1.5.1，战场悬浮默认色条与图标、Alt切详细；人物帐接通四项属性、个人升级、营地训练和跨出身学习驯兽；营地军需帐接通装备、库存与交易，人类自由组合武器，营地与战场共用可见装备和伤势的分层人物；六处地点接通地图接约、逐站旅行、途中事件、契约战斗、清点成长与返营生活；保留上一版战场优先的底部HUD与悬浮信息。当前优先搭完整框架与功能，再逐步丰富内容；以下规划仍不代表最终平衡、预算或发售承诺。
 
-更新日期：2026-09-20。
+更新日期：2026-09-21。
 
-最新美术交付：[A 标准人物、10武器、4护甲与套层动作评审](art/production/2026-09-20-a-standard/index.html)。双击 `Review-A-Standard.cmd` 可运行独立评审包；这是右向生产库，尚未替换正常战役全部人物，范围与限制见 [22生产规范](docs/22-a-standard-production.md)。
+最新：**装配台 v2** 已保留用户校准，支持旋转、更大位移／缩放、撤销重做、定位部件，并加入独立身体、发须、伤痕、绷带、血迹试样。双击 `Paperdoll.cmd`，或将配置JSON拖到启动器。[修正身体过大后的实际窗口](art/workbench/2026-09-21-modular/index.html) · [操作与人物重制入口](docs/27-modular-paperdoll.md)。身体已按最新参考回调为轻侧身、短颈，并保持缩小后的比例；当前仍为单体型试样，不视为全人物库已验收。
+
+2026-09-21补充：按最新反馈修复[衣甲嵌套与内层露出](art/validation/2026-09-21-nested-wear/index.html)，领口／破口不再盖死或预画固定衬料。`Paperdoll.cmd`新增“内外层检查”及各层甲损选择；旧v3坐标保留、草案兼容迁移，详见[26穿戴规范](docs/26-nested-wear-standard.md)。下方v3认可指原构图与比例，真实套层以本次修订为准。
+
+最新美术状态：用户已基本认可**H无手静态短胸＋独立武器反馈 v3**。[H固定盘面评审页](art/validation/2026-09-20-static-bust-v3/index.html)和`Review-Static-Bust.cmd`可检查一人、配套衣甲、剑盾／枪／弓和伤损。新增 **`Paperdoll.cmd` 人物装配工作台**：拖动校准、配套状态同步、v3对照、1×／2×和动作检查，人和agent共用配置。见[实际窗口](art/workbench/2026-09-20/index.html)、[使用说明](docs/25-paperdoll-workbench.md)与[24现行标准](docs/24-static-bust-standard.md)。原画／目录保持不变，正常战役未批量替换。旧[A资产](art/production/2026-09-20-a-standard/index.html)已退回，原因见[23复审](docs/23-equipment-motion-audit.md)。
 
 双击根目录 `Play.cmd`，或解压 `builds/FantasyBrothers-0.1.5.1-windows.zip` 后运行 `FantasyBrothers.exe`。建议自由佣兵团、种子 `1709`、渡口旧道。完整玩法与边界见 [试玩说明](docs/PLAYTEST.md)，接续顺序见 [框架计划](docs/10-framework-roadmap.md)；当前地图范围见 [大地图闭环](docs/11-world-map-framework.md)。
 
@@ -19,14 +23,14 @@
 3. [首个 12 周执行计划](docs/02-first-12-weeks.md)：每两周交付什么、如何试玩、何时继续或缩减。
 4. [假设、决策与官方资料](docs/03-decisions-and-sources.md)：哪些已由用户提出，哪些仍是建议，以及 Steam、Godot 资料来源。
 5. [肉鸽、技能与场景扩展](docs/04-systems-expansion.md)：持续战役、随机成长、技能联动、元素反应、结算与验证。
-6. 研究依据：[PTR](docs/research/ptr-findings.md)、[肉鸽叙事](docs/research/roguelite-findings.md)、[元素与场景](docs/research/elements-findings.md)。
+6. 研究依据：[PTR](docs/research/ptr-findings.md)、[肉鸽叙事](docs/research/roguelite-findings.md)、[元素与场景](docs/research/elements-findings.md)、[模组社区资产制作](docs/research/modding-art-workflow-findings.md)。
 7. 最新人物方案：[属性、培养与命运](docs/13-character-progression.md)、[开发日志研究](docs/research/character-development-findings.md)、[家庭与代际传承](docs/14-family-and-legacy.md)。已实现部分见[0.1.5人物属性](docs/15-character-attributes.md)；伤残性格仍为后续方案，繁衍先作长期预留。
 
 下一批四步范围与整批测试见 [招聘、契约、部署与人物后果](docs/16-next-four-steps.md)，尚未实现。
 
-用户已确认 [美术生产方式](docs/17-art-pipeline-selection.md)、[详细美术计划](docs/18-art-production-plan.md)与 **[H主导标准风格](docs/19-art-style-standard.md)**：保留H人物大小、完整双手和腰底贴合，少量融合E/G写实与油画；倒地/死亡不带底座。[最新三状态修订对照页](art/validation/2026-09-20-h-standard/index.html)可离线打开，提供武装、倒地、死亡新图及旧稿对照；三张均有真实透明alpha，边缘、装备精确对应、像素装配与动画仍待校准。[第二轮E–H](art/validation/2026-09-20-refined-directions/index.html)及[第一轮A–D](art/validation/2026-09-19-four-directions/index.html)保留供回看；[艺术设定集](references/battle-brothers/README.md)继续作为第三方参考。正式可玩版仍为0.1.5.1；本轮另有独立动作评审包。
+用户已确认 [美术生产方式](docs/17-art-pipeline-selection.md)、[详细美术计划](docs/18-art-production-plan.md)与 **[H主导标准风格](docs/19-art-style-standard.md)**。最新U48以固定底座定标身体/完整衣甲和低落头部，统一截取盘面范围内的胸肩；不露袖口、超出盘面的上臂或明显长颈；少量融合E/G写实与油画，倒地／死亡仍不带底座。[旧三状态页](art/validation/2026-09-20-h-standard/index.html)、[第二轮E–H](art/validation/2026-09-20-refined-directions/index.html)及[第一轮A–D](art/validation/2026-09-19-four-directions/index.html)保留回看，不覆盖当前标准；[艺术设定集](references/battle-brothers/README.md)继续作为第三方参考。正式可玩版仍为0.1.5.1。
 
-最新为[有手／无手同步比较页](art/validation/2026-09-20-hand-comparison/index.html)，可离线打开并播放普攻、盾击与声音示意，或双击 `Review-Hands.cmd` 启动独立Windows评审。A自然握持与少量局部换姿势，B无手抽象；人物、链甲、剑盾、底座、时长与反馈共用。腰底、迎敌盾位与袖口已重做，原“完整双手”进入用户授权的比较范围。当前只评审右向链甲剑盾，不自动替换正常战斗资产。见[说明与验证边界](art/validation/2026-09-20-hand-comparison/README.md)。
+历史[有手／无手同步比较页](art/validation/2026-09-20-hand-comparison/index.html)和`Review-Hands.cmd`保留比较；现行新样板以本页顶部的静态短胸评审入口为准。
 
 旧三套H动作v2仍可双击 `Review-Motion.cmd` 回看，用户复评指出腰底、盾位和锁肘动作问题，三套未通过用户视觉验收。见[复评意见](docs/21-motion-design-review.md)、[本批说明](art/validation/2026-09-20-motion-templates/README.md)与[装配生产规范](docs/20-motion-template-production.md)。
 

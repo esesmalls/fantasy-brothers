@@ -1,0 +1,59 @@
+{
+  "baseline_sha256": "b411dfd57a4efb9bbf1c866f2d37f8dbfbc351d838431da5403719e1c678123e",
+  "edits": {
+    "body": {
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "scale": 0.95
+    },
+    "bow": {
+      "offset": [
+        -2.5,
+        -0.75
+      ],
+      "scale": 1.0
+    },
+    "bust": {
+      "offset": [
+        0.25,
+        -1.25
+      ],
+      "scale": 1.0
+    },
+    "linen": {
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "scale": 0.98
+    },
+    "mail": {
+      "offset": [
+        0.25,
+        -0.75
+      ],
+      "scale": 1.01
+    },
+    "spear": {
+      "offset": [
+        -20.0,
+        13.0
+      ],
+      "scale": 1.0
+    }
+  },
+  "kind": "fantasy-brothers-paperdoll",
+  "schema": 2,
+  "modules_sha256": "9976573dc1f5fbcbfe1936cbb261970a5b49ae24569ef3e961cff71cd9e017b5",
+  "appearance": {
+    "head": "legacy",
+    "skin": true,
+    "hair": true,
+    "beard": true,
+    "scar": false,
+    "bandage": false,
+    "blood": false
+  }
+}
