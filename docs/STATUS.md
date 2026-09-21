@@ -1,5 +1,48 @@
 # 当前项目状态
 
+## 2026-09-21：文档与开发产物清理审计（仅检查）
+
+按用户要求检查多余文档、素材与开发产物。主AI独立核对目录大小、Git状态、SHA-256重复文件、资源目录/脚本/网页引用与导出配置；没有删除、迁移素材、修改运行代码、提交或推送。为避免新增一份重复报告，本次结果集中记在这里。下方U51仍为最新功能状态。
+
+统计为本机文件逻辑大小，单位MiB（1024²字节），不包含`.git`，不代表Git历史或实际磁盘分配空间。`builds`859.72、同步前备份457.52、`art`421.14、当前工具375.32、`game`106.87；`docs`共36份文件仅0.42。文档主要问题是阅读与维护冗余，而非空间。
+
+### 优先清理候选：可再生成的本地产物
+
+| 路径 | MiB | 判断与清理影响 |
+| --- | ---: | --- |
+| `builds/a-standard/` | 390.65 | 已退回A路线的EXE和4轮截图；`first`61.95、`second`60.99、`final`66.32、`exported`66.48、`windows`134.89。可清理本地副本，旧评审EXE需重建；已入库的本批网页/来源/QA仍保留。 |
+| `builds/motion-review/` | 143.16 | 旧三套动作构建、回放与截图。清理会移除README指向的本机review.html与旧EXE，需重建才能回看。 |
+| `builds/hand-style-review/` | 131.64 | 旧有手/无手比较构建与截图，可重建。 |
+| `builds/hand-style-review-export-route/`、`-final/`、`-layout/`、`-root/`、`-runtime/` | 合计39.29 | 多轮输入/布局/导出检查产物，优先清理。完整前缀均为`builds/hand-style-review`。 |
+| `builds/art-h-standard/` | 2.48 | 早期修图中间件，已非当前采用成果；清理会失去本机中间对照。 |
+| `game/.godot/` | 约51.94 | Godot导入缓存，关闭工程后可清理，下次导入重建；不要连同`.uid`或受版本控制的PNG导入设置一起删除。 |
+| `.local-backup-20260920/tools/` | 457.31 | 四个引擎/模板EXE与当前工具SHA-256一致，另有82.03 MiB旧下载ZIP。备份工具属于重复/可再下载内容；保留当前`tools/godot`与`tools/templates`。 |
+
+保留当前`builds/paperdoll/`152.49 MiB时，以上候选合计约1216.5 MiB（1.19 GiB），不是已释放空间。`builds`和`.godot`已被Git忽略，清它们只减少本机占用。旧备份中的源码/文档多份与当前不同，尚未证明都能从现有Git历史恢复，不应把整个备份直接判为重复；除工具外仅约0.21 MiB，建议保留及其manifest。
+
+### 文档：归档与合并候选
+
+- `docs/20-motion-template-production.md`、`21-motion-design-review.md`、`22-a-standard-production.md`、`23-equipment-motion-audit.md`：旧有手动作生产/复审资料，已被U46及其后静态路线替代。适合归为历史资料，保留失败原因与用户反馈；归档时统一改README、状态及相互链接，不能只删文件。
+- `docs/25-paperdoll-workbench.md`与`27-modular-paperdoll.md`：都写当前操作、快捷键、草案保护、部件与配置，存在内容重叠。建议25集中为现行工具手册，27保留人物重制与本次增量记录；25仍有CLI用法，27仍有schema2与附着规则，不能整份去掉。
+- `README.md`和本文件多次复述交付、限制与QA；本文件末尾还有旧分支/同步状态。建议README只留现行入口，本文件只留当前状态与下一步，把历史交付集中归档。`03-decisions-and-sources.md`保留用户要求及关键决策，避免继续重复全套测试数字。
+- `docs/07-github-sync.md`、`08-validation.md`、`09-visual-review.md`属于同步/验证证据，适合历史导航，不是无用设计稿。00–19的有效产品、规则、计划与研究资料不可仅按编号旧就删除；24静态规范、26穿戴规范仍各有独立用途。
+- 对36份`docs`文件做SHA-256检查，未发现整份字节相同的重复文件；以上为内容组织判断。
+
+### 素材：历史候选、重复存储及真实依赖
+
+- 旧第一轮A–D目录87.18 MiB、第二轮E–H目录74.90 MiB，共162.08 MiB，主要是选型资料，适合历史归档；H与已认可的E07仍有设计参考价值。旧static-bust与static-bust-v2评审目录分别53.62/44.91 MiB；被退回A生产目录88.23 MiB。这些含原图、来源和验收证据，不算可直接删除的缓存。迁移须修复网页、manifest和文档引用，保留关键对照。
+- 制作`art/**/sources/`与`game/assets/art/`找到29组字节相同的PNG，每组保留一份理论上减少45.70 MiB。当前分别承担来源归档与Godot运行路径，去重需要改打包/索引及网页引用，不能按哈希直接删运行副本。重复动画帧也可能承担停顿时长，需修改帧表后才可共享文件。
+- `game/assets/art/static-bust/body-turn-proof.png`约1.35 MiB是被退回的大侧转中间图。全仓文本搜索只发现生成提示及manifest的历史引用，当前`modules.json`使用`body-mild-proof.png`；建议移出运行资源目录，保留为历史原稿并更新来源路径。
+- `catalog-v1.json`只检出旧批次manifest/README引用，是历史归档候选。`catalog-v2.json`、`catalog-v3.json`则被当前`static_bust_actor.gd`实际读取，不能按旧版本名清理；旧PNG也可能继续承担头、底座、武器或对照。
+- `static_bust_review.gd`仍预载旧`hand_style_review.gd`作为声音示例，该旧评审器保留旧图集路径；`battle_board.gd`使用`modular_actor.gd`，后者读取旧motion目录。删除整套motion/有手评审资源前须先拆依赖。
+- `game/export_presets.cfg`使用`all_resources`，仅明确排除旧motion的三张初版图集，存在把其余旧试验资源带进导出的风险。可后续分开当前与历史评审导出范围；本次未重新导出或测量减包效果。
+
+### 明确保留与验证边界
+
+`my_test.json`、未跟踪的`my_test-v2.json`、`art/workbench/projects/`均为用户校准/兼容基准，不能当临时文件。启动器优先读取`my_test-v2.json`。保留当前modular/nested/v3评审、现用资源、来源/授权/生成记录、旧存档回归夹具，以及用户明确要求保留的设定集PDF。当前工具与个人存档不清理。
+
+本轮完成文件统计、重复哈希与静态引用核查；未逐张重新审美评图、未验证所有历史构建都能复现、未执行运行测试（无代码/资源变更）。实际执行清理时仍须按最终文件清单检查引用并验证受影响启动器；删除Git跟踪文件也不会自动缩小已有Git历史。
+
 ## 2026-09-21：装配台 v2，用户校准保留，身体与头面附着试样
 
 U51用户提供 `my_test.json`，要求旋转、撤销、更大调整范围、独立身体和发型／伤痕／绷带／血迹；制作中追加“身体明显偏大”。主AI独立实现，未启动子智能体。原文件不改，副本入 `art/workbench/projects`；旧草案载入后保存至新的 `-v2.json`，启动器可自动读本机调整或拖入JSON。
