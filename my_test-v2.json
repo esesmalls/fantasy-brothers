@@ -1,0 +1,113 @@
+{
+	"appearance": {
+		"bandage": true,
+		"beard": true,
+		"blood": false,
+		"hair": true,
+		"head": "modular",
+		"scar": true,
+		"skin": true
+	},
+	"baseline_sha256": "b411dfd57a4efb9bbf1c866f2d37f8dbfbc351d838431da5403719e1c678123e",
+	"edits": {
+		"blood": {
+			"angle": 0.0,
+			"offset": [
+				0.0,
+				-0.25
+			],
+			"scale": 1.0
+		},
+		"body": {
+			"angle": 0.0,
+			"offset": [
+				-0.5,
+				-0.25
+			],
+			"scale": 1.0
+		},
+		"bow": {
+			"angle": -25.0,
+			"offset": [
+				-8.25,
+				-9.75
+			],
+			"scale": 1.0
+		},
+		"bust": {
+			"angle": 0.0,
+			"offset": [
+				-0.75,
+				0.75
+			],
+			"scale": 1.0
+		},
+		"head": {
+			"angle": 0.0,
+			"offset": [
+				-2.0,
+				-4.5
+			],
+			"scale": 1.0
+		},
+		"linen": {
+			"angle": 0.0,
+			"offset": [
+				-1.25,
+				-0.5
+			],
+			"scale": 1.0
+		},
+		"mail": {
+			"angle": 0.0,
+			"offset": [
+				0.25,
+				-4.0
+			],
+			"scale": 1.0
+		},
+		"padded": {
+			"angle": 0.0,
+			"offset": [
+				-0.25,
+				-2.5
+			],
+			"scale": 1.0
+		},
+		"scar": {
+			"angle": 0.0,
+			"offset": [
+				-3.25,
+				11.5
+			],
+			"scale": 1.0
+		},
+		"shield": {
+			"angle": 0.0,
+			"offset": [
+				-5.75,
+				-3.75
+			],
+			"scale": 1.0
+		},
+		"spear": {
+			"angle": -9.5,
+			"offset": [
+				-16.25,
+				1.0
+			],
+			"scale": 1.0
+		},
+		"sword": {
+			"angle": 0.0,
+			"offset": [
+				-6.0,
+				-2.5
+			],
+			"scale": 1.0
+		}
+	},
+	"kind": "fantasy-brothers-paperdoll",
+	"modules_sha256": "9976573dc1f5fbcbfe1936cbb261970a5b49ae24569ef3e961cff71cd9e017b5",
+	"schema": 2
+}
