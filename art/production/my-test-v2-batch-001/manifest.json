@@ -1,0 +1,3429 @@
+{
+  "manifest_schema": "fb-art-production-batch/1",
+  "purpose": "production_tracker_not_godot_runtime_schema",
+  "batch_id": "my-test-v2-batch-001",
+  "template_id": "h-static-bust-my-test-v2",
+  "status": "planned",
+  "prepared_date": "2026-09-21",
+  "baseline": {
+    "repository": "esesmalls/fantasy-brothers",
+    "branch": "codex/h-motion-templates",
+    "commit": "260ab990a0f3f6bd395a7107e43e652e0ef683cc",
+    "captured_at": "2026-09-22T02:11:15+00:00",
+    "files": [
+      {
+        "role": "user_calibration",
+        "path": "my_test-v2.json",
+        "sha256": "da687e7979965d4ffa0b272f4358fdeee74b5310f9af0756da6ba71b1fc836f7"
+      },
+      {
+        "role": "catalog",
+        "path": "game/assets/art/static-bust/catalog.json",
+        "sha256": "b411dfd57a4efb9bbf1c866f2d37f8dbfbc351d838431da5403719e1c678123e"
+      },
+      {
+        "role": "modules",
+        "path": "game/assets/art/static-bust/modules.json",
+        "sha256": "9976573dc1f5fbcbfe1936cbb261970a5b49ae24569ef3e961cff71cd9e017b5"
+      },
+      {
+        "role": "motion_sampler",
+        "path": "game/presentation/static_bust_motion.gd",
+        "sha256": "4ba07127fc56e17be5bce33234ac94d7d73976618b374357b4d1c6eea75bae11"
+      },
+      {
+        "role": "bust_draw",
+        "path": "game/presentation/static_bust_actor.gd",
+        "sha256": "435ab09333b5072672f8c2fcfcf5e2660a2d1a1e7fea9473ab43190202392426"
+      },
+      {
+        "role": "paperdoll_compose",
+        "path": "game/presentation/paperdoll_document.gd",
+        "sha256": "ea3ac726dbd97d8aa8d650306d4fc72d9612e8dee0d2d434e0fd23076ec6388e"
+      }
+    ],
+    "source_pngs": [
+      {
+        "path": "game/assets/art/static-bust/anatomy.png",
+        "sha256": "31597055fae25590baaea0da922a694679d6934cec1e742f53798006fa6afcfb"
+      },
+      {
+        "path": "game/assets/art/static-bust/body-head.png",
+        "sha256": "c6e08f6464e945ad31737bb1398299a04b8e31ad44ddf4bd3186011237c4c5c4"
+      },
+      {
+        "path": "game/assets/art/static-bust/body-mild-proof.png",
+        "sha256": "579423add4e0e8e635f05d35ea17c88cc1e53a526b09aa139d5b39904316590a"
+      },
+      {
+        "path": "game/assets/art/static-bust/full-damaged-nested.png",
+        "sha256": "9f9662b6c8bc757c9c4bca8c6738151179160bf8596527e1c8001210dd865dc5"
+      },
+      {
+        "path": "game/assets/art/static-bust/full-garments-nested.png",
+        "sha256": "02958d8152205e4ac3e7ed6496dfc93f93a1fd805ee823ae7c28ad386a67ae40"
+      },
+      {
+        "path": "game/assets/art/static-bust/full-garments.png",
+        "sha256": "1de50fae31aa09261cf462318e2a88f2b73cc97affb90b7cb90675dc1969402c"
+      },
+      {
+        "path": "game/assets/art/static-bust/modular-proof.png",
+        "sha256": "932e0d5b21b2002f82ca42d549598517715938bc708d1012697b74650baa52bc"
+      },
+      {
+        "path": "game/assets/art/static-bust/weapons.png",
+        "sha256": "74847bd0aee0bf5ae753e90863b8ddb2d94ab32acb7e4c87833310fee5fdc4c9"
+      }
+    ],
+    "motion_sources": [
+      {
+        "path": "game/assets/art/static-bust/weapons.png",
+        "sha256": "74847bd0aee0bf5ae753e90863b8ddb2d94ab32acb7e4c87833310fee5fdc4c9",
+        "consumed_by_resolved_motion": true
+      },
+      {
+        "path": "game/assets/art/motion/a-atlas-v2.png",
+        "sha256": "881e622e37a2a841650e3fecb59455489a06f0470aab7239c158d8445c9f7bce",
+        "consumed_by_resolved_motion": false
+      },
+      {
+        "path": "game/assets/art/motion/b-atlas-v2.png",
+        "sha256": "f06f3768040abf4820014b358c75488848669502d46ca9bb094a3af35de6244a",
+        "consumed_by_resolved_motion": false
+      },
+      {
+        "path": "game/assets/art/motion/c-atlas-v2.png",
+        "sha256": "c8b359222d6bfc4af6f6bb36adec9087ac840b16c9e81bd532c7e1c3b244d22a",
+        "consumed_by_resolved_motion": false
+      },
+      {
+        "path": "game/assets/art/motion/terminal-atlas.png",
+        "sha256": "02d3be8dde711cad48337e614da0714bc12306c01c9b6b7160617b60ac21e0e7",
+        "consumed_by_resolved_motion": false
+      }
+    ],
+    "resolved_motion_mode": "code_default",
+    "bindings": {
+      "base": {
+        "status": "resolved",
+        "part_id": "base",
+        "defined_in": "catalog",
+        "atlas": "game/assets/art/static-bust/anatomy.png",
+        "source_rect_px": [
+          17,
+          918,
+          643,
+          260
+        ],
+        "logical_size_before_fit": [
+          64,
+          25.87869
+        ],
+        "position_before_fit": [
+          0,
+          0
+        ],
+        "pivot_normalized": [
+          0.5,
+          1
+        ],
+        "edit_group": "base",
+        "user_edit": {
+          "present_in_draft": false,
+          "offset": [
+            0,
+            0
+          ],
+          "scale": 1,
+          "angle_deg": 0
+        },
+        "parent_binding": "none",
+        "bust_translation_applied": false,
+        "final_local_transform": {
+          "position": [
+            0,
+            0
+          ],
+          "size": [
+            64,
+            25.87869
+          ],
+          "rotation_rad": 0
+        },
+        "bust_crop_applies": false,
+        "appearance_flag": "always_drawn",
+        "note": "catalog base; no appearance toggle"
+      },
+      "skin": {
+        "status": "resolved",
+        "part_id": "skin",
+        "defined_in": "modules",
+        "atlas": "game/assets/art/static-bust/body-mild-proof.png",
+        "source_rect_px": [
+          583,
+          301,
+          647,
+          353
+        ],
+        "logical_size_before_fit": [
+          52,
+          28.370943
+        ],
+        "position_before_fit": [
+          1.5,
+          -39.5
+        ],
+        "pivot_normalized": [
+          0.5,
+          0
+        ],
+        "edit_group": "skin",
+        "user_edit": {
+          "present_in_draft": false,
+          "offset": [
+            0,
+            0
+          ],
+          "scale": 1,
+          "angle_deg": 0
+        },
+        "parent_binding": "none",
+        "bust_translation_applied": true,
+        "final_local_transform": {
+          "position": [
+            0.75,
+            -39.5
+          ],
+          "size": [
+            52,
+            28.370943
+          ],
+          "rotation_rad": 0
+        },
+        "bust_crop_applies": true,
+        "appearance_flag": true,
+        "note": "modules nude body, distinct from catalog body underwear"
+      },
+      "body": {
+        "status": "resolved",
+        "part_id": "body",
+        "defined_in": "catalog",
+        "atlas": "game/assets/art/static-bust/full-garments.png",
+        "source_rect_px": [
+          110,
+          78,
+          470,
+          546
+        ],
+        "logical_size_before_fit": [
+          71,
+          82.48085
+        ],
+        "position_before_fit": [
+          3.5,
+          -42
+        ],
+        "pivot_normalized": [
+          0.5,
+          0
+        ],
+        "edit_group": "body",
+        "user_edit": {
+          "present_in_draft": true,
+          "offset": [
+            -0.5,
+            -0.25
+          ],
+          "scale": 1,
+          "angle_deg": 0
+        },
+        "parent_binding": "none",
+        "bust_translation_applied": true,
+        "final_local_transform": {
+          "position": [
+            2.25,
+            -42.25
+          ],
+          "size": [
+            71,
+            82.48085
+          ],
+          "rotation_rad": 0
+        },
+        "bust_crop_applies": true,
+        "appearance_flag": "always_in_body_layers_unless_armor_nude",
+        "note": "catalog underwear on full-garments.png, not the nude skin module"
+      },
+      "head": {
+        "status": "resolved",
+        "part_id": "face",
+        "defined_in": "modules",
+        "atlas": "game/assets/art/static-bust/modular-proof.png",
+        "source_rect_px": [
+          50,
+          80,
+          415,
+          480
+        ],
+        "logical_size_before_fit": [
+          31,
+          35.855422
+        ],
+        "position_before_fit": [
+          3,
+          -28
+        ],
+        "pivot_normalized": [
+          0.5,
+          1
+        ],
+        "edit_group": "head",
+        "user_edit": {
+          "present_in_draft": true,
+          "offset": [
+            -2,
+            -4.5
+          ],
+          "scale": 0.92,
+          "angle_deg": 0
+        },
+        "parent_binding": "none",
+        "bust_translation_applied": true,
+        "final_local_transform": {
+          "position": [
+            0.25,
+            -32.5
+          ],
+          "size": [
+            28.52,
+            32.98698824
+          ],
+          "rotation_rad": 0
+        },
+        "bust_crop_applies": false,
+        "appearance_mode": "modular",
+        "drawn_when": "assembly.head == modular",
+        "legacy_parts_receiving_same_head_edit_not_drawn": [
+          "head",
+          "wounded"
+        ],
+        "note": "my_test-v2 appearance.head is modular, so draw_body replaces the last head layer with modules face. Edit group head still scales catalog head, wounded, and face together. Face has no part.parent; composed anchors hair/beard/scar/bandage to catalog head position, which is also [3, -28]."
+      },
+      "hair": {
+        "status": "resolved",
+        "part_id": "hair",
+        "defined_in": "modules",
+        "atlas": "game/assets/art/static-bust/modular-proof.png",
+        "source_rect_px": [
+          497,
+          54,
+          515,
+          490
+        ],
+        "logical_size_before_fit": [
+          39,
+          37.106796
+        ],
+        "position_before_fit": [
+          0,
+          -66.5
+        ],
+        "pivot_normalized": [
+          0.5,
+          0
+        ],
+        "edit_group": "hair",
+        "user_edit": {
+          "present_in_draft": false,
+          "offset": [
+            0,
+            0
+          ],
+          "scale": 1,
+          "angle_deg": 0
+        },
+        "parent_binding": {
+          "modules_or_catalog_parent": "head",
+          "anchor_part_used_by_composed": "head",
+          "anchor_position_before_fit": [
+            3,
+            -28
+          ],
+          "parent_user_edit": {
+            "present_in_draft": true,
+            "offset": [
+              -2,
+              -4.5
+            ],
+            "scale": 0.92,
+            "angle_deg": 0
+          }
+        },
+        "bust_translation_applied": true,
+        "final_local_transform": {
+          "position": [
+            -2.51,
+            -67.92
+          ],
+          "size": [
+            35.88,
+            34.13825232
+          ],
+          "rotation_rad": 0
+        },
+        "bust_crop_applies": false,
+        "appearance_flag": true
+      },
+      "beard": {
+        "status": "resolved",
+        "part_id": "beard",
+        "defined_in": "modules",
+        "atlas": "game/assets/art/static-bust/modular-proof.png",
+        "source_rect_px": [
+          1150,
+          303,
+          350,
+          280
+        ],
+        "logical_size_before_fit": [
+          25.5,
+          20.4
+        ],
+        "position_before_fit": [
+          7,
+          -47
+        ],
+        "pivot_normalized": [
+          0.5,
+          0
+        ],
+        "edit_group": "beard",
+        "user_edit": {
+          "present_in_draft": false,
+          "offset": [
+            0,
+            0
+          ],
+          "scale": 1,
+          "angle_deg": 0
+        },
+        "parent_binding": {
+          "modules_or_catalog_parent": "head",
+          "anchor_part_used_by_composed": "head",
+          "anchor_position_before_fit": [
+            3,
+            -28
+          ],
+          "parent_user_edit": {
+            "present_in_draft": true,
+            "offset": [
+              -2,
+              -4.5
+            ],
+            "scale": 0.92,
+            "angle_deg": 0
+          }
+        },
+        "bust_translation_applied": true,
+        "final_local_transform": {
+          "position": [
+            3.93,
+            -49.98
+          ],
+          "size": [
+            23.46,
+            18.768
+          ],
+          "rotation_rad": 0
+        },
+        "bust_crop_applies": false,
+        "appearance_flag": true
+      },
+      "scar": {
+        "status": "resolved",
+        "part_id": "scar",
+        "defined_in": "modules",
+        "atlas": "game/assets/art/static-bust/modular-proof.png",
+        "source_rect_px": [
+          210,
+          680,
+          150,
+          140
+        ],
+        "logical_size_before_fit": [
+          7,
+          6.533333
+        ],
+        "position_before_fit": [
+          8,
+          -55
+        ],
+        "pivot_normalized": [
+          0.5,
+          0
+        ],
+        "edit_group": "scar",
+        "user_edit": {
+          "present_in_draft": true,
+          "offset": [
+            -3.25,
+            11.5
+          ],
+          "scale": 1,
+          "angle_deg": 0
+        },
+        "parent_binding": {
+          "modules_or_catalog_parent": "head",
+          "anchor_part_used_by_composed": "head",
+          "anchor_position_before_fit": [
+            3,
+            -28
+          ],
+          "parent_user_edit": {
+            "present_in_draft": true,
+            "offset": [
+              -2,
+              -4.5
+            ],
+            "scale": 0.92,
+            "angle_deg": 0
+          }
+        },
+        "bust_translation_applied": true,
+        "final_local_transform": {
+          "position": [
+            1.86,
+            -46.76
+          ],
+          "size": [
+            6.44,
+            6.01066636
+          ],
+          "rotation_rad": 0
+        },
+        "bust_crop_applies": false,
+        "appearance_flag": true
+      },
+      "bandage": {
+        "status": "resolved",
+        "part_id": "bandage",
+        "defined_in": "modules",
+        "atlas": "game/assets/art/static-bust/modular-proof.png",
+        "source_rect_px": [
+          510,
+          630,
+          510,
+          288
+        ],
+        "logical_size_before_fit": [
+          38,
+          21.458824
+        ],
+        "position_before_fit": [
+          1,
+          -58
+        ],
+        "pivot_normalized": [
+          0.5,
+          0
+        ],
+        "edit_group": "bandage",
+        "user_edit": {
+          "present_in_draft": false,
+          "offset": [
+            0,
+            0
+          ],
+          "scale": 1,
+          "angle_deg": 0
+        },
+        "parent_binding": {
+          "modules_or_catalog_parent": "head",
+          "anchor_part_used_by_composed": "head",
+          "anchor_position_before_fit": [
+            3,
+            -28
+          ],
+          "parent_user_edit": {
+            "present_in_draft": true,
+            "offset": [
+              -2,
+              -4.5
+            ],
+            "scale": 0.92,
+            "angle_deg": 0
+          }
+        },
+        "bust_translation_applied": true,
+        "final_local_transform": {
+          "position": [
+            -1.59,
+            -60.1
+          ],
+          "size": [
+            34.96,
+            19.74211808
+          ],
+          "rotation_rad": 0
+        },
+        "bust_crop_applies": false,
+        "appearance_flag": true
+      },
+      "blood": {
+        "status": "resolved",
+        "part_id": "blood",
+        "defined_in": "modules",
+        "atlas": "game/assets/art/static-bust/modular-proof.png",
+        "source_rect_px": [
+          1130,
+          680,
+          305,
+          280
+        ],
+        "logical_size_before_fit": [
+          17,
+          15.606557
+        ],
+        "position_before_fit": [
+          13,
+          -22
+        ],
+        "pivot_normalized": [
+          0.5,
+          0.5
+        ],
+        "edit_group": "blood",
+        "user_edit": {
+          "present_in_draft": false,
+          "offset": [
+            0,
+            0
+          ],
+          "scale": 1,
+          "angle_deg": 0
+        },
+        "parent_binding": {
+          "modules_or_catalog_parent": "skin",
+          "anchor_part_used_by_composed": "skin",
+          "anchor_position_before_fit": [
+            1.5,
+            -39.5
+          ],
+          "parent_user_edit": {
+            "present_in_draft": false,
+            "offset": [
+              0,
+              0
+            ],
+            "scale": 1,
+            "angle_deg": 0
+          }
+        },
+        "bust_translation_applied": true,
+        "final_local_transform": {
+          "position": [
+            12.25,
+            -22
+          ],
+          "size": [
+            17,
+            15.606557
+          ],
+          "rotation_rad": 0
+        },
+        "bust_crop_applies": true,
+        "appearance_flag": true
+      }
+    }
+  },
+  "counts": {
+    "expected_logical_assets": 30,
+    "expected_designs": 27,
+    "expected_headgear_designs": 6,
+    "counting_rule": "30 counts variants; intact/damaged are separate assets, headgear parts are not additional assets. PNG count is not fixed."
+  },
+  "geometry_policy": {
+    "dimensions_source": "live baseline + assembler resolved export; do not copy approximate old values",
+    "transform_owner": "assembler",
+    "game_reapplies_draft_edits": false,
+    "headgear_extent": "measured per design; do not force to face canvas size",
+    "large_fit_change_policy": "inspect source-canvas normalization first; return wrong anatomy/perspective to art repair"
+  },
+  "outputs": {
+    "resolved_geometry_spec": {
+      "path": "art/production/my-test-v2-batch-001/resolved_geometry_spec.json",
+      "sha256": "4f000b0944a58beff6a3899a0b36e61a9d8af29c4e265a14cb668c211bb6628b"
+    },
+    "assembly_package": {
+      "path": null,
+      "sha256": null,
+      "assembly_revision": null,
+      "transform_policy": "resolved_once"
+    },
+    "game_consistency_report": {
+      "path": null,
+      "sha256": null
+    },
+    "review_entry": null
+  },
+  "assets": [
+    {
+      "asset_id": "head_001",
+      "design_id": "head_001",
+      "category": "head",
+      "slot": "head.face",
+      "name": "轻瘦长脸",
+      "variant": "base",
+      "phase": "pilot",
+      "status": "planned",
+      "owner": null,
+      "brief": "只改变骨相和五官；共同轻侧朝向、短颈和装配边界保持",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "head_001.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "head",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_01",
+          "preset_05"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_APPLICABLE",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "head_002",
+      "design_id": "head_002",
+      "category": "head",
+      "slot": "head.face",
+      "name": "宽颧方脸",
+      "variant": "base",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "保持相同头型适配接口，不通过缩小整张脸适应帽盔",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "head_002.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "head",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_02",
+          "preset_06"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_APPLICABLE",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "head_003",
+      "design_id": "head_003",
+      "category": "head",
+      "slot": "head.face",
+      "name": "成熟窄脸",
+      "variant": "base",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "年龄感来自五官与克制纹理，不包含伤痕或胡须",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "head_003.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "head",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_03",
+          "preset_07"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_APPLICABLE",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "head_004",
+      "design_id": "head_004",
+      "category": "head",
+      "slot": "head.face",
+      "name": "圆颧短脸",
+      "variant": "base",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "身份可区分，头顶、下颌与头部装备适配边界不漂移",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "head_004.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "head",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_04",
+          "preset_08"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_APPLICABLE",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "hair_001",
+      "design_id": "hair_001",
+      "category": "hair",
+      "slot": "head.hair",
+      "name": "短碎发",
+      "variant": "base",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "不包含皮肤或脸；与四张净面头配合",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "hair_001.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "head",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_01",
+          "preset_08"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_APPLICABLE",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "hair_002",
+      "design_id": "hair_002",
+      "category": "hair",
+      "slot": "head.hair",
+      "name": "后梳短发",
+      "variant": "base",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "发际线和发量有区别；帽盔压发关系另行登记",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "hair_002.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "head",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_02",
+          "preset_05"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_APPLICABLE",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "hair_003",
+      "design_id": "hair_003",
+      "category": "hair",
+      "slot": "head.hair",
+      "name": "微卷短发",
+      "variant": "base",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "笔触克制，小尺寸轮廓可辨，不靠纹理噪声区分",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "hair_003.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "head",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_03",
+          "preset_06"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_APPLICABLE",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "hair_004",
+      "design_id": "hair_004",
+      "category": "hair",
+      "slot": "head.hair",
+      "name": "偏分短发",
+      "variant": "base",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "本批暂不引入垂至衣领的长后发",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "hair_004.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "head",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_04",
+          "preset_07"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_APPLICABLE",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "beard_001",
+      "design_id": "beard_001",
+      "category": "beard",
+      "slot": "head.beard",
+      "name": "短络腮胡",
+      "variant": "base",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "只有毛发，不带肤色下巴；脸口和下颌关系稳定",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "beard_001.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "head",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_01",
+          "preset_07"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_APPLICABLE",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "beard_002",
+      "design_id": "beard_002",
+      "category": "beard",
+      "slot": "head.beard",
+      "name": "短山羊胡",
+      "variant": "base",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "可读轮廓与络腮胡区分；不遮住全部嘴部",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "beard_002.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "head",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_02",
+          "preset_08"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_APPLICABLE",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "beard_003",
+      "design_id": "beard_003",
+      "category": "beard",
+      "slot": "head.beard",
+      "name": "八字胡",
+      "variant": "base",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "独立胡须模块，不烘焙鼻部或上唇皮肤",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "beard_003.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "head",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_03",
+          "preset_05"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_APPLICABLE",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "beard_004",
+      "design_id": "beard_004",
+      "category": "beard",
+      "slot": "head.beard",
+      "name": "修整方胡",
+      "variant": "base",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "长度克制；检查头盔护颊与下颌穿插",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "beard_004.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "head",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_04",
+          "preset_06"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_APPLICABLE",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "linen_001",
+      "design_id": "linen_001",
+      "category": "linen",
+      "slot": "body.linen",
+      "name": "灰麻开领外衣",
+      "variant": "intact",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "真实透明领口；一件只画自己的材料",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "linen_001.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "current_body_or_weapon_binding",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_01",
+          "preset_03",
+          "preset_05",
+          "preset_07"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_RUN",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "linen_002",
+      "design_id": "linen_002",
+      "category": "linen",
+      "slot": "body.linen",
+      "name": "旧蓝系襟外衣",
+      "variant": "intact",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "剪裁与领边区别不只换色；不自带固定内衣",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "linen_002.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "current_body_or_weapon_binding",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_02",
+          "preset_04",
+          "preset_06",
+          "preset_08"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_RUN",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "padded_001_intact",
+      "design_id": "padded_001",
+      "category": "padded",
+      "slot": "body.padded",
+      "name": "纵线绗缝甲·完好",
+      "variant": "intact",
+      "phase": "pilot",
+      "status": "planned",
+      "owner": null,
+      "brief": "共同身体与完整衣甲母版，领口真实露出下层",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": "padded_001_damaged",
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "padded_001_intact.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "current_body_or_weapon_binding",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_03",
+          "preset_07"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_RUN",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "padded_001_damaged",
+      "design_id": "padded_001",
+      "category": "padded",
+      "slot": "body.padded",
+      "name": "纵线绗缝甲·破损",
+      "variant": "damaged",
+      "phase": "pilot",
+      "status": "planned",
+      "owner": null,
+      "brief": "从对应完好图参考编辑，破口中心透明",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [
+        "padded_001_intact"
+      ],
+      "paired_asset_id": "padded_001_intact",
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "padded_001_damaged.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "current_body_or_weapon_binding",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_04"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_RUN",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "padded_002_intact",
+      "design_id": "padded_002",
+      "category": "padded",
+      "slot": "body.padded",
+      "name": "交错绗缝甲·完好",
+      "variant": "intact",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "剪裁、缝线与扣结区别；不另起头身比例",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": "padded_002_damaged",
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "padded_002_intact.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "current_body_or_weapon_binding",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_05",
+          "preset_08"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_RUN",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "padded_002_damaged",
+      "design_id": "padded_002",
+      "category": "padded",
+      "slot": "body.padded",
+      "name": "交错绗缝甲·破损",
+      "variant": "damaged",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "保持原扣具、纹样与未损区域身份",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [
+        "padded_002_intact"
+      ],
+      "paired_asset_id": "padded_002_intact",
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "padded_002_damaged.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "current_body_or_weapon_binding",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_06"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_RUN",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "mail_001_intact",
+      "design_id": "mail_001",
+      "category": "mail",
+      "slot": "body.mail",
+      "name": "包边链甲·完好",
+      "variant": "intact",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "金属环形成体积；开口不烘焙衬甲",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": "mail_001_damaged",
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "mail_001_intact.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "current_body_or_weapon_binding",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_07"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_RUN",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "mail_001_damaged",
+      "design_id": "mail_001",
+      "category": "mail",
+      "slot": "body.mail",
+      "name": "包边链甲·破损",
+      "variant": "damaged",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "同款断环和材料缺损，不画死里面的绗缝或亚麻",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [
+        "mail_001_intact"
+      ],
+      "paired_asset_id": "mail_001_intact",
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "mail_001_damaged.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "current_body_or_weapon_binding",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_08"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_RUN",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "sword_001",
+      "design_id": "sword_001",
+      "category": "sword",
+      "slot": "weapon.main",
+      "name": "旧铁直剑",
+      "variant": "base",
+      "phase": "pilot",
+      "status": "planned",
+      "owner": null,
+      "brief": "无手；沿冻结剑路径检查转轴、尖端和接触位置",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "sword_001.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "current_body_or_weapon_binding",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_01",
+          "preset_04",
+          "preset_07"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_APPLICABLE",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_RUN",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "spear_001",
+      "design_id": "spear_001",
+      "category": "spear",
+      "slot": "weapon.main",
+      "name": "叶刃木柄矛",
+      "variant": "base",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "沿冻结枪轴突刺路径，不靠缩小人物防裁切",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "spear_001.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "current_body_or_weapon_binding",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_02",
+          "preset_05",
+          "preset_08"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_APPLICABLE",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_RUN",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "bow_001",
+      "design_id": "bow_001",
+      "category": "bow",
+      "slot": "weapon.main",
+      "name": "简弧木弓",
+      "variant": "base",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "检查弓上箭与离弦点；不新增箭或招式规则",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "bow_001.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "current_body_or_weapon_binding",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_03",
+          "preset_06"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_APPLICABLE",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_RUN",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "shield_001",
+      "design_id": "shield_001",
+      "category": "shield",
+      "slot": "weapon.offhand",
+      "name": "包铁木盾",
+      "variant": "base",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "避免遮死面部；检查和剑的相对层序",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "shield_001.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "current_body_or_weapon_binding",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_01",
+          "preset_04",
+          "preset_07"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": null,
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_APPLICABLE",
+        "headgear_opening": "NOT_APPLICABLE",
+        "motion": "NOT_RUN",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "headgear_metal_001",
+      "design_id": "headgear_metal_001",
+      "category": "headgear",
+      "slot": "head.equipment",
+      "name": "开面铁盔",
+      "variant": "intact",
+      "phase": "pilot",
+      "status": "planned",
+      "owner": null,
+      "brief": "金属类；脸口透明，盔沿与盔体真实遮挡；首个接口样板",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "headgear_metal_001.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "head",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_01"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": {
+        "face_opening": "transparent_in_opening_bearing_part",
+        "opaque_regions": [],
+        "layer_plan": null,
+        "hair_policy": "unresolved",
+        "beard_policy": "unresolved",
+        "bandage_policy": "unresolved",
+        "collar_interaction": "unresolved",
+        "support_status": "NOT_IMPLEMENTED_OR_NOT_CHECKED"
+      },
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_APPLICABLE",
+        "headgear_opening": "NOT_RUN",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "headgear_metal_002",
+      "design_id": "headgear_metal_002",
+      "category": "headgear",
+      "slot": "head.equipment",
+      "name": "护鼻开面盔",
+      "variant": "intact",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "金属类；鼻护和护颊可遮挡对应实体区域，其余脸口真实露出",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "headgear_metal_002.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "head",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_02"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": {
+        "face_opening": "transparent_in_opening_bearing_part",
+        "opaque_regions": [],
+        "layer_plan": null,
+        "hair_policy": "unresolved",
+        "beard_policy": "unresolved",
+        "bandage_policy": "unresolved",
+        "collar_interaction": "unresolved",
+        "support_status": "NOT_IMPLEMENTED_OR_NOT_CHECKED"
+      },
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_APPLICABLE",
+        "headgear_opening": "NOT_RUN",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "headgear_cloth_001",
+      "design_id": "headgear_cloth_001",
+      "category": "headgear",
+      "slot": "head.equipment",
+      "name": "交叠包头巾",
+      "variant": "intact",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "布类；层叠布料允许遮挡额头，不烘焙脸和头发",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "headgear_cloth_001.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "head",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_03"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": {
+        "face_opening": "transparent_in_opening_bearing_part",
+        "opaque_regions": [],
+        "layer_plan": null,
+        "hair_policy": "unresolved",
+        "beard_policy": "unresolved",
+        "bandage_policy": "unresolved",
+        "collar_interaction": "unresolved",
+        "support_status": "NOT_IMPLEMENTED_OR_NOT_CHECKED"
+      },
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_APPLICABLE",
+        "headgear_opening": "NOT_RUN",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "headgear_cloth_002",
+      "design_id": "headgear_cloth_002",
+      "category": "headgear",
+      "slot": "head.equipment",
+      "name": "短兜帽",
+      "variant": "intact",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "布类；检查前缘、后片及衣领关系；复杂时拆层但仍计一件",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "headgear_cloth_002.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "head",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_04"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": {
+        "face_opening": "transparent_in_opening_bearing_part",
+        "opaque_regions": [],
+        "layer_plan": null,
+        "hair_policy": "unresolved",
+        "beard_policy": "unresolved",
+        "bandage_policy": "unresolved",
+        "collar_interaction": "unresolved",
+        "support_status": "NOT_IMPLEMENTED_OR_NOT_CHECKED"
+      },
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_APPLICABLE",
+        "headgear_opening": "NOT_RUN",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "headgear_cap_001",
+      "design_id": "headgear_cap_001",
+      "category": "headgear",
+      "slot": "head.equipment",
+      "name": "软皮帽",
+      "variant": "intact",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "帽类；有体积和真实边缘，帽内不得预画脸",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "headgear_cap_001.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "head",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_05"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": {
+        "face_opening": "transparent_in_opening_bearing_part",
+        "opaque_regions": [],
+        "layer_plan": null,
+        "hair_policy": "unresolved",
+        "beard_policy": "unresolved",
+        "bandage_policy": "unresolved",
+        "collar_interaction": "unresolved",
+        "support_status": "NOT_IMPLEMENTED_OR_NOT_CHECKED"
+      },
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_APPLICABLE",
+        "headgear_opening": "NOT_RUN",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    },
+    {
+      "asset_id": "headgear_cap_002",
+      "design_id": "headgear_cap_002",
+      "category": "headgear",
+      "slot": "head.equipment",
+      "name": "窄檐布帽",
+      "variant": "intact",
+      "phase": "batch",
+      "status": "planned",
+      "owner": null,
+      "brief": "帽类；帽檐实体遮挡允许，开口不得成为固定黑腔",
+      "template_id": "h-static-bust-my-test-v2",
+      "depends_on": [],
+      "paired_asset_id": null,
+      "runtime_binding": {
+        "mode": "visual_only",
+        "existing_rule_id": null,
+        "runtime_asset_id": null
+      },
+      "provenance": {
+        "reference_files": [],
+        "prompt_file": null,
+        "raw_output": {
+          "path": null,
+          "sha256": null
+        },
+        "tool": null,
+        "model": null,
+        "generated_at": null,
+        "generation_id": null,
+        "processing_log": []
+      },
+      "parts": [
+        {
+          "part_id": "headgear_cap_002.main",
+          "role": "main",
+          "file": {
+            "path": null,
+            "sha256": null
+          },
+          "image_size_px": null,
+          "source_rect_px": null,
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "head",
+          "layer_relation": null,
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        }
+      ],
+      "assembly_fit": {
+        "status": "NOT_RUN",
+        "fit_revision": null,
+        "fit_delta": null,
+        "resolved_transform": null,
+        "space": "template-local",
+        "applied_once": null,
+        "preset_ids": [
+          "preset_06"
+        ],
+        "notes": []
+      },
+      "compatibility": {
+        "tested_combinations": [],
+        "allowed_combinations": [],
+        "blocked_combinations": [],
+        "unverified_policy": "do_not_claim_compatible"
+      },
+      "headgear_policy": {
+        "face_opening": "transparent_in_opening_bearing_part",
+        "opaque_regions": [],
+        "layer_plan": null,
+        "hair_policy": "unresolved",
+        "beard_policy": "unresolved",
+        "bandage_policy": "unresolved",
+        "collar_interaction": "unresolved",
+        "support_status": "NOT_IMPLEMENTED_OR_NOT_CHECKED"
+      },
+      "qa": {
+        "technical": "NOT_RUN",
+        "assembly_visual": "NOT_RUN",
+        "save_reload": "NOT_RUN",
+        "wear_opening": "NOT_APPLICABLE",
+        "headgear_opening": "NOT_RUN",
+        "motion": "NOT_APPLICABLE",
+        "game_consistency": "NOT_RUN",
+        "evidence": [],
+        "issues": []
+      },
+      "revision_count": 0,
+      "user_approval": {
+        "status": "PENDING",
+        "by": null,
+        "at": null,
+        "reference": null
+      }
+    }
+  ]
+}

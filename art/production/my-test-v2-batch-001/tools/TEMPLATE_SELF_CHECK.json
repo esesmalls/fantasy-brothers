@@ -1,0 +1,73 @@
+{
+  "scope": "Template/validator tests only; no art or Godot execution",
+  "total": 11,
+  "passed": 11,
+  "tests": [
+    {
+      "test": "Initial plan passes structural checks",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "passed": true
+    },
+    {
+      "test": "Unproduced template rejected at assembled gate",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true
+    },
+    {
+      "test": "Unproduced template rejected at game gate",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true
+    },
+    {
+      "test": "Duplicate asset ID rejected",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true
+    },
+    {
+      "test": "Unknown preset reference rejected",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true
+    },
+    {
+      "test": "Asymmetric intact/damaged pair rejected",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true
+    },
+    {
+      "test": "Missing logical asset rejected",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true
+    },
+    {
+      "test": "PASS without evidence rejected",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true
+    },
+    {
+      "test": "Approval state without recorded provenance rejected",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true
+    },
+    {
+      "test": "Additional headgear layer does not change asset count",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "passed": true
+    },
+    {
+      "test": "NOT_APPLICABLE without reason rejected",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true
+    }
+  ]
+}

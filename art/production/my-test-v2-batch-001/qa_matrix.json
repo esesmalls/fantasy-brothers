@@ -1,0 +1,2277 @@
+{
+  "qa_schema": "fb-art-qa-matrix/1",
+  "batch_id": "my-test-v2-batch-001",
+  "purpose": "test definitions only; no case has been run",
+  "view_policy": {
+    "default_views": [
+      "1x_light",
+      "1x_dark",
+      "2x_light",
+      "2x_dark"
+    ],
+    "one_x_definition": "baseline-approved in-game display scale; not PNG 1:1",
+    "render_once_for_same_signature": true,
+    "evidence_rule": "reuse only when assets+hashes+assembly+pose+view signatures match"
+  },
+  "case_count": 126,
+  "cases": [
+    {
+      "case_id": "PIPE-01",
+      "family": "pipeline",
+      "asset_ids": [],
+      "setup": "冻结基线：记录配置、目录、PNG与动作来源；打开my_test-v2并输出只读参考。",
+      "expected": "记录真实提交与哈希；原样与健康诊断视图分开；不得虚构基线。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "PIPE-02",
+      "family": "pipeline",
+      "asset_ids": [],
+      "setup": "保护基线：完成本批注册后，重新核对原始文件哈希并打开原my_test-v2。",
+      "expected": "原文件字节与显示保持；新头盔层为空时旧人物不改变。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "PIPE-03",
+      "family": "pipeline",
+      "asset_ids": [],
+      "setup": "导出重载：装配→候选导出→关闭→重载同一预设，并对照资产ID和已解析变换。",
+      "expected": "无双重edits、锚点或裁取；导出重载后的像素/几何差异可解释。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "PIPE-04",
+      "family": "pipeline",
+      "asset_ids": [],
+      "setup": "装配/游戏一致：使用同一装配包、同一局部原点和比例、同一动作时间，比较工作台与游戏实际角色区域。",
+      "expected": "资产与版本相同；层序、裁取、透明、武器事件与最终变换一致；环境差异单独说明。",
+      "gate": "game",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "PIPE-05",
+      "family": "pipeline",
+      "asset_ids": [],
+      "setup": "扩库不换脸：保存旧组合ID后追加一个候选注册项，重载原组合。",
+      "expected": "旧人物ID和部件不因列表索引或哈希取模改变。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "PIPE-06",
+      "family": "pipeline",
+      "asset_ids": [],
+      "setup": "错误不静默回退：在隔离测试副本中引用不存在的资产或错误版本；不改用户原文件。",
+      "expected": "明确报错或使用标明的受控回退；不能显示旧图却报告候选通过。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FH-01-01",
+      "family": "face_hair",
+      "asset_ids": [
+        "head_001",
+        "hair_001"
+      ],
+      "setup": "使用健康净面；关闭胡须、伤痕、绷带、头部装备。",
+      "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FB-01-01",
+      "family": "face_beard",
+      "asset_ids": [
+        "head_001",
+        "beard_001"
+      ],
+      "setup": "使用健康净面；关闭头发、伤痕、绷带、头部装备。",
+      "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FH-01-02",
+      "family": "face_hair",
+      "asset_ids": [
+        "head_001",
+        "hair_002"
+      ],
+      "setup": "使用健康净面；关闭胡须、伤痕、绷带、头部装备。",
+      "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FB-01-02",
+      "family": "face_beard",
+      "asset_ids": [
+        "head_001",
+        "beard_002"
+      ],
+      "setup": "使用健康净面；关闭头发、伤痕、绷带、头部装备。",
+      "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FH-01-03",
+      "family": "face_hair",
+      "asset_ids": [
+        "head_001",
+        "hair_003"
+      ],
+      "setup": "使用健康净面；关闭胡须、伤痕、绷带、头部装备。",
+      "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FB-01-03",
+      "family": "face_beard",
+      "asset_ids": [
+        "head_001",
+        "beard_003"
+      ],
+      "setup": "使用健康净面；关闭头发、伤痕、绷带、头部装备。",
+      "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FH-01-04",
+      "family": "face_hair",
+      "asset_ids": [
+        "head_001",
+        "hair_004"
+      ],
+      "setup": "使用健康净面；关闭胡须、伤痕、绷带、头部装备。",
+      "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FB-01-04",
+      "family": "face_beard",
+      "asset_ids": [
+        "head_001",
+        "beard_004"
+      ],
+      "setup": "使用健康净面；关闭头发、伤痕、绷带、头部装备。",
+      "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HO-01-scar",
+      "family": "head_overlay",
+      "asset_ids": [
+        "head_001"
+      ],
+      "setup": "开启实际baseline绑定中的scar；保持其当前局部变换。",
+      "expected": "附着关系正确；伤痕受脸轮廓限制；绷带不随换脸异常漂移。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HO-01-bandage",
+      "family": "head_overlay",
+      "asset_ids": [
+        "head_001"
+      ],
+      "setup": "开启实际baseline绑定中的bandage；保持其当前局部变换。",
+      "expected": "附着关系正确；伤痕受脸轮廓限制；绷带不随换脸异常漂移。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FH-02-01",
+      "family": "face_hair",
+      "asset_ids": [
+        "head_002",
+        "hair_001"
+      ],
+      "setup": "使用健康净面；关闭胡须、伤痕、绷带、头部装备。",
+      "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FB-02-01",
+      "family": "face_beard",
+      "asset_ids": [
+        "head_002",
+        "beard_001"
+      ],
+      "setup": "使用健康净面；关闭头发、伤痕、绷带、头部装备。",
+      "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FH-02-02",
+      "family": "face_hair",
+      "asset_ids": [
+        "head_002",
+        "hair_002"
+      ],
+      "setup": "使用健康净面；关闭胡须、伤痕、绷带、头部装备。",
+      "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FB-02-02",
+      "family": "face_beard",
+      "asset_ids": [
+        "head_002",
+        "beard_002"
+      ],
+      "setup": "使用健康净面；关闭头发、伤痕、绷带、头部装备。",
+      "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FH-02-03",
+      "family": "face_hair",
+      "asset_ids": [
+        "head_002",
+        "hair_003"
+      ],
+      "setup": "使用健康净面；关闭胡须、伤痕、绷带、头部装备。",
+      "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FB-02-03",
+      "family": "face_beard",
+      "asset_ids": [
+        "head_002",
+        "beard_003"
+      ],
+      "setup": "使用健康净面；关闭头发、伤痕、绷带、头部装备。",
+      "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FH-02-04",
+      "family": "face_hair",
+      "asset_ids": [
+        "head_002",
+        "hair_004"
+      ],
+      "setup": "使用健康净面；关闭胡须、伤痕、绷带、头部装备。",
+      "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FB-02-04",
+      "family": "face_beard",
+      "asset_ids": [
+        "head_002",
+        "beard_004"
+      ],
+      "setup": "使用健康净面；关闭头发、伤痕、绷带、头部装备。",
+      "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HO-02-scar",
+      "family": "head_overlay",
+      "asset_ids": [
+        "head_002"
+      ],
+      "setup": "开启实际baseline绑定中的scar；保持其当前局部变换。",
+      "expected": "附着关系正确；伤痕受脸轮廓限制；绷带不随换脸异常漂移。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HO-02-bandage",
+      "family": "head_overlay",
+      "asset_ids": [
+        "head_002"
+      ],
+      "setup": "开启实际baseline绑定中的bandage；保持其当前局部变换。",
+      "expected": "附着关系正确；伤痕受脸轮廓限制；绷带不随换脸异常漂移。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FH-03-01",
+      "family": "face_hair",
+      "asset_ids": [
+        "head_003",
+        "hair_001"
+      ],
+      "setup": "使用健康净面；关闭胡须、伤痕、绷带、头部装备。",
+      "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FB-03-01",
+      "family": "face_beard",
+      "asset_ids": [
+        "head_003",
+        "beard_001"
+      ],
+      "setup": "使用健康净面；关闭头发、伤痕、绷带、头部装备。",
+      "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FH-03-02",
+      "family": "face_hair",
+      "asset_ids": [
+        "head_003",
+        "hair_002"
+      ],
+      "setup": "使用健康净面；关闭胡须、伤痕、绷带、头部装备。",
+      "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FB-03-02",
+      "family": "face_beard",
+      "asset_ids": [
+        "head_003",
+        "beard_002"
+      ],
+      "setup": "使用健康净面；关闭头发、伤痕、绷带、头部装备。",
+      "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FH-03-03",
+      "family": "face_hair",
+      "asset_ids": [
+        "head_003",
+        "hair_003"
+      ],
+      "setup": "使用健康净面；关闭胡须、伤痕、绷带、头部装备。",
+      "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FB-03-03",
+      "family": "face_beard",
+      "asset_ids": [
+        "head_003",
+        "beard_003"
+      ],
+      "setup": "使用健康净面；关闭头发、伤痕、绷带、头部装备。",
+      "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FH-03-04",
+      "family": "face_hair",
+      "asset_ids": [
+        "head_003",
+        "hair_004"
+      ],
+      "setup": "使用健康净面；关闭胡须、伤痕、绷带、头部装备。",
+      "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FB-03-04",
+      "family": "face_beard",
+      "asset_ids": [
+        "head_003",
+        "beard_004"
+      ],
+      "setup": "使用健康净面；关闭头发、伤痕、绷带、头部装备。",
+      "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HO-03-scar",
+      "family": "head_overlay",
+      "asset_ids": [
+        "head_003"
+      ],
+      "setup": "开启实际baseline绑定中的scar；保持其当前局部变换。",
+      "expected": "附着关系正确；伤痕受脸轮廓限制；绷带不随换脸异常漂移。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HO-03-bandage",
+      "family": "head_overlay",
+      "asset_ids": [
+        "head_003"
+      ],
+      "setup": "开启实际baseline绑定中的bandage；保持其当前局部变换。",
+      "expected": "附着关系正确；伤痕受脸轮廓限制；绷带不随换脸异常漂移。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FH-04-01",
+      "family": "face_hair",
+      "asset_ids": [
+        "head_004",
+        "hair_001"
+      ],
+      "setup": "使用健康净面；关闭胡须、伤痕、绷带、头部装备。",
+      "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FB-04-01",
+      "family": "face_beard",
+      "asset_ids": [
+        "head_004",
+        "beard_001"
+      ],
+      "setup": "使用健康净面；关闭头发、伤痕、绷带、头部装备。",
+      "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FH-04-02",
+      "family": "face_hair",
+      "asset_ids": [
+        "head_004",
+        "hair_002"
+      ],
+      "setup": "使用健康净面；关闭胡须、伤痕、绷带、头部装备。",
+      "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FB-04-02",
+      "family": "face_beard",
+      "asset_ids": [
+        "head_004",
+        "beard_002"
+      ],
+      "setup": "使用健康净面；关闭头发、伤痕、绷带、头部装备。",
+      "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FH-04-03",
+      "family": "face_hair",
+      "asset_ids": [
+        "head_004",
+        "hair_003"
+      ],
+      "setup": "使用健康净面；关闭胡须、伤痕、绷带、头部装备。",
+      "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FB-04-03",
+      "family": "face_beard",
+      "asset_ids": [
+        "head_004",
+        "beard_003"
+      ],
+      "setup": "使用健康净面；关闭头发、伤痕、绷带、头部装备。",
+      "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FH-04-04",
+      "family": "face_hair",
+      "asset_ids": [
+        "head_004",
+        "hair_004"
+      ],
+      "setup": "使用健康净面；关闭胡须、伤痕、绷带、头部装备。",
+      "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "FB-04-04",
+      "family": "face_beard",
+      "asset_ids": [
+        "head_004",
+        "beard_004"
+      ],
+      "setup": "使用健康净面；关闭头发、伤痕、绷带、头部装备。",
+      "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HO-04-scar",
+      "family": "head_overlay",
+      "asset_ids": [
+        "head_004"
+      ],
+      "setup": "开启实际baseline绑定中的scar；保持其当前局部变换。",
+      "expected": "附着关系正确；伤痕受脸轮廓限制；绷带不随换脸异常漂移。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HO-04-bandage",
+      "family": "head_overlay",
+      "asset_ids": [
+        "head_004"
+      ],
+      "setup": "开启实际baseline绑定中的bandage；保持其当前局部变换。",
+      "expected": "附着关系正确；伤痕受脸轮廓限制；绷带不随换脸异常漂移。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-01-01",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_metal_001",
+        "head_001",
+        "hair_001",
+        "beard_001"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=false；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "no_bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-01-02",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_metal_001",
+        "head_001",
+        "hair_002",
+        "beard_002"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=false；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "no_bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-01-03",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_metal_001",
+        "head_002",
+        "hair_001",
+        "beard_002"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=false；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "no_bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-01-04",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_metal_001",
+        "head_002",
+        "hair_002",
+        "beard_001"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=true；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HGW-01",
+      "family": "headgear_opening_isolation",
+      "asset_ids": [
+        "headgear_metal_001"
+      ],
+      "setup": "只显示含脸口的前片/主片；隐藏脸、发、须、绷带、后片与底座；再切回完整组合。",
+      "expected": "前片的真实开口具有alpha；完整组合显示最近实际内层。后片实体出现在开口后方时须有合法空间关系，不要求穿透真实材料。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HGC-01",
+      "family": "headgear_collar",
+      "asset_ids": [
+        "headgear_metal_001",
+        "linen_001",
+        "padded_001_intact",
+        "mail_001_intact"
+      ],
+      "setup": "在亚麻、绗缝、链甲三种穿戴中检查后片、前缘、护颊/垂布与衣领；不用改变旧衣甲层序。",
+      "expected": "继承head变换不等于整件总在衣领前；按遮挡需求拆片与声明层位，无穿领或错误盖住全部肩部。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-02-01",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_metal_002",
+        "head_002",
+        "hair_002",
+        "beard_002"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=false；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "no_bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-02-02",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_metal_002",
+        "head_002",
+        "hair_003",
+        "beard_003"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=false；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "no_bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-02-03",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_metal_002",
+        "head_003",
+        "hair_002",
+        "beard_003"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=false；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "no_bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-02-04",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_metal_002",
+        "head_003",
+        "hair_003",
+        "beard_002"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=true；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HGW-02",
+      "family": "headgear_opening_isolation",
+      "asset_ids": [
+        "headgear_metal_002"
+      ],
+      "setup": "只显示含脸口的前片/主片；隐藏脸、发、须、绷带、后片与底座；再切回完整组合。",
+      "expected": "前片的真实开口具有alpha；完整组合显示最近实际内层。后片实体出现在开口后方时须有合法空间关系，不要求穿透真实材料。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HGC-02",
+      "family": "headgear_collar",
+      "asset_ids": [
+        "headgear_metal_002",
+        "linen_001",
+        "padded_001_intact",
+        "mail_001_intact"
+      ],
+      "setup": "在亚麻、绗缝、链甲三种穿戴中检查后片、前缘、护颊/垂布与衣领；不用改变旧衣甲层序。",
+      "expected": "继承head变换不等于整件总在衣领前；按遮挡需求拆片与声明层位，无穿领或错误盖住全部肩部。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-03-01",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_cloth_001",
+        "head_003",
+        "hair_003",
+        "beard_003"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=false；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "no_bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-03-02",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_cloth_001",
+        "head_003",
+        "hair_004",
+        "beard_004"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=false；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "no_bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-03-03",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_cloth_001",
+        "head_004",
+        "hair_003",
+        "beard_004"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=false；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "no_bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-03-04",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_cloth_001",
+        "head_004",
+        "hair_004",
+        "beard_003"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=true；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HGW-03",
+      "family": "headgear_opening_isolation",
+      "asset_ids": [
+        "headgear_cloth_001"
+      ],
+      "setup": "只显示含脸口的前片/主片；隐藏脸、发、须、绷带、后片与底座；再切回完整组合。",
+      "expected": "前片的真实开口具有alpha；完整组合显示最近实际内层。后片实体出现在开口后方时须有合法空间关系，不要求穿透真实材料。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HGC-03",
+      "family": "headgear_collar",
+      "asset_ids": [
+        "headgear_cloth_001",
+        "linen_001",
+        "padded_001_intact",
+        "mail_001_intact"
+      ],
+      "setup": "在亚麻、绗缝、链甲三种穿戴中检查后片、前缘、护颊/垂布与衣领；不用改变旧衣甲层序。",
+      "expected": "继承head变换不等于整件总在衣领前；按遮挡需求拆片与声明层位，无穿领或错误盖住全部肩部。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-04-01",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_cloth_002",
+        "head_004",
+        "hair_004",
+        "beard_004"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=false；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "no_bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-04-02",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_cloth_002",
+        "head_004",
+        "hair_001",
+        "beard_001"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=false；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "no_bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-04-03",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_cloth_002",
+        "head_001",
+        "hair_004",
+        "beard_001"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=false；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "no_bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-04-04",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_cloth_002",
+        "head_001",
+        "hair_001",
+        "beard_004"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=true；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HGW-04",
+      "family": "headgear_opening_isolation",
+      "asset_ids": [
+        "headgear_cloth_002"
+      ],
+      "setup": "只显示含脸口的前片/主片；隐藏脸、发、须、绷带、后片与底座；再切回完整组合。",
+      "expected": "前片的真实开口具有alpha；完整组合显示最近实际内层。后片实体出现在开口后方时须有合法空间关系，不要求穿透真实材料。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HGC-04",
+      "family": "headgear_collar",
+      "asset_ids": [
+        "headgear_cloth_002",
+        "linen_001",
+        "padded_001_intact",
+        "mail_001_intact"
+      ],
+      "setup": "在亚麻、绗缝、链甲三种穿戴中检查后片、前缘、护颊/垂布与衣领；不用改变旧衣甲层序。",
+      "expected": "继承head变换不等于整件总在衣领前；按遮挡需求拆片与声明层位，无穿领或错误盖住全部肩部。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-05-01",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_cap_001",
+        "head_001",
+        "hair_001",
+        "beard_001"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=false；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "no_bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-05-02",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_cap_001",
+        "head_001",
+        "hair_002",
+        "beard_002"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=false；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "no_bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-05-03",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_cap_001",
+        "head_002",
+        "hair_001",
+        "beard_002"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=false；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "no_bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-05-04",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_cap_001",
+        "head_002",
+        "hair_002",
+        "beard_001"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=true；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HGW-05",
+      "family": "headgear_opening_isolation",
+      "asset_ids": [
+        "headgear_cap_001"
+      ],
+      "setup": "只显示含脸口的前片/主片；隐藏脸、发、须、绷带、后片与底座；再切回完整组合。",
+      "expected": "前片的真实开口具有alpha；完整组合显示最近实际内层。后片实体出现在开口后方时须有合法空间关系，不要求穿透真实材料。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HGC-05",
+      "family": "headgear_collar",
+      "asset_ids": [
+        "headgear_cap_001",
+        "linen_001",
+        "padded_001_intact",
+        "mail_001_intact"
+      ],
+      "setup": "在亚麻、绗缝、链甲三种穿戴中检查后片、前缘、护颊/垂布与衣领；不用改变旧衣甲层序。",
+      "expected": "继承head变换不等于整件总在衣领前；按遮挡需求拆片与声明层位，无穿领或错误盖住全部肩部。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-06-01",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_cap_002",
+        "head_002",
+        "hair_002",
+        "beard_002"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=false；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "no_bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-06-02",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_cap_002",
+        "head_002",
+        "hair_003",
+        "beard_003"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=false；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "no_bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-06-03",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_cap_002",
+        "head_003",
+        "hair_002",
+        "beard_003"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=false；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "no_bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HG-06-04",
+      "family": "headgear_pairwise",
+      "asset_ids": [
+        "headgear_cap_002",
+        "head_003",
+        "hair_003",
+        "beard_002"
+      ],
+      "setup": "头盔/头巾/帽子正常装配；绷带=true；显示真实内层。",
+      "expected": "至少覆盖2头/2发/2须，记录相容或不相容；遮挡仅来自真实实体；不得覆盖开口内本应可见的面部。",
+      "gate": "assembly",
+      "coverage_tags": [
+        "2_heads_2_hairs_2_beards",
+        "bandage"
+      ],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HGW-06",
+      "family": "headgear_opening_isolation",
+      "asset_ids": [
+        "headgear_cap_002"
+      ],
+      "setup": "只显示含脸口的前片/主片；隐藏脸、发、须、绷带、后片与底座；再切回完整组合。",
+      "expected": "前片的真实开口具有alpha；完整组合显示最近实际内层。后片实体出现在开口后方时须有合法空间关系，不要求穿透真实材料。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "HGC-06",
+      "family": "headgear_collar",
+      "asset_ids": [
+        "headgear_cap_002",
+        "linen_001",
+        "padded_001_intact",
+        "mail_001_intact"
+      ],
+      "setup": "在亚麻、绗缝、链甲三种穿戴中检查后片、前缘、护颊/垂布与衣领；不用改变旧衣甲层序。",
+      "expected": "继承head变换不等于整件总在衣领前；按遮挡需求拆片与声明层位，无穿领或错误盖住全部肩部。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-linen_001-A",
+      "family": "wear_opening",
+      "asset_ids": [
+        "linen_001"
+      ],
+      "setup": "只显示目标外层及内层=baseline:body；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-linen_001-B",
+      "family": "wear_opening",
+      "asset_ids": [
+        "linen_001"
+      ],
+      "setup": "只显示目标外层及内层=baseline:skin；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-linen_001-NONE",
+      "family": "wear_opening",
+      "asset_ids": [
+        "linen_001"
+      ],
+      "setup": "只显示目标外层及内层=none；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-linen_002-A",
+      "family": "wear_opening",
+      "asset_ids": [
+        "linen_002"
+      ],
+      "setup": "只显示目标外层及内层=baseline:body；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-linen_002-B",
+      "family": "wear_opening",
+      "asset_ids": [
+        "linen_002"
+      ],
+      "setup": "只显示目标外层及内层=baseline:skin；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-linen_002-NONE",
+      "family": "wear_opening",
+      "asset_ids": [
+        "linen_002"
+      ],
+      "setup": "只显示目标外层及内层=none；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-padded_001_intact-A",
+      "family": "wear_opening",
+      "asset_ids": [
+        "padded_001_intact",
+        "linen_001"
+      ],
+      "setup": "只显示目标外层及内层=linen_001；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-padded_001_intact-B",
+      "family": "wear_opening",
+      "asset_ids": [
+        "padded_001_intact"
+      ],
+      "setup": "只显示目标外层及内层=baseline:body；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-padded_001_intact-NONE",
+      "family": "wear_opening",
+      "asset_ids": [
+        "padded_001_intact"
+      ],
+      "setup": "只显示目标外层及内层=none；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-padded_001_damaged-A",
+      "family": "wear_opening",
+      "asset_ids": [
+        "padded_001_damaged",
+        "linen_001"
+      ],
+      "setup": "只显示目标外层及内层=linen_001；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-padded_001_damaged-B",
+      "family": "wear_opening",
+      "asset_ids": [
+        "padded_001_damaged"
+      ],
+      "setup": "只显示目标外层及内层=baseline:body；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-padded_001_damaged-NONE",
+      "family": "wear_opening",
+      "asset_ids": [
+        "padded_001_damaged"
+      ],
+      "setup": "只显示目标外层及内层=none；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-padded_002_intact-A",
+      "family": "wear_opening",
+      "asset_ids": [
+        "padded_002_intact",
+        "linen_001"
+      ],
+      "setup": "只显示目标外层及内层=linen_001；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-padded_002_intact-B",
+      "family": "wear_opening",
+      "asset_ids": [
+        "padded_002_intact"
+      ],
+      "setup": "只显示目标外层及内层=baseline:body；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-padded_002_intact-NONE",
+      "family": "wear_opening",
+      "asset_ids": [
+        "padded_002_intact"
+      ],
+      "setup": "只显示目标外层及内层=none；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-padded_002_damaged-A",
+      "family": "wear_opening",
+      "asset_ids": [
+        "padded_002_damaged",
+        "linen_001"
+      ],
+      "setup": "只显示目标外层及内层=linen_001；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-padded_002_damaged-B",
+      "family": "wear_opening",
+      "asset_ids": [
+        "padded_002_damaged"
+      ],
+      "setup": "只显示目标外层及内层=baseline:body；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-padded_002_damaged-NONE",
+      "family": "wear_opening",
+      "asset_ids": [
+        "padded_002_damaged"
+      ],
+      "setup": "只显示目标外层及内层=none；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-mail_001_intact-A",
+      "family": "wear_opening",
+      "asset_ids": [
+        "mail_001_intact",
+        "padded_001_intact"
+      ],
+      "setup": "只显示目标外层及内层=padded_001_intact；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-mail_001_intact-B",
+      "family": "wear_opening",
+      "asset_ids": [
+        "mail_001_intact",
+        "linen_002"
+      ],
+      "setup": "只显示目标外层及内层=linen_002；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-mail_001_intact-NONE",
+      "family": "wear_opening",
+      "asset_ids": [
+        "mail_001_intact"
+      ],
+      "setup": "只显示目标外层及内层=none；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-mail_001_damaged-A",
+      "family": "wear_opening",
+      "asset_ids": [
+        "mail_001_damaged",
+        "padded_001_intact"
+      ],
+      "setup": "只显示目标外层及内层=padded_001_intact；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-mail_001_damaged-B",
+      "family": "wear_opening",
+      "asset_ids": [
+        "mail_001_damaged",
+        "linen_002"
+      ],
+      "setup": "只显示目标外层及内层=linen_002；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "WEAR-mail_001_damaged-NONE",
+      "family": "wear_opening",
+      "asset_ids": [
+        "mail_001_damaged"
+      ],
+      "setup": "只显示目标外层及内层=none；隐藏头、武器、底座与其他无关层。NONE时包括skin/body在内全部内层关闭；纯美术诊断不新增装备规则。",
+      "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "SET-preset_01",
+      "family": "preset",
+      "asset_ids": [
+        "head_001",
+        "hair_001",
+        "beard_001",
+        "linen_001",
+        "sword_001",
+        "shield_001",
+        "headgear_metal_001"
+      ],
+      "setup": "按presets.json同名组合在装配台显示、保存、关闭、重载；三种状态叠层仅按案例开启。",
+      "expected": "ID不变、组合可重载；1×、2×及浅深底下保持可读；同槽位不同时选完好和破损。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "SET-preset_02",
+      "family": "preset",
+      "asset_ids": [
+        "head_002",
+        "hair_002",
+        "beard_002",
+        "linen_002",
+        "spear_001",
+        "headgear_metal_002"
+      ],
+      "setup": "按presets.json同名组合在装配台显示、保存、关闭、重载；三种状态叠层仅按案例开启。",
+      "expected": "ID不变、组合可重载；1×、2×及浅深底下保持可读；同槽位不同时选完好和破损。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "SET-preset_03",
+      "family": "preset",
+      "asset_ids": [
+        "head_003",
+        "hair_003",
+        "beard_003",
+        "linen_001",
+        "padded_001_intact",
+        "bow_001",
+        "headgear_cloth_001"
+      ],
+      "setup": "按presets.json同名组合在装配台显示、保存、关闭、重载；三种状态叠层仅按案例开启。",
+      "expected": "ID不变、组合可重载；1×、2×及浅深底下保持可读；同槽位不同时选完好和破损。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "SET-preset_04",
+      "family": "preset",
+      "asset_ids": [
+        "head_004",
+        "hair_004",
+        "beard_004",
+        "linen_002",
+        "padded_001_damaged",
+        "sword_001",
+        "shield_001",
+        "headgear_cloth_002"
+      ],
+      "setup": "按presets.json同名组合在装配台显示、保存、关闭、重载；三种状态叠层仅按案例开启。",
+      "expected": "ID不变、组合可重载；1×、2×及浅深底下保持可读；同槽位不同时选完好和破损。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "SET-preset_05",
+      "family": "preset",
+      "asset_ids": [
+        "head_001",
+        "hair_002",
+        "beard_003",
+        "linen_001",
+        "padded_002_intact",
+        "spear_001",
+        "headgear_cap_001"
+      ],
+      "setup": "按presets.json同名组合在装配台显示、保存、关闭、重载；三种状态叠层仅按案例开启。",
+      "expected": "ID不变、组合可重载；1×、2×及浅深底下保持可读；同槽位不同时选完好和破损。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "SET-preset_06",
+      "family": "preset",
+      "asset_ids": [
+        "head_002",
+        "hair_003",
+        "beard_004",
+        "linen_002",
+        "padded_002_damaged",
+        "bow_001",
+        "headgear_cap_002"
+      ],
+      "setup": "按presets.json同名组合在装配台显示、保存、关闭、重载；三种状态叠层仅按案例开启。",
+      "expected": "ID不变、组合可重载；1×、2×及浅深底下保持可读；同槽位不同时选完好和破损。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "SET-preset_07",
+      "family": "preset",
+      "asset_ids": [
+        "head_003",
+        "hair_004",
+        "beard_001",
+        "linen_001",
+        "padded_001_intact",
+        "mail_001_intact",
+        "sword_001",
+        "shield_001"
+      ],
+      "setup": "按presets.json同名组合在装配台显示、保存、关闭、重载；三种状态叠层仅按案例开启。",
+      "expected": "ID不变、组合可重载；1×、2×及浅深底下保持可读；同槽位不同时选完好和破损。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "SET-preset_08",
+      "family": "preset",
+      "asset_ids": [
+        "head_004",
+        "hair_001",
+        "beard_002",
+        "linen_002",
+        "padded_002_intact",
+        "mail_001_damaged",
+        "spear_001"
+      ],
+      "setup": "按presets.json同名组合在装配台显示、保存、关闭、重载；三种状态叠层仅按案例开启。",
+      "expected": "ID不变、组合可重载；1×、2×及浅深底下保持可读；同槽位不同时选完好和破损。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "MOTION-sword-timeline",
+      "family": "motion",
+      "asset_ids": [
+        "sword_001"
+      ],
+      "setup": "沿基线冻结动作检查timeline；时间来自实际路径事件，观察待机/预备/出手或离弦/结果/回收，不另造百分比。",
+      "expected": "转轴和尖端合理，无扫脸/穿地；弓上箭与离弦位置连续；规则仍决定结果；身体沿既定静态路线。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "MOTION-sword-hit",
+      "family": "motion",
+      "asset_ids": [
+        "sword_001"
+      ],
+      "setup": "沿基线冻结动作检查hit；时间来自实际路径事件，观察待机/预备/出手或离弦/结果/回收，不另造百分比。",
+      "expected": "转轴和尖端合理，无扫脸/穿地；弓上箭与离弦位置连续；规则仍决定结果；身体沿既定静态路线。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "MOTION-sword-miss",
+      "family": "motion",
+      "asset_ids": [
+        "sword_001"
+      ],
+      "setup": "沿基线冻结动作检查miss；时间来自实际路径事件，观察待机/预备/出手或离弦/结果/回收，不另造百分比。",
+      "expected": "转轴和尖端合理，无扫脸/穿地；弓上箭与离弦位置连续；规则仍决定结果；身体沿既定静态路线。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "MOTION-spear-timeline",
+      "family": "motion",
+      "asset_ids": [
+        "spear_001"
+      ],
+      "setup": "沿基线冻结动作检查timeline；时间来自实际路径事件，观察待机/预备/出手或离弦/结果/回收，不另造百分比。",
+      "expected": "转轴和尖端合理，无扫脸/穿地；弓上箭与离弦位置连续；规则仍决定结果；身体沿既定静态路线。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "MOTION-spear-hit",
+      "family": "motion",
+      "asset_ids": [
+        "spear_001"
+      ],
+      "setup": "沿基线冻结动作检查hit；时间来自实际路径事件，观察待机/预备/出手或离弦/结果/回收，不另造百分比。",
+      "expected": "转轴和尖端合理，无扫脸/穿地；弓上箭与离弦位置连续；规则仍决定结果；身体沿既定静态路线。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "MOTION-spear-miss",
+      "family": "motion",
+      "asset_ids": [
+        "spear_001"
+      ],
+      "setup": "沿基线冻结动作检查miss；时间来自实际路径事件，观察待机/预备/出手或离弦/结果/回收，不另造百分比。",
+      "expected": "转轴和尖端合理，无扫脸/穿地；弓上箭与离弦位置连续；规则仍决定结果；身体沿既定静态路线。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "MOTION-bow-timeline",
+      "family": "motion",
+      "asset_ids": [
+        "bow_001"
+      ],
+      "setup": "沿基线冻结动作检查timeline；时间来自实际路径事件，观察待机/预备/出手或离弦/结果/回收，不另造百分比。",
+      "expected": "转轴和尖端合理，无扫脸/穿地；弓上箭与离弦位置连续；规则仍决定结果；身体沿既定静态路线。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "MOTION-bow-hit",
+      "family": "motion",
+      "asset_ids": [
+        "bow_001"
+      ],
+      "setup": "沿基线冻结动作检查hit；时间来自实际路径事件，观察待机/预备/出手或离弦/结果/回收，不另造百分比。",
+      "expected": "转轴和尖端合理，无扫脸/穿地；弓上箭与离弦位置连续；规则仍决定结果；身体沿既定静态路线。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "MOTION-bow-miss",
+      "family": "motion",
+      "asset_ids": [
+        "bow_001"
+      ],
+      "setup": "沿基线冻结动作检查miss；时间来自实际路径事件，观察待机/预备/出手或离弦/结果/回收，不另造百分比。",
+      "expected": "转轴和尖端合理，无扫脸/穿地；弓上箭与离弦位置连续；规则仍决定结果；身体沿既定静态路线。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "MOTION-shield-idle",
+      "family": "motion",
+      "asset_ids": [
+        "shield_001",
+        "sword_001"
+      ],
+      "setup": "在现有支持的idle表现中检查盾和剑；不存在的反馈记录限制，不新增规则。",
+      "expected": "盾实体允许合理遮挡，但不错误盖死面部；层序与共同短胸轮廓保持。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "MOTION-shield-sword_motion",
+      "family": "motion",
+      "asset_ids": [
+        "shield_001",
+        "sword_001"
+      ],
+      "setup": "在现有支持的sword_motion表现中检查盾和剑；不存在的反馈记录限制，不新增规则。",
+      "expected": "盾实体允许合理遮挡，但不错误盖死面部；层序与共同短胸轮廓保持。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "MOTION-shield-hurt_feedback",
+      "family": "motion",
+      "asset_ids": [
+        "shield_001",
+        "sword_001"
+      ],
+      "setup": "在现有支持的hurt_feedback表现中检查盾和剑；不存在的反馈记录限制，不新增规则。",
+      "expected": "盾实体允许合理遮挡，但不错误盖死面部；层序与共同短胸轮廓保持。",
+      "gate": "assembly",
+      "coverage_tags": [],
+      "status": "NOT_RUN",
+      "reason": null,
+      "evidence": [],
+      "tested_revision": null,
+      "reviewer": null
+    }
+  ]
+}

@@ -1,0 +1,279 @@
+{
+  "preset_schema": "fb-art-review-presets/1",
+  "purpose": "planned combinations, not executable Godot configs",
+  "batch_id": "my-test-v2-batch-001",
+  "presets": [
+    {
+      "preset_id": "preset_01",
+      "name": "轻装剑盾",
+      "status": "planned",
+      "selections": {
+        "head": "head_001",
+        "hair": "hair_001",
+        "beard": "beard_001",
+        "linen": "linen_001",
+        "padded": null,
+        "mail": null,
+        "weapon": "sword_001",
+        "shield": "shield_001",
+        "headgear": "headgear_metal_001"
+      },
+      "baseline_bindings": [
+        "base",
+        "skin",
+        "body"
+      ],
+      "overlays": {
+        "scar": false,
+        "bandage": false,
+        "blood": false
+      },
+      "resolved_package": {
+        "path": null,
+        "sha256": null
+      },
+      "assembly_revision": null,
+      "save_reload": "NOT_RUN",
+      "game_consistency": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "preset_id": "preset_02",
+      "name": "轻装持矛",
+      "status": "planned",
+      "selections": {
+        "head": "head_002",
+        "hair": "hair_002",
+        "beard": "beard_002",
+        "linen": "linen_002",
+        "padded": null,
+        "mail": null,
+        "weapon": "spear_001",
+        "shield": null,
+        "headgear": "headgear_metal_002"
+      },
+      "baseline_bindings": [
+        "base",
+        "skin",
+        "body"
+      ],
+      "overlays": {
+        "scar": false,
+        "bandage": false,
+        "blood": false
+      },
+      "resolved_package": {
+        "path": null,
+        "sha256": null
+      },
+      "assembly_revision": null,
+      "save_reload": "NOT_RUN",
+      "game_consistency": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "preset_id": "preset_03",
+      "name": "绗缝弓手",
+      "status": "planned",
+      "selections": {
+        "head": "head_003",
+        "hair": "hair_003",
+        "beard": "beard_003",
+        "linen": "linen_001",
+        "padded": "padded_001_intact",
+        "mail": null,
+        "weapon": "bow_001",
+        "shield": null,
+        "headgear": "headgear_cloth_001"
+      },
+      "baseline_bindings": [
+        "base",
+        "skin",
+        "body"
+      ],
+      "overlays": {
+        "scar": false,
+        "bandage": false,
+        "blood": false
+      },
+      "resolved_package": {
+        "path": null,
+        "sha256": null
+      },
+      "assembly_revision": null,
+      "save_reload": "NOT_RUN",
+      "game_consistency": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "preset_id": "preset_04",
+      "name": "破损绗缝剑盾",
+      "status": "planned",
+      "selections": {
+        "head": "head_004",
+        "hair": "hair_004",
+        "beard": "beard_004",
+        "linen": "linen_002",
+        "padded": "padded_001_damaged",
+        "mail": null,
+        "weapon": "sword_001",
+        "shield": "shield_001",
+        "headgear": "headgear_cloth_002"
+      },
+      "baseline_bindings": [
+        "base",
+        "skin",
+        "body"
+      ],
+      "overlays": {
+        "scar": false,
+        "bandage": false,
+        "blood": false
+      },
+      "resolved_package": {
+        "path": null,
+        "sha256": null
+      },
+      "assembly_revision": null,
+      "save_reload": "NOT_RUN",
+      "game_consistency": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "preset_id": "preset_05",
+      "name": "另一款绗缝持矛",
+      "status": "planned",
+      "selections": {
+        "head": "head_001",
+        "hair": "hair_002",
+        "beard": "beard_003",
+        "linen": "linen_001",
+        "padded": "padded_002_intact",
+        "mail": null,
+        "weapon": "spear_001",
+        "shield": null,
+        "headgear": "headgear_cap_001"
+      },
+      "baseline_bindings": [
+        "base",
+        "skin",
+        "body"
+      ],
+      "overlays": {
+        "scar": false,
+        "bandage": false,
+        "blood": false
+      },
+      "resolved_package": {
+        "path": null,
+        "sha256": null
+      },
+      "assembly_revision": null,
+      "save_reload": "NOT_RUN",
+      "game_consistency": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "preset_id": "preset_06",
+      "name": "破损绗缝弓手",
+      "status": "planned",
+      "selections": {
+        "head": "head_002",
+        "hair": "hair_003",
+        "beard": "beard_004",
+        "linen": "linen_002",
+        "padded": "padded_002_damaged",
+        "mail": null,
+        "weapon": "bow_001",
+        "shield": null,
+        "headgear": "headgear_cap_002"
+      },
+      "baseline_bindings": [
+        "base",
+        "skin",
+        "body"
+      ],
+      "overlays": {
+        "scar": false,
+        "bandage": false,
+        "blood": false
+      },
+      "resolved_package": {
+        "path": null,
+        "sha256": null
+      },
+      "assembly_revision": null,
+      "save_reload": "NOT_RUN",
+      "game_consistency": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "preset_id": "preset_07",
+      "name": "完好链甲剑盾",
+      "status": "planned",
+      "selections": {
+        "head": "head_003",
+        "hair": "hair_004",
+        "beard": "beard_001",
+        "linen": "linen_001",
+        "padded": "padded_001_intact",
+        "mail": "mail_001_intact",
+        "weapon": "sword_001",
+        "shield": "shield_001",
+        "headgear": null
+      },
+      "baseline_bindings": [
+        "base",
+        "skin",
+        "body"
+      ],
+      "overlays": {
+        "scar": false,
+        "bandage": false,
+        "blood": false
+      },
+      "resolved_package": {
+        "path": null,
+        "sha256": null
+      },
+      "assembly_revision": null,
+      "save_reload": "NOT_RUN",
+      "game_consistency": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "preset_id": "preset_08",
+      "name": "外损内好链甲持矛",
+      "status": "planned",
+      "selections": {
+        "head": "head_004",
+        "hair": "hair_001",
+        "beard": "beard_002",
+        "linen": "linen_002",
+        "padded": "padded_002_intact",
+        "mail": "mail_001_damaged",
+        "weapon": "spear_001",
+        "shield": null,
+        "headgear": null
+      },
+      "baseline_bindings": [
+        "base",
+        "skin",
+        "body"
+      ],
+      "overlays": {
+        "scar": false,
+        "bandage": false,
+        "blood": false
+      },
+      "resolved_package": {
+        "path": null,
+        "sha256": null
+      },
+      "assembly_revision": null,
+      "save_reload": "NOT_RUN",
+      "game_consistency": "NOT_RUN",
+      "evidence": []
+    }
+  ]
+}

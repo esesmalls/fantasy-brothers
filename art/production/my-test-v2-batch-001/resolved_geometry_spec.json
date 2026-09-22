@@ -1,0 +1,1994 @@
+{
+  "spec_schema": "fb-resolved-geometry-spec/1",
+  "purpose": "phase0_measured_freeze_not_runtime_schema_not_assembly_package",
+  "batch_id": "my-test-v2-batch-001",
+  "baseline_commit": "260ab990a0f3f6bd395a7107e43e652e0ef683cc",
+  "baseline_commit_authored_at": "2026-09-22T08:54:21+08:00",
+  "baseline_branch": "codex/h-motion-templates",
+  "captured_at": "2026-09-22T02:11:15+00:00",
+  "timezone_note": "captured_at is the VM clock in UTC. The baseline commit timestamp is +08:00 from git.",
+  "measurement": {
+    "godot_executed": false,
+    "reason": "This environment has no Godot binary. Local transforms were produced by applying paperdoll_document.gd composed() in order to the parsed JSON, using IEEE-754 float64. Angle zero test uses Godot is_zero_approx threshold 0.00001. Rotation uses the standard radians matrix, matching Vector2.rotated.",
+    "compose_order": [
+      "own edit: position += offset, size *= scale, rotation = deg_to_rad(angle) when angle is not zero",
+      "child hair/beard/scar/bandage/blood: anchor is the pre-edit parent position; position = anchor + ((position-anchor)*parent.scale).rotated(parent.angle) + parent.offset; size *= parent.scale; rotation += parent radians",
+      "bust translation added only to GROUPS.bust; base and weapons are excluded"
+    ],
+    "fingerprint_check": {
+      "draft_baseline_sha256": "b411dfd57a4efb9bbf1c866f2d37f8dbfbc351d838431da5403719e1c678123e",
+      "catalog_bytes_sha256": "b411dfd57a4efb9bbf1c866f2d37f8dbfbc351d838431da5403719e1c678123e",
+      "equal": true,
+      "draft_modules_sha256": "9976573dc1f5fbcbfe1936cbb261970a5b49ae24569ef3e961cff71cd9e017b5",
+      "modules_bytes_sha256": "9976573dc1f5fbcbfe1936cbb261970a5b49ae24569ef3e961cff71cd9e017b5",
+      "modules_equal": true,
+      "current_catalog_hash_in_compatible_draft_baselines": false,
+      "load_implication": "paperdoll_document.validate accepts the draft because baseline_sha256 equals the current catalog bytes and modules_sha256 equals the current modules bytes. The compatible_draft_baselines list is a fallback and does not contain this hash."
+    }
+  },
+  "file_sha256": {
+    "user_calibration": {
+      "path": "my_test-v2.json",
+      "sha256": "da687e7979965d4ffa0b272f4358fdeee74b5310f9af0756da6ba71b1fc836f7"
+    },
+    "catalog": {
+      "path": "game/assets/art/static-bust/catalog.json",
+      "sha256": "b411dfd57a4efb9bbf1c866f2d37f8dbfbc351d838431da5403719e1c678123e"
+    },
+    "modules": {
+      "path": "game/assets/art/static-bust/modules.json",
+      "sha256": "9976573dc1f5fbcbfe1936cbb261970a5b49ae24569ef3e961cff71cd9e017b5"
+    },
+    "motion_sampler": {
+      "path": "game/presentation/static_bust_motion.gd",
+      "sha256": "4ba07127fc56e17be5bce33234ac94d7d73976618b374357b4d1c6eea75bae11"
+    },
+    "bust_draw": {
+      "path": "game/presentation/static_bust_actor.gd",
+      "sha256": "435ab09333b5072672f8c2fcfcf5e2660a2d1a1e7fea9473ab43190202392426"
+    },
+    "paperdoll_compose": {
+      "path": "game/presentation/paperdoll_document.gd",
+      "sha256": "ea3ac726dbd97d8aa8d650306d4fc72d9612e8dee0d2d434e0fd23076ec6388e"
+    },
+    "paperdoll_workbench": {
+      "path": "game/presentation/paperdoll_workbench.gd",
+      "sha256": "d4c5d324bf579bb4f715c4f002b3a9dded7710e5fa692b8ccb4d210f8c42a77e"
+    },
+    "static_bust_review": {
+      "path": "game/presentation/static_bust_review.gd",
+      "sha256": "35cd6f427f9c31304f54c4273514044c034d297337cd225ecb5294fb392ce7be"
+    },
+    "legacy_motion_actor": {
+      "path": "game/presentation/modular_actor.gd",
+      "sha256": "7f69e03e62dbddd1db32cad02edd5f40eac245e702fe10ed7dc86cf591407be7"
+    },
+    "legacy_motion_catalog": {
+      "path": "game/assets/art/motion/catalog.json",
+      "sha256": "4833a5e1633a987e9525faf14938a8b60542578bbc70f984870a1acad477ce10"
+    },
+    "battle_board": {
+      "path": "game/presentation/battle_board.gd",
+      "sha256": "0fb8e642157f4bee6b11bbcd0d1f783ffb110fb580e935b29f8920acbb67436c"
+    },
+    "project_godot": {
+      "path": "game/project.godot",
+      "sha256": "bc559fad7f596d75b9f14f7ffc2f25d4b8f86d3e42f267ad9514ebacd5ed2dcd"
+    }
+  },
+  "coordinate_convention": {
+    "space": "board logical pixels",
+    "origin": "ground contact used as the part origin by static_bust_actor.draw_part; catalog base position is [0, 0] and its pivot is [0.5, 1], the bottom center of the 64-wide base",
+    "axes": "+x right, +y down, Godot CanvasItem space",
+    "pivot": "normalized 0..1 of the part logical size. part_point = (point - pivot*size).rotated(rotation_rad) + position",
+    "screen": "origin + logical_point * scale_value. scale_value is the draw call argument, not a second fit stored on the part",
+    "bust_alignment_shift": {
+      "catalog_value": [
+        2,
+        0
+      ],
+      "runtime": "present only in catalog.json and catalog-v3.json. No GDScript reads bust_alignment_shift, so composed() does not add it again."
+    }
+  },
+  "angle_units": {
+    "draft_edit_angle": "degrees, field edits.*.angle. paperdoll_document.composed stores part.rotation = deg_to_rad(angle). Workbench spin box is labeled 旋转 °.",
+    "part_rotation": "radians after compose",
+    "motion_keyframe_angle": "radians in static_bust_motion.DEFAULT_ACTIONS and in schema3 actions. Workbench key_angle displays rad_to_deg and writes deg_to_rad.",
+    "draw_addition": "static_bust_actor.draw_part uses angle_argument + part.rotation, both radians. It does not convert a second time.",
+    "legacy_modular_actor": "modular_actor.gd pose angles are already radians and are a different rig. They are not added to these static-bust parts."
+  },
+  "bust_crop": {
+    "catalog_default": {
+      "center": [
+        -0.049767,
+        -17.219285
+      ],
+      "radius": [
+        28.765163,
+        7.166407
+      ],
+      "top": -120
+    },
+    "user_override_in_my_test_v2": {
+      "center": [
+        0,
+        -17.25
+      ],
+      "radius": [
+        30.25,
+        7.25
+      ],
+      "top": -120
+    },
+    "effective_when_draft_loaded": {
+      "center": [
+        0,
+        -17.25
+      ],
+      "radius": [
+        30.25,
+        7.25
+      ],
+      "top": -120
+    },
+    "why": "paperdoll_document.composed copies baseline then, because crop is non-empty, replaces result.bust_crop with the draft crop. An empty crop would keep catalog bust_crop.",
+    "window_construction": "static_bust_actor.bust_window: top edge from (center.x-radius.x, top) to (center.x+radius.x, top), then 65 points at angle = PI*i/64 for i in 0..64, point = center + (cos(angle)*radius.x, sin(angle)*radius.y). That is the lower semicircle in +y-down space.",
+    "applies_to": [
+      "blood",
+      "body",
+      "linen",
+      "mail",
+      "mail_damaged",
+      "padded",
+      "padded_damaged",
+      "skin"
+    ],
+    "does_not_apply_to": [
+      "arrow",
+      "bandage",
+      "base",
+      "beard",
+      "bow",
+      "face",
+      "hair",
+      "head",
+      "impact",
+      "shield",
+      "spear",
+      "sword",
+      "wounded",
+      "scar (silhouette clip only)"
+    ],
+    "head_weapons_base_not_forced_into_garment_window": true
+  },
+  "display": {
+    "one_x_definition": "1 logical pixel = 1 viewport pixel. paperdoll_workbench.draw_stage calls static_bust_actor.draw_actor with scale 1 and labels that inset 1×; scale 2 is labeled 2× 当前. static_bust_review._draw_motion does the same with scale 1.0 and the label 1×.",
+    "workbench_view_magnification": {
+      "control": "paperdoll_workbench.zoom, default 4.0, choices 1× through 6×",
+      "camera_function": "scale = min(zoom, stage.width/(230 if bow else 135), (stage.height-150)/100), then max(scale, 1). origin = stage fraction plus pan. This magnifies the already resolved logical bust; it is not stored in my_test-v2.",
+      "no_camera2d": true
+    },
+    "project_viewport": {
+      "path": "game/project.godot",
+      "viewport": [
+        1440,
+        900
+      ],
+      "window_override": [
+        1440,
+        900
+      ],
+      "stretch_mode": "canvas_items",
+      "stretch_scale_key_present": false,
+      "default_texture_filter_key_present": false
+    },
+    "import_sampling": {
+      "referenced_png_imports": "every referenced static-bust .import has compress/mode=0 and mipmaps/generate=true. None of those import files set a canvas texture filter.",
+      "runtime_filter": "paperdoll_workbench, static_bust_review, and battle_board set CanvasItem.texture_filter = TEXTURE_FILTER_LINEAR_WITH_MIPMAPS before drawing."
+    },
+    "battle_board_fit": {
+      "consumed_by_my_test_v2": false,
+      "draw_transform": "battle_board._draw calls draw_set_transform(_offset, 0, Vector2(_scale, _scale)). _scale fits the hex map into the playfield. ModularActor.draw_actor is then called with scale 1.0 inside that transform.",
+      "hex_radius": 34,
+      "static_bust_not_used": "battle_board does not call static_bust_actor and does not load my_test-v2.json."
+    }
+  },
+  "motion": {
+    "resolved_motion_mode": "code_default",
+    "why": "my_test-v2.json schema 3 has crop and edits but no actions key. paperdoll_document.action_for returns Motion.default_action when the weapon is absent. composed() only copies actions when the dictionary is non-empty. static_bust_actor.motion_action then gets {} and static_bust_motion.spec falls through to DEFAULT_ACTIONS.",
+    "not_mixed_reason": "mixed would mean this draft overrides some weapons and leaves others on the code default. This draft overrides none.",
+    "sampler": "game/presentation/static_bust_motion.gd",
+    "preview_and_resolution_share_sampler": "paperdoll_document.warnings and paperdoll_workbench playback both call static_bust_motion.sample. The sampler does not write combat rules.",
+    "default_actions": {
+      "sword": {
+        "id": "sword",
+        "weapon": "sword",
+        "duration": 0.86,
+        "contact": 0.42,
+        "release": 0.25,
+        "keyframes": [
+          {
+            "id": "sword.rest",
+            "t": 0,
+            "x": 8,
+            "y": -12,
+            "angle": 0.62
+          },
+          {
+            "id": "sword.windup",
+            "t": 0.25,
+            "x": 26,
+            "y": -13,
+            "angle": 0.38
+          },
+          {
+            "id": "sword.contact",
+            "t": 0.42,
+            "x": 22,
+            "y": -31,
+            "angle": 1.55
+          },
+          {
+            "id": "sword.hold",
+            "t": 0.53,
+            "x": 22,
+            "y": -31,
+            "angle": 1.55
+          },
+          {
+            "id": "sword.recover",
+            "t": 0.64,
+            "x": 20,
+            "y": -30,
+            "angle": 1.44
+          },
+          {
+            "id": "sword.return",
+            "t": 1,
+            "x": 8,
+            "y": -12,
+            "angle": 0.62
+          }
+        ]
+      },
+      "spear": {
+        "id": "spear",
+        "weapon": "spear",
+        "duration": 0.82,
+        "contact": 0.42,
+        "release": 0.25,
+        "keyframes": [
+          {
+            "id": "spear.rest",
+            "t": 0,
+            "x": 19,
+            "y": -26,
+            "angle": 1.3
+          },
+          {
+            "id": "spear.chamber",
+            "t": 0.25,
+            "x": 13,
+            "y": -25,
+            "angle": 1.35
+          },
+          {
+            "id": "spear.contact",
+            "t": 0.42,
+            "x": 35,
+            "y": -31,
+            "angle": 1.57079633
+          },
+          {
+            "id": "spear.hold",
+            "t": 0.53,
+            "x": 35,
+            "y": -31,
+            "angle": 1.57079633
+          },
+          {
+            "id": "spear.recover",
+            "t": 0.64,
+            "x": 31,
+            "y": -31,
+            "angle": 1.57079633
+          },
+          {
+            "id": "spear.return",
+            "t": 1,
+            "x": 19,
+            "y": -26,
+            "angle": 1.3
+          }
+        ]
+      },
+      "bow": {
+        "id": "bow",
+        "weapon": "bow",
+        "duration": 1.48,
+        "contact": 0.76,
+        "release": 0.44,
+        "keyframes": [
+          {
+            "id": "bow.rest",
+            "t": 0,
+            "x": 15,
+            "y": -12,
+            "angle": 1.45
+          },
+          {
+            "id": "bow.draw",
+            "t": 0.12,
+            "x": 37,
+            "y": -19,
+            "angle": 1.3
+          },
+          {
+            "id": "bow.raise",
+            "t": 0.28,
+            "x": 44,
+            "y": -42,
+            "angle": 0.25
+          },
+          {
+            "id": "bow.aim",
+            "t": 0.34,
+            "x": 40,
+            "y": -41,
+            "angle": -0.34
+          },
+          {
+            "id": "bow.release",
+            "t": 0.44,
+            "x": 40,
+            "y": -41,
+            "angle": -0.34
+          },
+          {
+            "id": "bow.recoil",
+            "t": 0.49,
+            "x": 42,
+            "y": -40,
+            "angle": -0.29
+          },
+          {
+            "id": "bow.hold",
+            "t": 0.62,
+            "x": 40,
+            "y": -41,
+            "angle": -0.34
+          },
+          {
+            "id": "bow.lower",
+            "t": 0.8,
+            "x": 44,
+            "y": -42,
+            "angle": 0.25
+          },
+          {
+            "id": "bow.drop",
+            "t": 0.94,
+            "x": 37,
+            "y": -19,
+            "angle": 1.3
+          },
+          {
+            "id": "bow.return",
+            "t": 1,
+            "x": 15,
+            "y": -12,
+            "angle": 1.45
+          }
+        ]
+      }
+    },
+    "rest_pose_draw": {
+      "sword": {
+        "keyframe_id": "sword.rest",
+        "t": 0,
+        "motion_offset": [
+          8,
+          -12
+        ],
+        "motion_angle_rad": 0.62,
+        "part_rotation_rad": 0,
+        "draw_position": [
+          2,
+          -14.5
+        ],
+        "draw_angle_rad": 0.62,
+        "sampler": "static_bust_motion.sample at progress 0 returns the first keyframe; static_bust_actor.draw_part adds that offset and angle to the composed part"
+      },
+      "spear": {
+        "keyframe_id": "spear.rest",
+        "t": 0,
+        "motion_offset": [
+          19,
+          -26
+        ],
+        "motion_angle_rad": 1.3,
+        "part_rotation_rad": -0.16580628,
+        "draw_position": [
+          2.75,
+          -25
+        ],
+        "draw_angle_rad": 1.13419372,
+        "sampler": "static_bust_motion.sample at progress 0 returns the first keyframe; static_bust_actor.draw_part adds that offset and angle to the composed part"
+      },
+      "bow": {
+        "keyframe_id": "bow.rest",
+        "t": 0,
+        "motion_offset": [
+          15,
+          -12
+        ],
+        "motion_angle_rad": 1.45,
+        "part_rotation_rad": -0.43633231,
+        "draw_position": [
+          6.75,
+          -21.75
+        ],
+        "draw_angle_rad": 1.01366769,
+        "sampler": "static_bust_motion.sample at progress 0 returns the first keyframe; static_bust_actor.draw_part adds that offset and angle to the composed part"
+      }
+    },
+    "shield": "no keyframe path. With weapon sword, draw_weapon draws shield at its composed local transform and a zero extra offset/angle.",
+    "arrow": {
+      "catalog_part_unchanged_by_compose": {
+        "position": [
+          0,
+          0
+        ],
+        "size": [
+          4,
+          24.53333
+        ],
+        "rotation_rad": 0
+      },
+      "nocked": "static_bust_motion.nocked_arrow follows the bow sample. At progress 0 the opacity smoothstep(.10,.19,p) is 0.",
+      "flight_targets_logical": {
+        "hit": [
+          134,
+          -27
+        ],
+        "miss": [
+          118,
+          -2
+        ]
+      },
+      "authored_bow_rotation_added": "static_bust_actor.nocked_arrow adds the composed bow position delta, scales the arrow offset by bow.size.x/base bow.size.x, and adds bow.rotation to the arrow angle when a catalog_data override exists."
+    },
+    "legacy_parallel_path": {
+      "renderer": "game/presentation/modular_actor.gd",
+      "catalog": "game/assets/art/motion/catalog.json",
+      "used_by": "battle_board for presentation_sample or the motion-review actor; character_portrait first tries ModularActor",
+      "not_the_resolved_path_for_this_draft": true
+    }
+  },
+  "appearance_saved_in_draft": {
+    "bandage": true,
+    "beard": true,
+    "blood": true,
+    "hair": true,
+    "head": "modular",
+    "scar": true,
+    "skin": true
+  },
+  "workbench_preview_defaults_not_in_draft": {
+    "armor": "mail",
+    "weapon": "sword",
+    "damaged": false,
+    "wounded": false
+  },
+  "draw_order_for_saved_appearance_and_workbench_defaults": [
+    "base",
+    "skin",
+    "blood",
+    "body",
+    "linen",
+    "padded",
+    "mail",
+    "face",
+    "scar",
+    "beard",
+    "hair",
+    "bandage",
+    "shield",
+    "sword"
+  ],
+  "draw_order_source": "static_bust_actor.body_layers('mail') then assembly inserts. Skin inserts at index 1, blood at index 2, modular replaces the final head with face, then appends scar, beard, hair, bandage. draw_weapon then draws shield and the sampled sword.",
+  "slots": {
+    "base": {
+      "part_id": "base",
+      "defined_in": "catalog",
+      "atlas": "game/assets/art/static-bust/anatomy.png",
+      "image_size_px": [
+        1254,
+        1254
+      ],
+      "source_rect_px": [
+        17,
+        918,
+        643,
+        260
+      ],
+      "logical_size_before_fit": [
+        64,
+        25.87869
+      ],
+      "position_before_fit": [
+        0,
+        0
+      ],
+      "pivot_normalized": [
+        0.5,
+        1
+      ],
+      "edit_group": "base",
+      "user_edit": {
+        "present_in_draft": false,
+        "offset": [
+          0,
+          0
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "parent_binding": null,
+      "bust_translation_applied": false,
+      "bust_user_edit": {
+        "present_in_draft": true,
+        "applied": false,
+        "reason": "paperdoll_document.composed adds bust.offset only to GROUPS.bust; this part is outside that list"
+      },
+      "final_local_transform": {
+        "position": [
+          0,
+          0
+        ],
+        "size": [
+          64,
+          25.87869
+        ],
+        "rotation_rad": 0
+      },
+      "clip": {
+        "bust_crop": false,
+        "clip_to": null,
+        "runtime": "draw_part, no bust window"
+      },
+      "source_rect_inside_image": true
+    },
+    "skin": {
+      "part_id": "skin",
+      "defined_in": "modules",
+      "atlas": "game/assets/art/static-bust/body-mild-proof.png",
+      "image_size_px": [
+        1254,
+        1254
+      ],
+      "source_rect_px": [
+        583,
+        301,
+        647,
+        353
+      ],
+      "logical_size_before_fit": [
+        52,
+        28.370943
+      ],
+      "position_before_fit": [
+        1.5,
+        -39.5
+      ],
+      "pivot_normalized": [
+        0.5,
+        0
+      ],
+      "edit_group": "skin",
+      "user_edit": {
+        "present_in_draft": false,
+        "offset": [
+          0,
+          0
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "parent_binding": null,
+      "bust_translation_applied": true,
+      "bust_user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -0.75,
+          0
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "final_local_transform": {
+        "position": [
+          0.75,
+          -39.5
+        ],
+        "size": [
+          52,
+          28.370943
+        ],
+        "rotation_rad": 0
+      },
+      "clip": {
+        "bust_crop": true,
+        "clip_to": null,
+        "runtime": "draw_bust_part intersects the sprite quad with bust_window"
+      },
+      "source_rect_inside_image": true
+    },
+    "body": {
+      "part_id": "body",
+      "defined_in": "catalog",
+      "atlas": "game/assets/art/static-bust/full-garments.png",
+      "image_size_px": [
+        1254,
+        1254
+      ],
+      "source_rect_px": [
+        110,
+        78,
+        470,
+        546
+      ],
+      "logical_size_before_fit": [
+        71,
+        82.48085
+      ],
+      "position_before_fit": [
+        3.5,
+        -42
+      ],
+      "pivot_normalized": [
+        0.5,
+        0
+      ],
+      "edit_group": "body",
+      "user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -0.5,
+          -0.25
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "parent_binding": null,
+      "bust_translation_applied": true,
+      "bust_user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -0.75,
+          0
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "final_local_transform": {
+        "position": [
+          2.25,
+          -42.25
+        ],
+        "size": [
+          71,
+          82.48085
+        ],
+        "rotation_rad": 0
+      },
+      "clip": {
+        "bust_crop": true,
+        "clip_to": null,
+        "runtime": "draw_bust_part intersects the sprite quad with bust_window"
+      },
+      "source_rect_inside_image": true
+    },
+    "head": {
+      "part_id": "head",
+      "defined_in": "catalog",
+      "atlas": "game/assets/art/static-bust/body-head.png",
+      "image_size_px": [
+        1254,
+        1254
+      ],
+      "source_rect_px": [
+        68,
+        40,
+        477,
+        516
+      ],
+      "logical_size_before_fit": [
+        34,
+        36.77987
+      ],
+      "position_before_fit": [
+        3,
+        -28
+      ],
+      "pivot_normalized": [
+        0.5,
+        1
+      ],
+      "edit_group": "head",
+      "user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -2,
+          -4.5
+        ],
+        "scale": 0.92,
+        "angle_deg": 0
+      },
+      "parent_binding": null,
+      "bust_translation_applied": true,
+      "bust_user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -0.75,
+          0
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "final_local_transform": {
+        "position": [
+          0.25,
+          -32.5
+        ],
+        "size": [
+          31.28,
+          33.8374804
+        ],
+        "rotation_rad": 0
+      },
+      "clip": {
+        "bust_crop": false,
+        "clip_to": null,
+        "runtime": "draw_part, no bust window"
+      },
+      "source_rect_inside_image": true
+    },
+    "wounded": {
+      "part_id": "wounded",
+      "defined_in": "catalog",
+      "atlas": "game/assets/art/static-bust/body-head.png",
+      "image_size_px": [
+        1254,
+        1254
+      ],
+      "source_rect_px": [
+        682,
+        655,
+        477,
+        516
+      ],
+      "logical_size_before_fit": [
+        34,
+        36.77987
+      ],
+      "position_before_fit": [
+        3,
+        -28
+      ],
+      "pivot_normalized": [
+        0.5,
+        1
+      ],
+      "edit_group": "head",
+      "user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -2,
+          -4.5
+        ],
+        "scale": 0.92,
+        "angle_deg": 0
+      },
+      "parent_binding": null,
+      "bust_translation_applied": true,
+      "bust_user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -0.75,
+          0
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "final_local_transform": {
+        "position": [
+          0.25,
+          -32.5
+        ],
+        "size": [
+          31.28,
+          33.8374804
+        ],
+        "rotation_rad": 0
+      },
+      "clip": {
+        "bust_crop": false,
+        "clip_to": null,
+        "runtime": "draw_part, no bust window"
+      },
+      "source_rect_inside_image": true
+    },
+    "face": {
+      "part_id": "face",
+      "defined_in": "modules",
+      "atlas": "game/assets/art/static-bust/modular-proof.png",
+      "image_size_px": [
+        1536,
+        1024
+      ],
+      "source_rect_px": [
+        50,
+        80,
+        415,
+        480
+      ],
+      "logical_size_before_fit": [
+        31,
+        35.855422
+      ],
+      "position_before_fit": [
+        3,
+        -28
+      ],
+      "pivot_normalized": [
+        0.5,
+        1
+      ],
+      "edit_group": "head",
+      "user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -2,
+          -4.5
+        ],
+        "scale": 0.92,
+        "angle_deg": 0
+      },
+      "parent_binding": null,
+      "bust_translation_applied": true,
+      "bust_user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -0.75,
+          0
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "final_local_transform": {
+        "position": [
+          0.25,
+          -32.5
+        ],
+        "size": [
+          28.52,
+          32.98698824
+        ],
+        "rotation_rad": 0
+      },
+      "clip": {
+        "bust_crop": false,
+        "clip_to": null,
+        "runtime": "draw_part, no bust window"
+      },
+      "source_rect_inside_image": true
+    },
+    "hair": {
+      "part_id": "hair",
+      "defined_in": "modules",
+      "atlas": "game/assets/art/static-bust/modular-proof.png",
+      "image_size_px": [
+        1536,
+        1024
+      ],
+      "source_rect_px": [
+        497,
+        54,
+        515,
+        490
+      ],
+      "logical_size_before_fit": [
+        39,
+        37.106796
+      ],
+      "position_before_fit": [
+        0,
+        -66.5
+      ],
+      "pivot_normalized": [
+        0.5,
+        0
+      ],
+      "edit_group": "hair",
+      "user_edit": {
+        "present_in_draft": false,
+        "offset": [
+          0,
+          0
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "parent_binding": {
+        "modules_or_catalog_parent": "head",
+        "anchor_part_used_by_composed": "head",
+        "anchor_position_before_fit": [
+          3,
+          -28
+        ],
+        "parent_user_edit": {
+          "present_in_draft": true,
+          "offset": [
+            -2,
+            -4.5
+          ],
+          "scale": 0.92,
+          "angle_deg": 0
+        }
+      },
+      "bust_translation_applied": true,
+      "bust_user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -0.75,
+          0
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "final_local_transform": {
+        "position": [
+          -2.51,
+          -67.92
+        ],
+        "size": [
+          35.88,
+          34.13825232
+        ],
+        "rotation_rad": 0
+      },
+      "clip": {
+        "bust_crop": false,
+        "clip_to": null,
+        "runtime": "draw_part, no bust window"
+      },
+      "source_rect_inside_image": true
+    },
+    "beard": {
+      "part_id": "beard",
+      "defined_in": "modules",
+      "atlas": "game/assets/art/static-bust/modular-proof.png",
+      "image_size_px": [
+        1536,
+        1024
+      ],
+      "source_rect_px": [
+        1150,
+        303,
+        350,
+        280
+      ],
+      "logical_size_before_fit": [
+        25.5,
+        20.4
+      ],
+      "position_before_fit": [
+        7,
+        -47
+      ],
+      "pivot_normalized": [
+        0.5,
+        0
+      ],
+      "edit_group": "beard",
+      "user_edit": {
+        "present_in_draft": false,
+        "offset": [
+          0,
+          0
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "parent_binding": {
+        "modules_or_catalog_parent": "head",
+        "anchor_part_used_by_composed": "head",
+        "anchor_position_before_fit": [
+          3,
+          -28
+        ],
+        "parent_user_edit": {
+          "present_in_draft": true,
+          "offset": [
+            -2,
+            -4.5
+          ],
+          "scale": 0.92,
+          "angle_deg": 0
+        }
+      },
+      "bust_translation_applied": true,
+      "bust_user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -0.75,
+          0
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "final_local_transform": {
+        "position": [
+          3.93,
+          -49.98
+        ],
+        "size": [
+          23.46,
+          18.768
+        ],
+        "rotation_rad": 0
+      },
+      "clip": {
+        "bust_crop": false,
+        "clip_to": null,
+        "runtime": "draw_part, no bust window"
+      },
+      "source_rect_inside_image": true
+    },
+    "scar": {
+      "part_id": "scar",
+      "defined_in": "modules",
+      "atlas": "game/assets/art/static-bust/modular-proof.png",
+      "image_size_px": [
+        1536,
+        1024
+      ],
+      "source_rect_px": [
+        210,
+        680,
+        150,
+        140
+      ],
+      "logical_size_before_fit": [
+        7,
+        6.533333
+      ],
+      "position_before_fit": [
+        8,
+        -55
+      ],
+      "pivot_normalized": [
+        0.5,
+        0
+      ],
+      "edit_group": "scar",
+      "user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -3.25,
+          11.5
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "parent_binding": {
+        "modules_or_catalog_parent": "head",
+        "anchor_part_used_by_composed": "head",
+        "anchor_position_before_fit": [
+          3,
+          -28
+        ],
+        "parent_user_edit": {
+          "present_in_draft": true,
+          "offset": [
+            -2,
+            -4.5
+          ],
+          "scale": 0.92,
+          "angle_deg": 0
+        }
+      },
+      "bust_translation_applied": true,
+      "bust_user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -0.75,
+          0
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "final_local_transform": {
+        "position": [
+          1.86,
+          -46.76
+        ],
+        "size": [
+          6.44,
+          6.01066636
+        ],
+        "rotation_rad": 0
+      },
+      "clip": {
+        "bust_crop": false,
+        "clip_to": "face",
+        "runtime": "static_bust_actor.draw_body calls draw_clipped_part with clip_bust=false; owner face is remapped to head only when assembly.head is legacy"
+      },
+      "source_rect_inside_image": true
+    },
+    "bandage": {
+      "part_id": "bandage",
+      "defined_in": "modules",
+      "atlas": "game/assets/art/static-bust/modular-proof.png",
+      "image_size_px": [
+        1536,
+        1024
+      ],
+      "source_rect_px": [
+        510,
+        630,
+        510,
+        288
+      ],
+      "logical_size_before_fit": [
+        38,
+        21.458824
+      ],
+      "position_before_fit": [
+        1,
+        -58
+      ],
+      "pivot_normalized": [
+        0.5,
+        0
+      ],
+      "edit_group": "bandage",
+      "user_edit": {
+        "present_in_draft": false,
+        "offset": [
+          0,
+          0
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "parent_binding": {
+        "modules_or_catalog_parent": "head",
+        "anchor_part_used_by_composed": "head",
+        "anchor_position_before_fit": [
+          3,
+          -28
+        ],
+        "parent_user_edit": {
+          "present_in_draft": true,
+          "offset": [
+            -2,
+            -4.5
+          ],
+          "scale": 0.92,
+          "angle_deg": 0
+        }
+      },
+      "bust_translation_applied": true,
+      "bust_user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -0.75,
+          0
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "final_local_transform": {
+        "position": [
+          -1.59,
+          -60.1
+        ],
+        "size": [
+          34.96,
+          19.74211808
+        ],
+        "rotation_rad": 0
+      },
+      "clip": {
+        "bust_crop": false,
+        "clip_to": null,
+        "runtime": "draw_part, no bust window"
+      },
+      "source_rect_inside_image": true
+    },
+    "blood": {
+      "part_id": "blood",
+      "defined_in": "modules",
+      "atlas": "game/assets/art/static-bust/modular-proof.png",
+      "image_size_px": [
+        1536,
+        1024
+      ],
+      "source_rect_px": [
+        1130,
+        680,
+        305,
+        280
+      ],
+      "logical_size_before_fit": [
+        17,
+        15.606557
+      ],
+      "position_before_fit": [
+        13,
+        -22
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "edit_group": "blood",
+      "user_edit": {
+        "present_in_draft": false,
+        "offset": [
+          0,
+          0
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "parent_binding": {
+        "modules_or_catalog_parent": "skin",
+        "anchor_part_used_by_composed": "skin",
+        "anchor_position_before_fit": [
+          1.5,
+          -39.5
+        ],
+        "parent_user_edit": {
+          "present_in_draft": false,
+          "offset": [
+            0,
+            0
+          ],
+          "scale": 1,
+          "angle_deg": 0
+        }
+      },
+      "bust_translation_applied": true,
+      "bust_user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -0.75,
+          0
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "final_local_transform": {
+        "position": [
+          12.25,
+          -22
+        ],
+        "size": [
+          17,
+          15.606557
+        ],
+        "rotation_rad": 0
+      },
+      "clip": {
+        "bust_crop": true,
+        "clip_to": "skin",
+        "runtime": "draw_bust_part intersects the sprite quad with bust_window; then intersects owner_regions of clip_to"
+      },
+      "source_rect_inside_image": true
+    },
+    "linen": {
+      "part_id": "linen",
+      "defined_in": "catalog",
+      "atlas": "game/assets/art/static-bust/full-garments-nested.png",
+      "image_size_px": [
+        1254,
+        1254
+      ],
+      "source_rect_px": [
+        726,
+        78,
+        478,
+        546
+      ],
+      "logical_size_before_fit": [
+        72,
+        82.24268
+      ],
+      "position_before_fit": [
+        3.5,
+        -42
+      ],
+      "pivot_normalized": [
+        0.5,
+        0
+      ],
+      "edit_group": "linen",
+      "user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -1.25,
+          -0.5
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "parent_binding": null,
+      "bust_translation_applied": true,
+      "bust_user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -0.75,
+          0
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "final_local_transform": {
+        "position": [
+          1.5,
+          -42.5
+        ],
+        "size": [
+          72,
+          82.24268
+        ],
+        "rotation_rad": 0
+      },
+      "clip": {
+        "bust_crop": true,
+        "clip_to": null,
+        "runtime": "draw_bust_part intersects the sprite quad with bust_window"
+      },
+      "source_rect_inside_image": true
+    },
+    "padded": {
+      "part_id": "padded",
+      "defined_in": "catalog",
+      "atlas": "game/assets/art/static-bust/full-garments-nested.png",
+      "image_size_px": [
+        1254,
+        1254
+      ],
+      "source_rect_px": [
+        105,
+        644,
+        496,
+        557
+      ],
+      "logical_size_before_fit": [
+        72.5,
+        81.41633
+      ],
+      "position_before_fit": [
+        3.5,
+        -42
+      ],
+      "pivot_normalized": [
+        0.5,
+        0
+      ],
+      "edit_group": "padded",
+      "user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -0.25,
+          -2.5
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "parent_binding": null,
+      "bust_translation_applied": true,
+      "bust_user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -0.75,
+          0
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "final_local_transform": {
+        "position": [
+          2.5,
+          -44.5
+        ],
+        "size": [
+          72.5,
+          81.41633
+        ],
+        "rotation_rad": 0
+      },
+      "clip": {
+        "bust_crop": true,
+        "clip_to": null,
+        "runtime": "draw_bust_part intersects the sprite quad with bust_window"
+      },
+      "source_rect_inside_image": true
+    },
+    "padded_damaged": {
+      "part_id": "padded_damaged",
+      "defined_in": "catalog",
+      "atlas": "game/assets/art/static-bust/full-damaged-nested.png",
+      "image_size_px": [
+        1254,
+        1254
+      ],
+      "source_rect_px": [
+        105,
+        644,
+        496,
+        557
+      ],
+      "logical_size_before_fit": [
+        72.5,
+        81.41633
+      ],
+      "position_before_fit": [
+        3.5,
+        -42
+      ],
+      "pivot_normalized": [
+        0.5,
+        0
+      ],
+      "edit_group": "padded",
+      "user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -0.25,
+          -2.5
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "parent_binding": null,
+      "bust_translation_applied": true,
+      "bust_user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -0.75,
+          0
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "final_local_transform": {
+        "position": [
+          2.5,
+          -44.5
+        ],
+        "size": [
+          72.5,
+          81.41633
+        ],
+        "rotation_rad": 0
+      },
+      "clip": {
+        "bust_crop": true,
+        "clip_to": null,
+        "runtime": "draw_bust_part intersects the sprite quad with bust_window"
+      },
+      "source_rect_inside_image": true
+    },
+    "mail": {
+      "part_id": "mail",
+      "defined_in": "catalog",
+      "atlas": "game/assets/art/static-bust/full-garments-nested.png",
+      "image_size_px": [
+        1254,
+        1254
+      ],
+      "source_rect_px": [
+        731,
+        644,
+        497,
+        560
+      ],
+      "logical_size_before_fit": [
+        72.5,
+        81.69014
+      ],
+      "position_before_fit": [
+        3.5,
+        -42
+      ],
+      "pivot_normalized": [
+        0.5,
+        0
+      ],
+      "edit_group": "mail",
+      "user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          0.25,
+          -4
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "parent_binding": null,
+      "bust_translation_applied": true,
+      "bust_user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -0.75,
+          0
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "final_local_transform": {
+        "position": [
+          3,
+          -46
+        ],
+        "size": [
+          72.5,
+          81.69014
+        ],
+        "rotation_rad": 0
+      },
+      "clip": {
+        "bust_crop": true,
+        "clip_to": null,
+        "runtime": "draw_bust_part intersects the sprite quad with bust_window"
+      },
+      "source_rect_inside_image": true
+    },
+    "mail_damaged": {
+      "part_id": "mail_damaged",
+      "defined_in": "catalog",
+      "atlas": "game/assets/art/static-bust/full-damaged-nested.png",
+      "image_size_px": [
+        1254,
+        1254
+      ],
+      "source_rect_px": [
+        731,
+        644,
+        497,
+        560
+      ],
+      "logical_size_before_fit": [
+        72.5,
+        81.69014
+      ],
+      "position_before_fit": [
+        3.5,
+        -42
+      ],
+      "pivot_normalized": [
+        0.5,
+        0
+      ],
+      "edit_group": "mail",
+      "user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          0.25,
+          -4
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "parent_binding": null,
+      "bust_translation_applied": true,
+      "bust_user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -0.75,
+          0
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "final_local_transform": {
+        "position": [
+          3,
+          -46
+        ],
+        "size": [
+          72.5,
+          81.69014
+        ],
+        "rotation_rad": 0
+      },
+      "clip": {
+        "bust_crop": true,
+        "clip_to": null,
+        "runtime": "draw_bust_part intersects the sprite quad with bust_window"
+      },
+      "source_rect_inside_image": true
+    },
+    "sword": {
+      "part_id": "sword",
+      "defined_in": "catalog",
+      "atlas": "game/assets/art/static-bust/weapons.png",
+      "image_size_px": [
+        1254,
+        1254
+      ],
+      "source_rect_px": [
+        141,
+        75,
+        185,
+        596
+      ],
+      "logical_size_before_fit": [
+        22.5,
+        72.48649
+      ],
+      "position_before_fit": [
+        0,
+        0
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.82
+      ],
+      "edit_group": "sword",
+      "user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -6,
+          -2.5
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "parent_binding": null,
+      "bust_translation_applied": false,
+      "bust_user_edit": {
+        "present_in_draft": true,
+        "applied": false,
+        "reason": "paperdoll_document.composed adds bust.offset only to GROUPS.bust; this part is outside that list"
+      },
+      "final_local_transform": {
+        "position": [
+          -6,
+          -2.5
+        ],
+        "size": [
+          22.5,
+          72.48649
+        ],
+        "rotation_rad": 0
+      },
+      "clip": {
+        "bust_crop": false,
+        "clip_to": null,
+        "runtime": "draw_part, no bust window"
+      },
+      "source_rect_inside_image": true
+    },
+    "spear": {
+      "part_id": "spear",
+      "defined_in": "catalog",
+      "atlas": "game/assets/art/static-bust/weapons.png",
+      "image_size_px": [
+        1254,
+        1254
+      ],
+      "source_rect_px": [
+        600,
+        42,
+        55,
+        630
+      ],
+      "logical_size_before_fit": [
+        8.4,
+        96.21818
+      ],
+      "position_before_fit": [
+        0,
+        0
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.7
+      ],
+      "edit_group": "spear",
+      "user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -16.25,
+          1
+        ],
+        "scale": 1,
+        "angle_deg": -9.5
+      },
+      "parent_binding": null,
+      "bust_translation_applied": false,
+      "bust_user_edit": {
+        "present_in_draft": true,
+        "applied": false,
+        "reason": "paperdoll_document.composed adds bust.offset only to GROUPS.bust; this part is outside that list"
+      },
+      "final_local_transform": {
+        "position": [
+          -16.25,
+          1
+        ],
+        "size": [
+          8.4,
+          96.21818
+        ],
+        "rotation_rad": -0.16580628
+      },
+      "clip": {
+        "bust_crop": false,
+        "clip_to": null,
+        "runtime": "draw_part, no bust window"
+      },
+      "source_rect_inside_image": true
+    },
+    "bow": {
+      "part_id": "bow",
+      "defined_in": "catalog",
+      "atlas": "game/assets/art/static-bust/weapons.png",
+      "image_size_px": [
+        1254,
+        1254
+      ],
+      "source_rect_px": [
+        990,
+        87,
+        134,
+        580
+      ],
+      "logical_size_before_fit": [
+        17.5,
+        75.74627
+      ],
+      "position_before_fit": [
+        0,
+        0
+      ],
+      "pivot_normalized": [
+        0.8,
+        0.51
+      ],
+      "edit_group": "bow",
+      "user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -8.25,
+          -9.75
+        ],
+        "scale": 1,
+        "angle_deg": -25
+      },
+      "parent_binding": null,
+      "bust_translation_applied": false,
+      "bust_user_edit": {
+        "present_in_draft": true,
+        "applied": false,
+        "reason": "paperdoll_document.composed adds bust.offset only to GROUPS.bust; this part is outside that list"
+      },
+      "final_local_transform": {
+        "position": [
+          -8.25,
+          -9.75
+        ],
+        "size": [
+          17.5,
+          75.74627
+        ],
+        "rotation_rad": -0.43633231
+      },
+      "clip": {
+        "bust_crop": false,
+        "clip_to": null,
+        "runtime": "draw_part, no bust window"
+      },
+      "source_rect_inside_image": true
+    },
+    "shield": {
+      "part_id": "shield",
+      "defined_in": "catalog",
+      "atlas": "game/assets/art/static-bust/weapons.png",
+      "image_size_px": [
+        1254,
+        1254
+      ],
+      "source_rect_px": [
+        81,
+        737,
+        305,
+        455
+      ],
+      "logical_size_before_fit": [
+        32,
+        47.7377
+      ],
+      "position_before_fit": [
+        28,
+        2
+      ],
+      "pivot_normalized": [
+        0.5,
+        1
+      ],
+      "edit_group": "shield",
+      "user_edit": {
+        "present_in_draft": true,
+        "offset": [
+          -5.75,
+          -3.75
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "parent_binding": null,
+      "bust_translation_applied": false,
+      "bust_user_edit": {
+        "present_in_draft": true,
+        "applied": false,
+        "reason": "paperdoll_document.composed adds bust.offset only to GROUPS.bust; this part is outside that list"
+      },
+      "final_local_transform": {
+        "position": [
+          22.25,
+          -1.75
+        ],
+        "size": [
+          32,
+          47.7377
+        ],
+        "rotation_rad": 0
+      },
+      "clip": {
+        "bust_crop": false,
+        "clip_to": null,
+        "runtime": "draw_part, no bust window"
+      },
+      "source_rect_inside_image": true
+    },
+    "arrow": {
+      "part_id": "arrow",
+      "defined_in": "catalog",
+      "atlas": "game/assets/art/static-bust/weapons.png",
+      "image_size_px": [
+        1254,
+        1254
+      ],
+      "source_rect_px": [
+        591,
+        730,
+        75,
+        460
+      ],
+      "logical_size_before_fit": [
+        4,
+        24.53333
+      ],
+      "position_before_fit": [
+        0,
+        0
+      ],
+      "pivot_normalized": [
+        0.5,
+        0
+      ],
+      "edit_group": null,
+      "user_edit": {
+        "present_in_draft": false,
+        "offset": [
+          0,
+          0
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "parent_binding": null,
+      "bust_translation_applied": false,
+      "bust_user_edit": {
+        "present_in_draft": true,
+        "applied": false,
+        "reason": "paperdoll_document.composed adds bust.offset only to GROUPS.bust; this part is outside that list"
+      },
+      "final_local_transform": {
+        "position": [
+          0,
+          0
+        ],
+        "size": [
+          4,
+          24.53333
+        ],
+        "rotation_rad": 0
+      },
+      "clip": {
+        "bust_crop": false,
+        "clip_to": null,
+        "runtime": "draw_part, no bust window"
+      },
+      "source_rect_inside_image": true
+    },
+    "impact": {
+      "part_id": "impact",
+      "defined_in": "catalog",
+      "atlas": "game/assets/art/static-bust/weapons.png",
+      "image_size_px": [
+        1254,
+        1254
+      ],
+      "source_rect_px": [
+        883,
+        812,
+        313,
+        297
+      ],
+      "logical_size_before_fit": [
+        20,
+        18.97764
+      ],
+      "position_before_fit": [
+        0,
+        0
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "edit_group": null,
+      "user_edit": {
+        "present_in_draft": false,
+        "offset": [
+          0,
+          0
+        ],
+        "scale": 1,
+        "angle_deg": 0
+      },
+      "parent_binding": null,
+      "bust_translation_applied": false,
+      "bust_user_edit": {
+        "present_in_draft": true,
+        "applied": false,
+        "reason": "paperdoll_document.composed adds bust.offset only to GROUPS.bust; this part is outside that list"
+      },
+      "final_local_transform": {
+        "position": [
+          0,
+          0
+        ],
+        "size": [
+          20,
+          18.97764
+        ],
+        "rotation_rad": 0
+      },
+      "clip": {
+        "bust_crop": false,
+        "clip_to": null,
+        "runtime": "draw_part, no bust window"
+      },
+      "source_rect_inside_image": true
+    }
+  },
+  "unresolved": [
+    {
+      "slot": "headgear",
+      "reason": "catalog.json, modules.json, my_test-v2.json, and static_bust_actor.gd have no headgear part, parent, or layer. The nine baseline bindings are the slots that exist. A helmet layer is batch work, not a measured binding."
+    },
+    {
+      "slot": "campaign_static_bust_draw",
+      "reason": "The campaign board still draws ModularActor or the program portrait. This freeze does not make the game consume the resolved static-bust transforms."
+    }
+  ]
+}
