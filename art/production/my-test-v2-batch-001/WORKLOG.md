@@ -48,3 +48,9 @@ PASS: static plan gate only. No images were generated or visually approved; Godo
 ## 校验提醒
 - 其余 25 条仍为 planned（未动假完成）。
 - assembly_fit 仍为 NOT_RUN。
+
+
+## 2026-09-22 · 资产生产真图覆盖
+- GenerateImage 重出 pilot 5（含 headgear back/main/front）
+- 覆盖临时 Pillow 占位；geometry/assembly/qa/user_approved 未填完成
+- 提交人：奇幻兄弟·资产生产

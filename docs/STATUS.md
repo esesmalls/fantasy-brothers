@@ -1,5 +1,9 @@
 # 当前项目状态
 
+## 2026-09-22：pilot-5 临时占位图换成 GenerateImage 真图
+
+在 `art/my-test-v2-batch-001` 上，用 GenerateImage 产出覆盖 `art/production/my-test-v2-batch-001/` 里 head_001、padded_001_intact、padded_001_damaged、sword_001、headgear_metal_001（back/main/front）的临时 Pillow 图，并换上对应卡片、提示、出处和 manifest。几何仍 unresolved，装配与 QA 仍是 NOT_RUN，用户确认仍是 PENDING。没有改 `my_test-v2.json`、catalog、modules 或运行原图。这不是美术通过，也不要合并。
+
 ## 2026-09-21：文档与开发产物清理审计（仅检查）
 
 按用户要求检查多余文档、素材与开发产物。主AI独立核对目录大小、Git状态、SHA-256重复文件、资源目录/脚本/网页引用与导出配置；没有删除、迁移素材、修改运行代码、提交或推送。为避免新增一份重复报告，本次结果集中记在这里。下方U51仍为最新功能状态。

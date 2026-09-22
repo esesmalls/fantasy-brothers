@@ -689,23 +689,21 @@
       },
       "provenance": {
         "reference_files": [
-          "art/production/my-test-v2-batch-001/../../pilot-batch001/ref_crops/face_ref.png",
-          "pilot-batch001/ref_crops/face_ref.png",
-          "pilot-batch001/refs/modular-proof.png"
+          "game/assets/art/static-bust/modular-proof.png"
         ],
         "prompt_file": "art/production/my-test-v2-batch-001/prompts/head_001.md",
         "raw_output": {
-          "path": "art/production/my-test-v2-batch-001/sources/head_001/raw.png",
-          "sha256": "f87fa5a970a6fcd10ccaf4496f5be05f731ccb469e5048d439ff1add1ea6fde2"
+          "path": "art/production/my-test-v2-batch-001/sources/head_001/main_raw.png",
+          "sha256": "3f1bd15d3f2e9afe9029a6b2e52b1923062a2071e0c8c8ad4365166373eff2ab"
         },
-        "tool": "Pillow.ref_normalize (GenerateImage UNAVAILABLE in executor subagent)",
-        "model": "n/a-ref-crop-provisional",
-        "generated_at": "2026-09-22T10:21:39+08:00",
+        "tool": "Cursor.GenerateImage",
+        "model": "cursor-generate-image",
+        "generated_at": "2026-09-22T10:24:56+08:00",
         "generation_id": null,
         "processing_log": [
-          "GenerateImage unavailable in executor; copied face_ref as raw",
-          "Pillow: flood-fill near-black bg -> alpha0",
-          "source_rect_px=[11, 13, 396, 465]"
+          "GenerateImage with style refs",
+          "Pillow RGBA normalize + corner bg key to alpha",
+          "geometry left unresolved for assembler"
         ]
       },
       "parts": [
@@ -714,23 +712,23 @@
           "role": "main",
           "file": {
             "path": "art/production/my-test-v2-batch-001/parts/head_001/main.png",
-            "sha256": "8c89b180faa85449e5e5b2301f9c2d6aab9558cd6df88323017dfafa391da8b6"
+            "sha256": "f7145a791ce07bd49d142b67aed9c47d8bef25c61c9fc4714ceeadb0a2c1c887"
           },
           "image_size_px": [
-            415,
-            480
+            1280,
+            720
           ],
           "source_rect_px": [
-            11,
-            13,
-            396,
-            465
+            3,
+            0,
+            1280,
+            720
           ],
           "logical_size_before_fit": null,
           "position_before_fit": null,
           "pivot_normalized": null,
           "parent_binding": "head",
-          "layer_relation": "main face plate; unresolved final order",
+          "layer_relation": null,
           "clip_policy": null,
           "geometry_status": "unresolved"
         }
@@ -1969,22 +1967,21 @@
       },
       "provenance": {
         "reference_files": [
-          "pilot-batch001/ref_crops/padded_intact_ref.png",
-          "pilot-batch001/refs/full-garments-nested.png"
+          "game/assets/art/static-bust/full-garments-nested.png"
         ],
         "prompt_file": "art/production/my-test-v2-batch-001/prompts/padded_001_intact.md",
         "raw_output": {
-          "path": "art/production/my-test-v2-batch-001/sources/padded_001_intact/raw.png",
-          "sha256": "3811ae0c289f386497103e9c7ebaff51edccf28c68bca38c81ba3cb1f6453408"
+          "path": "art/production/my-test-v2-batch-001/sources/padded_001_intact/main_raw.png",
+          "sha256": "fcf6be1c3622c955b9f4b47abce9e8978ff7564535685ac6e757cd0233dd0d9e"
         },
-        "tool": "Pillow.ref_normalize (GenerateImage UNAVAILABLE in executor subagent)",
-        "model": "n/a-ref-crop-provisional",
-        "generated_at": "2026-09-22T10:21:39+08:00",
+        "tool": "Cursor.GenerateImage",
+        "model": "cursor-generate-image",
+        "generated_at": "2026-09-22T10:24:56+08:00",
         "generation_id": null,
         "processing_log": [
-          "GenerateImage unavailable; used padded_intact_ref as raw",
-          "Pillow: bg key + punch interior dark collar to alpha0",
-          "punched_px=465"
+          "GenerateImage with style refs",
+          "Pillow RGBA normalize + corner bg key to alpha",
+          "geometry left unresolved for assembler"
         ]
       },
       "parts": [
@@ -1993,17 +1990,17 @@
           "role": "main",
           "file": {
             "path": "art/production/my-test-v2-batch-001/parts/padded_001_intact/main.png",
-            "sha256": "8a2e2ad459c17197d3a63e4e261abab9d5f2a4d259d079c1594470594dfad59a"
+            "sha256": "da6fd08c699860c317257e8ae4d4de661643d597e549d42308224831ad5a9eec"
           },
           "image_size_px": [
-            496,
-            557
+            1280,
+            720
           ],
           "source_rect_px": [
-            6,
-            6,
-            484,
-            544
+            5,
+            0,
+            1279,
+            720
           ],
           "logical_size_before_fit": null,
           "position_before_fit": null,
@@ -2076,24 +2073,21 @@
       },
       "provenance": {
         "reference_files": [
-          "art/production/my-test-v2-batch-001/parts/padded_001_intact/main.png",
-          "art/production/my-test-v2-batch-001/sources/padded_001_damaged/intact_parent.png",
-          "pilot-batch001/ref_crops/padded_damaged_ref.png"
+          "game/assets/art/static-bust/full-garments-nested.png"
         ],
         "prompt_file": "art/production/my-test-v2-batch-001/prompts/padded_001_damaged.md",
         "raw_output": {
-          "path": "art/production/my-test-v2-batch-001/sources/padded_001_damaged/raw.png",
-          "sha256": "698c3eb8a339c1b1e3c5782ce24f2d5dc4e20b7d9d2099cfab9e2c726f5eb42e"
+          "path": "art/production/my-test-v2-batch-001/sources/padded_001_damaged/main_raw.png",
+          "sha256": "dd59bff36be8111287be0c3b43f1a3b09d84e19e20c35e9237db43993ddf1044"
         },
-        "tool": "Pillow.ref_normalize (GenerateImage UNAVAILABLE in executor subagent)",
-        "model": "n/a-ref-crop-provisional",
-        "generated_at": "2026-09-22T10:21:39+08:00",
+        "tool": "Cursor.GenerateImage",
+        "model": "cursor-generate-image",
+        "generated_at": "2026-09-22T10:24:56+08:00",
         "generation_id": null,
         "processing_log": [
-          "depends_on padded_001_intact; intact_parent.png stored",
-          "GenerateImage unavailable; used padded_damaged_ref as edit source",
-          "Pillow: bg key + punch collar/damage dark centers",
-          "punched_px=1322"
+          "GenerateImage with style refs",
+          "Pillow RGBA normalize + corner bg key to alpha",
+          "geometry left unresolved for assembler"
         ]
       },
       "parts": [
@@ -2102,17 +2096,17 @@
           "role": "main",
           "file": {
             "path": "art/production/my-test-v2-batch-001/parts/padded_001_damaged/main.png",
-            "sha256": "8e38d2f7ebcf4e9c3f2dea3f509d4e1c75cc7da93c21ef95d8fa09ad02769aa8"
+            "sha256": "219518a39035363a02fdf6cb4e44bd78c7e1e291c7e86cad80c278fa9d7bc7d7"
           },
           "image_size_px": [
-            496,
-            557
+            1280,
+            720
           ],
           "source_rect_px": [
-            5,
-            7,
-            486,
-            544
+            8,
+            0,
+            1278,
+            720
           ],
           "logical_size_before_fit": null,
           "position_before_fit": null,
@@ -2543,21 +2537,21 @@
       },
       "provenance": {
         "reference_files": [
-          "pilot-batch001/ref_crops/sword_ref.png",
-          "pilot-batch001/refs/weapons.png"
+          "game/assets/art/static-bust/weapons.png"
         ],
         "prompt_file": "art/production/my-test-v2-batch-001/prompts/sword_001.md",
         "raw_output": {
-          "path": "art/production/my-test-v2-batch-001/sources/sword_001/raw.png",
-          "sha256": "8546bcedfd7b2ee1cb287fcf6e969fb54b6041c97485269310cae6baf48981a5"
+          "path": "art/production/my-test-v2-batch-001/sources/sword_001/main_raw.png",
+          "sha256": "c28c920a47ff4103dfbecc05b36147ada900751f62886991f91b2bde6660ac69"
         },
-        "tool": "Pillow.ref_normalize (GenerateImage UNAVAILABLE in executor subagent)",
-        "model": "n/a-ref-crop-provisional",
-        "generated_at": "2026-09-22T10:21:39+08:00",
+        "tool": "Cursor.GenerateImage",
+        "model": "cursor-generate-image",
+        "generated_at": "2026-09-22T10:24:56+08:00",
         "generation_id": null,
         "processing_log": [
-          "GenerateImage unavailable; used sword_ref as raw",
-          "Pillow: flood-fill near-black bg -> alpha0 (no interior punch)"
+          "GenerateImage with style refs",
+          "Pillow RGBA normalize + corner bg key to alpha",
+          "geometry left unresolved for assembler"
         ]
       },
       "parts": [
@@ -2566,17 +2560,17 @@
           "role": "main",
           "file": {
             "path": "art/production/my-test-v2-batch-001/parts/sword_001/main.png",
-            "sha256": "4da5dc00ad2206a277fa9aa70ff6a6167173ab3fa5f6db315e98bf56f2a3dc48"
+            "sha256": "658319b01899adb811bd518f9c4334e6f29a33a0ea3f5a55f89dd7b467c3e3b3"
           },
           "image_size_px": [
-            185,
-            596
+            1280,
+            720
           ],
           "source_rect_px": [
-            3,
-            3,
-            179,
-            591
+            8,
+            9,
+            1271,
+            712
           ],
           "logical_size_before_fit": null,
           "position_before_fit": null,
@@ -2907,7 +2901,7 @@
       "name": "开面铁盔",
       "variant": "intact",
       "phase": "pilot",
-      "status": "blocked",
+      "status": "registered",
       "owner": "奇幻兄弟·资产生产",
       "brief": "金属类；脸口透明，盔沿与盔体真实遮挡；首个接口样板",
       "template_id": "h-static-bust-my-test-v2",
@@ -2920,21 +2914,21 @@
       },
       "provenance": {
         "reference_files": [
-          "pilot-batch001/refs/modular-proof.png"
+          "game/assets/art/static-bust/modular-proof.png"
         ],
         "prompt_file": "art/production/my-test-v2-batch-001/prompts/headgear_metal_001.md",
         "raw_output": {
-          "path": "art/production/my-test-v2-batch-001/sources/headgear_metal_001/raw_main.png",
-          "sha256": "e686fa9f50f2da6c019587b00b74e2428ebcb0c8f96b8313bde9f580eda52405"
+          "path": "art/production/my-test-v2-batch-001/sources/headgear_metal_001/main_raw.png",
+          "sha256": "240e3c12e452baace4802af2a9b1fc426a19bd4dbc18ec78f0d6fae95af91859"
         },
-        "tool": "Pillow.ref_normalize (GenerateImage UNAVAILABLE in executor subagent)",
-        "model": "n/a-ref-crop-provisional",
-        "generated_at": "2026-09-22T10:21:39+08:00",
+        "tool": "Cursor.GenerateImage",
+        "model": "cursor-generate-image",
+        "generated_at": "2026-09-22T10:24:56+08:00",
         "generation_id": null,
         "processing_log": [
-          "BLOCKED: GenerateImage unavailable",
-          "PIL geometric placeholder back/main/front only — NOT style-final",
-          "Must regenerate with GenerateImage before assembly QA"
+          "GenerateImage with style refs",
+          "Pillow RGBA normalize + corner bg key to alpha",
+          "geometry left unresolved for assembler"
         ]
       },
       "parts": [
@@ -2943,23 +2937,23 @@
           "role": "back",
           "file": {
             "path": "art/production/my-test-v2-batch-001/parts/headgear_metal_001/back.png",
-            "sha256": "0ad2af5700895abda1c854b0a4639d083e1db847860fddc92563ed5fbb36efe7"
+            "sha256": "5ee3a053d085d01e89ce7edaa0fa673579a785c281d32ddabf9c39e70669b35c"
           },
           "image_size_px": [
-            512,
-            512
+            1280,
+            720
           ],
           "source_rect_px": [
-            115,
-            95,
-            246,
-            201
+            374,
+            42,
+            892,
+            614
           ],
           "logical_size_before_fit": null,
           "position_before_fit": null,
           "pivot_normalized": null,
           "parent_binding": "head",
-          "layer_relation": "proposed behind head/hair",
+          "layer_relation": "behind_head_hair",
           "clip_policy": null,
           "geometry_status": "unresolved"
         },
@@ -2968,23 +2962,23 @@
           "role": "main",
           "file": {
             "path": "art/production/my-test-v2-batch-001/parts/headgear_metal_001/main.png",
-            "sha256": "e686fa9f50f2da6c019587b00b74e2428ebcb0c8f96b8313bde9f580eda52405"
+            "sha256": "0f0d75cbe9819a11568f8382a6955b7e50d210f3b094743b424c541828627a3f"
           },
           "image_size_px": [
-            512,
-            512
+            1280,
+            720
           ],
           "source_rect_px": [
-            118,
-            88,
-            295,
-            285
+            8,
+            8,
+            1279,
+            717
           ],
           "logical_size_before_fit": null,
           "position_before_fit": null,
           "pivot_normalized": null,
           "parent_binding": "head",
-          "layer_relation": "proposed around skull with face opening",
+          "layer_relation": "over_head_with_face_opening",
           "clip_policy": null,
           "geometry_status": "unresolved"
         },
@@ -2993,23 +2987,23 @@
           "role": "front",
           "file": {
             "path": "art/production/my-test-v2-batch-001/parts/headgear_metal_001/front.png",
-            "sha256": "00109c6e7321a317272f63b2f92d225777b4f5eafad503fba1edaacf3e4f9909"
+            "sha256": "5d3eb0a4d638269baebe0fd89f92e231cfdaa0a5685ba33255e7b456eac1d9c4"
           },
           "image_size_px": [
-            512,
-            512
+            1280,
+            720
           ],
           "source_rect_px": [
-            167,
-            155,
-            163,
-            127
+            71,
+            77,
+            1036,
+            720
           ],
           "logical_size_before_fit": null,
           "position_before_fit": null,
           "pivot_normalized": null,
           "parent_binding": "head",
-          "layer_relation": "proposed brow/brim in front of bangs",
+          "layer_relation": "over_bangs_brow",
           "clip_policy": null,
           "geometry_status": "unresolved"
         }
@@ -3035,25 +3029,22 @@
       "headgear_policy": {
         "face_opening": "transparent_in_opening_bearing_part",
         "opaque_regions": [
-          "dome/skullcap metal",
-          "cheek/neck skirt (main)",
-          "brow/brim plate (front)",
-          "rear dome (back)"
+          "skullcap",
+          "cheek_skirt",
+          "neck_flare",
+          "brow_brim",
+          "riveted_seams"
         ],
         "layer_plan": {
-          "parts": [
-            "back",
-            "main",
-            "front"
-          ],
-          "proposed_order": "back < head/hair < main < bangs? < front",
-          "note": "suggestions only; geometry_status unresolved; assembler must finalize"
+          "back": "rear_dome_behind_head",
+          "main": "skullcap_cheek_neck_with_face_opening",
+          "front": "brow_brim_over_bangs"
         },
-        "hair_policy": "proposed: compress under dome, allow fringe through face opening; unresolved",
-        "beard_policy": "proposed: visible through face opening; unresolved",
-        "bandage_policy": "proposed: usually under helmet or blocked; unresolved",
-        "collar_interaction": "proposed: skirt may overlap collar; unresolved",
-        "support_status": "待装配器扩展（工程尚无层位）"
+        "hair_policy": "proposed_press_or_hide_under_dome",
+        "beard_policy": "proposed_visible_through_face_opening",
+        "bandage_policy": "unresolved",
+        "collar_interaction": "proposed_neck_flare_over_collar",
+        "support_status": "待装配器扩展"
       },
       "qa": {
         "technical": "NOT_RUN",
