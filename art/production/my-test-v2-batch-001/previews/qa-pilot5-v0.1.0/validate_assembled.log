@@ -1,0 +1,62 @@
+{
+  "logical_assets": 30,
+  "designs": 27,
+  "headgear_designs": 6,
+  "pilot_assets": 5,
+  "presets": 8,
+  "preset_covered_assets": 30,
+  "qa_cases": 126,
+  "asset_statuses": {
+    "registered": 5,
+    "planned": 25
+  },
+  "test_statuses": {
+    "NOT_RUN": 126
+  }
+}
+
+--- stderr ---
+FAIL: 795 error(s) at gate=assembled
+ - head_001: not at the requested assembled gate
+ - head_001: technical has not passed
+ - head_001: assembly_visual has not passed
+ - head_001: save_reload has not passed
+ - head_001.qa.evidence: no actual evidence file is registered
+ - head_002: not at the requested assembled gate
+ - head_002.raw_output: path is not filled
+ - head_002.prompt_file: path is not filled
+ - head_002: no actual reference files
+ - head_002: tool must be filled (unknown is allowed when unavailable)
+ - head_002: model must be filled (unknown is allowed when unavailable)
+ - head_002: generated_at must be filled (unknown is allowed when unavailable)
+ - head_002.main.file: path is not filled
+ - head_002.main: geometry is unresolved
+ - head_002.main: invalid image_size_px
+ - head_002.main: invalid source_rect_px
+ - head_002.main: invalid logical size
+ - head_002.main: invalid position
+ - head_002.main: invalid pivot
+ - head_002.main: layer relation is unresolved
+ - head_002: actual fit review/revision is missing
+ - head_002: resolved transform is missing
+ - head_002: applied-once contract is not recorded
+ - head_002: technical has not passed
+ - head_002: assembly_visual has not passed
+ - head_002: save_reload has not passed
+ - head_002.qa.evidence: no actual evidence file is registered
+ - head_003: not at the requested assembled gate
+ - head_003.raw_output: path is not filled
+ - head_003.prompt_file: path is not filled
+ - head_003: no actual reference files
+ - head_003: tool must be filled (unknown is allowed when unavailable)
+ - head_003: model must be filled (unknown is allowed when unavailable)
+ - head_003: generated_at must be filled (unknown is allowed when unavailable)
+ - head_003.main.file: path is not filled
+ - head_003.main: geometry is unresolved
+ - head_003.main: invalid image_size_px
+ - head_003.main: invalid source_rect_px
+ - head_003.main: invalid logical size
+ - head_003.main: invalid position
+ ... 755 more errors omitted
+
+exit=1

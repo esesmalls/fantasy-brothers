@@ -1,0 +1,24 @@
+{
+  "logical_assets": 30,
+  "designs": 27,
+  "headgear_designs": 6,
+  "pilot_assets": 5,
+  "presets": 8,
+  "preset_covered_assets": 30,
+  "qa_cases": 126,
+  "asset_statuses": {
+    "registered": 5,
+    "planned": 25
+  },
+  "test_statuses": {
+    "PASS": 2,
+    "BLOCKED": 122,
+    "FAIL": 2
+  }
+}
+PASS: static plan gate only. No images were generated or visually approved; Godot was not run.
+
+--- stderr ---
+
+exit=0
+note: re-run after qa_matrix update; statuses reflect this QA.
