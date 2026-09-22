@@ -34,7 +34,7 @@
       {
         "role": "bust_draw",
         "path": "game/presentation/static_bust_actor.gd",
-        "sha256": "435ab09333b5072672f8c2fcfcf5e2660a2d1a1e7fea9473ab43190202392426"
+        "sha256": "3174630822198903bf7338ee59202a00d800696dabb801d5aa068f1e8d1410ea"
       },
       {
         "role": "paperdoll_compose",
@@ -656,9 +656,9 @@
       "sha256": "4f000b0944a58beff6a3899a0b36e61a9d8af29c4e265a14cb668c211bb6628b"
     },
     "assembly_package": {
-      "path": null,
-      "sha256": null,
-      "assembly_revision": null,
+      "path": "art/production/my-test-v2-batch-001/exports/assembly/assembly-v0.1.0-pilot5.json",
+      "sha256": "233e500d8735fdfac023927b74c33e836d6f6535bb1432b5075aab151a1087de",
+      "assembly_revision": "assembly-v0.1.0-pilot5",
       "transform_policy": "resolved_once"
     },
     "game_consistency_report": {
@@ -685,11 +685,14 @@
       "runtime_binding": {
         "mode": "visual_only",
         "existing_rule_id": null,
-        "runtime_asset_id": null
+        "runtime_asset_id": "face"
       },
       "provenance": {
         "reference_files": [
-          "game/assets/art/static-bust/modular-proof.png"
+          {
+            "path": "game/assets/art/static-bust/modular-proof.png",
+            "sha256": "932e0d5b21b2002f82ca42d549598517715938bc708d1012697b74650baa52bc"
+          }
         ],
         "prompt_file": "art/production/my-test-v2-batch-001/prompts/head_001.md",
         "raw_output": {
@@ -719,32 +722,67 @@
             720
           ],
           "source_rect_px": [
-            3,
-            0,
-            1280,
-            720
+            451,
+            60,
+            358,
+            604
           ],
-          "logical_size_before_fit": null,
-          "position_before_fit": null,
-          "pivot_normalized": null,
+          "logical_size_before_fit": [
+            28.52,
+            48.11754
+          ],
+          "position_before_fit": [
+            0.25,
+            -32.5
+          ],
+          "pivot_normalized": [
+            0.5,
+            1.0
+          ],
           "parent_binding": "head",
-          "layer_relation": null,
-          "clip_policy": null,
-          "geometry_status": "unresolved"
+          "layer_relation": "replaces_modular_face_before_beard_hair_bandage",
+          "clip_policy": "none",
+          "geometry_status": "resolved"
         }
       ],
       "assembly_fit": {
-        "status": "NOT_RUN",
-        "fit_revision": null,
-        "fit_delta": null,
-        "resolved_transform": null,
-        "space": "template-local",
-        "applied_once": null,
+        "status": "PASS",
+        "fit_revision": "assembly-v0.1.0-pilot5",
+        "fit_delta": {
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": 1.0,
+          "angle_deg": 0.0
+        },
+        "resolved_transform": {
+          "position": [
+            0.25,
+            -32.5
+          ],
+          "size": [
+            28.52,
+            48.11754
+          ],
+          "pivot_normalized": [
+            0.5,
+            1.0
+          ],
+          "rotation_rad": 0.0
+        },
+        "coordinate_family": "head_001",
+        "space": "board-logical-pixels",
+        "applied_once": true,
         "preset_ids": [
           "preset_01",
           "preset_05"
         ],
-        "notes": []
+        "notes": [
+          "底边中心锚在冻结脸枢轴 (0.25, -32.5)，宽对齐冻结脸宽 28.52，高按源图宽高比展开。",
+          "fit_delta 为单位变换。游戏只读 resolved_transform，不再叠加 my_test-v2 头部 edits。",
+          "装配锁定，不是 QA PASS，也不是用户批准。"
+        ]
       },
       "compatibility": {
         "tested_combinations": [],
@@ -764,7 +802,7 @@
         "evidence": [],
         "issues": []
       },
-      "revision_count": 0,
+      "revision_count": 1,
       "user_approval": {
         "status": "PENDING",
         "by": null,
@@ -1963,11 +2001,14 @@
       "runtime_binding": {
         "mode": "visual_only",
         "existing_rule_id": null,
-        "runtime_asset_id": null
+        "runtime_asset_id": "padded"
       },
       "provenance": {
         "reference_files": [
-          "game/assets/art/static-bust/full-garments-nested.png"
+          {
+            "path": "game/assets/art/static-bust/full-garments-nested.png",
+            "sha256": "02958d8152205e4ac3e7ed6496dfc93f93a1fd805ee823ae7c28ad386a67ae40"
+          }
         ],
         "prompt_file": "art/production/my-test-v2-batch-001/prompts/padded_001_intact.md",
         "raw_output": {
@@ -1997,32 +2038,68 @@
             720
           ],
           "source_rect_px": [
-            5,
-            0,
-            1279,
-            720
+            297,
+            43,
+            647,
+            627
           ],
-          "logical_size_before_fit": null,
-          "position_before_fit": null,
-          "pivot_normalized": null,
-          "parent_binding": "current_body_or_weapon_binding",
-          "layer_relation": null,
-          "clip_policy": null,
-          "geometry_status": "unresolved"
+          "logical_size_before_fit": [
+            84.01334,
+            81.41633
+          ],
+          "position_before_fit": [
+            2.5,
+            -44.5
+          ],
+          "pivot_normalized": [
+            0.5,
+            0.0
+          ],
+          "parent_binding": "none",
+          "layer_relation": "padded_over_linen_under_mail",
+          "clip_policy": "bust_crop",
+          "geometry_status": "resolved"
         }
       ],
       "assembly_fit": {
-        "status": "NOT_RUN",
-        "fit_revision": null,
-        "fit_delta": null,
-        "resolved_transform": null,
-        "space": "template-local",
-        "applied_once": null,
+        "status": "PASS",
+        "fit_revision": "assembly-v0.1.0-pilot5",
+        "fit_delta": {
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": 1.0,
+          "angle_deg": 0.0
+        },
+        "resolved_transform": {
+          "position": [
+            2.5,
+            -44.5
+          ],
+          "size": [
+            84.01334,
+            81.41633
+          ],
+          "pivot_normalized": [
+            0.5,
+            0.0
+          ],
+          "rotation_rad": 0.0
+        },
+        "coordinate_family": "padded_001",
+        "space": "board-logical-pixels",
+        "applied_once": true,
         "preset_ids": [
           "preset_03",
           "preset_07"
         ],
-        "notes": []
+        "notes": [
+          "完好与破损共用 source_rect、位置、尺寸、枢轴和旋转。",
+          "高度锁定冻结绗缝甲 81.41633，宽度按共用源矩形的宽高比。",
+          "破口和下摆毛边只来自各自 PNG 的透明差，不另写一套坐标。",
+          "fit_delta 为单位变换。bust_crop 仍由现有绘制入口裁切，不改变装配坐标。"
+        ]
       },
       "compatibility": {
         "tested_combinations": [],
@@ -2042,7 +2119,7 @@
         "evidence": [],
         "issues": []
       },
-      "revision_count": 0,
+      "revision_count": 1,
       "user_approval": {
         "status": "PENDING",
         "by": null,
@@ -2069,11 +2146,14 @@
       "runtime_binding": {
         "mode": "visual_only",
         "existing_rule_id": null,
-        "runtime_asset_id": null
+        "runtime_asset_id": "padded_damaged"
       },
       "provenance": {
         "reference_files": [
-          "game/assets/art/static-bust/full-garments-nested.png"
+          {
+            "path": "game/assets/art/static-bust/full-garments-nested.png",
+            "sha256": "02958d8152205e4ac3e7ed6496dfc93f93a1fd805ee823ae7c28ad386a67ae40"
+          }
         ],
         "prompt_file": "art/production/my-test-v2-batch-001/prompts/padded_001_damaged.md",
         "raw_output": {
@@ -2103,31 +2183,67 @@
             720
           ],
           "source_rect_px": [
-            8,
-            0,
-            1278,
-            720
+            297,
+            43,
+            647,
+            627
           ],
-          "logical_size_before_fit": null,
-          "position_before_fit": null,
-          "pivot_normalized": null,
-          "parent_binding": "current_body_or_weapon_binding",
-          "layer_relation": null,
-          "clip_policy": null,
-          "geometry_status": "unresolved"
+          "logical_size_before_fit": [
+            84.01334,
+            81.41633
+          ],
+          "position_before_fit": [
+            2.5,
+            -44.5
+          ],
+          "pivot_normalized": [
+            0.5,
+            0.0
+          ],
+          "parent_binding": "none",
+          "layer_relation": "padded_over_linen_under_mail",
+          "clip_policy": "bust_crop",
+          "geometry_status": "resolved"
         }
       ],
       "assembly_fit": {
-        "status": "NOT_RUN",
-        "fit_revision": null,
-        "fit_delta": null,
-        "resolved_transform": null,
-        "space": "template-local",
-        "applied_once": null,
+        "status": "PASS",
+        "fit_revision": "assembly-v0.1.0-pilot5",
+        "fit_delta": {
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": 1.0,
+          "angle_deg": 0.0
+        },
+        "resolved_transform": {
+          "position": [
+            2.5,
+            -44.5
+          ],
+          "size": [
+            84.01334,
+            81.41633
+          ],
+          "pivot_normalized": [
+            0.5,
+            0.0
+          ],
+          "rotation_rad": 0.0
+        },
+        "coordinate_family": "padded_001",
+        "space": "board-logical-pixels",
+        "applied_once": true,
         "preset_ids": [
           "preset_04"
         ],
-        "notes": []
+        "notes": [
+          "完好与破损共用 source_rect、位置、尺寸、枢轴和旋转。",
+          "高度锁定冻结绗缝甲 81.41633，宽度按共用源矩形的宽高比。",
+          "破口和下摆毛边只来自各自 PNG 的透明差，不另写一套坐标。",
+          "fit_delta 为单位变换。bust_crop 仍由现有绘制入口裁切，不改变装配坐标。"
+        ]
       },
       "compatibility": {
         "tested_combinations": [],
@@ -2147,7 +2263,7 @@
         "evidence": [],
         "issues": []
       },
-      "revision_count": 0,
+      "revision_count": 1,
       "user_approval": {
         "status": "PENDING",
         "by": null,
@@ -2533,11 +2649,14 @@
       "runtime_binding": {
         "mode": "visual_only",
         "existing_rule_id": null,
-        "runtime_asset_id": null
+        "runtime_asset_id": "sword"
       },
       "provenance": {
         "reference_files": [
-          "game/assets/art/static-bust/weapons.png"
+          {
+            "path": "game/assets/art/static-bust/weapons.png",
+            "sha256": "74847bd0aee0bf5ae753e90863b8ddb2d94ab32acb7e4c87833310fee5fdc4c9"
+          }
         ],
         "prompt_file": "art/production/my-test-v2-batch-001/prompts/sword_001.md",
         "raw_output": {
@@ -2567,33 +2686,70 @@
             720
           ],
           "source_rect_px": [
-            8,
+            223,
             9,
-            1271,
-            712
+            209,
+            700
           ],
-          "logical_size_before_fit": null,
-          "position_before_fit": null,
-          "pivot_normalized": null,
-          "parent_binding": "current_body_or_weapon_binding",
-          "layer_relation": null,
-          "clip_policy": null,
-          "geometry_status": "unresolved"
+          "logical_size_before_fit": [
+            21.64239,
+            72.48649
+          ],
+          "position_before_fit": [
+            -6.0,
+            -2.5
+          ],
+          "pivot_normalized": [
+            0.5884,
+            0.82
+          ],
+          "parent_binding": "none",
+          "layer_relation": "after_shield_motion_sampled_separately",
+          "clip_policy": "none",
+          "geometry_status": "resolved",
+          "flip_y": true
         }
       ],
       "assembly_fit": {
-        "status": "NOT_RUN",
-        "fit_revision": null,
-        "fit_delta": null,
-        "resolved_transform": null,
-        "space": "template-local",
-        "applied_once": null,
+        "status": "PASS",
+        "fit_revision": "assembly-v0.1.0-pilot5",
+        "fit_delta": {
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": 1.0,
+          "angle_deg": 0.0
+        },
+        "resolved_transform": {
+          "position": [
+            -6.0,
+            -2.5
+          ],
+          "size": [
+            21.64239,
+            72.48649
+          ],
+          "pivot_normalized": [
+            0.5884,
+            0.82
+          ],
+          "rotation_rad": 0.0
+        },
+        "coordinate_family": "sword_001",
+        "space": "board-logical-pixels",
+        "applied_once": true,
         "preset_ids": [
           "preset_01",
           "preset_04",
           "preset_07"
         ],
-        "notes": []
+        "notes": [
+          "高度锁定冻结剑 72.48649，宽度按源矩形宽高比，不拉伸。",
+          "枢轴 x=0.5884 落在握点，y=0.82 沿用冻结握点比例，使尖端到握点的距离与冻结剑一致。",
+          "flip_y 只翻转采样，使图中位于下方的剑尖对上冻结的向上剑轴。不把该翻转再加进动作角。",
+          "待机位移和角度仍由 static_bust_motion 采样，不写进本零件位置。"
+        ]
       },
       "compatibility": {
         "tested_combinations": [],
@@ -2613,7 +2769,7 @@
         "evidence": [],
         "issues": []
       },
-      "revision_count": 0,
+      "revision_count": 1,
       "user_approval": {
         "status": "PENDING",
         "by": null,
@@ -2910,11 +3066,14 @@
       "runtime_binding": {
         "mode": "visual_only",
         "existing_rule_id": null,
-        "runtime_asset_id": null
+        "runtime_asset_id": "headgear_metal_001"
       },
       "provenance": {
         "reference_files": [
-          "game/assets/art/static-bust/modular-proof.png"
+          {
+            "path": "game/assets/art/static-bust/modular-proof.png",
+            "sha256": "932e0d5b21b2002f82ca42d549598517715938bc708d1012697b74650baa52bc"
+          }
         ],
         "prompt_file": "art/production/my-test-v2-batch-001/prompts/headgear_metal_001.md",
         "raw_output": {
@@ -2944,18 +3103,27 @@
             720
           ],
           "source_rect_px": [
-            374,
-            42,
-            892,
-            614
+            288,
+            41,
+            715,
+            629
           ],
-          "logical_size_before_fit": null,
-          "position_before_fit": null,
-          "pivot_normalized": null,
+          "logical_size_before_fit": [
+            58.10658,
+            51.11754
+          ],
+          "position_before_fit": [
+            0.25,
+            -44.5
+          ],
+          "pivot_normalized": [
+            0.5,
+            1.0
+          ],
           "parent_binding": "head",
-          "layer_relation": "behind_head_hair",
-          "clip_policy": null,
-          "geometry_status": "unresolved"
+          "layer_relation": "behind_head_and_hair",
+          "clip_policy": "none",
+          "geometry_status": "resolved"
         },
         {
           "part_id": "headgear_metal_001.main",
@@ -2969,18 +3137,27 @@
             720
           ],
           "source_rect_px": [
-            8,
-            8,
-            1279,
-            717
+            288,
+            41,
+            715,
+            629
           ],
-          "logical_size_before_fit": null,
-          "position_before_fit": null,
-          "pivot_normalized": null,
+          "logical_size_before_fit": [
+            58.10658,
+            51.11754
+          ],
+          "position_before_fit": [
+            0.25,
+            -44.5
+          ],
+          "pivot_normalized": [
+            0.5,
+            1.0
+          ],
           "parent_binding": "head",
-          "layer_relation": "over_head_with_face_opening",
-          "clip_policy": null,
-          "geometry_status": "unresolved"
+          "layer_relation": "over_hair_beard_bandage_with_face_opening",
+          "clip_policy": "none",
+          "geometry_status": "resolved"
         },
         {
           "part_id": "headgear_metal_001.front",
@@ -2994,31 +3171,67 @@
             720
           ],
           "source_rect_px": [
-            71,
-            77,
-            1036,
-            720
+            288,
+            41,
+            715,
+            629
           ],
-          "logical_size_before_fit": null,
-          "position_before_fit": null,
-          "pivot_normalized": null,
+          "logical_size_before_fit": [
+            58.10658,
+            51.11754
+          ],
+          "position_before_fit": [
+            0.25,
+            -44.5
+          ],
+          "pivot_normalized": [
+            0.5,
+            1.0
+          ],
           "parent_binding": "head",
-          "layer_relation": "over_bangs_brow",
-          "clip_policy": null,
-          "geometry_status": "unresolved"
+          "layer_relation": "over_bangs_and_brow",
+          "clip_policy": "none",
+          "geometry_status": "resolved"
         }
       ],
       "assembly_fit": {
-        "status": "NOT_RUN",
-        "fit_revision": null,
-        "fit_delta": null,
-        "resolved_transform": null,
-        "space": "template-local",
-        "applied_once": null,
+        "status": "PASS",
+        "fit_revision": "assembly-v0.1.0-pilot5",
+        "fit_delta": {
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": 1.0,
+          "angle_deg": 0.0
+        },
+        "resolved_transform": {
+          "position": [
+            0.25,
+            -44.5
+          ],
+          "size": [
+            58.10658,
+            51.11754
+          ],
+          "pivot_normalized": [
+            0.5,
+            1.0
+          ],
+          "rotation_rad": 0.0
+        },
+        "coordinate_family": "headgear_metal_001",
+        "space": "board-logical-pixels",
+        "applied_once": true,
         "preset_ids": [
           "preset_01"
         ],
-        "notes": []
+        "notes": [
+          "back/main/front 共用同一 source_rect 与 resolved_transform，三片叠合不互相错位。",
+          "parent_binding 都是 head。layer_relation 分别是发后、压发须绷带并留脸口、压刘海眉檐。",
+          "盔底落在衣领上沿 y=-44.5，宽于并高于脸框。脸口留在面颊和下颌，眉额由 front 压住。",
+          "若把盔底改到脸枢轴 y=-32.5，面颊开口会被穹顶盖住。因此不把颈沿再往下压。未改像素。"
+        ]
       },
       "compatibility": {
         "tested_combinations": [],
@@ -3040,11 +3253,21 @@
           "main": "skullcap_cheek_neck_with_face_opening",
           "front": "brow_brim_over_bangs"
         },
-        "hair_policy": "proposed_press_or_hide_under_dome",
-        "beard_policy": "proposed_visible_through_face_opening",
-        "bandage_policy": "unresolved",
-        "collar_interaction": "proposed_neck_flare_over_collar",
-        "support_status": "待装配器扩展"
+        "hair_policy": "back_behind_hair; main_and_front_draw_after_hair; front_presses_bangs",
+        "beard_policy": "beard_draws_before_main; visible_only_through_main_opening; cheek_metal_occludes",
+        "bandage_policy": "bandage_draws_after_hair_and_before_main; skull_wrap_under_metal; facial_wrap_shows_through_opening",
+        "collar_interaction": "garments_draw_before_headgear; neck_flare_bottom_on_padded_collar_line",
+        "support_status": "IMPLEMENTED",
+        "layer_order": [
+          "headgear_back",
+          "face_or_head",
+          "scar",
+          "beard",
+          "hair",
+          "bandage",
+          "headgear_main",
+          "headgear_front"
+        ]
       },
       "qa": {
         "technical": "NOT_RUN",
@@ -3057,7 +3280,7 @@
         "evidence": [],
         "issues": []
       },
-      "revision_count": 0,
+      "revision_count": 1,
       "user_approval": {
         "status": "PENDING",
         "by": null,

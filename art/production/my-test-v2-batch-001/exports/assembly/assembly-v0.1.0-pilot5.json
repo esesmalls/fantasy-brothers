@@ -1,0 +1,443 @@
+{
+  "package_schema": "fb-assembly-package/1",
+  "purpose": "resolved_draw_input_not_a_second_edit_stack",
+  "batch_id": "my-test-v2-batch-001",
+  "assembly_revision": "assembly-v0.1.0-pilot5",
+  "transform_policy": "resolved_once",
+  "game_may_add": [
+    "board_origin",
+    "existing_draw_scale",
+    "static_bust_motion.sample position and angle for weapons"
+  ],
+  "game_must_not_add": [
+    "my_test-v2 edits",
+    "fit_delta",
+    "a second head or armor coordinate set"
+  ],
+  "baseline_commit": "260ab990a0f3f6bd395a7107e43e652e0ef683cc",
+  "starting_ref": "469632b54f68debd3d47c00459643ba9aa8077d0",
+  "pilot_asset_ids": [
+    "head_001",
+    "padded_001_intact",
+    "padded_001_damaged",
+    "sword_001",
+    "headgear_metal_001"
+  ],
+  "headgear_asset_id": "headgear_metal_001",
+  "draw_order": [
+    "garments_via_existing_body_layers",
+    "headgear_back",
+    "head_or_face",
+    "scar",
+    "beard",
+    "hair",
+    "bandage",
+    "headgear_main",
+    "headgear_front",
+    "shield_then_sword_via_existing_motion_sample"
+  ],
+  "runtime_layers": {
+    "head": {
+      "layer_id": "head",
+      "asset_id": "head_001",
+      "part_id": "head_001.main",
+      "file": "art/production/my-test-v2-batch-001/parts/head_001/main.png",
+      "sha256": "f7145a791ce07bd49d142b67aed9c47d8bef25c61c9fc4714ceeadb0a2c1c887",
+      "image_size_px": [
+        1280,
+        720
+      ],
+      "source_rect_px": [
+        451,
+        60,
+        358,
+        604
+      ],
+      "parent_binding": "head",
+      "layer_relation": "replaces_modular_face_before_beard_hair_bandage",
+      "clip_policy": "none",
+      "flip_y": false,
+      "resolved_transform": {
+        "position": [
+          0.25,
+          -32.5
+        ],
+        "size": [
+          28.52,
+          48.11754
+        ],
+        "pivot_normalized": [
+          0.5,
+          1.0
+        ],
+        "rotation_rad": 0.0
+      },
+      "coordinate_family": "head_001"
+    },
+    "face": {
+      "layer_id": "face",
+      "asset_id": "head_001",
+      "part_id": "head_001.main",
+      "file": "art/production/my-test-v2-batch-001/parts/head_001/main.png",
+      "sha256": "f7145a791ce07bd49d142b67aed9c47d8bef25c61c9fc4714ceeadb0a2c1c887",
+      "image_size_px": [
+        1280,
+        720
+      ],
+      "source_rect_px": [
+        451,
+        60,
+        358,
+        604
+      ],
+      "parent_binding": "head",
+      "layer_relation": "replaces_modular_face_before_beard_hair_bandage",
+      "clip_policy": "none",
+      "flip_y": false,
+      "resolved_transform": {
+        "position": [
+          0.25,
+          -32.5
+        ],
+        "size": [
+          28.52,
+          48.11754
+        ],
+        "pivot_normalized": [
+          0.5,
+          1.0
+        ],
+        "rotation_rad": 0.0
+      },
+      "coordinate_family": "head_001"
+    },
+    "padded": {
+      "layer_id": "padded",
+      "asset_id": "padded_001_intact",
+      "part_id": "padded_001_intact.main",
+      "file": "art/production/my-test-v2-batch-001/parts/padded_001_intact/main.png",
+      "sha256": "da6fd08c699860c317257e8ae4d4de661643d597e549d42308224831ad5a9eec",
+      "image_size_px": [
+        1280,
+        720
+      ],
+      "source_rect_px": [
+        297,
+        43,
+        647,
+        627
+      ],
+      "parent_binding": "none",
+      "layer_relation": "padded_over_linen_under_mail",
+      "clip_policy": "bust_crop",
+      "flip_y": false,
+      "resolved_transform": {
+        "position": [
+          2.5,
+          -44.5
+        ],
+        "size": [
+          84.01334,
+          81.41633
+        ],
+        "pivot_normalized": [
+          0.5,
+          0.0
+        ],
+        "rotation_rad": 0.0
+      },
+      "coordinate_family": "padded_001"
+    },
+    "padded_damaged": {
+      "layer_id": "padded_damaged",
+      "asset_id": "padded_001_damaged",
+      "part_id": "padded_001_damaged.main",
+      "file": "art/production/my-test-v2-batch-001/parts/padded_001_damaged/main.png",
+      "sha256": "219518a39035363a02fdf6cb4e44bd78c7e1e291c7e86cad80c278fa9d7bc7d7",
+      "image_size_px": [
+        1280,
+        720
+      ],
+      "source_rect_px": [
+        297,
+        43,
+        647,
+        627
+      ],
+      "parent_binding": "none",
+      "layer_relation": "padded_over_linen_under_mail",
+      "clip_policy": "bust_crop",
+      "flip_y": false,
+      "resolved_transform": {
+        "position": [
+          2.5,
+          -44.5
+        ],
+        "size": [
+          84.01334,
+          81.41633
+        ],
+        "pivot_normalized": [
+          0.5,
+          0.0
+        ],
+        "rotation_rad": 0.0
+      },
+      "coordinate_family": "padded_001"
+    },
+    "sword": {
+      "layer_id": "sword",
+      "asset_id": "sword_001",
+      "part_id": "sword_001.main",
+      "file": "art/production/my-test-v2-batch-001/parts/sword_001/main.png",
+      "sha256": "658319b01899adb811bd518f9c4334e6f29a33a0ea3f5a55f89dd7b467c3e3b3",
+      "image_size_px": [
+        1280,
+        720
+      ],
+      "source_rect_px": [
+        223,
+        9,
+        209,
+        700
+      ],
+      "parent_binding": "none",
+      "layer_relation": "after_shield_motion_sampled_separately",
+      "clip_policy": "none",
+      "flip_y": true,
+      "resolved_transform": {
+        "position": [
+          -6.0,
+          -2.5
+        ],
+        "size": [
+          21.64239,
+          72.48649
+        ],
+        "pivot_normalized": [
+          0.5884,
+          0.82
+        ],
+        "rotation_rad": 0.0
+      },
+      "coordinate_family": "sword_001"
+    },
+    "headgear_back": {
+      "layer_id": "headgear_back",
+      "asset_id": "headgear_metal_001",
+      "part_id": "headgear_metal_001.back",
+      "file": "art/production/my-test-v2-batch-001/parts/headgear_metal_001/back.png",
+      "sha256": "5ee3a053d085d01e89ce7edaa0fa673579a785c281d32ddabf9c39e70669b35c",
+      "image_size_px": [
+        1280,
+        720
+      ],
+      "source_rect_px": [
+        288,
+        41,
+        715,
+        629
+      ],
+      "parent_binding": "head",
+      "layer_relation": "behind_head_and_hair",
+      "clip_policy": "none",
+      "flip_y": false,
+      "resolved_transform": {
+        "position": [
+          0.25,
+          -44.5
+        ],
+        "size": [
+          58.10658,
+          51.11754
+        ],
+        "pivot_normalized": [
+          0.5,
+          1.0
+        ],
+        "rotation_rad": 0.0
+      },
+      "coordinate_family": "headgear_metal_001"
+    },
+    "headgear_main": {
+      "layer_id": "headgear_main",
+      "asset_id": "headgear_metal_001",
+      "part_id": "headgear_metal_001.main",
+      "file": "art/production/my-test-v2-batch-001/parts/headgear_metal_001/main.png",
+      "sha256": "0f0d75cbe9819a11568f8382a6955b7e50d210f3b094743b424c541828627a3f",
+      "image_size_px": [
+        1280,
+        720
+      ],
+      "source_rect_px": [
+        288,
+        41,
+        715,
+        629
+      ],
+      "parent_binding": "head",
+      "layer_relation": "over_hair_beard_bandage_with_face_opening",
+      "clip_policy": "none",
+      "flip_y": false,
+      "resolved_transform": {
+        "position": [
+          0.25,
+          -44.5
+        ],
+        "size": [
+          58.10658,
+          51.11754
+        ],
+        "pivot_normalized": [
+          0.5,
+          1.0
+        ],
+        "rotation_rad": 0.0
+      },
+      "coordinate_family": "headgear_metal_001"
+    },
+    "headgear_front": {
+      "layer_id": "headgear_front",
+      "asset_id": "headgear_metal_001",
+      "part_id": "headgear_metal_001.front",
+      "file": "art/production/my-test-v2-batch-001/parts/headgear_metal_001/front.png",
+      "sha256": "5d3eb0a4d638269baebe0fd89f92e231cfdaa0a5685ba33255e7b456eac1d9c4",
+      "image_size_px": [
+        1280,
+        720
+      ],
+      "source_rect_px": [
+        288,
+        41,
+        715,
+        629
+      ],
+      "parent_binding": "head",
+      "layer_relation": "over_bangs_and_brow",
+      "clip_policy": "none",
+      "flip_y": false,
+      "resolved_transform": {
+        "position": [
+          0.25,
+          -44.5
+        ],
+        "size": [
+          58.10658,
+          51.11754
+        ],
+        "pivot_normalized": [
+          0.5,
+          1.0
+        ],
+        "rotation_rad": 0.0
+      },
+      "coordinate_family": "headgear_metal_001"
+    }
+  },
+  "coordinate_families": {
+    "head_001": {
+      "resolved_transform": {
+        "position": [
+          0.25,
+          -32.5
+        ],
+        "size": [
+          28.52,
+          48.11754
+        ],
+        "pivot_normalized": [
+          0.5,
+          1.0
+        ],
+        "rotation_rad": 0.0
+      }
+    },
+    "padded_001": {
+      "resolved_transform": {
+        "position": [
+          2.5,
+          -44.5
+        ],
+        "size": [
+          84.01334,
+          81.41633
+        ],
+        "pivot_normalized": [
+          0.5,
+          0.0
+        ],
+        "rotation_rad": 0.0
+      },
+      "shared_source_rect_px": [
+        297,
+        43,
+        647,
+        627
+      ],
+      "members": [
+        "padded_001_intact",
+        "padded_001_damaged"
+      ],
+      "difference": "damage opening and hem fringe only"
+    },
+    "sword_001": {
+      "resolved_transform": {
+        "position": [
+          -6.0,
+          -2.5
+        ],
+        "size": [
+          21.64239,
+          72.48649
+        ],
+        "pivot_normalized": [
+          0.5884,
+          0.82
+        ],
+        "rotation_rad": 0.0
+      },
+      "flip_y": true,
+      "flip_reason": "opaque tip is at max y; frozen sword axis keeps the tip at min y"
+    },
+    "headgear_metal_001": {
+      "resolved_transform": {
+        "position": [
+          0.25,
+          -44.5
+        ],
+        "size": [
+          58.10658,
+          51.11754
+        ],
+        "pivot_normalized": [
+          0.5,
+          1.0
+        ],
+        "rotation_rad": 0.0
+      },
+      "shared_source_rect_px": [
+        288,
+        41,
+        715,
+        629
+      ],
+      "members": [
+        "headgear_metal_001.back",
+        "headgear_metal_001.main",
+        "headgear_metal_001.front"
+      ]
+    }
+  },
+  "occlusion_probe": {
+    "sample_step_px": 3,
+    "head_samples_covered_by_main_or_front": 11708,
+    "head_samples_visible_through_helmet": 5223,
+    "head_samples_under_front": 5933,
+    "visible_ratio": 0.3085
+  },
+  "known_limits": [
+    "Helmet bottom is the padded collar line y=-44.5, not the face pivot y=-32.5. That placement keeps the main opening on the cheek and jaw. The brow is under the front piece. Pushing the helmet down onto the face pivot covers the cheek opening.",
+    "sword_001 is diagonal in its rect. flip_y maps the tip onto the frozen tip-up axis. The lateral tip offset is the source drawing, not an extra position delta.",
+    "Visual QA and user approval are not claimed."
+  ]
+}

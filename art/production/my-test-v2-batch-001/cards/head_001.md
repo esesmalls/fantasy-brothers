@@ -15,6 +15,9 @@
 - raw: `art/production/my-test-v2-batch-001/sources/head_001/main_raw.png`
 
 ## Assembly / QA
-- assembly_fit: NOT_RUN (assembler)
+- assembly_fit: PASS `assembly-v0.1.0-pilot5`（装配锁定，不是 QA，也不是用户批准）
+- resolved: position [0.25, -32.5]，size [28.52, 48.11754]，pivot [0.5, 1]，rotation 0
+- parent_binding: head
+- layer_relation: replaces_modular_face_before_beard_hair_bandage
 - qa: NOT_RUN
 - user_approval: PENDING

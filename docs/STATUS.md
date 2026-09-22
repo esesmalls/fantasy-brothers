@@ -1,5 +1,9 @@
 # 当前项目状态
 
+## 2026-09-22：pilot 5 正式装配已锁定
+
+在 `art/my-test-v2-batch-001` 上为 head_001、padded_001 完好/破损、sword_001、headgear_metal_001 写下最终装配，并导出 `assembly-v0.1.0-pilot5`。变换策略是 `resolved_once`：游戏读取这一份最终位置和尺寸，不再叠加用户校准，也不再加一层差量。完好甲和破损甲共用同一坐标。头盔三片跟随头部，但后片、主片、前片的绘制先后分开。头盔可以比脸框大。本环境没有 Godot，所以没有跑引擎画面；QA 和用户批准仍未通过。这不是美术通过，也不要合并。
+
 ## 2026-09-22：pilot-5 临时占位图换成 GenerateImage 真图
 
 在 `art/my-test-v2-batch-001` 上，用 GenerateImage 产出覆盖 `art/production/my-test-v2-batch-001/` 里 head_001、padded_001_intact、padded_001_damaged、sword_001、headgear_metal_001（back/main/front）的临时 Pillow 图，并换上对应卡片、提示、出处和 manifest。几何仍 unresolved，装配与 QA 仍是 NOT_RUN，用户确认仍是 PENDING。没有改 `my_test-v2.json`、catalog、modules 或运行原图。这不是美术通过，也不要合并。

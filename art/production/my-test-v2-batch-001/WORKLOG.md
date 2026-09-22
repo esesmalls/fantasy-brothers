@@ -54,3 +54,23 @@ PASS: static plan gate only. No images were generated or visually approved; Godo
 - GenerateImage 重出 pilot 5（含 headgear back/main/front）
 - 覆盖临时 Pillow 占位；geometry/assembly/qa/user_approved 未填完成
 - 提交人：奇幻兄弟·资产生产
+
+# Pilot 5 · 正式装配（2026-09-22）
+
+装配版本 `assembly-v0.1.0-pilot5`。`transform_policy` = `resolved_once`。游戏只读装配包里的最终位置、尺寸、枢轴和旋转，不再叠加 `my_test-v2` edits，也不再加 `fit_delta`（该字段是单位变换）。
+
+## 五件装配
+- `head_001`：底边中心锚在冻结脸枢轴 `[0.25, -32.5]`，宽 28.52，高 48.11754。`parent_binding=head`，画在胡须/头发/绷带之前。
+- `padded_001_intact` 与 `padded_001_damaged`：同一 `source_rect` `[297, 43, 647, 627]`、同一位置 `[2.5, -44.5]`、同一尺寸 `[84.01334, 81.41633]`、同一枢轴 `[0.5, 0]`。破口只来自 PNG 透明差。
+- `sword_001`：高锁定冻结剑 72.48649，宽 21.64239。握点枢轴 `[0.5884, 0.82]`。`flip_y` 把图里朝下的剑尖翻到冻结的向上剑轴，不写入动作角。待机偏移仍由 `static_bust_motion` 采样。
+- `headgear_metal_001`：back/main/front 共用矩形 `[288, 41, 715, 629]` 和变换，位置 `[0.25, -44.5]`，尺寸 `[58.10658, 51.11754]`。`parent_binding` 都是 `head`。层关系分开：back 在头和发后，main 在头发/胡须/绷带之后并留脸口，front 压刘海和眉檐。盔底落在衣领上沿，宽于脸框。
+
+## 头部装备绘制
+`static_bust_actor.gd` 增加 `headgear_layer_order` 和 `resolved_parts` 覆盖。`static_bust_assembly.gd` 把装配包变成绘制零件。没有改 `my_test-v2.json`、catalog、modules，也没有改骨骼或战斗。本环境没有 Godot，层序用代码对照检查，没有跑引擎画面。`headgear_policy.support_status` 记为 `IMPLEMENTED`，不记 `VERIFIED`。
+
+阶段 0 记录的 `static_bust_actor.gd` 哈希是 `435ab09333b5072672f8c2fcfcf5e2660a2d1a1e7fea9473ab43190202392426`。装配扩展后的哈希已写回 manifest baseline，避免门禁把这份绘制改动当成文件丢失。`resolved_geometry_spec.json` 仍是阶段 0 快照，没有改。
+
+## 没有填写的状态
+五件 `assembly_fit.status` 为 PASS，表示装配器锁定。`qa` 仍是 NOT_RUN。`user_approval` 仍是 PENDING。其余 25 件仍是 planned。
+
+预览：`previews/pilot5-head-helmet.jpg`、`pilot5-padded-intact.jpg`、`pilot5-padded-damaged.jpg`、`pilot5-sword-rest.jpg`、`pilot5-stack.jpg`。这些图供 QA 看，不是 QA 通过。

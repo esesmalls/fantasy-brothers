@@ -15,6 +15,10 @@
 - raw: `art/production/my-test-v2-batch-001/sources/sword_001/main_raw.png`
 
 ## Assembly / QA
-- assembly_fit: NOT_RUN (assembler)
+- assembly_fit: PASS `assembly-v0.1.0-pilot5`
+- resolved: position [-6, -2.5]，size [21.64239, 72.48649]，pivot [0.5884, 0.82]，rotation 0
+- flip_y: true（剑尖从图像下方翻到冻结的向上剑轴；不叠加到动作角）
+- parent_binding: none
+- layer_relation: after_shield_motion_sampled_separately
 - qa: NOT_RUN
 - user_approval: PENDING

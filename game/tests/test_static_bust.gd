@@ -25,6 +25,14 @@ func run() -> void:
 	check(Actor.body_layers("mail",false,false)==["base","body","linen","padded","mail","head"],"layer stack and face occlusion")
 	check(Actor.body_layers("mail",true,false).has("head"),"armor damage does not injure face")
 	check(Actor.body_layers("mail",false,true).has("mail"),"face injury does not damage armor")
+	var plain:=["base","body","linen","padded","mail","face","scar","beard","hair","bandage"]
+	check(Actor.headgear_layer_order(plain,{})==plain,"missing headgear does not change draw order")
+	var stacked:=Actor.headgear_layer_order(plain,{
+		"headgear_back":{},"headgear_main":{},"headgear_front":{}})
+	check(stacked==["base","body","linen","padded","mail","headgear_back","face","scar","beard","hair","bandage","headgear_main","headgear_front"],
+		"headgear back is behind the head and front follows the bandage")
+	var legacy:=Actor.headgear_layer_order(["base","body","head"],{"headgear_back":{},"headgear_main":{}})
+	check(legacy==["base","body","headgear_back","head","headgear_main"],"headgear back stays behind a legacy head")
 	for weapon in ["sword","spear","bow"]:
 		for outcome in ["hit","block","miss"]:
 			var first:=Motion.sample(weapon,0,outcome)

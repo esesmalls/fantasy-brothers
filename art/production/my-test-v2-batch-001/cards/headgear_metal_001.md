@@ -17,6 +17,9 @@
 - raw: `art/production/my-test-v2-batch-001/sources/headgear_metal_001/main_raw.png`
 
 ## Assembly / QA
-- assembly_fit: NOT_RUN (assembler)
+- assembly_fit: PASS `assembly-v0.1.0-pilot5`
+- resolved: position [0.25, -44.5], size [58.10658, 51.11754], pivot [0.5, 1], rotation 0（back/main/front 相同）
+- parent_binding: head（三片相同，表示跟随谁）
+- layer_relation: back=behind_head_and_hair；main=over_hair_beard_bandage_with_face_opening；front=over_bangs_and_brow
 - qa: NOT_RUN
 - user_approval: PENDING

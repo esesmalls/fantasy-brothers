@@ -15,6 +15,10 @@
 - raw: `art/production/my-test-v2-batch-001/sources/padded_001_damaged/main_raw.png`
 
 ## Assembly / QA
-- assembly_fit: NOT_RUN (assembler)
+- assembly_fit: PASS `assembly-v0.1.0-pilot5`，与 padded_001_intact 同一坐标族
+- resolved: position [2.5, -44.5]，size [84.01334, 81.41633]，pivot [0.5, 0]，rotation 0
+- source_rect_px: [297, 43, 647, 627]（与完好件相同；破口只在像素透明处）
+- parent_binding: none
+- layer_relation: padded_over_linen_under_mail
 - qa: NOT_RUN
 - user_approval: PENDING
