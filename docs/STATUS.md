@@ -1,5 +1,9 @@
 # 当前项目状态
 
+## 2026-09-22：pilot 5 装配包已做真实 QA
+
+在 `assembly-v0.1.0-pilot5`（sha256 与期望 `233e500d…1087de` 一致，`resolved_once`）上做了文件哈希、plan/assembled 门禁、PNG/预览目视和解析叠图。矩阵 126 条：PASS 2、FAIL 2、BLOCKED 122。`--gate plan` 通过；`--gate assembled` 失败（其余约 25 件仍 planned）。头盔脸口偏低已确认（MAJOR，ISS-01，像素未改）；盔口与破损甲破口有烘焙棋盘（MAJOR，ISS-02）。本环境无 Godot，T07/T08/T09 和游戏用例为 BLOCKED，未填 game_verified / user_approved / qa_pass。证据在 `art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/`。这不是美术通过，也不要合并。
+
 ## 2026-09-22：pilot 5 正式装配已锁定
 
 在 `art/my-test-v2-batch-001` 上为 head_001、padded_001 完好/破损、sword_001、headgear_metal_001 写下最终装配，并导出 `assembly-v0.1.0-pilot5`。变换策略是 `resolved_once`：游戏读取这一份最终位置和尺寸，不再叠加用户校准，也不再加一层差量。完好甲和破损甲共用同一坐标。头盔三片跟随头部，但后片、主片、前片的绘制先后分开。头盔可以比脸框大。本环境没有 Godot，所以没有跑引擎画面；QA 和用户批准仍未通过。这不是美术通过，也不要合并。

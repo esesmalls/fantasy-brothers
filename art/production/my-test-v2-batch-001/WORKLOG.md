@@ -1,3 +1,13 @@
+# Pilot 5 · QA（2026-09-22）
+
+评审：奇幻兄弟·QA。对象 `assembly-v0.1.0-pilot5`（sha256 `233e500d…1087de`，`transform_policy=resolved_once`），tested_revision `3170da1789a87fc5bd83218cef6eb3321f4cb03e`。
+
+- `--gate plan` 退出 0；`--gate assembled` 退出 1（795 错，其余约 25 件仍 planned）。不是 assembled PASS。
+- 矩阵 126：PASS 2 / FAIL 2 / BLOCKED 122 / NOT_RUN 0。未填 user_approved、game_verified、qa_pass。
+- ISS-01 MAJOR：盔口偏低挡眼（装配器已注明，像素未改）。ISS-02 MAJOR：盔口与破损甲破口含烘焙棋盘/近白。
+- T07/T08/T09 BLOCKED（无 Godot）。T10 受保护文件哈希未变。
+- 证据：`previews/qa-pilot5-v0.1.0/`。未改 my_test-v2 / catalog / modules / 原图。
+
 # 阶段 0 冻结
 
 只记录实测基线。没有出图，没有把资产标成完成，没有填写 QA PASS/FAIL，没有填写 user_approved，没有改 `my_test-v2.json`、catalog、modules、原图或其他批次。

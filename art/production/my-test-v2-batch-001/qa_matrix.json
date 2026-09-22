@@ -1,7 +1,7 @@
 {
   "qa_schema": "fb-art-qa-matrix/1",
   "batch_id": "my-test-v2-batch-001",
-  "purpose": "test definitions only; no case has been run",
+  "purpose": "pilot-5 QA against assembly-v0.1.0-pilot5 / 3170da1789a87fc5bd83218cef6eb3321f4cb03e; user_approved not set; game_verified not set",
   "view_policy": {
     "default_views": [
       "1x_light",
@@ -23,11 +23,24 @@
       "expected": "记录真实提交与哈希；原样与健康诊断视图分开；不得虚构基线。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "PASS",
+      "reason": "已记录 assembly-v0.1.0-pilot5 sha256=233e500d…1087de、transform_policy=resolved_once、pilot 部件哈希与卡片/装配包一致，以及 my_test-v2/catalog/modules/原 PNG 哈希。未启动装配台窗口，只读打开 JSON。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/HASHES.md"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/validate_plan.log"
+        },
+        {
+          "path": "my_test-v2.json"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "PIPE-02",
@@ -37,11 +50,18 @@
       "expected": "原文件字节与显示保持；新头盔层为空时旧人物不改变。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "受保护基线文件字节哈希与 manifest 记录一致（见 T10/HASHES.md），但本环境无 Godot，无法打开原 my_test-v2 画面确认空头盔槽旧人物不改变。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/HASHES.md"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "PIPE-03",
@@ -51,11 +71,15 @@
       "expected": "无双重edits、锚点或裁取；导出重载后的像素/几何差异可解释。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "无纸娃娃装配台/Godot，不能做装配→候选导出→关闭→重载。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "PIPE-04",
@@ -65,11 +89,15 @@
       "expected": "资产与版本相同；层序、裁取、透明、武器事件与最终变换一致；环境差异单独说明。",
       "gate": "game",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "无 Godot，不能比较装配台与游戏实际角色区域。未填写 game_verified。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "PIPE-05",
@@ -79,11 +107,15 @@
       "expected": "旧人物ID和部件不因列表索引或哈希取模改变。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "无装配台，不能追加候选注册并重载旧组合以验证扩库不换脸。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "PIPE-06",
@@ -93,11 +125,15 @@
       "expected": "明确报错或使用标明的受控回退；不能显示旧图却报告候选通过。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "无装配台，不能在隔离副本引用不存在资产并观察受控报错。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FH-01-01",
@@ -110,11 +146,15 @@
       "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: hair_001。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FB-01-01",
@@ -127,11 +167,15 @@
       "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_001。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FH-01-02",
@@ -144,11 +188,15 @@
       "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: hair_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FB-01-02",
@@ -161,11 +209,15 @@
       "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FH-01-03",
@@ -178,11 +230,15 @@
       "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: hair_003。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FB-01-03",
@@ -195,11 +251,15 @@
       "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_003。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FH-01-04",
@@ -212,11 +272,15 @@
       "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: hair_004。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FB-01-04",
@@ -229,11 +293,15 @@
       "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_004。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HO-01-scar",
@@ -245,11 +313,15 @@
       "expected": "附着关系正确；伤痕受脸轮廓限制；绷带不随换脸异常漂移。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "用例只需 head_001，但要在装配台开启 baseline scar/bandage。无 Godot/装配台。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HO-01-bandage",
@@ -261,11 +333,15 @@
       "expected": "附着关系正确；伤痕受脸轮廓限制；绷带不随换脸异常漂移。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "用例只需 head_001，但要在装配台开启 baseline scar/bandage。无 Godot/装配台。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FH-02-01",
@@ -278,11 +354,15 @@
       "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: hair_001, head_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FB-02-01",
@@ -295,11 +375,15 @@
       "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_001, head_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FH-02-02",
@@ -312,11 +396,15 @@
       "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: hair_002, head_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FB-02-02",
@@ -329,11 +417,15 @@
       "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_002, head_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FH-02-03",
@@ -346,11 +438,15 @@
       "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: hair_003, head_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FB-02-03",
@@ -363,11 +459,15 @@
       "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_003, head_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FH-02-04",
@@ -380,11 +480,15 @@
       "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: hair_004, head_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FB-02-04",
@@ -397,11 +501,15 @@
       "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_004, head_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HO-02-scar",
@@ -413,11 +521,15 @@
       "expected": "附着关系正确；伤痕受脸轮廓限制；绷带不随换脸异常漂移。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: head_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HO-02-bandage",
@@ -429,11 +541,15 @@
       "expected": "附着关系正确；伤痕受脸轮廓限制；绷带不随换脸异常漂移。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: head_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FH-03-01",
@@ -446,11 +562,15 @@
       "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: hair_001, head_003。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FB-03-01",
@@ -463,11 +583,15 @@
       "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_001, head_003。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FH-03-02",
@@ -480,11 +604,15 @@
       "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: hair_002, head_003。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FB-03-02",
@@ -497,11 +625,15 @@
       "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_002, head_003。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FH-03-03",
@@ -514,11 +646,15 @@
       "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: hair_003, head_003。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FB-03-03",
@@ -531,11 +667,15 @@
       "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_003, head_003。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FH-03-04",
@@ -548,11 +688,15 @@
       "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: hair_004, head_003。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FB-03-04",
@@ -565,11 +709,15 @@
       "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_004, head_003。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HO-03-scar",
@@ -581,11 +729,15 @@
       "expected": "附着关系正确；伤痕受脸轮廓限制；绷带不随换脸异常漂移。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: head_003。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HO-03-bandage",
@@ -597,11 +749,15 @@
       "expected": "附着关系正确；伤痕受脸轮廓限制；绷带不随换脸异常漂移。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: head_003。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FH-04-01",
@@ -614,11 +770,15 @@
       "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: hair_001, head_004。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FB-04-01",
@@ -631,11 +791,15 @@
       "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_001, head_004。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FH-04-02",
@@ -648,11 +812,15 @@
       "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: hair_002, head_004。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FB-04-02",
@@ -665,11 +833,15 @@
       "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_002, head_004。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FH-04-03",
@@ -682,11 +854,15 @@
       "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: hair_003, head_004。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FB-04-03",
@@ -699,11 +875,15 @@
       "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_003, head_004。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FH-04-04",
@@ -716,11 +896,15 @@
       "expected": "发际线贴合、无带皮肤补丁、不改变共同头部比例。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: hair_004, head_004。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "FB-04-04",
@@ -733,11 +917,15 @@
       "expected": "胡须正确贴合口鼻与下颌；不烘焙另一张脸。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_004, head_004。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HO-04-scar",
@@ -749,11 +937,15 @@
       "expected": "附着关系正确；伤痕受脸轮廓限制；绷带不随换脸异常漂移。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: head_004。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HO-04-bandage",
@@ -765,11 +957,15 @@
       "expected": "附着关系正确；伤痕受脸轮廓限制；绷带不随换脸异常漂移。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: head_004。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-01-01",
@@ -787,11 +983,15 @@
         "2_heads_2_hairs_2_beards",
         "no_bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_001, hair_001。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-01-02",
@@ -809,11 +1009,15 @@
         "2_heads_2_hairs_2_beards",
         "no_bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_002, hair_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-01-03",
@@ -831,11 +1035,15 @@
         "2_heads_2_hairs_2_beards",
         "no_bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_002, hair_001, head_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-01-04",
@@ -853,11 +1061,15 @@
         "2_heads_2_hairs_2_beards",
         "bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_001, hair_002, head_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HGW-01",
@@ -869,11 +1081,30 @@
       "expected": "前片的真实开口具有alpha；完整组合显示最近实际内层。后片实体出现在开口后方时须有合法空间关系，不要求穿透真实材料。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "FAIL",
+      "reason": "ISS-01：脸口偏低，帽檐盖住双眼，开口落在口鼻/下颌。ISS-02：main 脸口内有烘焙棋盘格（不透明灰白交替），不是干净真透明窗口。隐藏后片后开口仍可见；完整组合能看到口鼻皮肤，但眼睛不可读。像素未改。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/hgw01_main_isolated_magenta.png"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/hgw01_resolved_full_combo.png"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/iss01_helmet_opening_low.png"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/iss02_helmet_opening_rgb_noalpha.png"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/pilot5-head-helmet.jpg"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/ISSUES.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HGC-01",
@@ -888,11 +1119,15 @@
       "expected": "继承head变换不等于整件总在衣领前；按遮挡需求拆片与声明层位，无穿领或错误盖住全部肩部。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: linen_001, mail_001_intact。衣领关系需要亚麻/链甲，pilot5 未交付。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-02-01",
@@ -910,11 +1145,15 @@
         "2_heads_2_hairs_2_beards",
         "no_bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_002, hair_002, head_002, headgear_metal_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-02-02",
@@ -932,11 +1171,15 @@
         "2_heads_2_hairs_2_beards",
         "no_bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_003, hair_003, head_002, headgear_metal_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-02-03",
@@ -954,11 +1197,15 @@
         "2_heads_2_hairs_2_beards",
         "no_bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_003, hair_002, head_003, headgear_metal_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-02-04",
@@ -976,11 +1223,15 @@
         "2_heads_2_hairs_2_beards",
         "bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_002, hair_003, head_003, headgear_metal_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HGW-02",
@@ -992,11 +1243,15 @@
       "expected": "前片的真实开口具有alpha；完整组合显示最近实际内层。后片实体出现在开口后方时须有合法空间关系，不要求穿透真实材料。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: headgear_metal_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HGC-02",
@@ -1011,11 +1266,15 @@
       "expected": "继承head变换不等于整件总在衣领前；按遮挡需求拆片与声明层位，无穿领或错误盖住全部肩部。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: headgear_metal_002, linen_001, mail_001_intact。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-03-01",
@@ -1033,11 +1292,15 @@
         "2_heads_2_hairs_2_beards",
         "no_bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_003, hair_003, head_003, headgear_cloth_001。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-03-02",
@@ -1055,11 +1318,15 @@
         "2_heads_2_hairs_2_beards",
         "no_bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_004, hair_004, head_003, headgear_cloth_001。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-03-03",
@@ -1077,11 +1344,15 @@
         "2_heads_2_hairs_2_beards",
         "no_bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_004, hair_003, head_004, headgear_cloth_001。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-03-04",
@@ -1099,11 +1370,15 @@
         "2_heads_2_hairs_2_beards",
         "bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_003, hair_004, head_004, headgear_cloth_001。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HGW-03",
@@ -1115,11 +1390,15 @@
       "expected": "前片的真实开口具有alpha；完整组合显示最近实际内层。后片实体出现在开口后方时须有合法空间关系，不要求穿透真实材料。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: headgear_cloth_001。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HGC-03",
@@ -1134,11 +1413,15 @@
       "expected": "继承head变换不等于整件总在衣领前；按遮挡需求拆片与声明层位，无穿领或错误盖住全部肩部。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: headgear_cloth_001, linen_001, mail_001_intact。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-04-01",
@@ -1156,11 +1439,15 @@
         "2_heads_2_hairs_2_beards",
         "no_bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_004, hair_004, head_004, headgear_cloth_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-04-02",
@@ -1178,11 +1465,15 @@
         "2_heads_2_hairs_2_beards",
         "no_bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_001, hair_001, head_004, headgear_cloth_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-04-03",
@@ -1200,11 +1491,15 @@
         "2_heads_2_hairs_2_beards",
         "no_bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_001, hair_004, headgear_cloth_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-04-04",
@@ -1222,11 +1517,15 @@
         "2_heads_2_hairs_2_beards",
         "bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_004, hair_001, headgear_cloth_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HGW-04",
@@ -1238,11 +1537,15 @@
       "expected": "前片的真实开口具有alpha；完整组合显示最近实际内层。后片实体出现在开口后方时须有合法空间关系，不要求穿透真实材料。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: headgear_cloth_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HGC-04",
@@ -1257,11 +1560,15 @@
       "expected": "继承head变换不等于整件总在衣领前；按遮挡需求拆片与声明层位，无穿领或错误盖住全部肩部。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: headgear_cloth_002, linen_001, mail_001_intact。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-05-01",
@@ -1279,11 +1586,15 @@
         "2_heads_2_hairs_2_beards",
         "no_bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_001, hair_001, headgear_cap_001。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-05-02",
@@ -1301,11 +1612,15 @@
         "2_heads_2_hairs_2_beards",
         "no_bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_002, hair_002, headgear_cap_001。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-05-03",
@@ -1323,11 +1638,15 @@
         "2_heads_2_hairs_2_beards",
         "no_bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_002, hair_001, head_002, headgear_cap_001。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-05-04",
@@ -1345,11 +1664,15 @@
         "2_heads_2_hairs_2_beards",
         "bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_001, hair_002, head_002, headgear_cap_001。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HGW-05",
@@ -1361,11 +1684,15 @@
       "expected": "前片的真实开口具有alpha；完整组合显示最近实际内层。后片实体出现在开口后方时须有合法空间关系，不要求穿透真实材料。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: headgear_cap_001。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HGC-05",
@@ -1380,11 +1707,15 @@
       "expected": "继承head变换不等于整件总在衣领前；按遮挡需求拆片与声明层位，无穿领或错误盖住全部肩部。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: headgear_cap_001, linen_001, mail_001_intact。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-06-01",
@@ -1402,11 +1733,15 @@
         "2_heads_2_hairs_2_beards",
         "no_bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_002, hair_002, head_002, headgear_cap_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-06-02",
@@ -1424,11 +1759,15 @@
         "2_heads_2_hairs_2_beards",
         "no_bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_003, hair_003, head_002, headgear_cap_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-06-03",
@@ -1446,11 +1785,15 @@
         "2_heads_2_hairs_2_beards",
         "no_bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_003, hair_002, head_003, headgear_cap_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HG-06-04",
@@ -1468,11 +1811,15 @@
         "2_heads_2_hairs_2_beards",
         "bandage"
       ],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_002, hair_003, head_003, headgear_cap_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HGW-06",
@@ -1484,11 +1831,15 @@
       "expected": "前片的真实开口具有alpha；完整组合显示最近实际内层。后片实体出现在开口后方时须有合法空间关系，不要求穿透真实材料。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: headgear_cap_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "HGC-06",
@@ -1503,11 +1854,15 @@
       "expected": "继承head变换不等于整件总在衣领前；按遮挡需求拆片与声明层位，无穿领或错误盖住全部肩部。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: headgear_cap_002, linen_001, mail_001_intact。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-linen_001-A",
@@ -1519,11 +1874,15 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: linen_001。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-linen_001-B",
@@ -1535,11 +1894,15 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: linen_001。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-linen_001-NONE",
@@ -1551,11 +1914,15 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: linen_001。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-linen_002-A",
@@ -1567,11 +1934,15 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: linen_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-linen_002-B",
@@ -1583,11 +1954,15 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: linen_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-linen_002-NONE",
@@ -1599,11 +1974,15 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: linen_002。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-padded_001_intact-A",
@@ -1616,11 +1995,15 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: linen_001。内层=linen_001 要等后续波次。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-padded_001_intact-B",
@@ -1632,11 +2015,15 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "需要把 baseline:body 作为真实内层叠在绗缝下。无 Godot/装配台，ref_crops/body_skin_ref.png 不能代替现行绑定。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-padded_001_intact-NONE",
@@ -1648,11 +2035,21 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "PASS",
+      "reason": "完好绗缝无破口；洋红底未见烘焙棋盘；实体不透明。领管内壁是本层织物，不是预画衬甲。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/wear_padded_intact_none_magenta.png"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/t02_padded_intact_flatten_magenta.jpg"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/padded_intact_damaged_pair_checker.png"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-padded_001_damaged-A",
@@ -1665,11 +2062,15 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: linen_001。内层=linen_001 要等后续波次。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-padded_001_damaged-B",
@@ -1681,11 +2082,15 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "需要把 baseline:body 作为真实内层叠在绗缝下。无 Godot/装配台，ref_crops/body_skin_ref.png 不能代替现行绑定。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-padded_001_damaged-NONE",
@@ -1697,11 +2102,24 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "FAIL",
+      "reason": "ISS-02：破口不是干净透空。洋红扁平化后破口内仍有不透明近白/棋盘像素，NONE 不能稳定露出下层。完好/破损共用同一 source_rect 与变换（跳位检查见 T04）。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/iss02_padded_damaged_flatten_magenta.jpg"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/wear_padded_damaged_none_magenta.png"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/iss02_padded_damaged_baked_white.png"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/ISSUES.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-padded_002_intact-A",
@@ -1714,11 +2132,15 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: linen_001, padded_002_intact。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-padded_002_intact-B",
@@ -1730,11 +2152,15 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: padded_002_intact。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-padded_002_intact-NONE",
@@ -1746,11 +2172,15 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: padded_002_intact。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-padded_002_damaged-A",
@@ -1763,11 +2193,15 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: linen_001, padded_002_damaged。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-padded_002_damaged-B",
@@ -1779,11 +2213,15 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: padded_002_damaged。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-padded_002_damaged-NONE",
@@ -1795,11 +2233,15 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: padded_002_damaged。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-mail_001_intact-A",
@@ -1812,11 +2254,15 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: mail_001_intact。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-mail_001_intact-B",
@@ -1829,11 +2275,15 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: linen_002, mail_001_intact。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-mail_001_intact-NONE",
@@ -1845,11 +2295,15 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: mail_001_intact。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-mail_001_damaged-A",
@@ -1862,11 +2316,15 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: mail_001_damaged。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-mail_001_damaged-B",
@@ -1879,11 +2337,15 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: linen_002, mail_001_damaged。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "WEAR-mail_001_damaged-NONE",
@@ -1895,11 +2357,15 @@
       "expected": "真实领口/破口随所选内层改变；NONE透空；实体仍不透明；破损只改变被选中的对应甲层。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: mail_001_damaged。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "SET-preset_01",
@@ -1917,11 +2383,15 @@
       "expected": "ID不变、组合可重载；1×、2×及浅深底下保持可读；同槽位不同时选完好和破损。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_001, hair_001, linen_001, shield_001。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "SET-preset_02",
@@ -1938,11 +2408,15 @@
       "expected": "ID不变、组合可重载；1×、2×及浅深底下保持可读；同槽位不同时选完好和破损。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_002, hair_002, head_002, headgear_metal_002, linen_002, spear_001。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "SET-preset_03",
@@ -1960,11 +2434,15 @@
       "expected": "ID不变、组合可重载；1×、2×及浅深底下保持可读；同槽位不同时选完好和破损。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_003, bow_001, hair_003, head_003, headgear_cloth_001, linen_001。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "SET-preset_04",
@@ -1983,11 +2461,15 @@
       "expected": "ID不变、组合可重载；1×、2×及浅深底下保持可读；同槽位不同时选完好和破损。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_004, hair_004, head_004, headgear_cloth_002, linen_002, shield_001。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "SET-preset_05",
@@ -2005,11 +2487,15 @@
       "expected": "ID不变、组合可重载；1×、2×及浅深底下保持可读；同槽位不同时选完好和破损。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_003, hair_002, headgear_cap_001, linen_001, padded_002_intact, spear_001。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "SET-preset_06",
@@ -2027,11 +2513,15 @@
       "expected": "ID不变、组合可重载；1×、2×及浅深底下保持可读；同槽位不同时选完好和破损。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_004, bow_001, hair_003, head_002, headgear_cap_002, linen_002, padded_002_damaged。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "SET-preset_07",
@@ -2050,11 +2540,15 @@
       "expected": "ID不变、组合可重载；1×、2×及浅深底下保持可读；同槽位不同时选完好和破损。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_001, hair_004, head_003, linen_001, mail_001_intact, shield_001。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "SET-preset_08",
@@ -2072,11 +2566,15 @@
       "expected": "ID不变、组合可重载；1×、2×及浅深底下保持可读；同槽位不同时选完好和破损。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: beard_002, hair_001, head_004, linen_002, mail_001_damaged, padded_002_intact, spear_001。pilot5 仅有 head_001 / padded_001_intact / padded_001_damaged / sword_001 / headgear_metal_001。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "MOTION-sword-timeline",
@@ -2088,11 +2586,18 @@
       "expected": "转轴和尖端合理，无扫脸/穿地；弓上箭与离弦位置连续；规则仍决定结果；身体沿既定静态路线。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "无动作运行时/Godot，不能沿冻结路径检查待机/出手/命中。sword_001 静态 flip_y 已另记，不记作动作 PASS。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/sword_source_vs_flipy.png"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "MOTION-sword-hit",
@@ -2104,11 +2609,18 @@
       "expected": "转轴和尖端合理，无扫脸/穿地；弓上箭与离弦位置连续；规则仍决定结果；身体沿既定静态路线。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "无动作运行时/Godot，不能沿冻结路径检查待机/出手/命中。sword_001 静态 flip_y 已另记，不记作动作 PASS。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/sword_source_vs_flipy.png"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "MOTION-sword-miss",
@@ -2120,11 +2632,18 @@
       "expected": "转轴和尖端合理，无扫脸/穿地；弓上箭与离弦位置连续；规则仍决定结果；身体沿既定静态路线。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "无动作运行时/Godot，不能沿冻结路径检查待机/出手/命中。sword_001 静态 flip_y 已另记，不记作动作 PASS。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/sword_source_vs_flipy.png"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "MOTION-spear-timeline",
@@ -2136,11 +2655,18 @@
       "expected": "转轴和尖端合理，无扫脸/穿地；弓上箭与离弦位置连续；规则仍决定结果；身体沿既定静态路线。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: spear_001。无动作运行时/Godot，不能沿冻结路径检查待机/出手/命中。sword_001 静态 flip_y 已另记，不记作动作 PASS。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/sword_source_vs_flipy.png"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "MOTION-spear-hit",
@@ -2152,11 +2678,18 @@
       "expected": "转轴和尖端合理，无扫脸/穿地；弓上箭与离弦位置连续；规则仍决定结果；身体沿既定静态路线。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: spear_001。无动作运行时/Godot，不能沿冻结路径检查待机/出手/命中。sword_001 静态 flip_y 已另记，不记作动作 PASS。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/sword_source_vs_flipy.png"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "MOTION-spear-miss",
@@ -2168,11 +2701,18 @@
       "expected": "转轴和尖端合理，无扫脸/穿地；弓上箭与离弦位置连续；规则仍决定结果；身体沿既定静态路线。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: spear_001。无动作运行时/Godot，不能沿冻结路径检查待机/出手/命中。sword_001 静态 flip_y 已另记，不记作动作 PASS。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/sword_source_vs_flipy.png"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "MOTION-bow-timeline",
@@ -2184,11 +2724,18 @@
       "expected": "转轴和尖端合理，无扫脸/穿地；弓上箭与离弦位置连续；规则仍决定结果；身体沿既定静态路线。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: bow_001。无动作运行时/Godot，不能沿冻结路径检查待机/出手/命中。sword_001 静态 flip_y 已另记，不记作动作 PASS。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/sword_source_vs_flipy.png"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "MOTION-bow-hit",
@@ -2200,11 +2747,18 @@
       "expected": "转轴和尖端合理，无扫脸/穿地；弓上箭与离弦位置连续；规则仍决定结果；身体沿既定静态路线。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: bow_001。无动作运行时/Godot，不能沿冻结路径检查待机/出手/命中。sword_001 静态 flip_y 已另记，不记作动作 PASS。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/sword_source_vs_flipy.png"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "MOTION-bow-miss",
@@ -2216,11 +2770,18 @@
       "expected": "转轴和尖端合理，无扫脸/穿地；弓上箭与离弦位置连续；规则仍决定结果；身体沿既定静态路线。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: bow_001。无动作运行时/Godot，不能沿冻结路径检查待机/出手/命中。sword_001 静态 flip_y 已另记，不记作动作 PASS。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/sword_source_vs_flipy.png"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "MOTION-shield-idle",
@@ -2233,11 +2794,18 @@
       "expected": "盾实体允许合理遮挡，但不错误盖死面部；层序与共同短胸轮廓保持。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: shield_001。无动作运行时/Godot，不能沿冻结路径检查待机/出手/命中。sword_001 静态 flip_y 已另记，不记作动作 PASS。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/sword_source_vs_flipy.png"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "MOTION-shield-sword_motion",
@@ -2250,11 +2818,18 @@
       "expected": "盾实体允许合理遮挡，但不错误盖死面部；层序与共同短胸轮廓保持。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: shield_001。无动作运行时/Godot，不能沿冻结路径检查待机/出手/命中。sword_001 静态 flip_y 已另记，不记作动作 PASS。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/sword_source_vs_flipy.png"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     },
     {
       "case_id": "MOTION-shield-hurt_feedback",
@@ -2267,11 +2842,18 @@
       "expected": "盾实体允许合理遮挡，但不错误盖死面部；层序与共同短胸轮廓保持。",
       "gate": "assembly",
       "coverage_tags": [],
-      "status": "NOT_RUN",
-      "reason": null,
-      "evidence": [],
-      "tested_revision": null,
-      "reviewer": null
+      "status": "BLOCKED",
+      "reason": "missing assets: shield_001。无动作运行时/Godot，不能沿冻结路径检查待机/出手/命中。sword_001 静态 flip_y 已另记，不记作动作 PASS。",
+      "evidence": [
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/SUMMARY.md"
+        },
+        {
+          "path": "art/production/my-test-v2-batch-001/previews/qa-pilot5-v0.1.0/sword_source_vs_flipy.png"
+        }
+      ],
+      "tested_revision": "3170da1789a87fc5bd83218cef6eb3321f4cb03e",
+      "reviewer": "奇幻兄弟·QA"
     }
   ]
 }
