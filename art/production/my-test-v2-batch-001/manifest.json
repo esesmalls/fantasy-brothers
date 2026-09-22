@@ -3,7 +3,7 @@
   "purpose": "production_tracker_not_godot_runtime_schema",
   "batch_id": "my-test-v2-batch-001",
   "template_id": "h-static-bust-my-test-v2",
-  "status": "planned",
+  "status": "pilot_in_progress",
   "prepared_date": "2026-09-21",
   "baseline": {
     "repository": "esesmalls/fantasy-brothers",
@@ -676,8 +676,8 @@
       "name": "轻瘦长脸",
       "variant": "base",
       "phase": "pilot",
-      "status": "planned",
-      "owner": null,
+      "status": "registered",
+      "owner": "奇幻兄弟·资产生产",
       "brief": "只改变骨相和五官；共同轻侧朝向、短颈和装配边界保持",
       "template_id": "h-static-bust-my-test-v2",
       "depends_on": [],
@@ -688,33 +688,49 @@
         "runtime_asset_id": null
       },
       "provenance": {
-        "reference_files": [],
-        "prompt_file": null,
+        "reference_files": [
+          "art/production/my-test-v2-batch-001/../../pilot-batch001/ref_crops/face_ref.png",
+          "pilot-batch001/ref_crops/face_ref.png",
+          "pilot-batch001/refs/modular-proof.png"
+        ],
+        "prompt_file": "art/production/my-test-v2-batch-001/prompts/head_001.md",
         "raw_output": {
-          "path": null,
-          "sha256": null
+          "path": "art/production/my-test-v2-batch-001/sources/head_001/raw.png",
+          "sha256": "f87fa5a970a6fcd10ccaf4496f5be05f731ccb469e5048d439ff1add1ea6fde2"
         },
-        "tool": null,
-        "model": null,
-        "generated_at": null,
+        "tool": "Pillow.ref_normalize (GenerateImage UNAVAILABLE in executor subagent)",
+        "model": "n/a-ref-crop-provisional",
+        "generated_at": "2026-09-22T10:21:39+08:00",
         "generation_id": null,
-        "processing_log": []
+        "processing_log": [
+          "GenerateImage unavailable in executor; copied face_ref as raw",
+          "Pillow: flood-fill near-black bg -> alpha0",
+          "source_rect_px=[11, 13, 396, 465]"
+        ]
       },
       "parts": [
         {
           "part_id": "head_001.main",
           "role": "main",
           "file": {
-            "path": null,
-            "sha256": null
+            "path": "art/production/my-test-v2-batch-001/parts/head_001/main.png",
+            "sha256": "8c89b180faa85449e5e5b2301f9c2d6aab9558cd6df88323017dfafa391da8b6"
           },
-          "image_size_px": null,
-          "source_rect_px": null,
+          "image_size_px": [
+            415,
+            480
+          ],
+          "source_rect_px": [
+            11,
+            13,
+            396,
+            465
+          ],
           "logical_size_before_fit": null,
           "position_before_fit": null,
           "pivot_normalized": null,
           "parent_binding": "head",
-          "layer_relation": null,
+          "layer_relation": "main face plate; unresolved final order",
           "clip_policy": null,
           "geometry_status": "unresolved"
         }
@@ -1940,8 +1956,8 @@
       "name": "纵线绗缝甲·完好",
       "variant": "intact",
       "phase": "pilot",
-      "status": "planned",
-      "owner": null,
+      "status": "registered",
+      "owner": "奇幻兄弟·资产生产",
       "brief": "共同身体与完整衣甲母版，领口真实露出下层",
       "template_id": "h-static-bust-my-test-v2",
       "depends_on": [],
@@ -1952,28 +1968,43 @@
         "runtime_asset_id": null
       },
       "provenance": {
-        "reference_files": [],
-        "prompt_file": null,
+        "reference_files": [
+          "pilot-batch001/ref_crops/padded_intact_ref.png",
+          "pilot-batch001/refs/full-garments-nested.png"
+        ],
+        "prompt_file": "art/production/my-test-v2-batch-001/prompts/padded_001_intact.md",
         "raw_output": {
-          "path": null,
-          "sha256": null
+          "path": "art/production/my-test-v2-batch-001/sources/padded_001_intact/raw.png",
+          "sha256": "3811ae0c289f386497103e9c7ebaff51edccf28c68bca38c81ba3cb1f6453408"
         },
-        "tool": null,
-        "model": null,
-        "generated_at": null,
+        "tool": "Pillow.ref_normalize (GenerateImage UNAVAILABLE in executor subagent)",
+        "model": "n/a-ref-crop-provisional",
+        "generated_at": "2026-09-22T10:21:39+08:00",
         "generation_id": null,
-        "processing_log": []
+        "processing_log": [
+          "GenerateImage unavailable; used padded_intact_ref as raw",
+          "Pillow: bg key + punch interior dark collar to alpha0",
+          "punched_px=465"
+        ]
       },
       "parts": [
         {
           "part_id": "padded_001_intact.main",
           "role": "main",
           "file": {
-            "path": null,
-            "sha256": null
+            "path": "art/production/my-test-v2-batch-001/parts/padded_001_intact/main.png",
+            "sha256": "8a2e2ad459c17197d3a63e4e261abab9d5f2a4d259d079c1594470594dfad59a"
           },
-          "image_size_px": null,
-          "source_rect_px": null,
+          "image_size_px": [
+            496,
+            557
+          ],
+          "source_rect_px": [
+            6,
+            6,
+            484,
+            544
+          ],
           "logical_size_before_fit": null,
           "position_before_fit": null,
           "pivot_normalized": null,
@@ -2030,8 +2061,8 @@
       "name": "纵线绗缝甲·破损",
       "variant": "damaged",
       "phase": "pilot",
-      "status": "planned",
-      "owner": null,
+      "status": "registered",
+      "owner": "奇幻兄弟·资产生产",
       "brief": "从对应完好图参考编辑，破口中心透明",
       "template_id": "h-static-bust-my-test-v2",
       "depends_on": [
@@ -2044,28 +2075,45 @@
         "runtime_asset_id": null
       },
       "provenance": {
-        "reference_files": [],
-        "prompt_file": null,
+        "reference_files": [
+          "art/production/my-test-v2-batch-001/parts/padded_001_intact/main.png",
+          "art/production/my-test-v2-batch-001/sources/padded_001_damaged/intact_parent.png",
+          "pilot-batch001/ref_crops/padded_damaged_ref.png"
+        ],
+        "prompt_file": "art/production/my-test-v2-batch-001/prompts/padded_001_damaged.md",
         "raw_output": {
-          "path": null,
-          "sha256": null
+          "path": "art/production/my-test-v2-batch-001/sources/padded_001_damaged/raw.png",
+          "sha256": "698c3eb8a339c1b1e3c5782ce24f2d5dc4e20b7d9d2099cfab9e2c726f5eb42e"
         },
-        "tool": null,
-        "model": null,
-        "generated_at": null,
+        "tool": "Pillow.ref_normalize (GenerateImage UNAVAILABLE in executor subagent)",
+        "model": "n/a-ref-crop-provisional",
+        "generated_at": "2026-09-22T10:21:39+08:00",
         "generation_id": null,
-        "processing_log": []
+        "processing_log": [
+          "depends_on padded_001_intact; intact_parent.png stored",
+          "GenerateImage unavailable; used padded_damaged_ref as edit source",
+          "Pillow: bg key + punch collar/damage dark centers",
+          "punched_px=1322"
+        ]
       },
       "parts": [
         {
           "part_id": "padded_001_damaged.main",
           "role": "main",
           "file": {
-            "path": null,
-            "sha256": null
+            "path": "art/production/my-test-v2-batch-001/parts/padded_001_damaged/main.png",
+            "sha256": "8e38d2f7ebcf4e9c3f2dea3f509d4e1c75cc7da93c21ef95d8fa09ad02769aa8"
           },
-          "image_size_px": null,
-          "source_rect_px": null,
+          "image_size_px": [
+            496,
+            557
+          ],
+          "source_rect_px": [
+            5,
+            7,
+            486,
+            544
+          ],
           "logical_size_before_fit": null,
           "position_before_fit": null,
           "pivot_normalized": null,
@@ -2482,8 +2530,8 @@
       "name": "旧铁直剑",
       "variant": "base",
       "phase": "pilot",
-      "status": "planned",
-      "owner": null,
+      "status": "registered",
+      "owner": "奇幻兄弟·资产生产",
       "brief": "无手；沿冻结剑路径检查转轴、尖端和接触位置",
       "template_id": "h-static-bust-my-test-v2",
       "depends_on": [],
@@ -2494,28 +2542,42 @@
         "runtime_asset_id": null
       },
       "provenance": {
-        "reference_files": [],
-        "prompt_file": null,
+        "reference_files": [
+          "pilot-batch001/ref_crops/sword_ref.png",
+          "pilot-batch001/refs/weapons.png"
+        ],
+        "prompt_file": "art/production/my-test-v2-batch-001/prompts/sword_001.md",
         "raw_output": {
-          "path": null,
-          "sha256": null
+          "path": "art/production/my-test-v2-batch-001/sources/sword_001/raw.png",
+          "sha256": "8546bcedfd7b2ee1cb287fcf6e969fb54b6041c97485269310cae6baf48981a5"
         },
-        "tool": null,
-        "model": null,
-        "generated_at": null,
+        "tool": "Pillow.ref_normalize (GenerateImage UNAVAILABLE in executor subagent)",
+        "model": "n/a-ref-crop-provisional",
+        "generated_at": "2026-09-22T10:21:39+08:00",
         "generation_id": null,
-        "processing_log": []
+        "processing_log": [
+          "GenerateImage unavailable; used sword_ref as raw",
+          "Pillow: flood-fill near-black bg -> alpha0 (no interior punch)"
+        ]
       },
       "parts": [
         {
           "part_id": "sword_001.main",
           "role": "main",
           "file": {
-            "path": null,
-            "sha256": null
+            "path": "art/production/my-test-v2-batch-001/parts/sword_001/main.png",
+            "sha256": "4da5dc00ad2206a277fa9aa70ff6a6167173ab3fa5f6db315e98bf56f2a3dc48"
           },
-          "image_size_px": null,
-          "source_rect_px": null,
+          "image_size_px": [
+            185,
+            596
+          ],
+          "source_rect_px": [
+            3,
+            3,
+            179,
+            591
+          ],
           "logical_size_before_fit": null,
           "position_before_fit": null,
           "pivot_normalized": null,
@@ -2845,8 +2907,8 @@
       "name": "开面铁盔",
       "variant": "intact",
       "phase": "pilot",
-      "status": "planned",
-      "owner": null,
+      "status": "blocked",
+      "owner": "奇幻兄弟·资产生产",
       "brief": "金属类；脸口透明，盔沿与盔体真实遮挡；首个接口样板",
       "template_id": "h-static-bust-my-test-v2",
       "depends_on": [],
@@ -2857,33 +2919,97 @@
         "runtime_asset_id": null
       },
       "provenance": {
-        "reference_files": [],
-        "prompt_file": null,
+        "reference_files": [
+          "pilot-batch001/refs/modular-proof.png"
+        ],
+        "prompt_file": "art/production/my-test-v2-batch-001/prompts/headgear_metal_001.md",
         "raw_output": {
-          "path": null,
-          "sha256": null
+          "path": "art/production/my-test-v2-batch-001/sources/headgear_metal_001/raw_main.png",
+          "sha256": "e686fa9f50f2da6c019587b00b74e2428ebcb0c8f96b8313bde9f580eda52405"
         },
-        "tool": null,
-        "model": null,
-        "generated_at": null,
+        "tool": "Pillow.ref_normalize (GenerateImage UNAVAILABLE in executor subagent)",
+        "model": "n/a-ref-crop-provisional",
+        "generated_at": "2026-09-22T10:21:39+08:00",
         "generation_id": null,
-        "processing_log": []
+        "processing_log": [
+          "BLOCKED: GenerateImage unavailable",
+          "PIL geometric placeholder back/main/front only — NOT style-final",
+          "Must regenerate with GenerateImage before assembly QA"
+        ]
       },
       "parts": [
         {
-          "part_id": "headgear_metal_001.main",
-          "role": "main",
+          "part_id": "headgear_metal_001.back",
+          "role": "back",
           "file": {
-            "path": null,
-            "sha256": null
+            "path": "art/production/my-test-v2-batch-001/parts/headgear_metal_001/back.png",
+            "sha256": "0ad2af5700895abda1c854b0a4639d083e1db847860fddc92563ed5fbb36efe7"
           },
-          "image_size_px": null,
-          "source_rect_px": null,
+          "image_size_px": [
+            512,
+            512
+          ],
+          "source_rect_px": [
+            115,
+            95,
+            246,
+            201
+          ],
           "logical_size_before_fit": null,
           "position_before_fit": null,
           "pivot_normalized": null,
           "parent_binding": "head",
-          "layer_relation": null,
+          "layer_relation": "proposed behind head/hair",
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        },
+        {
+          "part_id": "headgear_metal_001.main",
+          "role": "main",
+          "file": {
+            "path": "art/production/my-test-v2-batch-001/parts/headgear_metal_001/main.png",
+            "sha256": "e686fa9f50f2da6c019587b00b74e2428ebcb0c8f96b8313bde9f580eda52405"
+          },
+          "image_size_px": [
+            512,
+            512
+          ],
+          "source_rect_px": [
+            118,
+            88,
+            295,
+            285
+          ],
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "head",
+          "layer_relation": "proposed around skull with face opening",
+          "clip_policy": null,
+          "geometry_status": "unresolved"
+        },
+        {
+          "part_id": "headgear_metal_001.front",
+          "role": "front",
+          "file": {
+            "path": "art/production/my-test-v2-batch-001/parts/headgear_metal_001/front.png",
+            "sha256": "00109c6e7321a317272f63b2f92d225777b4f5eafad503fba1edaacf3e4f9909"
+          },
+          "image_size_px": [
+            512,
+            512
+          ],
+          "source_rect_px": [
+            167,
+            155,
+            163,
+            127
+          ],
+          "logical_size_before_fit": null,
+          "position_before_fit": null,
+          "pivot_normalized": null,
+          "parent_binding": "head",
+          "layer_relation": "proposed brow/brim in front of bangs",
           "clip_policy": null,
           "geometry_status": "unresolved"
         }
@@ -2908,13 +3034,26 @@
       },
       "headgear_policy": {
         "face_opening": "transparent_in_opening_bearing_part",
-        "opaque_regions": [],
-        "layer_plan": null,
-        "hair_policy": "unresolved",
-        "beard_policy": "unresolved",
-        "bandage_policy": "unresolved",
-        "collar_interaction": "unresolved",
-        "support_status": "NOT_IMPLEMENTED_OR_NOT_CHECKED"
+        "opaque_regions": [
+          "dome/skullcap metal",
+          "cheek/neck skirt (main)",
+          "brow/brim plate (front)",
+          "rear dome (back)"
+        ],
+        "layer_plan": {
+          "parts": [
+            "back",
+            "main",
+            "front"
+          ],
+          "proposed_order": "back < head/hair < main < bangs? < front",
+          "note": "suggestions only; geometry_status unresolved; assembler must finalize"
+        },
+        "hair_policy": "proposed: compress under dome, allow fringe through face opening; unresolved",
+        "beard_policy": "proposed: visible through face opening; unresolved",
+        "bandage_policy": "proposed: usually under helmet or blocked; unresolved",
+        "collar_interaction": "proposed: skirt may overlap collar; unresolved",
+        "support_status": "待装配器扩展（工程尚无层位）"
       },
       "qa": {
         "technical": "NOT_RUN",

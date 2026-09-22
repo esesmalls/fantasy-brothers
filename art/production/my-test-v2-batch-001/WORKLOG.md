@@ -29,3 +29,22 @@ PASS: static plan gate only. No images were generated or visually approved; Godo
 - 头盔还没有运行槽。catalog、modules、草案和 `static_bust_actor.gd` 都没有 headgear 部件、父级或层位。九个 baseline 绑定都已填实，没有裸 null。
 - 战役棋盘仍画旧拼装或程序立绘，不读取这份静态半身几何。阶段 0 没有把游戏接到这套变换上。
 - `catalog.json` 里的 `bust_alignment_shift` `[2, 0]` 没有被任何 GDScript 读取，复算时没有再加一次。
+
+# Pilot 5 · 原图→规整→provenance（2026-09-22T10:21:39+08:00）
+
+执行器子代理完成临时交付。**阻塞：本子代理工具集无 Cursor GenerateImage / CloudAgent。**
+
+## 做了什么
+- 对 head_001 / padded_001_intact / padded_001_damaged / sword_001：用 `ref_crops` 做 Pillow 去黑底与领口/破口暗区打孔，写入 `sources/`+`parts/`，填 ASSET_CARD、prompts、manifest provenance。
+- padded_001_damaged 登记 depends_on intact，并保存 `sources/padded_001_damaged/intact_parent.png`。
+- headgear_metal_001：PIL 占位 back/main/front + layer_plan 建议；`status=blocked`，`geometry_status=unresolved`，`support_status=待装配器扩展`。
+- 未改 my_test-v2 / catalog / modules / 原运行图；未填 qa PASS / user_approved；未跑装配最终几何。
+
+## 未完成 / 阻塞
+1. GenerateImage：需父代理或具备该工具的会话按 prompts 重出真图（尤其 head 轻瘦改骨相、头盔手绘金属）。
+2. CloudAgent：子代理无此工具；需父代理 launch 把 `/workspace/art-production-staging/` 文件写进分支 `art/my-test-v2-batch-001`（starting_ref 7c3764bd），或在本汇报后由执行器用 GitHub API 等价写入。
+3. 头盔占位不可进 QA。
+
+## 校验提醒
+- 其余 25 条仍为 planned（未动假完成）。
+- assembly_fit 仍为 NOT_RUN。
