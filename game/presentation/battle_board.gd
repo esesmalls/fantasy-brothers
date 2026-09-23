@@ -244,8 +244,15 @@ func _begin_event(event: Dictionary) -> void:
 			var reach: Vector2 = origin.direction_to(point) * 12.0
 			var action := "shield_bash" if str(event.get("_action", "")) == "shield_bash" else "slash"
 			var duration := motion_duration(_motion_template, action)
+			var authored: Dictionary = ModularActor.AssetRuntime.action_for_unit(unit, action) if ModularActor.VisualProfile.supports(unit) or unit.has("visual_assets") else {}
+			var contact := duration * motion_contact(_motion_template)
+			if not authored.is_empty():
+				duration = float(authored.duration)
+				contact = duration * 0.42
+				for marker: Dictionary in authored.get("events", []):
+					if marker.id == "contact": contact = float(marker.time)
 			_motions[actor] = {"from": origin, "to": origin + reach, "time": 0.0, "duration": duration, "kind": "attack", "action": action, "direction": origin.direction_to(point)}
-			_pending_impacts.append({"remaining": duration * motion_contact(_motion_template), "events": event.get("_feedback", [])})
+			_pending_impacts.append({"remaining": contact, "events": event.get("_feedback", [])})
 			_event_remaining = duration
 	else:
 		_show_feedback(event)

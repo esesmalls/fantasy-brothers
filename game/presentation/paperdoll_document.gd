@@ -149,11 +149,35 @@ func change_shared(groups:Array,offset:Vector2,factor:float,angle:float,record:b
 	edits=next_edits
 	return true
 
+func parent_group(group:String) -> String:
+	if not GROUPS.has(group):return ""
+	var id:=str(GROUPS[group][0])
+	var parent_id:=str(baseline.parts[id].get("parent",""))
+	if parent_id in GROUPS:return parent_id
+	return ""
+
+func follows_bust(group:String) -> bool:
+	if group=="bust" or not GROUPS.has(group):return false
+	for id in GROUPS[group]:
+		if id in GROUPS.bust:return true
+	return false
+
+## A selected parent, or the whole figure, already carries this part.
+func offset_carried(group:String, groups:Array) -> bool:
+	if group!="bust" and "bust" in groups and follows_bust(group):return true
+	var parent:=parent_group(group)
+	return parent!="" and parent in groups
+
+func offset_carrier(group:String, groups:Array) -> String:
+	if not offset_carried(group, groups):return group
+	if "bust" in groups and follows_bust(group):return "bust"
+	return offset_carrier(parent_group(group), groups)
+
 func nudge_shared(groups:Array,delta:Vector2,record:bool=true) -> bool:
 	var next_edits:=edits.duplicate(true)
 	var changed:=false
 	for group in groups:
-		if group=="crop" or not GROUPS.has(group):continue
+		if group=="crop" or not GROUPS.has(group) or offset_carried(group, groups):continue
 		var t:=transform_for(group)
 		var offset:=(Vector2(t.offset[0],t.offset[1])+delta).clamp(Vector2(-MOVE_LIMIT,-MOVE_LIMIT),Vector2(MOVE_LIMIT,MOVE_LIMIT))
 		if not offset.is_finite():return false
@@ -491,6 +515,8 @@ func load_project(path:String) -> String:
 	if not errors.is_empty():return "\n".join(errors)
 	checkpoint();edits=value.edits.duplicate(true);appearance=value.get("appearance",DEFAULT_APPEARANCE).duplicate(true)
 	crop=value.get("crop",{}).duplicate(true);actions=value.get("actions",{}).duplicate(true);layers={}
+	for weapon in actions:
+		actions[weapon]=Motion.normalize_action(str(weapon),actions[weapon])
 	if value.get("layers") is Dictionary:
 		for group in value.layers:
 			var rank:=int(round(float(value.layers[group])))

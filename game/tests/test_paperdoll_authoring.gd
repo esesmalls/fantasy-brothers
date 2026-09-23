@@ -100,6 +100,22 @@ func run() -> void:
 	check(is_equal_approx(multi.transform_for("head").offset[0],5) and is_equal_approx(multi.transform_for("head").offset[1],-3),"aligned offset")
 	check(is_equal_approx(multi.transform_for("head").scale,1.7) and is_zero_approx(multi.transform_for("head").angle) and multi.layer_rank("head")==50,"aligned scale, angle, and layer")
 	multi.undo();check(is_equal_approx(multi.transform_for("head").offset[0],11) and multi.layer_rank("head")==80,"align is one undo step")
+	var carried:=Document.new()
+	carried.change("head",Vector2.ZERO,2.0)
+	var hair_before:float=carried.composed().parts.hair.position[0]
+	var head_before:float=carried.composed().parts.head.position[0]
+	check(carried.nudge_shared(["head","hair"],Vector2(6,0)),"parent and child move as one step")
+	check(is_equal_approx(carried.transform_for("head").offset[0],6) and is_zero_approx(carried.transform_for("hair").offset[0]),"child offset is not added again")
+	check(is_equal_approx(carried.composed().parts.hair.position[0]-hair_before,6) and is_equal_approx(carried.composed().parts.head.position[0]-head_before,6),"scaled parent carries the child the same distance")
+	check(carried.nudge_shared(["hair"],Vector2(2,0)) and is_equal_approx(carried.transform_for("hair").offset[0],2),"a child alone still keeps its own offset")
+	var whole:=Document.new()
+	var linen_before:float=whole.composed().parts.linen.position[0]
+	var sword_before:float=whole.composed().parts.sword.position[0]
+	check(whole.nudge_shared(["bust","linen","head","sword"],Vector2(4,0)),"the whole figure carries body parts once")
+	check(is_equal_approx(whole.transform_for("bust").offset[0],4) and is_zero_approx(whole.transform_for("linen").offset[0]) and is_zero_approx(whole.transform_for("head").offset[0]),"body parts are not shifted a second time")
+	check(is_equal_approx(whole.transform_for("sword").offset[0],4),"a weapon is not a child of the whole figure")
+	check(is_equal_approx(whole.composed().parts.linen.position[0]-linen_before,4) and is_equal_approx(whole.composed().parts.sword.position[0]-sword_before,4),"body and weapon travel the same distance")
+	whole.undo();check(is_zero_approx(whole.transform_for("bust").offset[0]) and is_zero_approx(whole.transform_for("sword").offset[0]),"one carried move undoes together")
 	var old:=Document.new()
 	var saved:Dictionary={"schema":2,"kind":"fantasy-brothers-paperdoll","baseline_sha256":old.fingerprint,"modules_sha256":old.modules_fingerprint,"appearance":old.appearance.duplicate(true),"edits":{"head":{"offset":[2,0],"scale":1,"angle":0}}}
 	check(old.validate(saved).is_empty(),"schema 2 without layers still validates")
@@ -162,6 +178,51 @@ func run() -> void:
 	check(preview.position.x>30,"workbench preview samples the authored pose")
 	ui.document.reset_action("sword");ui.refresh()
 	check(not ui.document.actions.has("sword"),"workbench can restore the built-in path")
+	ui.document.set_appearance("head","modular")
+	ui.document.change("head",Vector2(1,0),1)
+	ui.document.change("hair",Vector2(3,0),1)
+	ui.select_groups(["head","hair"])
+	check(is_equal_approx(ui.x_field.value,3),"child field shows its own offset")
+	ui.x_field.value=4
+	check(is_equal_approx(ui.document.transform_for("head").offset[0],2) and is_equal_approx(ui.document.transform_for("hair").offset[0],3),"editing the child number moves only the selected parent")
+	check(is_equal_approx(ui.x_field.value,3),"child number stays on its own offset")
+	ui.weapon="none";ui.refresh()
+	ui.select_group("base")
+	var head_rect:Rect2=ui._quad_bounds(ui._part_quad("head"))
+	ui._box_add=false
+	ui._box_origin=head_rect.position
+	ui._box_current=head_rect.end
+	ui.apply_box_selection()
+	check("head" in ui.selected_groups and "base" not in ui.selected_groups,"box select replaces with the parts inside")
+	ui._box_add=true
+	ui._box_base=ui.selected_groups.duplicate()
+	var base_rect:Rect2=ui._quad_bounds(ui._part_quad("base"))
+	ui._box_origin=base_rect.position
+	ui._box_current=base_rect.end
+	ui.apply_box_selection()
+	check("head" in ui.selected_groups and "base" in ui.selected_groups,"shift box adds the base")
+	var kept:Array=ui.selected_groups.duplicate()
+	ui._box_add=false
+	ui._box_origin=Vector2(2,2)
+	ui._box_current=Vector2(12,12)
+	ui.apply_box_selection()
+	check(ui.selected_groups==kept,"a box on empty canvas keeps the current selection")
+	ui.document.set_appearance("head","legacy");ui.weapon="none";ui.refresh()
+	ui.select_group("head")
+	var point:Vector2=ui.pointer_for("head")
+	check(ui.group_at_point(point)=="head","pointer sample lands on the head")
+	var before:float=ui.document.transform_for("head").offset[0]
+	var press:=InputEventMouseButton.new();press.button_index=MOUSE_BUTTON_LEFT;press.pressed=true;press.position=point
+	ui.stage_input(press)
+	var motion:=InputEventMouseMotion.new();motion.position=point+Vector2(ui.camera().scale*2,0)
+	ui.stage_input(motion)
+	press.pressed=false;ui.stage_input(press)
+	check(is_equal_approx(ui.document.transform_for("head").offset[0],before+2),"dragging the part still moves it")
+	before=ui.document.transform_for("head").offset[0]
+	press.pressed=true;press.position=Vector2(2,2);ui.stage_input(press)
+	motion.position=Vector2(36,28);ui.stage_input(motion)
+	press.pressed=false;ui.stage_input(press)
+	check(is_equal_approx(ui.document.transform_for("head").offset[0],before),"dragging empty space does not move the part")
 	ui.queue_free();await process_frame
 	check(JSON.stringify(Actor.catalog())==original,"authoring tests do not mutate the catalog")
 	print("Paperdoll authoring checks: %d passed, %d failed"%[passed,failed]);quit(1 if failed else 0)

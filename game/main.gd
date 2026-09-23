@@ -16,6 +16,7 @@ const HandStyleReviewScene = preload("res://presentation/hand_style_review.tscn"
 const AStandardReview = preload("res://presentation/a_standard_review.gd")
 const StaticBustReview = preload("res://presentation/static_bust_review.gd")
 const PaperdollWorkbench = preload("res://presentation/paperdoll_workbench.gd")
+const AssetWorkbench = preload("res://presentation/asset_workbench.gd")
 const CREAM = Color("e7ddc6")
 const MUTED = Color("9caeaa")
 const GOLD = Color("c8aa6e")
@@ -74,6 +75,14 @@ var motion_review_dir := "user://motion-review"
 func _ready() -> void:
 	_build_theme()
 	var arguments := OS.get_cmdline_user_args()
+	if arguments.has("--paperdoll") or arguments.has("--asset-smoke"):
+		var editor = AssetWorkbench.new(); add_child(editor)
+		editor.closed.connect(func(): get_tree().quit())
+		for flag: String in arguments:
+			if flag.begins_with("--paperdoll-project="): editor.open_project(flag.trim_prefix("--paperdoll-project="))
+		if arguments.has("--asset-smoke"):
+			var runner = load("res://tests/asset_workbench_smoke.gd").new(); add_child(runner); runner.call_deferred("run", editor)
+		return
 	if arguments.has("--paperdoll") or arguments.has("--paperdoll-capture") or arguments.has("--paperdoll-smoke") or arguments.has("--paperdoll-nesting-test") or arguments.has("--paperdoll-modular-test"):
 		var workbench=PaperdollWorkbench.new();add_child(workbench)
 		workbench.closed.connect(func():get_tree().quit())

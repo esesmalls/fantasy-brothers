@@ -79,6 +79,11 @@ var _dragging:=false
 var _drag_start:=Vector2.ZERO
 var _drag_offset:=Vector2.ZERO
 var _drag_recorded:=false
+var _boxing:=false
+var _box_origin:=Vector2.ZERO
+var _box_current:=Vector2.ZERO
+var _box_add:=false
+var _box_base:Array=[]
 var _syncing:=false
 var _tree_editing:=false
 var _collapsed:Dictionary={}
@@ -86,7 +91,7 @@ var _shown:Dictionary={"x":0.0,"y":0.0,"size":100.0,"angle":0.0,"layer":0.0}
 var _angle_starts:Dictionary={}
 var _dialogs:Array=[]
 var _close_dialog:ConfirmationDialog
-var _notice:="勾选多个部件后，数值在各自原值上增减；对齐参数会使它们相同。"
+var _notice:="空白处拖动可框选。和父组件或人物整体一起选中时，子部件只跟着走一次。"
 
 class Stage extends Control:
 	var owner_ui:Control
@@ -436,7 +441,9 @@ func numbers_changed() -> void:
 	var dy:=y_field.value-float(_shown.y)
 	var ds:=(size_field.value-float(_shown.size))/100.0
 	var da:=angle_field.value-float(_shown.angle)
-	if not is_zero_approx(dx) or not is_zero_approx(dy):document.nudge_shared(targets,Vector2(dx,dy))
+	if not is_zero_approx(dx) or not is_zero_approx(dy):
+		document.nudge_shared(targets,Vector2(dx,dy))
+		_note_carried_move()
 	elif not is_zero_approx(ds):document.nudge_scale(targets,ds)
 	elif not is_zero_approx(da):document.nudge_angle(targets,da)
 	refresh()
@@ -642,6 +649,121 @@ func local_delta(delta:Vector2,group:String="") -> Vector2:
 		delta=delta.rotated(-deg_to_rad(t.angle))/t.scale
 	return delta
 
+func _visible_ids() -> Array:
+	return Actor.visible_draw_ids(armor,damaged,wounded,weapon,preview_catalog(catalog_data,armor,damaged),hidden_layers,progress,"hit")
+
+func _part_quad(id:String) -> PackedVector2Array:
+	var cam:=camera()
+	var part:Dictionary=catalog_data.parts[id]
+	var offset:=Vector2.ZERO
+	var extra:=0.0
+	if id=="arrow":
+		var arrow:Dictionary=Actor.arrow_sample(progress,"hit",catalog_data)
+		offset=arrow.position
+		extra=arrow.angle
+	elif id in ["sword","spear","bow"]:
+		var pose:Dictionary=Motion.sample(id,progress,"hit",current_action())
+		offset=pose.position
+		extra=pose.angle
+	var angle:=extra+float(part.get("rotation",0.0))
+	var sz:=Vector2(part.size[0],part.size[1])
+	var pivot:=Vector2(part.pivot[0],part.pivot[1])*sz
+	var pos:=Vector2(part.position[0],part.position[1])+offset
+	var points:=PackedVector2Array()
+	for corner in [Vector2.ZERO,Vector2(sz.x,0),sz,Vector2(0,sz.y)]:
+		points.append(cam.origin+((corner-pivot).rotated(angle)+pos)*cam.scale)
+	return points
+
+func _quad_hits_rect(quad:PackedVector2Array, rect:Rect2) -> bool:
+	if quad.size()<3 or not rect.intersects(_quad_bounds(quad)):return false
+	var box:=PackedVector2Array([rect.position,Vector2(rect.end.x,rect.position.y),rect.end,Vector2(rect.position.x,rect.end.y)])
+	return not Geometry2D.intersect_polygons(quad,box).is_empty()
+
+func _quad_bounds(quad:PackedVector2Array) -> Rect2:
+	var bounds:=Rect2(quad[0],Vector2.ZERO)
+	for point in quad:bounds=bounds.expand(point)
+	return bounds
+
+func group_at_point(point:Vector2) -> String:
+	var best:=""
+	var best_rank:=-100000
+	for id in _visible_ids():
+		var group:=str(Actor.PART_GROUP.get(str(id),""))
+		if group=="" or group not in Document.SELECT_ORDER:continue
+		if not Geometry2D.is_point_in_polygon(point,_part_quad(str(id))):continue
+		var rank:=document.layer_rank(group)
+		if rank<best_rank:continue
+		best_rank=rank
+		best=group
+	return best
+
+func groups_in_rect(rect:Rect2) -> Array[String]:
+	if rect.size.x<3.0 or rect.size.y<3.0:return []
+	var found:Array[String]=[]
+	for id in _visible_ids():
+		var group:=str(Actor.PART_GROUP.get(str(id),""))
+		if group=="" or group not in Document.SELECT_ORDER or group in found:continue
+		if not _quad_hits_rect(_part_quad(str(id)),rect):continue
+		found.append(group)
+	found.sort_custom(func(a,b):
+		var ra:=document.layer_rank(a)
+		var rb:=document.layer_rank(b)
+		if ra==rb:return Document.SELECT_ORDER.find(a)<Document.SELECT_ORDER.find(b)
+		return ra<rb)
+	return found
+
+func pointer_for(group:String) -> Vector2:
+	var quad:=PackedVector2Array()
+	for id in _visible_ids():
+		if str(Actor.PART_GROUP.get(str(id),""))!=group:continue
+		quad=_part_quad(str(id))
+		break
+	if quad.size()<4:return camera().origin
+	var center:=(quad[0]+quad[1]+quad[2]+quad[3])*0.25
+	for step in range(1,6):
+		var toward:=float(step)/6.0
+		for index in range(4):
+			var point:Vector2=quad[index].lerp(center,toward)
+			if group_at_point(point)==group:return point
+	if group_at_point(center)==group:return center
+	return center
+
+func _drag_hits_selection(hit:String) -> bool:
+	if hit=="":return false
+	if hit in selected_groups:return true
+	return "bust" in selected_groups and document.follows_bust(hit)
+
+func _note_carried_move() -> void:
+	var targets:=transform_targets()
+	for group in targets:
+		if document.offset_carried(group,targets):
+			_notice="子部件挂在同时选中的父组件或人物整体上，这次只移动上层。"
+			return
+
+func _begin_move_drag(event:InputEventMouseButton) -> void:
+	_dragging=true
+	_boxing=false
+	_drag_start=event.position
+	_drag_recorded=false
+	if selected=="crop":
+		var spec:=document.crop_spec()
+		_drag_offset=Vector2(spec.center[0],spec.center[1])
+	else:
+		var t:Dictionary=document.transform_for(selected)
+		_drag_offset=Vector2(t.offset[0],t.offset[1])
+
+func apply_box_selection() -> void:
+	var rect:=Rect2(_box_origin,_box_current-_box_origin).abs()
+	var hits:=groups_in_rect(rect)
+	var next:Array=[]
+	if _box_add:
+		for group in _box_base:next.append(group)
+		for group in hits:
+			if group not in next:next.append(group)
+	else:next=hits
+	if next.is_empty() or next==selected_groups:return
+	select_groups(next)
+
 func stage_input(event:InputEvent) -> void:
 	if view!="fit" or _modal_open():return
 	if event is InputEventMouseButton and event.button_index==MOUSE_BUTTON_MIDDLE:
@@ -649,21 +771,41 @@ func stage_input(event:InputEvent) -> void:
 	if event is InputEventMouseMotion and _panning:pan=_pan_start+event.position-_drag_start;stage.queue_redraw();stage.accept_event();return
 	if event is InputEventMouseButton and event.button_index==MOUSE_BUTTON_LEFT:
 		if event.pressed:
-			stage.grab_focus();playing=false;progress=0;_dragging=true;_drag_start=event.position
-			if selected=="crop":
-				var spec:=document.crop_spec();_drag_offset=Vector2(spec.center[0],spec.center[1])
-			else:
-				var t:Dictionary=document.transform_for(selected);_drag_offset=Vector2(t.offset[0],t.offset[1])
-			_drag_recorded=false
+			stage.grab_focus();playing=false;progress=0
+			_drag_start=event.position
+			_dragging=false
+			_boxing=false
 			_rotating=event.alt_pressed and selected!="crop" and transform_targets().any(func(group):return Document.allows_scale(group))
-			_rotation_start=document.transform_for(selected).angle if selected!="crop" else 0.0
-			_rotation_mouse=(event.position-camera().origin-selected_anchor()*camera().scale).angle()
-			_angle_starts={}
-			if _rotating:
-				for group in transform_targets():
-					if Document.allows_scale(group):_angle_starts[group]=document.transform_for(group).angle
-		else:_dragging=false;_rotating=false
+			var hit:String=group_at_point(event.position)
+			var crop_drag:bool=selected=="crop" and selected_groups.size()==1 and not event.shift_pressed
+			if _rotating or crop_drag or _drag_hits_selection(hit):
+				_begin_move_drag(event)
+				if _rotating:
+					_rotation_start=document.transform_for(selected).angle
+					_rotation_mouse=(event.position-camera().origin-selected_anchor()*camera().scale).angle()
+					_angle_starts={}
+					for group in transform_targets():
+						if Document.allows_scale(group):_angle_starts[group]=document.transform_for(group).angle
+			elif hit!="":
+				if event.shift_pressed:set_part_checked(hit,true)
+				else:select_group(hit)
+				_begin_move_drag(event)
+			else:
+				_boxing=true
+				_box_origin=event.position
+				_box_current=event.position
+				_box_add=event.shift_pressed
+				_box_base=selected_groups.duplicate()
+		else:
+			if _boxing:apply_box_selection()
+			_dragging=false
+			_rotating=false
+			_boxing=false
 		stage.accept_event()
+	if event is InputEventMouseMotion and _boxing:
+		_box_current=event.position
+		apply_box_selection()
+		stage.queue_redraw();stage.accept_event();return
 	if event is InputEventMouseMotion and _dragging:
 		if _rotating:
 			var angle:=rad_to_deg(wrapf((event.position-camera().origin-selected_anchor()*camera().scale).angle()-_rotation_mouse,-PI,PI))+_rotation_start
@@ -674,22 +816,27 @@ func stage_input(event:InputEvent) -> void:
 			elif not targets.is_empty():ok=document.change(targets[0],_drag_offset,document.transform_for(targets[0]).scale,not _drag_recorded,angle)
 			if ok:_drag_recorded=true
 			refresh();stage.accept_event();return
-		var delta:Vector2=local_delta((event.position-_drag_start)/camera().scale)
+		var world:Vector2=(event.position-_drag_start)/camera().scale
 		if selected=="crop":
 			var spec:=document.crop_spec()
-			var center:=(_drag_offset+delta).snapped(Vector2(.25,.25))
+			var center:=(_drag_offset+world).snapped(Vector2(.25,.25))
 			if document.change_crop(center,Vector2(spec.radius[0],spec.radius[1]),spec.top,not _drag_recorded):_drag_recorded=true
 		elif selected_groups.size()>1:
-			if document.nudge_shared(transform_targets(),delta.snapped(Vector2(.25,.25)),not _drag_recorded):_drag_recorded=true
+			var space:=document.offset_carrier(selected,transform_targets())
+			var shared:=local_delta(world,space).snapped(Vector2(.25,.25))
+			if document.nudge_shared(transform_targets(),shared,not _drag_recorded):
+				_drag_recorded=true
+				_note_carried_move()
 			_drag_start=event.position
 		else:
+			var delta:=local_delta(world)
 			var offset:=(_drag_offset+delta).snapped(Vector2(.25,.25)).clamp(Vector2(-128,-128),Vector2(128,128))
 			if offset!=_drag_offset or _drag_recorded:
 				if document.change(selected,offset,document.transform_for(selected).scale,not _drag_recorded):_drag_recorded=true
 		refresh();stage.accept_event()
 
 func _input(event:InputEvent) -> void:
-	if event is InputEventMouseButton and not event.pressed and event.button_index==MOUSE_BUTTON_LEFT:_dragging=false
+	if event is InputEventMouseButton and not event.pressed and event.button_index==MOUSE_BUTTON_LEFT:_dragging=false;_boxing=false
 	if event is InputEventMouseButton and not event.pressed and event.button_index==MOUSE_BUTTON_MIDDLE:_panning=false
 	if event is InputEventKey and event.pressed and not event.echo and not _modal_open():
 		if event.ctrl_pressed and event.keycode==KEY_S:save_current();get_viewport().set_input_as_handled()
@@ -704,7 +851,9 @@ func _input(event:InputEvent) -> void:
 			if selected=="crop":
 				var spec:=document.crop_spec()
 				document.change_crop(Vector2(spec.center[0],spec.center[1])+delta,Vector2(spec.radius[0],spec.radius[1]),spec.top)
-			elif selected_groups.size()>1:document.nudge_shared(transform_targets(),delta)
+			elif selected_groups.size()>1:
+				document.nudge_shared(transform_targets(),delta)
+				_note_carried_move()
 			else:
 				var t:Dictionary=document.transform_for(selected)
 				document.change(selected,Vector2(t.offset[0],t.offset[1])+local_delta(delta),t.scale)
@@ -749,7 +898,11 @@ func draw_stage(c:Control) -> void:
 		if arrow.visible:Actor.draw_part(c,"arrow",at,s,arrow.position,arrow.angle,Color.WHITE,catalog_data.parts)
 	if ghost:Actor.draw_actor(c,at,s,armor,weapon,damaged,wounded,progress,"hit",reference,[],Color(.6,.85,1,ghost_alpha))
 	if guides:_draw_guides(c,at,s)
-	_text(c,"拖动平移 · Alt 拖动旋转 · 不同分类也可一起勾选",Vector2(18,29),16)
+	_text(c,"拖动已选部件平移 · 空白处拖动框选 · Shift 追加 · Alt 旋转",Vector2(18,29),16)
+	if _boxing:
+		var box:=Rect2(_box_origin,_box_current-_box_origin).abs()
+		c.draw_rect(box,Color(0.95,0.82,0.45,0.16))
+		c.draw_rect(box,Color("f2d08a"),false,1.5)
 	_text(c,"方向键微调 / Shift 加速 · Ctrl Z 撤销 · 棋格中心为锚点",Vector2(18,52),13)
 	var small_y:=c.size.y-28
 	if board_hexes:_draw_board_hexes(c,Vector2(64,small_y),1.0,false)
@@ -866,7 +1019,7 @@ func open_project(path:String) -> bool:
 	refresh();return error.is_empty()
 
 func _file_dialog(action:String) -> void:
-	playing=false;_dragging=false
+	playing=false;_dragging=false;_boxing=false
 	if action=="open" and document.dirty():
 		var confirm:=ConfirmationDialog.new();confirm.title="打开另一份调整";confirm.dialog_text="当前修改尚未保存。继续打开会替换它；可用撤销恢复。";confirm.ok_button_text="继续打开";confirm.cancel_button_text="返回保存";add_child(confirm);_dialogs.append(confirm)
 		confirm.confirmed.connect(func():_show_file_dialog(action));confirm.popup_centered();return

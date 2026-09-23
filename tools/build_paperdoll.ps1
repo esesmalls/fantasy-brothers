@@ -15,6 +15,10 @@ try {
     & $engine --headless --editor --path game --import
     if ($LASTEXITCODE -ne 0) { throw 'Import failed.' }
     if (-not $SkipTests) {
+        & $engine --headless --path game --script res://tests/test_asset_workbench.gd
+        if ($LASTEXITCODE -ne 0) { throw 'Asset workbench checks failed.' }
+        & $engine --headless --path game --script res://tests/test_motion_events.gd
+        if ($LASTEXITCODE -ne 0) { throw 'Authored motion timing checks failed.' }
         & $engine --headless --path game --script res://tests/test_paperdoll.gd
         if ($LASTEXITCODE -ne 0) { throw 'Paperdoll checks failed.' }
         & $engine --headless --path game --script res://tests/test_paperdoll_modules.gd
@@ -27,6 +31,10 @@ try {
     New-Item -ItemType Directory -Force 'builds/paperdoll/windows' | Out-Null
     & $engine --headless --path game --export-release 'Windows Desktop' '../builds/paperdoll/windows/FantasyBrothers-Paperdoll.exe'
     if ($LASTEXITCODE -ne 0) { throw 'Export failed.' }
+    if (-not $SkipTests) {
+        $smokeProcess = Start-Process -FilePath $exportPath -ArgumentList '--', '--asset-smoke' -WindowStyle Hidden -Wait -PassThru
+        if ($smokeProcess.ExitCode -ne 0) { throw 'Exported asset workbench checks failed.' }
+    }
     Copy-Item -LiteralPath 'game/assets/godot-notices.txt' -Destination 'builds/paperdoll/windows/GODOT-NOTICES.txt'
     Get-FileHash -Algorithm SHA256 -LiteralPath 'builds/paperdoll/windows/FantasyBrothers-Paperdoll.exe'
 } finally { Pop-Location }

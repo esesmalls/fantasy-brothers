@@ -6,6 +6,10 @@ if not "%~1"=="" (
   start "" "builds\paperdoll\windows\FantasyBrothers-Paperdoll.exe" -- --paperdoll "--paperdoll-project=%~f1"
   exit /b
 )
+if exist "art\workbench\projects\current.asset.json" (
+  start "" "builds\paperdoll\windows\FantasyBrothers-Paperdoll.exe" -- --paperdoll "--paperdoll-project=%CD%\art\workbench\projects\current.asset.json"
+  exit /b
+)
 if exist "my_test-v2.json" (
   start "" "builds\paperdoll\windows\FantasyBrothers-Paperdoll.exe" -- --paperdoll "--paperdoll-project=%CD%\my_test-v2.json"
   exit /b

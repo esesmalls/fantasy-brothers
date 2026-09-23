@@ -46,11 +46,13 @@ func run(workbench:Control,output:String) -> void:
 		var rect:Rect2=ui.part_row_rect("head")
 		await click(ui.layer_list.global_position+rect.get_center())
 		check(ui.selected=="head","pointer selects head "+str(resolution))
-		var start:Vector2=ui.stage.global_position+ui.camera().origin+Vector2(0,-45)*ui.camera().scale
+		ui.weapon="none";ui.refresh();await settle()
+		var start:Vector2=ui.stage.global_position+ui.pointer_for("head")
 		var prior:float=ui.document.transform_for("head").offset[0]
 		await move(start);await press(start,true)
 		await move(start+Vector2(2*ui.camera().scale,0),true);await press(start+Vector2(2*ui.camera().scale,0),false)
 		check(is_equal_approx(ui.x_field.value,prior+2),"pointer drag updates field "+str(resolution))
+		ui.weapon="sword";ui.refresh()
 		await click(ui.undo_button.get_global_rect().get_center())
 		check(is_equal_approx(ui.x_field.value,prior),"pointer undo "+str(resolution))
 		await click(ui.redo_button.get_global_rect().get_center())
