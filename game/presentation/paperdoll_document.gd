@@ -25,7 +25,10 @@ const DETAIL_LABELS = {"hair":"发型 · 试样","beard":"胡须 · 试样","sca
 const SCHEMA_FIELDS = {
 	1:["schema","kind","baseline_sha256","edits"],
 	2:["schema","kind","baseline_sha256","modules_sha256","edits","appearance"],
-	3:["schema","kind","baseline_sha256","modules_sha256","edits","appearance","crop","actions"]}
+	3:["schema","kind","baseline_sha256","modules_sha256","edits","appearance","crop","actions"],
+	4:["schema","kind","baseline_sha256","modules_sha256","edits","appearance","crop","actions","layers"]}
+const MIN_LAYER := -200
+const MAX_LAYER := 400
 var baseline:Dictionary
 var fingerprint:String
 var modules_fingerprint:String
@@ -33,6 +36,7 @@ var edits:Dictionary={}
 var appearance:Dictionary=DEFAULT_APPEARANCE.duplicate(true)
 var crop:Dictionary={}
 var actions:Dictionary={}
+var layers:Dictionary={}
 var history:Array=[]
 var future:Array=[]
 var saved_text:=""
@@ -53,13 +57,39 @@ static func label_for(group:String) -> String:
 static func allows_scale(group:String) -> bool:
 	return group not in ["bust","base","crop"]
 
+static func has_layer(group:String) -> bool:
+	return Actor.DRAW_RANK.has(group)
+
+static func browser_sections(mode:String) -> Array:
+	if mode=="name":
+		return [{"id":"all","label":"","groups":SELECT_ORDER.duplicate()}]
+	if mode=="layer":
+		return [
+			{"id":"back","label":"后层","groups":["base"]},
+			{"id":"body","label":"身体层","groups":["skin","blood","body"]},
+			{"id":"armor","label":"护甲层","groups":["linen","padded","mail"]},
+			{"id":"face","label":"头面层","groups":["head","scar","beard","hair","bandage"]},
+			{"id":"front","label":"前景","groups":["shield","sword","spear","bow"]},
+			{"id":"ops","label":"操作项","groups":["bust","crop"]}]
+	return [
+		{"id":"reference","label":"参照","groups":["bust","base","crop"]},
+		{"id":"body","label":"身体","groups":["skin","body","blood"]},
+		{"id":"armor","label":"护甲","groups":["linen","padded","mail"]},
+		{"id":"helmet","label":"头盔与头面","groups":["head","hair","beard","scar","bandage"]},
+		{"id":"weapon","label":"武器","groups":["sword","spear","bow","shield"]}]
+
 func snapshot() -> Dictionary:
 	return {"edits":edits.duplicate(true),"appearance":appearance.duplicate(true),
-		"crop":crop.duplicate(true),"actions":actions.duplicate(true)}
+		"crop":crop.duplicate(true),"actions":actions.duplicate(true),"layers":layers.duplicate(true)}
 
 func restore(value:Dictionary) -> void:
 	edits=value.edits.duplicate(true);appearance=value.appearance.duplicate(true)
 	crop=value.get("crop",{}).duplicate(true);actions=value.get("actions",{}).duplicate(true)
+	layers=value.get("layers",{}).duplicate(true)
+
+func layer_rank(group:String) -> int:
+	if layers.has(group):return int(layers[group])
+	return int(Actor.DRAW_RANK.get(group,0))
 
 func transform_for(group:String) -> Dictionary:
 	var value:Dictionary=edits.get(group,{"offset":[0.0,0.0],"scale":1.0}).duplicate(true)
@@ -154,6 +184,127 @@ func rotate_shared(groups:Array,angle:float,record:bool=true) -> bool:
 	edits=next_edits
 	return true
 
+func nudge_scale(groups:Array,delta:float,record:bool=true) -> bool:
+	if not is_finite(delta) or is_zero_approx(delta):return false
+	var next_edits:=edits.duplicate(true)
+	var changed:=false
+	for group in groups:
+		if not allows_scale(group):continue
+		var t:=transform_for(group)
+		var factor:=clampf(snappedf(t.scale+delta,.001),MIN_SCALE,MAX_SCALE)
+		if is_equal_approx(factor,t.scale):continue
+		var offset:=Vector2(t.offset[0],t.offset[1])
+		if offset.is_zero_approx() and is_equal_approx(factor,1.0) and is_zero_approx(t.angle):next_edits.erase(group)
+		else:next_edits[group]=_normalized_transform(offset,factor,t.angle)
+		changed=true
+	if not changed:return false
+	if record:checkpoint()
+	edits=next_edits
+	return true
+
+func nudge_angle(groups:Array,delta:float,record:bool=true) -> bool:
+	if not is_finite(delta) or is_zero_approx(delta):return false
+	var starts:Dictionary={}
+	for group in groups:
+		if allows_scale(group):starts[group]=transform_for(group).angle
+	return apply_angle_delta(starts,delta,record)
+
+func apply_angle_delta(starts:Dictionary,delta:float,record:bool=true) -> bool:
+	if not is_finite(delta):return false
+	var next_edits:=edits.duplicate(true)
+	var changed:=false
+	for group in starts:
+		if not allows_scale(group):continue
+		var t:=transform_for(group)
+		var angle:=clampf(snappedf(float(starts[group])+delta,.1),-180,180)
+		if is_equal_approx(angle,t.angle):continue
+		var offset:=Vector2(t.offset[0],t.offset[1])
+		if offset.is_zero_approx() and is_equal_approx(t.scale,1.0) and is_zero_approx(angle):next_edits.erase(group)
+		else:next_edits[group]=_normalized_transform(offset,t.scale,angle)
+		changed=true
+	if not changed:return false
+	if record:checkpoint()
+	edits=next_edits
+	return true
+
+func set_layer_rank(group:String,rank:int,record:bool=true) -> bool:
+	if not has_layer(group) or rank<MIN_LAYER or rank>MAX_LAYER:return false
+	if rank==layer_rank(group):return false
+	if record:checkpoint()
+	if rank==int(Actor.DRAW_RANK[group]):layers.erase(group)
+	else:layers[group]=rank
+	return true
+
+func nudge_layer(groups:Array,delta:int,record:bool=true) -> bool:
+	if delta==0:return false
+	var next_layers:=layers.duplicate(true)
+	var changed:=false
+	for group in groups:
+		if not has_layer(group):continue
+		var rank:=clampi(layer_rank(group)+delta,MIN_LAYER,MAX_LAYER)
+		if rank==layer_rank(group):continue
+		if rank==int(Actor.DRAW_RANK[group]):next_layers.erase(group)
+		else:next_layers[group]=rank
+		changed=true
+	if not changed:return false
+	if record:checkpoint()
+	layers=next_layers
+	return true
+
+func align_to(groups:Array,source:String,record:bool=true) -> bool:
+	if source not in GROUPS:return false
+	var src:=transform_for(source)
+	var copy_scale:=allows_scale(source)
+	var copy_layer:=has_layer(source)
+	var src_layer:=layer_rank(source) if copy_layer else 0
+	var src_offset:=Vector2(src.offset[0],src.offset[1])
+	if absf(src_offset.x)>MOVE_LIMIT or absf(src_offset.y)>MOVE_LIMIT:return false
+	var next_edits:=edits.duplicate(true)
+	var next_layers:=layers.duplicate(true)
+	var changed:=false
+	for group in groups:
+		if group==source or group not in GROUPS:continue
+		var current:=transform_for(group)
+		var scale:float=current.scale
+		var angle:float=current.angle
+		if copy_scale and allows_scale(group):
+			scale=src.scale
+			angle=src.angle
+		if not allows_scale(group):
+			scale=1.0
+			angle=0.0
+		var current_offset:=Vector2(current.offset[0],current.offset[1])
+		if not current_offset.is_equal_approx(src_offset) or not is_equal_approx(current.scale,scale) or not is_equal_approx(current.angle,angle):
+			if src_offset.is_zero_approx() and is_equal_approx(scale,1.0) and is_zero_approx(angle):next_edits.erase(group)
+			else:next_edits[group]=_normalized_transform(src_offset,scale,angle)
+			changed=true
+		if copy_layer and has_layer(group) and layer_rank(group)!=src_layer:
+			if src_layer==int(Actor.DRAW_RANK[group]):next_layers.erase(group)
+			else:next_layers[group]=src_layer
+			changed=true
+	if not changed:return false
+	if record:checkpoint()
+	edits=next_edits
+	layers=next_layers
+	return true
+
+func reset_components(groups:Array,record:bool=true) -> bool:
+	var next_edits:=edits.duplicate(true)
+	var next_layers:=layers.duplicate(true)
+	var changed:=false
+	for group in groups:
+		if next_edits.has(group):
+			next_edits.erase(group)
+			changed=true
+		if next_layers.has(group):
+			next_layers.erase(group)
+			changed=true
+	if not changed:return false
+	if record:checkpoint()
+	edits=next_edits
+	layers=next_layers
+	return true
+
 func _crop_matches_default(spec:Dictionary) -> bool:
 	var current:=default_crop()
 	return is_equal_approx(spec.center[0],current.center[0]) and is_equal_approx(spec.center[1],current.center[1]) \
@@ -219,8 +370,8 @@ func redo() -> void:
 	history.append(snapshot());restore(future.pop_back())
 
 func reset_all() -> void:
-	if not edits.is_empty() or appearance!=DEFAULT_APPEARANCE or not crop.is_empty() or not actions.is_empty():
-		checkpoint();edits.clear();appearance=DEFAULT_APPEARANCE.duplicate(true);crop={};actions={}
+	if not edits.is_empty() or appearance!=DEFAULT_APPEARANCE or not crop.is_empty() or not actions.is_empty() or not layers.is_empty():
+		checkpoint();edits.clear();appearance=DEFAULT_APPEARANCE.duplicate(true);crop={};actions={};layers={}
 
 func composed() -> Dictionary:
 	var result:=baseline.duplicate(true)
@@ -249,6 +400,7 @@ func composed() -> Dictionary:
 	result.assembly=appearance.duplicate(true)
 	if not crop.is_empty():result.bust_crop=crop.duplicate(true)
 	if not actions.is_empty():result.actions=actions.duplicate(true)
+	if not layers.is_empty():result.layer_ranks=layers.duplicate(true)
 	return result
 
 func uses_authoring() -> bool:
@@ -257,7 +409,12 @@ func uses_authoring() -> bool:
 func payload() -> Dictionary:
 	var data:={"schema":2,"kind":"fantasy-brothers-paperdoll","baseline_sha256":fingerprint,
 		"modules_sha256":modules_fingerprint,"edits":edits.duplicate(true),"appearance":appearance.duplicate(true)}
-	if uses_authoring():
+	if not layers.is_empty():
+		data.schema=4
+		data.layers=layers.duplicate(true)
+		if not crop.is_empty():data.crop=crop.duplicate(true)
+		if not actions.is_empty():data.actions=actions.duplicate(true)
+	elif uses_authoring():
 		data.schema=3
 		if not crop.is_empty():data.crop=crop.duplicate(true)
 		if not actions.is_empty():data.actions=actions.duplicate(true)
@@ -267,7 +424,7 @@ func validate(value:Variant) -> Array[String]:
 	var errors:Array[String]=[]
 	if not value is Dictionary:return ["文件必须是装配配置对象。"]
 	var schema:int=int(value.get("schema",0))
-	if schema not in [1,2,3] or value.get("kind")!="fantasy-brothers-paperdoll":errors.append("不是支持的装配配置版本。")
+	if schema not in [1,2,3,4] or value.get("kind")!="fantasy-brothers-paperdoll":errors.append("不是支持的装配配置版本。")
 	if schema>=2:
 		if value.get("modules_sha256")!=modules_fingerprint:errors.append("拆件样板版本不同，未盲目套用调整。")
 		var a:Variant=value.get("appearance")
@@ -284,7 +441,7 @@ func validate(value:Variant) -> Array[String]:
 	var allowed:Array=SCHEMA_FIELDS.get(schema, [])
 	for key in value:
 		if key not in allowed:errors.append("未知字段："+str(key))
-	if schema==3:
+	if schema>=3:
 		if value.has("crop"):
 			if not value.crop is Dictionary:errors.append("裁取配置必须是对象。")
 			elif not _valid_crop(value.crop):errors.append("裁取范围超出工具限制。")
@@ -298,6 +455,15 @@ func validate(value:Variant) -> Array[String]:
 					if weapon not in Motion.DEFAULT_ACTIONS:errors.append("未知武器动作："+str(weapon));continue
 					if Motion.normalize_action(str(weapon),value.actions[weapon]).is_empty():
 						errors.append("武器动作无效："+str(weapon))
+	if schema==4:
+		if not value.get("layers") is Dictionary or value.layers.is_empty():errors.append("层高配置必须写明改过的组件。")
+		elif value.layers is Dictionary:
+			for group in value.layers:
+				if not has_layer(str(group)):errors.append("该组件没有层高："+str(group));continue
+				var number:Variant=value.layers[group]
+				if not (number is int or number is float) or not is_finite(float(number)):errors.append("层高无效："+str(group));continue
+				var rank:=int(round(float(number)))
+				if absf(float(number)-rank)>0.001 or rank<MIN_LAYER or rank>MAX_LAYER:errors.append("层高超出范围："+str(group))
 	if not value.get("edits") is Dictionary:return errors+["缺少 edits 配置。"]
 	for group in value.edits:
 		if not GROUPS.has(group):errors.append("不允许调整："+str(group));continue
@@ -324,7 +490,11 @@ func load_project(path:String) -> String:
 	var errors:=validate(value)
 	if not errors.is_empty():return "\n".join(errors)
 	checkpoint();edits=value.edits.duplicate(true);appearance=value.get("appearance",DEFAULT_APPEARANCE).duplicate(true)
-	crop=value.get("crop",{}).duplicate(true);actions=value.get("actions",{}).duplicate(true)
+	crop=value.get("crop",{}).duplicate(true);actions=value.get("actions",{}).duplicate(true);layers={}
+	if value.get("layers") is Dictionary:
+		for group in value.layers:
+			var rank:=int(round(float(value.layers[group])))
+			if has_layer(str(group)) and rank!=int(Actor.DRAW_RANK[group]):layers[str(group)]=rank
 	saved_text=JSON.stringify(snapshot())
 	migrated_v3=value.baseline_sha256!=fingerprint or value.schema==1
 	return ""
@@ -379,6 +549,7 @@ func warnings() -> Array[String]:
 	if edits.has("base"):result.append("底座锚点已移动，请复看盘面贴合。")
 	if not crop.is_empty():result.append("盘面裁取已改，超出范围的衣甲会按新边界显示。")
 	if not actions.is_empty():result.append("武器动作已改写，预览与结算共用同一路径，不决定伤害。")
+	if not layers.is_empty():result.append("层高已改，只改变绘制先后，位移和大小不变。")
 	var bow:Dictionary=data.parts.bow
 	var sz:=Vector2(bow.size[0],bow.size[1]);var pivot:=Vector2(bow.pivot[0],bow.pivot[1])*sz
 	var bow_action:=action_for("bow")

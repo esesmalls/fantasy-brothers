@@ -3,6 +3,8 @@ extends Control
 const Document = preload("res://presentation/paperdoll_document.gd")
 const Actor = preload("res://presentation/static_bust_actor.gd")
 const Motion = preload("res://presentation/static_bust_motion.gd")
+## Same pointy-top cell as battle_board.gd: radius 34, first vertex at 30 degrees.
+const HEX_RADIUS := 34.0
 signal closed
 var document=Document.new()
 var selected:="bust"
@@ -15,6 +17,7 @@ var view:="fit"
 var backdrop:="green"
 var hidden_layers:Array=[]
 var guides:=true
+var board_hexes:=true
 var ghost:=false
 var ghost_alpha:=.28
 var zoom:=4.0
@@ -31,6 +34,8 @@ var x_field:SpinBox
 var y_field:SpinBox
 var size_field:SpinBox
 var angle_field:SpinBox
+var layer_field:SpinBox
+var align_button:Button
 var crop_x:SpinBox
 var crop_y:SpinBox
 var crop_rx:SpinBox
@@ -62,7 +67,9 @@ var slider:HSlider
 var play_button:Button
 var undo_button:Button
 var redo_button:Button
-var layer_list:ItemList
+var layer_list:Tree
+var group_choice:OptionButton
+var group_mode:="type"
 var armor_choice:OptionButton
 var weapon_choice:OptionButton
 var view_choice:OptionButton
@@ -73,9 +80,13 @@ var _drag_start:=Vector2.ZERO
 var _drag_offset:=Vector2.ZERO
 var _drag_recorded:=false
 var _syncing:=false
+var _tree_editing:=false
+var _collapsed:Dictionary={}
+var _shown:Dictionary={"x":0.0,"y":0.0,"size":100.0,"angle":0.0,"layer":0.0}
+var _angle_starts:Dictionary={}
 var _dialogs:Array=[]
 var _close_dialog:ConfirmationDialog
-var _notice:="选择左侧部件，Ctrl 多选后可统一改大小和旋转。"
+var _notice:="勾选多个部件后，数值在各自原值上增减；对齐参数会使它们相同。"
 
 class Stage extends Control:
 	var owner_ui:Control
@@ -108,14 +119,16 @@ func _ready() -> void:
 	background_choice=_choice(toolbar,["苔绿底","泥土底","浅底","深底"],["green","earth","light","dark"],func(v):backdrop=v;refresh(),backdrop)
 	head_choice=_choice(toolbar,["H 原整头","H 拆件试样"],["legacy","modular"],func(v):document.set_appearance("head",v);refresh(),document.appearance.head)
 	var body:=HBoxContainer.new();body.size_flags_vertical=Control.SIZE_EXPAND_FILL;body.add_theme_constant_override("separation",12);root.add_child(body)
-	var left:=VBoxContainer.new();left.custom_minimum_size.x=218;body.add_child(left)
-	_label(left,"装配部件 · Ctrl 多选",19)
-	layer_list=ItemList.new();layer_list.size_flags_vertical=Control.SIZE_EXPAND_FILL;layer_list.custom_minimum_size.y=180;left.add_child(layer_list)
-	layer_list.select_mode=ItemList.SELECT_MULTI
-	for group in Document.SELECT_ORDER:layer_list.add_item(Document.label_for(group))
-	layer_list.select(0,true)
-	layer_list.item_selected.connect(func(_i):sync_layer_selection())
-	layer_list.multi_selected.connect(func(_i,_on):sync_layer_selection())
+	var left:=VBoxContainer.new();left.custom_minimum_size.x=260;body.add_child(left)
+	_label(left,"装配部件",19)
+	group_choice=_choice(left,["组件类型","层位置","名称"],["type","layer","name"],func(v):_set_group_mode(str(v)),group_mode)
+	layer_list=Tree.new();layer_list.size_flags_vertical=Control.SIZE_EXPAND_FILL;layer_list.custom_minimum_size.y=220;left.add_child(layer_list)
+	layer_list.hide_root=true;layer_list.columns=2;layer_list.hide_folding=false;layer_list.allow_reselect=true
+	layer_list.set_column_expand(0,false);layer_list.set_column_custom_minimum_width(0,28);layer_list.set_column_expand(1,true);layer_list.set_column_clip_content(1,true)
+	layer_list.item_selected.connect(_on_tree_selected)
+	layer_list.item_edited.connect(_on_tree_edited)
+	layer_list.item_collapsed.connect(_on_tree_collapsed)
+	_rebuild_tree()
 	var layer_scroll:=ScrollContainer.new();layer_scroll.custom_minimum_size.y=210;layer_scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL;layer_scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;left.add_child(layer_scroll)
 	var layer_panel:=VBoxContainer.new();layer_panel.size_flags_horizontal=Control.SIZE_EXPAND_FILL;layer_scroll.add_child(layer_panel)
 	_label(layer_panel,"启用部件 · 随配置保存",15)
@@ -129,7 +142,7 @@ func _ready() -> void:
 	for id in ["base","head","body","linen","padded","mail","shield"]:
 		var label:String={"base":"底座","head":"头部","body":"内衣","linen":"亚麻","padded":"绗缝","mail":"链甲","shield":"盾"}[id]
 		_toggle(layers,label,func(on):set_layer_visible(id,on),true)
-	var hint:=_label(layer_panel,"发须需切到 H 拆件试样\n血迹在皮肤上、衣物下\n盘面裁取与底座锚点可调\n默认保持现行范围",13);hint.modulate=Color("a8b4a4")
+	var hint:=_label(layer_panel,"发须需切到 H 拆件试样\n血迹在皮肤上、衣物下\n不同分类的部件可以一起勾选，再点一次取消\n层高只改绘制先后",13);hint.modulate=Color("a8b4a4")
 	stage=Stage.new();stage.owner_ui=self;stage.size_flags_horizontal=Control.SIZE_EXPAND_FILL;stage.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	stage.clip_contents=true;stage.focus_mode=Control.FOCUS_ALL;stage.mouse_default_cursor_shape=Control.CURSOR_MOVE;body.add_child(stage)
 	var right_scroll:=ScrollContainer.new();right_scroll.custom_minimum_size.x=234;right_scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;body.add_child(right_scroll)
@@ -140,6 +153,8 @@ func _ready() -> void:
 	y_field=_number(transform_box,"上下 · ±128",-128,128,.25,func(_v):numbers_changed())
 	size_field=_number(transform_box,"等比大小 % · 25–300",25,300,1,func(_v):numbers_changed())
 	angle_field=_number(transform_box,"旋转 ° · 绕锚点",-180,180,.5,func(_v):numbers_changed())
+	layer_field=_number(transform_box,"层高 · 越大越靠前",Document.MIN_LAYER,Document.MAX_LAYER,1,func(_v):layer_changed())
+	align_button=_button(transform_box,"对齐参数",align_parameters)
 	crop_box=VBoxContainer.new();crop_box.add_theme_constant_override("separation",9);right.add_child(crop_box)
 	crop_x=_number(crop_box,"裁取中心左右",-80,80,.25,func(_v):crop_changed())
 	crop_y=_number(crop_box,"裁取中心上下",-80,80,.25,func(_v):crop_changed())
@@ -153,6 +168,7 @@ func _ready() -> void:
 	_button(right,"复原此部件",reset_selected)
 	_button(right,"复原全部调整",func():document.reset_all();refresh())
 	_label(right,"对照与视图",18)
+	_toggle(right,"棋盘格",func(v):board_hexes=v;refresh(),true)
 	_toggle(right,"盘面与锚点",func(v):guides=v;refresh(),true)
 	_toggle(right,"查看选中部件原图",func(v):source_view=v;refresh())
 	_button(right,"定位选中部件",focus_selected)
@@ -188,12 +204,12 @@ func _ready() -> void:
 
 func _build_theme() -> void:
 	var t:=Theme.new();t.default_font=_font;t.default_font_size=15
-	for type in ["Button","OptionButton","LineEdit","ItemList"]:
+	for type in ["Button","OptionButton","LineEdit","ItemList","Tree"]:
 		for state in ["normal","panel","hover","pressed","focus"]:
 			var box:=StyleBoxFlat.new();box.bg_color=Color("283a34") if state not in ["hover","pressed"] else Color("4c5540")
 			box.border_color=Color("a98b55") if state=="focus" else Color("596551");box.set_border_width_all(1);box.set_corner_radius_all(4)
 			box.content_margin_left=10;box.content_margin_right=10;box.content_margin_top=7;box.content_margin_bottom=7;t.set_stylebox(state,type,box)
-		for name in ["font_color","font_hover_color","font_pressed_color"]:t.set_color(name,type,Color("e8dcc4"))
+		for name in ["font_color","font_hover_color","font_pressed_color","font_selected_color","font_hovered_color"]:t.set_color(name,type,Color("e8dcc4"))
 	t.set_color("font_color","Label",Color("e8dcc4"));theme=t
 
 func _label(parent:Node,value:String,font_size:int=16) -> Label:
@@ -225,17 +241,175 @@ func transform_targets() -> Array[String]:
 func current_action() -> Dictionary:
 	return document.action_for(weapon) if weapon!="none" else {}
 
-func sync_layer_selection() -> void:
-	if _syncing or layer_list==null:return
-	var next:Array[String]=[]
-	for index in layer_list.get_selected_items():
-		next.append(Document.SELECT_ORDER[index])
-	if next.is_empty():next=["bust"]
-	selected_groups=next;selected=selected_groups[-1]
+func _set_group_mode(mode:String) -> void:
+	if mode==group_mode and layer_list!=null and layer_list.get_root()!=null:return
+	group_mode=mode
+	if group_choice!=null:
+		var index:=["type","layer","name"].find(mode)
+		if index>=0 and group_choice.selected!=index:group_choice.select(index)
+	_rebuild_tree()
+	refresh()
+
+func _rebuild_tree() -> void:
+	if layer_list==null:return
+	_syncing=true
+	layer_list.clear()
+	var root:=layer_list.create_item()
+	for section in Document.browser_sections(group_mode):
+		var parent:=root
+		if str(section.label)!="":
+			parent=layer_list.create_item(root)
+			_style_tree_row(parent,str(section.label))
+			parent.set_meta("category",section.id)
+			parent.collapsed=bool(_collapsed.get(group_mode+":"+str(section.id),false))
+		for group in section.groups:
+			var leaf:=layer_list.create_item(parent)
+			_style_tree_row(leaf,Document.label_for(str(group)))
+			leaf.set_meta("group",str(group))
+	_syncing=false
+
+func _style_tree_row(item:TreeItem,text:String) -> void:
+	item.set_cell_mode(0,TreeItem.CELL_MODE_CHECK)
+	item.set_editable(0,true)
+	item.set_selectable(0,false)
+	item.set_cell_mode(1,TreeItem.CELL_MODE_STRING)
+	item.set_text(1,text)
+	item.set_custom_font(1,_font)
+	item.set_custom_font_size(1,15)
+	item.set_custom_color(1,Color("e8dcc4"))
+	item.set_selectable(1,true)
+
+func _tree_nodes(item:TreeItem,into:Array) -> void:
+	while item:
+		into.append(item)
+		_tree_nodes(item.get_first_child(),into)
+		item=item.get_next()
+
+func _find_leaf(group:String) -> TreeItem:
+	if layer_list==null or layer_list.get_root()==null:return null
+	var nodes:Array=[]
+	_tree_nodes(layer_list.get_root().get_first_child(),nodes)
+	for item in nodes:
+		if item.has_meta("group") and str(item.get_meta("group"))==group:return item
+	return null
+
+func focus_part_row(group:String) -> void:
+	var item:=_find_leaf(group)
+	if item==null:return
+	var parent:TreeItem=item.get_parent()
+	if parent!=null and parent!=layer_list.get_root() and parent.collapsed:parent.collapsed=false
+	layer_list.scroll_to_item(item)
+
+func part_row_rect(group:String) -> Rect2:
+	var item:=_find_leaf(group)
+	if item==null:return Rect2()
+	var label:=layer_list.get_item_area_rect(item,1)
+	if label.size.x>8:return label
+	return layer_list.get_item_area_rect(item,0)
+
+func _sync_tree_checks() -> void:
+	if layer_list==null or layer_list.get_root()==null:return
+	var nodes:Array=[]
+	_tree_nodes(layer_list.get_root().get_first_child(),nodes)
+	for item in nodes:
+		if item.has_meta("group"):
+			item.set_checked(0,str(item.get_meta("group")) in selected_groups)
+		elif item.has_meta("category"):
+			var child:TreeItem=item.get_first_child()
+			var all:=child!=null
+			var any:=false
+			while child:
+				var on:=str(child.get_meta("group")) in selected_groups
+				child.set_checked(0,on)
+				all=all and on
+				any=any or on
+				child=child.get_next()
+			item.set_checked(0,all)
+			item.set_indeterminate(0,any and not all)
+	var primary:=_find_leaf(selected)
+	if primary:primary.select(1)
+
+func _on_tree_collapsed(item:TreeItem) -> void:
+	if _syncing or not item.has_meta("category"):return
+	_collapsed[group_mode+":"+str(item.get_meta("category"))]=item.collapsed
+	var primary:=_find_leaf(selected)
+	if primary:
+		_syncing=true
+		primary.select(1)
+		_syncing=false
+
+func _category_members(item:TreeItem) -> Array:
+	var members:Array=[]
+	var child:TreeItem=item.get_first_child()
+	while child:
+		if child.has_meta("group"):members.append(str(child.get_meta("group")))
+		child=child.get_next()
+	return members
+
+func _apply_members(members:Array,turn_on:bool) -> void:
+	var next:Array=[]
+	for group in selected_groups:
+		if group not in members:next.append(group)
+	if turn_on:
+		for group in members:
+			if group not in next:next.append(group)
+	if next.is_empty() and not members.is_empty():next=[members[members.size()-1]]
+	select_groups(next)
+
+func toggle_part(group:String) -> void:
+	var name:=str(group)
+	if name not in Document.SELECT_ORDER:return
+	set_part_checked(name,name not in selected_groups)
+
+func set_part_checked(group:String,on:bool) -> void:
+	var name:=str(group)
+	if name not in Document.SELECT_ORDER:return
+	var next:Array=[]
+	for existing in selected_groups:next.append(existing)
+	if on:
+		if name not in next:next.append(name)
+	elif name in next:
+		if next.size()==1:return
+		next.erase(name)
+	else:return
+	select_groups(next)
+
+func apply_tree_item_check(item:TreeItem) -> void:
+	if item==null:return
+	if item.has_meta("category"):_apply_members(_category_members(item),item.is_checked(0))
+	elif item.has_meta("group"):set_part_checked(str(item.get_meta("group")),item.is_checked(0))
+
+func _on_tree_edited() -> void:
+	if _syncing or _tree_editing:return
+	var item:TreeItem=layer_list.get_edited()
+	if item==null or layer_list.get_edited_column()!=0:return
+	_tree_editing=true
+	apply_tree_item_check(item)
+	call_deferred("_end_tree_edit")
+
+func _end_tree_edit() -> void:
+	_tree_editing=false
+
+func _on_tree_selected() -> void:
+	if _syncing or _tree_editing:return
+	var item:TreeItem=layer_list.get_selected()
+	if item==null:return
+	_tree_editing=true
+	if item.has_meta("category"):
+		var members:=_category_members(item)
+		var all_on:=not members.is_empty()
+		for group in members:
+			if group not in selected_groups:all_on=false
+		_apply_members(members,not all_on)
+	elif item.has_meta("group"):toggle_part(str(item.get_meta("group")))
+	call_deferred("_end_tree_edit")
+
+func _apply_part_preview() -> void:
 	if selected in ["sword","spear","bow"]:weapon=selected
 	elif selected=="shield":weapon="sword"
 	elif selected in ["body","linen","padded","mail","skin"]:armor={"body":"bare","skin":"nude"}.get(selected,selected)
-	playing=false;progress=0;refresh()
+	playing=false
+	progress=0
 
 func select_group(group:String) -> void:
 	select_groups([group])
@@ -244,25 +418,42 @@ func select_groups(groups:Array) -> void:
 	if groups.is_empty():groups=["bust"]
 	selected_groups=[]
 	for group in groups:
-		if group in Document.SELECT_ORDER:selected_groups.append(str(group))
+		var name:=str(group)
+		if name in Document.SELECT_ORDER and name not in selected_groups:selected_groups.append(name)
 	if selected_groups.is_empty():selected_groups=["bust"]
 	selected=selected_groups[-1]
-	_syncing=true
-	if layer_list!=null:
-		layer_list.deselect_all()
-		for group in selected_groups:layer_list.select(Document.SELECT_ORDER.find(group),false)
-	_syncing=false
-	if selected in ["sword","spear","bow"]:weapon=selected
-	elif selected=="shield":weapon="sword"
-	elif selected in ["body","linen","padded","mail","skin"]:armor={"body":"bare","skin":"nude"}.get(selected,selected)
-	playing=false;progress=0;refresh()
+	_apply_part_preview()
+	refresh()
 
 func numbers_changed() -> void:
 	if size_field==null or _syncing:return
 	var targets:=transform_targets()
 	if targets.is_empty():return
-	if targets.size()==1:document.change(targets[0],Vector2(x_field.value,y_field.value),size_field.value/100.0,true,angle_field.value)
-	else:document.change_shared(targets,Vector2(x_field.value,y_field.value),size_field.value/100.0,angle_field.value)
+	if targets.size()==1:
+		document.change(targets[0],Vector2(x_field.value,y_field.value),size_field.value/100.0,true,angle_field.value)
+		refresh();return
+	var dx:=x_field.value-float(_shown.x)
+	var dy:=y_field.value-float(_shown.y)
+	var ds:=(size_field.value-float(_shown.size))/100.0
+	var da:=angle_field.value-float(_shown.angle)
+	if not is_zero_approx(dx) or not is_zero_approx(dy):document.nudge_shared(targets,Vector2(dx,dy))
+	elif not is_zero_approx(ds):document.nudge_scale(targets,ds)
+	elif not is_zero_approx(da):document.nudge_angle(targets,da)
+	refresh()
+
+func layer_changed() -> void:
+	if _syncing or layer_field==null:return
+	var targets:Array[String]=[]
+	for group in transform_targets():
+		if Document.has_layer(group):targets.append(group)
+	if targets.is_empty():return
+	if selected_groups.size()==1:document.set_layer_rank(targets[0],int(round(layer_field.value)))
+	else:document.nudge_layer(targets,int(round(layer_field.value-float(_shown.layer))))
+	refresh()
+
+func align_parameters() -> void:
+	if selected_groups.size()<2:return
+	document.align_to(transform_targets(),selected)
 	refresh()
 
 func crop_changed() -> void:
@@ -271,12 +462,10 @@ func crop_changed() -> void:
 	refresh()
 
 func reset_selected() -> void:
-	if selected=="crop":
+	if selected=="crop" and selected_groups.size()==1:
 		var spec:=document.default_crop()
 		document.change_crop(Vector2(spec.center[0],spec.center[1]),Vector2(spec.radius[0],spec.radius[1]),spec.top)
-	elif selected_groups.size()>1:
-		for group in transform_targets():document.change(group,Vector2.ZERO,1,group==transform_targets()[0],0)
-	else:document.change(selected,Vector2.ZERO,1,true,0)
+	else:document.reset_components(transform_targets())
 	refresh()
 
 func refresh_action_fields() -> void:
@@ -381,6 +570,17 @@ func refresh() -> void:
 		if Document.allows_scale(group):can_scale=true
 	angle_field.editable=can_scale;size_field.editable=can_scale
 	size_field.modulate=Color.WHITE if can_scale else Color(.6,.6,.6)
+	var layered:=Document.has_layer(selected)
+	if layer_field!=null:
+		layer_field.editable=layered
+		layer_field.modulate=Color.WHITE if layered else Color(.6,.6,.6)
+		layer_field.set_value_no_signal(document.layer_rank(selected) if layered else 0)
+	if align_button!=null:
+		align_button.visible=selected_groups.size()>1
+		align_button.disabled=selected not in Document.GROUPS
+	_shown={"x":x_field.value,"y":y_field.value,"size":size_field.value,"angle":angle_field.value,
+		"layer":layer_field.value if layer_field!=null else 0.0}
+	_sync_tree_checks()
 	var spec:=document.crop_spec()
 	if crop_x!=null:
 		crop_x.set_value_no_signal(spec.center[0]);crop_y.set_value_no_signal(spec.center[1])
@@ -458,6 +658,10 @@ func stage_input(event:InputEvent) -> void:
 			_rotating=event.alt_pressed and selected!="crop" and transform_targets().any(func(group):return Document.allows_scale(group))
 			_rotation_start=document.transform_for(selected).angle if selected!="crop" else 0.0
 			_rotation_mouse=(event.position-camera().origin-selected_anchor()*camera().scale).angle()
+			_angle_starts={}
+			if _rotating:
+				for group in transform_targets():
+					if Document.allows_scale(group):_angle_starts[group]=document.transform_for(group).angle
 		else:_dragging=false;_rotating=false
 		stage.accept_event()
 	if event is InputEventMouseMotion and _dragging:
@@ -466,7 +670,7 @@ func stage_input(event:InputEvent) -> void:
 			angle=snappedf(clampf(angle,-180,180),.5)
 			var targets:=transform_targets()
 			var ok:=false
-			if targets.size()>1:ok=document.rotate_shared(targets,angle,not _drag_recorded)
+			if targets.size()>1:ok=document.apply_angle_delta(_angle_starts,angle-_rotation_start,not _drag_recorded)
 			elif not targets.is_empty():ok=document.change(targets[0],_drag_offset,document.transform_for(targets[0]).scale,not _drag_recorded,angle)
 			if ok:_drag_recorded=true
 			refresh();stage.accept_event();return
@@ -535,6 +739,7 @@ func draw_stage(c:Control) -> void:
 	if guides:
 		for x in range(-40,61,10):c.draw_line(at+Vector2(x,-95)*s,at+Vector2(x,10)*s,Color(.6,.7,.6,.10))
 		for y in range(-90,11,10):c.draw_line(at+Vector2(-45,y)*s,at+Vector2(65,y)*s,Color(.6,.7,.6,.10))
+	if board_hexes:_draw_board_hexes(c,at,s,true)
 	Actor.draw_actor(c,at,s,armor,weapon,damaged,wounded,progress,"hit",rendered,hidden_layers)
 	if source_view and selected not in ["bust","crop"]:
 		var id:=selected_id();var pose:Dictionary=Motion.sample(id,progress,"hit",current_action()) if id in ["sword","spear","bow"] else {"position":Vector2.ZERO,"angle":0.0}
@@ -544,9 +749,10 @@ func draw_stage(c:Control) -> void:
 		if arrow.visible:Actor.draw_part(c,"arrow",at,s,arrow.position,arrow.angle,Color.WHITE,catalog_data.parts)
 	if ghost:Actor.draw_actor(c,at,s,armor,weapon,damaged,wounded,progress,"hit",reference,[],Color(.6,.85,1,ghost_alpha))
 	if guides:_draw_guides(c,at,s)
-	_text(c,"拖动平移 · Alt 拖动旋转 · Ctrl 多选统一变换",Vector2(18,29),16)
-	_text(c,"方向键微调 / Shift 加速 · Ctrl Z 撤销 · 盘面可调",Vector2(18,52),13)
+	_text(c,"拖动平移 · Alt 拖动旋转 · 不同分类也可一起勾选",Vector2(18,29),16)
+	_text(c,"方向键微调 / Shift 加速 · Ctrl Z 撤销 · 棋格中心为锚点",Vector2(18,52),13)
 	var small_y:=c.size.y-28
+	if board_hexes:_draw_board_hexes(c,Vector2(64,small_y),1.0,false)
 	Actor.draw_actor(c,Vector2(64,small_y),1,armor,weapon,damaged,wounded,0,"hit",rendered)
 	Actor.draw_actor(c,Vector2(215,small_y),2,armor,weapon,damaged,wounded,0,"hit",rendered)
 	Actor.draw_actor(c,Vector2(c.size.x-130,small_y),2,armor,weapon,damaged,wounded,0,"hit",reference)
@@ -579,17 +785,41 @@ func _draw_matrix(c:Control) -> void:
 			if col==0:state_label=["完好","无甲损变体","脸伤"][row]
 			_text(c,["亚麻","绗缝","链甲"][col]+" · "+state_label,Vector2(col*cell.x+14,65+row*cell.y),13)
 
+static func board_hex_points(center:Vector2,scale_value:float,radius:float=-1.0) -> PackedVector2Array:
+	var used:=HEX_RADIUS-1.0 if radius<0.0 else radius
+	var points:=PackedVector2Array()
+	for index in range(6):
+		var angle:=deg_to_rad(30.0+60.0*float(index))
+		points.append(center+Vector2(cos(angle),sin(angle))*used*scale_value)
+	return points
+
+static func board_cell_center(origin:Vector2,q:int,r:int,scale_value:float) -> Vector2:
+	return origin+Vector2(sqrt(3.0)*HEX_RADIUS*(float(q)+float(r)*0.5),1.5*HEX_RADIUS*float(r))*scale_value
+
+func _draw_hex(c:CanvasItem,center:Vector2,scale_value:float,fill:Color,line:Color,width:float) -> void:
+	var hex:=board_hex_points(center,scale_value)
+	c.draw_colored_polygon(hex,fill)
+	var loop:=hex.duplicate()
+	loop.append(loop[0])
+	c.draw_polyline(loop,line,width,true)
+
+func _draw_board_hexes(c:CanvasItem,origin:Vector2,scale_value:float,with_neighbors:bool) -> void:
+	if with_neighbors:
+		for cell in [Vector2i(1,0),Vector2i(1,-1),Vector2i(0,-1),Vector2i(-1,0),Vector2i(-1,1),Vector2i(0,1)]:
+			_draw_hex(c,board_cell_center(origin,cell.x,cell.y,scale_value),scale_value,Color(.45,.49,.35,.08),Color(.7,.7,.55,.18),1.0)
+	_draw_hex(c,origin,scale_value,Color(.45,.49,.35,.16),Color(.78,.74,.52,.55),1.5)
+	c.draw_line(origin-Vector2(7,0),origin+Vector2(7,0),Color(.86,.78,.48,.8),1.0)
+	c.draw_line(origin-Vector2(0,7),origin+Vector2(0,7),Color(.86,.78,.48,.8),1.0)
+
 func _draw_field(c:Control) -> void:
 	_text(c,"战场尺寸检查  ·  1× / 2×",Vector2(18,30),18)
-	_text(c,"仅为尺寸与相邻遮挡检查；不代表新增战场美术。",Vector2(18,53),14)
+	_text(c,"棋格与战场同尺寸，只检查相邻遮挡，不是新战场美术。",Vector2(18,53),14)
 	for row in range(2):
 		var s:=float(row+1);var y:=c.size.y*(.38 if row==0 else .8)
-		var step:=82*s;var start:=c.size.x*.5-step
+		var step:=sqrt(3.0)*HEX_RADIUS*s;var start:=c.size.x*.5-step
 		for i in range(3):
 			var at:=Vector2(start+i*step,y)
-			var hex:=PackedVector2Array()
-			for j in range(6):hex.append(at+Vector2(cos(j*PI/3),sin(j*PI/3))*(39*s))
-			c.draw_colored_polygon(hex,Color(.45,.49,.35,.13));hex.append(hex[0]);c.draw_polyline(hex,Color(.7,.7,.55,.25),1,true)
+			_draw_hex(c,at,s,Color(.45,.49,.35,.13),Color(.7,.7,.55,.45),1.0)
 			Actor.draw_actor(c,at,s,["linen","padded","mail"][i],["sword","spear","bow"][i],damaged,wounded,0,"hit",preview_catalog(catalog_data,["linen","padded","mail"][i],damaged))
 		_text(c,str(row+1)+"×",Vector2(18,y),18)
 

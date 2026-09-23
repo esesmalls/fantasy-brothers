@@ -4,11 +4,24 @@ extends RefCounted
 const Motion = preload("res://presentation/static_bust_motion.gd")
 const CATALOG := "res://assets/art/static-bust/catalog.json"
 const V3_CATALOG := "res://assets/art/static-bust/catalog-v3.json"
+const MODULES := "res://assets/art/static-bust/modules.json"
+const RUNTIME_PROFILE := "res://assets/art/static-bust/runtime-profile.json"
+## Higher rank draws later. Defaults match the historical paint order; overrides come from a draft.
+const DRAW_RANK := {
+	"base":0,"skin":10,"blood":20,"body":30,"linen":40,"padded":50,"mail":60,
+	"head":70,"scar":80,"beard":90,"hair":100,"bandage":110,
+	"shield":120,"sword":130,"spear":140,"bow":150}
+const PART_GROUP := {
+	"base":"base","body":"body","linen":"linen","padded":"padded","padded_damaged":"padded",
+	"mail":"mail","mail_damaged":"mail","head":"head","wounded":"head","face":"head",
+	"skin":"skin","blood":"blood","hair":"hair","beard":"beard","scar":"scar","bandage":"bandage",
+	"shield":"shield","sword":"sword","spear":"spear","bow":"bow","arrow":"bow"}
 static var _catalog: Dictionary = {}
 static var _previous_catalog: Dictionary = {}
 static var _textures: Dictionary = {}
 static var _v3:Dictionary={}
 static var _outlines:Dictionary={}
+static var _runtime:Dictionary={}
 
 static func v3_catalog() -> Dictionary:
 	if _v3.is_empty():_v3=JSON.parse_string(FileAccess.get_file_as_string(V3_CATALOG))
@@ -21,6 +34,57 @@ static func catalog() -> Dictionary:
 static func parts() -> Dictionary:
 	if _catalog.is_empty():_catalog = JSON.parse_string(FileAccess.get_file_as_string(CATALOG))
 	return _catalog.parts
+
+static func runtime_catalog() -> Dictionary:
+	if not _runtime.is_empty():return _runtime
+	var result:Dictionary=catalog().duplicate(true)
+	var modules:Variant=JSON.parse_string(FileAccess.get_file_as_string(MODULES))
+	if modules is Dictionary:
+		result.parts.merge(modules.get("parts", {}), true)
+	var profile:Variant=JSON.parse_string(FileAccess.get_file_as_string(RUNTIME_PROFILE))
+	if not profile is Dictionary:return result
+	var groups:Dictionary={
+		"bust":["body","linen","padded","padded_damaged","mail","mail_damaged","head","wounded","skin","face","hair","beard","scar","bandage","blood"],
+		"base":["base"],"head":["head","wounded","face"],"skin":["skin"],"body":["body"],"linen":["linen"],
+		"padded":["padded","padded_damaged"],"mail":["mail","mail_damaged"],
+		"sword":["sword"],"spear":["spear"],"bow":["bow"],"shield":["shield"]}
+	var edits:Dictionary=profile.get("edits", {})
+	for group in edits:
+		if group == "bust":continue
+		if not groups.has(group):continue
+		var transform:Dictionary=edits[group]
+		var offset:=Vector2(float(transform.offset[0]),float(transform.offset[1]))
+		var scale:=float(transform.get("scale",1.0))
+		var angle:=deg_to_rad(float(transform.get("angle",0.0)))
+		for id in groups[group]:
+			if not result.parts.has(id):continue
+			var part:Dictionary=result.parts[id]
+			var pos:=Vector2(float(part.position[0]),float(part.position[1]))
+			part.position=[pos.x+offset.x,pos.y+offset.y]
+			part.size=[float(part.size[0])*scale,float(part.size[1])*scale]
+			if not is_zero_approx(angle):part.rotation=angle
+	for id in ["hair","beard","scar","bandage","blood"]:
+		if not result.parts.has(id):continue
+		var part:Dictionary=result.parts[id]
+		var parent:=str(part.get("parent", ""))
+		if not edits.has(parent):continue
+		var transform:Dictionary=edits[parent]
+		var anchor:=Vector2(float(catalog().parts[parent].position[0]),float(catalog().parts[parent].position[1]))
+		var pos:=Vector2(float(part.position[0]),float(part.position[1]))
+		var scale:=float(transform.get("scale",1.0))
+		var angle:=deg_to_rad(float(transform.get("angle",0.0)))
+		pos=anchor+((pos-anchor)*scale).rotated(angle)+Vector2(float(transform.offset[0]),float(transform.offset[1]))
+		part.position=[pos.x,pos.y];part.size=[float(part.size[0])*scale,float(part.size[1])*scale]
+		if not is_zero_approx(angle):part.rotation=part.get("rotation",0.0)+angle
+	var bust:Dictionary=edits.get("bust", {})
+	var bust_offset:=Vector2(float(bust.get("offset",[0,0])[0]),float(bust.get("offset",[0,0])[1]))
+	for id in groups.bust:
+		if result.parts.has(id):
+			var p:Dictionary=result.parts[id];p.position=[float(p.position[0])+bust_offset.x,float(p.position[1])+bust_offset.y]
+	result.assembly=profile.get("appearance", {}).duplicate(true)
+	if profile.has("crop"):result.bust_crop=profile.crop.duplicate(true)
+	_runtime=result
+	return _runtime
 
 static func previous_parts() -> Dictionary:
 	if _previous_catalog.is_empty():
@@ -105,6 +169,55 @@ static func body_layers(armor: String, damaged: bool, wounded: bool,wear_damage:
 	layers.append("wounded" if wounded else "head")
 	return layers
 
+static func assembly_layers(armor: String, damaged: bool, wounded: bool, catalog_data: Dictionary = {}) -> Array:
+	var layers: Array = body_layers(armor, damaged, wounded, catalog_data.get("wear_damage", {}))
+	var assembly: Dictionary = catalog_data.get("assembly", {})
+	if assembly.is_empty(): return layers
+	if armor == "nude": layers = ["base", "wounded" if wounded else "head"]
+	if assembly.get("skin", true):
+		layers.insert(1, "skin")
+		if assembly.get("blood", false): layers.insert(2, "blood")
+	if assembly.get("head", "legacy") == "modular":
+		layers[-1] = "face"
+		if assembly.get("scar", false) or wounded: layers.append("scar")
+		if assembly.get("beard", true): layers.append("beard")
+		if assembly.get("hair", true): layers.append("hair")
+	elif assembly.get("scar", false): layers.append("scar")
+	if assembly.get("bandage", false): layers.append("bandage")
+	return layers
+
+static func rank_of(id: String, overrides: Dictionary) -> int:
+	var group := str(PART_GROUP.get(id, id))
+	if overrides.has(group): return int(overrides[group])
+	return int(DRAW_RANK.get(group, 0))
+
+static func sort_draw_ids(ids: Array, overrides: Dictionary) -> Array:
+	var decorated: Array = []
+	for index in range(ids.size()):
+		decorated.append({"id":ids[index],"rank":rank_of(str(ids[index]), overrides),"index":index})
+	decorated.sort_custom(func(a, b):
+		if int(a.rank) == int(b.rank): return int(a.index) < int(b.index)
+		return int(a.rank) < int(b.rank))
+	var ordered: Array = []
+	for item in decorated: ordered.append(item.id)
+	return ordered
+
+static func visible_draw_ids(armor: String, damaged: bool, wounded: bool, weapon: String,
+		catalog_data: Dictionary = {}, hidden: Array = [], p: float = 0.0, outcome: String = "hit") -> Array:
+	var ids: Array = []
+	for part in assembly_layers(armor, damaged, wounded, catalog_data):
+		if part in hidden: continue
+		if part in ["face", "hair", "beard", "scar", "bandage"] and "head" in hidden: continue
+		if part == "blood" and "skin" in hidden: continue
+		ids.append(part)
+	if weapon == "none": return ids
+	if weapon == "sword" and "shield" not in hidden: ids.append("shield")
+	if weapon in hidden: return ids
+	ids.append(weapon)
+	var action := motion_action(weapon, catalog_data)
+	if weapon == "bow" and p < Motion.release(weapon, action): ids.append("arrow")
+	return ids
+
 static func draw_part(c: CanvasItem, id: String, origin: Vector2, scale_value: float,
 		offset: Vector2 = Vector2.ZERO, angle: float = 0.0, tint: Color = Color.WHITE,
 		catalog_parts: Dictionary = {}) -> void:
@@ -129,21 +242,7 @@ static func draw_body(c: CanvasItem, origin: Vector2, scale_value: float,
 		armor: String = "mail", damaged: bool = false, wounded: bool = false,
 		catalog_data:Dictionary={},hidden:Array=[],tint:Color=Color.WHITE) -> void:
 	var data:Dictionary=parts() if catalog_data.is_empty() else catalog_data.parts
-	var layers:=body_layers(armor,damaged,wounded,catalog_data.get("wear_damage",{}))
-	var assembly:Dictionary=catalog_data.get("assembly",{})
-	if not assembly.is_empty():
-		if armor=="nude":layers=["base","wounded" if wounded else "head"]
-		if assembly.get("skin",true):
-			layers.insert(1,"skin")
-			if assembly.get("blood",false):layers.insert(2,"blood")
-		if assembly.get("head","legacy")=="modular":
-			layers[-1]="face"
-			if assembly.get("scar",false) or wounded:layers.append("scar")
-			if assembly.get("beard",true):layers.append("beard")
-			if assembly.get("hair",true):layers.append("hair")
-		elif assembly.get("scar",false):layers.append("scar")
-		if assembly.get("bandage",false):layers.append("bandage")
-	for part in layers:
+	for part in assembly_layers(armor,damaged,wounded,catalog_data):
 		if part in hidden:continue
 		if part in ["face","hair","beard","scar","bandage"] and "head" in hidden:continue
 		if part=="blood" and "skin" in hidden:continue
@@ -172,8 +271,38 @@ static func draw_actor(c: CanvasItem, origin: Vector2, scale_value: float,
 		armor: String = "mail", weapon: String = "sword", damaged: bool = false,
 		wounded: bool = false, p: float = 0.0, outcome: String = "hit",
 		catalog_data:Dictionary={},hidden:Array=[],tint:Color=Color.WHITE) -> void:
-	draw_body(c,origin,scale_value,armor,damaged,wounded,catalog_data,hidden,tint)
-	draw_weapon(c,weapon,origin,scale_value,p,outcome,true,catalog_data,hidden,tint)
+	var ranks: Variant = catalog_data.get("layer_ranks", {})
+	if not ranks is Dictionary or ranks.is_empty():
+		draw_body(c,origin,scale_value,armor,damaged,wounded,catalog_data,hidden,tint)
+		draw_weapon(c,weapon,origin,scale_value,p,outcome,true,catalog_data,hidden,tint)
+		return
+	var data: Dictionary = parts() if catalog_data.is_empty() else catalog_data.parts
+	var action := motion_action(weapon, catalog_data)
+	for id in sort_draw_ids(visible_draw_ids(armor, damaged, wounded, weapon, catalog_data, hidden, p, outcome), ranks):
+		_draw_listed_part(c, str(id), origin, scale_value, p, outcome, action, catalog_data, data, tint)
+
+static func _draw_listed_part(c: CanvasItem, id: String, origin: Vector2, scale_value: float,
+		p: float, outcome: String, action: Dictionary, catalog_data: Dictionary, data: Dictionary, tint: Color) -> void:
+	if id == "shield":
+		draw_part(c, "shield", origin, scale_value, Vector2.ZERO, 0, tint, data)
+	elif id in ["sword", "spear", "bow"]:
+		var state: Dictionary = Motion.sample(id, p, outcome, action)
+		draw_part(c, id, origin, scale_value, state.position, state.angle, tint, data)
+	elif id == "arrow":
+		var arrow: Dictionary = nocked_arrow(p, catalog_data)
+		draw_part(c, "arrow", origin, scale_value, arrow.position, arrow.angle, Color(tint, tint.a * arrow.opacity), data)
+	elif id == "scar":
+		draw_clipped_part(c, id, origin, scale_value, tint, catalog_data, false)
+	elif id in ["base", "head", "wounded", "face", "hair", "beard", "bandage"]:
+		draw_part(c, id, origin, scale_value, Vector2.ZERO, 0, tint, data)
+	else:
+		draw_bust_part(c, id, origin, scale_value, tint, catalog_data)
+
+static func draw_runtime_actor(c: CanvasItem, origin: Vector2, scale_value: float,
+		armor: String = "mail", weapon: String = "sword", damaged: bool = false,
+		wounded: bool = false, p: float = 0.0, outcome: String = "hit",
+		hidden:Array=[],tint:Color=Color.WHITE) -> void:
+	draw_actor(c,origin,scale_value,armor,weapon,damaged,wounded,p,outcome,runtime_catalog(),hidden,tint)
 
 ## A fitted bow carries its nocked arrow with it. No gameplay state is involved.
 static func nocked_arrow(p:float,catalog_data:Dictionary={}) -> Dictionary:
