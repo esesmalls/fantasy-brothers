@@ -1,0 +1,52 @@
+{
+  "state_down": {
+    "id": "state_down",
+    "name": "倒地 · 接触阴影与尘擦",
+    "category": "状态",
+    "tags": ["terminal", "downed", "may-survive"],
+    "image": "S:/fantasy brothers/art/production/terminal-20260923/state_down.png",
+    "rect": [0, 0, 1254, 1254],
+    "size": [90.0, 90.0],
+    "pivot": [0.5, 0.70],
+    "position": [0.0, 0.0],
+    "rotation": 0.0,
+    "scale": [1.0, 1.0],
+    "layer": -10.0,
+    "parent": "",
+    "anchor": "origin",
+    "anchors": {"origin": [0.0, 0.0]},
+    "masks": [],
+    "clip_to": "",
+    "source": {
+      "origin": "openai-generated",
+      "tool": "built-in image_gen",
+      "image": "state_down.png",
+      "prompt_record": "prompts.md"
+    }
+  },
+  "state_dead": {
+    "id": "state_dead",
+    "name": "确认死亡 · 暗血与终局阴影",
+    "category": "状态",
+    "tags": ["terminal", "confirmed-dead"],
+    "image": "S:/fantasy brothers/art/production/terminal-20260923/state_dead.png",
+    "rect": [0, 0, 1254, 1254],
+    "size": [90.0, 90.0],
+    "pivot": [0.5, 0.70],
+    "position": [0.0, 0.0],
+    "rotation": 0.0,
+    "scale": [1.0, 1.0],
+    "layer": -10.0,
+    "parent": "",
+    "anchor": "origin",
+    "anchors": {"origin": [0.0, 0.0]},
+    "masks": [],
+    "clip_to": "",
+    "source": {
+      "origin": "openai-generated",
+      "tool": "built-in image_gen",
+      "image": "state_dead.png",
+      "prompt_record": "prompts.md"
+    }
+  }
+}

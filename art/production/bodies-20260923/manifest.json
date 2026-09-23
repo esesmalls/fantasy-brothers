@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "batch": "bodies-20260923",
+  "generation_tool": "OpenAI built-in image_gen",
+  "design_revision": "User-approved smooth neutral mannequin chest base after an earlier, separate detailed-anatomy request was rejected.",
+  "integration_note": "Raw transparent PNGs; production_assets owns normalization and foundation asset registration. User retains final alignment/appearance review.",
+  "items": {
+    "body_02": {
+      "id": "body_02",
+      "name": "Dark-brown smooth mannequin bust",
+      "file": "body_02.png",
+      "references": [
+        "art/production/foundation-20260923/assets/body_01.png",
+        "art/production/foundation-20260923/assets/face_02.png"
+      ],
+      "source": "C:/Users/esmalls/.codex/generated_images/01a0ce08-9705-77d3-ba97-d137d4943b37/exec-71a03e0a-54bc-4977-8a43-a7b61d2bb4e9.png",
+      "origin": "OpenAI built-in image_gen",
+      "prompt": "Use case: precise-object-edit\nAsset type: clothed-looking neutral paperdoll base component for a 2D medieval fantasy tactical game, body_02. The user requests deliberately simplified and non-anatomical chest detail.\nInput image 1 is a geometry reference ONLY: preserve the same short wide shoulder-and-upper-torso silhouette, three-quarter orientation toward viewer's right, small neck socket, shallow curved lower cutoff, and no hands. Do not preserve any bare-chest internal anatomy from the reference. Input image 2 is a color reference ONLY for warm deep-brown skin shade.\nCreate a smooth featureless mannequin-like torso foundation in warm deep-brown matte color, for armor and clothing overlays. The front is a continuous plain surface with soft value shading, no breast or pectoral outline, no nipples, areolae, chest crease, body hair, pores, veins, or anatomical texture. Limit age/strength cues to subtle shoulder and collar area planes; do not widen the existing shoulders. Short empty neck socket for separate head asset. Refined hand-painted H fantasy illustration finish but intentionally low anatomical detail, clear silhouette at normal game scale. Single isolated transparent RGBA sprite, no setting or floor. No head, face, arms, hands, clothing, jewelry, text, symbols or extra objects."
+    },
+    "body_03": {
+      "id": "body_03",
+      "name": "Pale mature smooth mannequin bust",
+      "file": "body_03.png",
+      "references": [
+        "art/production/bodies-20260923/body_02.png",
+        "art/production/foundation-20260923/assets/face_03.png"
+      ],
+      "source": "C:/Users/esmalls/.codex/generated_images/01a0ce08-9705-77d3-ba97-d137d4943b37/exec-fbfd3416-0a61-4843-adab-faa50f7a8bad.png",
+      "origin": "OpenAI built-in image_gen",
+      "prompt": "Use case: precise-object-edit\nAsset type: smooth non-anatomical paperdoll torso base for a 2D medieval fantasy tactical game, body_03.\nInput image 1 is the EDIT TARGET: preserve its full shoulder-and-upper-torso contour, three-quarter lean toward viewer's right, empty short neck socket, shallow curved bottom edge, limited shoulder span, and smooth featureless front. Input image 2 is only a color reference for the pale mature complexion of face_03.\nChange the base color to pale warm skin with a modest ruddy shoulder/neck tint and gently aged matte value variation at the shoulder and collar planes. Keep the entire chest surface simple, flat and mannequin-like, with no nipples, areolae, chest or pectoral grooves, breast forms, hair, pores, veins, or detailed anatomy. Do not make shoulders wider. This is a neutral modular foundation to be covered by clothing and armor. H static-bust refined painted oil/gouache style, soft practical lighting. Isolated one-piece genuine transparent RGBA sprite. No head, face, hands, arms, garments, jewelry, backdrop, lettering or objects."
+    },
+    "body_04": {
+      "id": "body_04",
+      "name": "Warm-brown smooth mannequin bust",
+      "file": "body_04.png",
+      "references": [
+        "art/production/bodies-20260923/body_04.png",
+        "art/production/foundation-20260923/assets/face_04.png"
+      ],
+      "source": "C:/Users/esmalls/.codex/generated_images/01a0ce08-9705-77d3-ba97-d137d4943b37/exec-aec559b5-3ab5-437d-8be0-09fb8c5a8e55.png",
+      "origin": "OpenAI built-in image_gen",
+      "prompt": "Use case: precise-object-edit\nAsset type: color correction of a smooth neutral paperdoll torso base, body_04, for a 2D medieval fantasy game.\nInput image 1 is the EDIT TARGET. Preserve EVERY contour, shoulder span, short neck socket, three-quarter right-facing perspective, shallow lower cut, matte painted texture and transparent alpha exactly. Keep the featureless non-anatomical front unchanged. Input image 2 is the complexion COLOR REFERENCE for face_04. Make the entire torso a lighter warm olive-brown skin shade that matches the visible midtone of face_04 when assembled, clearly lighter than the deep-brown body_02. Keep the highlights and shadows coherent with the existing image and H hand-painted oil/gouache style. Do not add any nipples, areolae, pectoral grooves, chest anatomy, body hair, head, hands, arms, clothing, objects, scenery, text or matte background. Change color only; output genuine transparent RGBA PNG."
+    }
+  },
+  "rejected": {
+    "body_04_v1": {
+      "file": "rejected/body_04-v1.png",
+      "source": "C:/Users/esmalls/.codex/generated_images/01a0ce08-9705-77d3-ba97-d137d4943b37/exec-c2aa51ee-eaaf-4217-acc8-c2129a35e675.png",
+      "reason": "Skin tone remained too dark and close to body_02 compared with face_04; one color-only revision selected.",
+      "prompt": "Use case: precise-object-edit\nAsset type: smooth non-anatomical paperdoll torso base for a 2D medieval fantasy tactical game, body_04.\nInput image 1 is the EDIT TARGET for its exact shoulder outline, three-quarter facing toward viewer's right, shallow lower bust cut, short open neck socket, and smooth featureless chest front. Input image 2 is ONLY a warm olive-brown complexion reference for face_04.\nCreate a warm medium-brown matte mannequin-like upper torso, with subtly firmer shoulder/collar planes suggesting a strong older adult while keeping the exact existing shoulder width and no detailed chest musculature. The broad front must remain a continuous simple shaded surface with no nipples, areolae, breast or pectoral groove, chest crease, hair, veins, pores or detailed anatomy. Designed as a neutral base beneath clothing and armor in the approved H static-bust oil/gouache painted style. One component, no head, face, hands, arms, clothing, jewelry, props, text or scenery. Preserve genuine transparent RGBA alpha around the complete cutout and within the short neck opening; no dark matte. Do not enlarge or change the silhouette."
+    }
+  }
+}

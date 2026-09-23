@@ -7,6 +7,8 @@ static var geometry_cache: Dictionary = {}
 static var geometry_signature := 0
 static var hit_signature := 0
 static var hit_parts: Array = []
+static var draw_cache: Dictionary = {}
+static var compiled_draws := 0
 
 static func vector(value: Array) -> Vector2:
 	return Vector2(float(value[0]), float(value[1]))
@@ -131,7 +133,8 @@ static func regions(data: Dictionary, id: String, adaptation: String, action: Di
 		var independent := []
 		for polygon: PackedVector2Array in regions(data, id, adaptation, action, time, base_dir, anchors, false, trail): independent.append(rebase * polygon)
 		return independent
-	var signature := hash([data.assets, data.get("adaptations", {}), data.get("masks", {}), data.get("game", {}), adaptation, action, time, base_dir, anchors, root_mode])
+	var identity: Variant = data.get("_render_cache_key", [data.assets, data.get("adaptations", {}), data.get("masks", {}), data.get("game", {})])
+	var signature := hash([identity, adaptation, action, time, base_dir, anchors, root_mode])
 	if signature != geometry_signature:
 		geometry_signature = signature; geometry_cache.clear()
 	if geometry_cache.has(id): return geometry_cache[id]
@@ -168,7 +171,10 @@ static func _regions(data: Dictionary, id: String, adaptation: String, action: D
 		var outlines := []
 		for outline in outlines_cache[outline_key]:
 			var points := PackedVector2Array()
-			for point: Vector2 in outline: points.append(owner_transform * (point / Vector2(rect[2], rect[3]) * size - pivot))
+			for point: Vector2 in outline:
+				var uv := point / Vector2(rect[2], rect[3])
+				if other.get("flip_h", false): uv.x = 1.0 - uv.x
+				points.append(owner_transform * (uv * size - pivot))
 			outlines.append(points)
 		var next := []
 		var owner_regions := regions(data, owner, adaptation, action, time, base_dir, anchors, root_mode, trail + [id])
@@ -187,9 +193,24 @@ static func ordered(data: Dictionary, ids: Array, adaptation: String = "") -> Ar
 		return x < y if x != y else str(a) < str(b))
 	return result
 
-static func draw(canvas: CanvasItem, data: Dictionary, ids: Array, origin: Vector2, zoom: float, base_dir: String, adaptation: String = "", action: Dictionary = {}, time: float = 0, anchors: Dictionary = {}, root_mode: bool = false, opacity: float = 1.0) -> Array:
+static func draw(canvas: CanvasItem, data: Dictionary, ids: Array, origin: Vector2, zoom: float, base_dir: String, adaptation: String = "", action: Dictionary = {}, time: float = 0, anchors: Dictionary = {}, root_mode: bool = false, opacity: float = 1.0, presentation_transform: Transform2D = Transform2D.IDENTITY) -> Array:
+	var batch := draw_packets(data, ids, base_dir, adaptation, action, time, anchors, root_mode)
+	for part: Dictionary in batch.parts:
+		var points := PackedVector2Array()
+		for point: Vector2 in part.polygon: points.append(origin + (presentation_transform * point) * zoom)
+		canvas.draw_polygon(points, PackedColorArray([Color(1, 1, 1, opacity)]), part.uvs, part.texture)
+	return batch.errors
+
+static func draw_packets(data: Dictionary, ids: Array, base_dir: String, adaptation: String = "", action: Dictionary = {}, time: float = 0, anchors: Dictionary = {}, root_mode: bool = false) -> Dictionary:
+	# Runtime identity snapshots are immutable until a publication/equipment change.
+	# Editor documents have no stamp and continue to reflect every unsaved edit.
+	var cacheable := data.has("_render_cache_key") and action.is_empty()
+	var key := hash([data.get("_render_cache_key", ""), ids, base_dir, adaptation, anchors, root_mode])
+	if cacheable and draw_cache.has(key): return draw_cache[key]
+	compiled_draws += 1
 	var errors := diagnostics(data, ids, adaptation, anchors, root_mode)
-	if not errors.is_empty(): return errors
+	var batch := {"parts": [], "errors": errors}
+	if not errors.is_empty(): return batch
 	for id: String in ordered(data, ids, adaptation):
 		var asset := resolve(data, id, adaptation)
 		if not bool(sample(action, id, time).get("visible", true)): continue
@@ -198,14 +219,16 @@ static func draw(canvas: CanvasItem, data: Dictionary, ids: Array, origin: Vecto
 		var inverse := world_transform(data, id, adaptation, action, time, anchors, root_mode).affine_inverse()
 		var rect: Array = asset.rect
 		for polygon: PackedVector2Array in regions(data, id, adaptation, action, time, base_dir, anchors, root_mode):
-			var points := PackedVector2Array()
 			var uvs := PackedVector2Array()
 			for point: Vector2 in polygon:
-				points.append(origin + point * zoom)
 				var uv := (inverse * point) / vector(asset.size) + vector(asset.pivot)
+				if asset.get("flip_h", false): uv.x = 1.0 - uv.x
 				uvs.append((vector(rect.slice(0, 2)) + uv * Vector2(rect[2], rect[3])) / tex.get_size())
-			canvas.draw_polygon(points, PackedColorArray([Color(1, 1, 1, opacity)]), uvs, tex)
-	return errors
+			batch.parts.append({"polygon": polygon, "uvs": uvs, "texture": tex})
+	if cacheable:
+		if draw_cache.size() >= 128: draw_cache.erase(draw_cache.keys()[0])
+		draw_cache[key] = batch
+	return batch
 
 static func hits(data: Dictionary, ids: Array, point: Vector2, base_dir: String, adaptation: String = "", action: Dictionary = {}, time: float = 0) -> Array:
 	var signature := hash([data.assets, data.get("adaptations", {}), data.get("masks", {}), data.get("game", {}), ids, base_dir, adaptation, action, time])
@@ -229,6 +252,7 @@ static func hit_prepared(point: Vector2) -> Array:
 		if not inside: continue
 		var local: Vector2 = part.inverse * point
 		var uv := local / vector(asset.size) + vector(asset.pivot)
+		if asset.get("flip_h", false): uv.x = 1.0 - uv.x
 		var rect: Array = asset.rect
 		var pixel := Vector2i(Vector2(rect[0], rect[1]) + uv * Vector2(rect[2], rect[3]))
 		var img: Image = part.image

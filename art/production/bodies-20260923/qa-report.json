@@ -1,0 +1,89 @@
+{
+  "body_02": {
+    "sha256": "b75e8f8c3da010b24840ebcd3aafb98c1fb2b66a41fcff69f713f553651c244a",
+    "pixel_size": [
+      1698,
+      926
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "alpha_32_bbox": [
+      13,
+      19,
+      1682,
+      898
+    ],
+    "corner_alpha": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "opaque_area_mean_rgb": [
+      110.5,
+      68.4,
+      44.2
+    ]
+  },
+  "body_03": {
+    "sha256": "372223eb21cd6e6046bc830c9ff3e7c40e7397b41acba8067f484f0b887031e7",
+    "pixel_size": [
+      1699,
+      926
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "alpha_32_bbox": [
+      6,
+      15,
+      1686,
+      902
+    ],
+    "corner_alpha": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "opaque_area_mean_rgb": [
+      170.9,
+      122.1,
+      95.7
+    ]
+  },
+  "body_04": {
+    "sha256": "8a7e66a4bd9cab3c7c0f6c3e776803a4146f799a3b08a5f69bb3f49589b36da0",
+    "pixel_size": [
+      1698,
+      926
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "alpha_32_bbox": [
+      12,
+      13,
+      1682,
+      898
+    ],
+    "corner_alpha": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "opaque_area_mean_rgb": [
+      155.3,
+      107.9,
+      77.5
+    ]
+  }
+}

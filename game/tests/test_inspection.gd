@@ -1,5 +1,5 @@
 extends SceneTree
-const Rules = preload("res://core/battle_rules.gd")
+const Rules = preload("res://tests/legacy_battle_rules.gd")
 const Inspection = preload("res://presentation/battle_inspection.gd")
 var checks := 0
 var failures: Array[String] = []

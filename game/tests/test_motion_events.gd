@@ -2,7 +2,7 @@ extends SceneTree
 ## Presentation timing checks. BattleBoard may read snapshots and events, but it may
 ## never change rules, RNG, action history or the already-settled result.
 
-const Battle = preload("res://core/battle_rules.gd")
+const Battle = preload("res://tests/legacy_battle_rules.gd") # Fixed event fixtures before dynamic initiative.
 const Board = preload("res://presentation/battle_board.gd")
 const ReviewScene = preload("res://presentation/motion_review.tscn")
 const AssetDocument = preload("res://presentation/asset_document.gd")

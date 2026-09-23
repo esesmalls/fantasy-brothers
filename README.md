@@ -1,20 +1,24 @@
 # Fantasy Brothers · 灰烬誓约原型
 
+**0.1.6.1 修正版：** 装配器支持自动DPI/手动缩放、待处理与存疑标记、一键批量/随机装配、水平翻转；战斗修正敌我方向、实际箭矢落点、撤离目标提示并减少重复计算。`Foundation.cmd` 打开保留旧稿的 `foundation-review.asset.json`，`Play.cmd` 运行最新游戏。[操作交接](docs/31-foundation-handoff.md) · [修复与验证](docs/STATUS.md)。
+
+**0.1.6 基础库与战术增量已交付：** 15类各四种基础素材、配套伤甲与全员外观已接入；地形、疲劳、士气、倒地后的战后命运，以及招聘、维护、四人轮换和差异契约可以试玩。独立 `Foundation.cmd` / `foundation-ready.asset.json` 交给用户精调。Windows包已在工作区外完成整场流程验证。[实施范围](docs/30-foundation-and-tactics.md) · [素材与动作交接](docs/31-foundation-handoff.md) · [实际状态与验证](docs/STATUS.md)。
+
 **Paperdoll 新版：** 双击 `Paperdoll.cmd` 打开资产表现编辑器。支持动态资产库、PNG／图集导入、显隐锁定、适配配置、通用部件时间轴和“保存草案 → 应用到游戏”。[操作与 agent 接口](docs/29-asset-workbench.md)。原 `my_test-v2.json` 已迁移为独立新版副本，原稿保留。
 
 一款以战术战斗、佣兵命运和魔幻中世纪美术为重点的原创 2D 单机游戏，目标平台为 Steam。
 
-当前阶段：最小可玩验证 v0.1.5.1，战场悬浮默认色条与图标、Alt切详细；人物帐接通四项属性、个人升级、营地训练和跨出身学习驯兽；营地军需帐接通装备、库存与交易，人类自由组合武器，营地与战场共用可见装备和伤势的分层人物；六处地点接通地图接约、逐站旅行、途中事件、契约战斗、清点成长与返营生活；保留上一版战场优先的底部HUD与悬浮信息。当前优先搭完整框架与功能，再逐步丰富内容；以下规划仍不代表最终平衡、预算或发售承诺。
+当前阶段：v0.1.6 战术与佣兵团增量。原有世界地图、六个条件事件、人物属性/升级/训练、装备库存与交易继续使用同一工程。新战斗启用扩展规则，旧进行中战斗保持原版本。具体平衡和基础装配仍可调整，以下规划不代表最终预算或发售承诺。
 
-更新日期：2026-09-21。
+更新日期：2026-09-23。
 
-此前装配台增量：框选、父子只移动一次、底座锚点、盘面裁取和武器关键帧。历史说明：[编写说明](docs/28-paperdoll-authoring.md) · [装配台 v2](docs/27-modular-paperdoll.md)。当前工具入口见上方新版说明；仍为单体型美术试样，不视为全人物库已验收。
+此前装配台增量：框选、父子只移动一次、底座锚点、盘面裁取和武器关键帧。历史说明：[编写说明](docs/28-paperdoll-authoring.md) · [装配台 v2](docs/27-modular-paperdoll.md)。当时为单体型美术试样；当前基础库与工具入口见上方说明。
 
 2026-09-21补充：按最新反馈修复[衣甲嵌套与内层露出](art/validation/2026-09-21-nested-wear/index.html)，领口／破口不再盖死或预画固定衬料。`Paperdoll.cmd`新增“内外层检查”及各层甲损选择；旧v3坐标保留、草案兼容迁移，详见[26穿戴规范](docs/26-nested-wear-standard.md)。下方v3认可指原构图与比例，真实套层以本次修订为准。
 
-最新美术状态：用户已基本认可**H无手静态短胸＋独立武器反馈 v3**。[H固定盘面评审页](art/validation/2026-09-20-static-bust-v3/index.html)和`Review-Static-Bust.cmd`可检查一人、配套衣甲、剑盾／枪／弓和伤损。新增 **`Paperdoll.cmd` 人物装配工作台**：拖动校准、配套状态同步、v3对照、1×／2×和动作检查，人和agent共用配置。见[实际窗口](art/workbench/2026-09-20/index.html)、[使用说明](docs/25-paperdoll-workbench.md)与[24现行标准](docs/24-static-bust-standard.md)。原画／目录保持不变，正常战役未批量替换。旧[A资产](art/production/2026-09-20-a-standard/index.html)已退回，原因见[23复审](docs/23-equipment-motion-audit.md)。
+此前样板美术状态：用户已基本认可**H无手静态短胸＋独立武器反馈 v3**。[H固定盘面评审页](art/validation/2026-09-20-static-bust-v3/index.html)和`Review-Static-Bust.cmd`可检查一人、配套衣甲、剑盾／枪／弓和伤损。新增 **`Paperdoll.cmd` 人物装配工作台**：拖动校准、配套状态同步、v3对照、1×／2×和动作检查，人和agent共用配置。见[实际窗口](art/workbench/2026-09-20/index.html)、[使用说明](docs/25-paperdoll-workbench.md)与[24现行标准](docs/24-static-bust-standard.md)。原画／目录保持不变，正常战役未批量替换。旧[A资产](art/production/2026-09-20-a-standard/index.html)已退回，原因见[23复审](docs/23-equipment-motion-audit.md)。
 
-双击根目录 `Play.cmd`，或解压 `builds/FantasyBrothers-0.1.5.1-windows.zip` 后运行 `FantasyBrothers.exe`。建议自由佣兵团、种子 `1709`、渡口旧道。完整玩法与边界见 [试玩说明](docs/PLAYTEST.md)，接续顺序见 [框架计划](docs/10-framework-roadmap.md)；当前地图范围见 [大地图闭环](docs/11-world-map-framework.md)。
+双击根目录 `Play.cmd`，或解压 `builds/FantasyBrothers-0.1.6.1-windows.zip` 后运行 `FantasyBrothers.exe`。建议自由佣兵团、种子 `6023`，先整备换装再选择山脊路线。完整玩法与边界见 [试玩说明](docs/PLAYTEST.md)，历史接续顺序见 [框架计划](docs/10-framework-roadmap.md)；当前地图范围见 [大地图闭环](docs/11-world-map-framework.md)。
 
 源码仓库：[esesmalls/fantasy-brothers](https://github.com/esesmalls/fantasy-brothers)。源码不包含本地构建包；另一台 Windows 电脑按下方步骤重新准备工具和构建。
 
@@ -26,11 +30,11 @@
 4. [假设、决策与官方资料](docs/03-decisions-and-sources.md)：哪些已由用户提出，哪些仍是建议，以及 Steam、Godot 资料来源。
 5. [肉鸽、技能与场景扩展](docs/04-systems-expansion.md)：持续战役、随机成长、技能联动、元素反应、结算与验证。
 6. 研究依据：[PTR](docs/research/ptr-findings.md)、[肉鸽叙事](docs/research/roguelite-findings.md)、[元素与场景](docs/research/elements-findings.md)、[模组社区资产制作](docs/research/modding-art-workflow-findings.md)。
-7. 最新人物方案：[属性、培养与命运](docs/13-character-progression.md)、[开发日志研究](docs/research/character-development-findings.md)、[家庭与代际传承](docs/14-family-and-legacy.md)。已实现部分见[0.1.5人物属性](docs/15-character-attributes.md)；伤残性格仍为后续方案，繁衍先作长期预留。
+7. 最新人物方案：[属性、培养与命运](docs/13-character-progression.md)、[开发日志研究](docs/research/character-development-findings.md)、[家庭与代际传承](docs/14-family-and-legacy.md)。已实现部分见[0.1.5人物属性](docs/15-character-attributes.md)；本轮已接基础旧伤和谨慎性格样本，繁衍先作长期预留。
 
-下一批四步范围与整批测试见 [招聘、契约、部署与人物后果](docs/16-next-four-steps.md)，尚未实现。
+原定四步见 [招聘、契约、部署与人物后果](docs/16-next-four-steps.md)；本轮在战术增量后接通其基础样本，最新实现和限制见 [30执行单](docs/30-foundation-and-tactics.md)。
 
-用户已确认 [美术生产方式](docs/17-art-pipeline-selection.md)、[详细美术计划](docs/18-art-production-plan.md)与 **[H主导标准风格](docs/19-art-style-standard.md)**。最新U48以固定底座定标身体/完整衣甲和低落头部，统一截取盘面范围内的胸肩；不露袖口、超出盘面的上臂或明显长颈；少量融合E/G写实与油画，倒地／死亡仍不带底座。[旧三状态页](art/validation/2026-09-20-h-standard/index.html)、[第二轮E–H](art/validation/2026-09-20-refined-directions/index.html)及[第一轮A–D](art/validation/2026-09-19-four-directions/index.html)保留回看，不覆盖当前标准；[艺术设定集](references/battle-brothers/README.md)继续作为第三方参考。正式可玩版仍为0.1.5.1。
+用户已确认 [美术生产方式](docs/17-art-pipeline-selection.md)、[详细美术计划](docs/18-art-production-plan.md)与 **[H主导标准风格](docs/19-art-style-standard.md)**。最新U48以固定底座定标身体/完整衣甲和低落头部，统一截取盘面范围内的胸肩；不露袖口、超出盘面的上臂或明显长颈；少量融合E/G写实与油画，倒地／死亡仍不带底座。[旧三状态页](art/validation/2026-09-20-h-standard/index.html)、[第二轮E–H](art/validation/2026-09-20-refined-directions/index.html)及[第一轮A–D](art/validation/2026-09-19-four-directions/index.html)保留回看，不覆盖当前标准；[艺术设定集](references/battle-brothers/README.md)继续作为第三方参考。该历史样板对应0.1.5.1；最新交付见本页顶部。
 
 历史[有手／无手同步比较页](art/validation/2026-09-20-hand-comparison/index.html)和`Review-Hands.cmd`保留比较；现行新样板以本页顶部的静态短胸评审入口为准。
 

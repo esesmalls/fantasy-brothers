@@ -2,6 +2,7 @@ extends HBoxContainer
 ## Read-only world view and explicit commands. Campaign rules own every journey.
 const MapView = preload("res://presentation/world_map.gd")
 const Campaign = preload("res://core/campaign_rules.gd")
+const World = preload("res://core/world_data.gd")
 var controller: Control
 var map: Control
 var advance_button: Button
@@ -51,6 +52,7 @@ func build(owner_control: Control) -> void:
 	var phase: String = str(c.phase)
 	if phase == "camp":
 		camp_button = controller._button(actions, "进入营地生活 · 名册与整备", controller._show_camp_view)
+		controller._button(actions, "团务帐 · 招聘与出战", controller._show_company)
 		var training_points := 0
 		for member: Dictionary in c.roster:
 			if int(member.hp) > 0: training_points += int(member.get("progression", {}).get("attribute_points", 0))
@@ -61,13 +63,18 @@ func build(owner_control: Control) -> void:
 		for offer: Dictionary in Campaign.get_contract_offers(c, str(world_view.location_id)):
 			controller._text(actions, "契约 · " + str(offer.title), 21, controller.GOLD)
 			controller._text(actions, str(offer.description), 15, controller.MUTED)
+			if str(offer.id) == "contract_short_work":
+				controller._button(actions, "承接渡口短工", func(): controller._accept_contract(str(offer.id), "road"))
 			for route: Dictionary in offer.routes:
 				var id: String = str(route.id)
-				var button: Button = controller._button(actions, str(route.name) + " · 接约出发", func(): controller._start_expedition(id))
+				var button: Button = controller._button(actions, str(route.name) + " · 接约出发", func(): controller._accept_contract(str(offer.id), id))
 				button.tooltip_text = str(route.description)
 				button.disabled = not bool(route.available)
-				route_buttons[id] = button
+				route_buttons[str(offer.id) + ":" + id] = button
+				if str(offer.id) == World.CONTRACT_ID: route_buttons[id] = button
 				controller._text(actions, "%d 粮 · %d 天  /  %s  /  %d 金\n油 %d · 火 %d · 水 %d" % [int(route.food_cost), int(route.days), ["小股劫匪", "有备而来", "增援集结"][int(route.difficulty)], int(route.reward), int(route.supplies.oil), int(route.supplies.fire), int(route.supplies.water)], 15, controller.GOLD)
+				if int(route.get("extra_food_cost", 0)) > 0:
+					controller._text(actions, "粮耗已包含谨慎准备／长期旧伤的额外%d粮。" % int(route.extra_food_cost), 13, controller.MUTED)
 				if not bool(route.available):
 					controller._text(actions, str(route.reason), 14, controller.RED)
 	elif phase == "travel":
@@ -76,7 +83,7 @@ func build(owner_control: Control) -> void:
 		advance_button = controller._button(actions, "继续行军 · " + _location_name(str(world_view.next_location_id)), controller._advance_travel)
 		controller._text(actions, str(world_view.report), 16, controller.MUTED)
 		controller._text(actions, "去程口粮与天数已在出发时计入。逐站行军不会重复扣费，事件选择仍有各自的代价。", 15, controller.MUTED)
-		controller._text(actions, "契约目的地 · 雨夜粮仓\n击退敌人，尽量保住粮食。", 17, controller.GOLD)
+		controller._text(actions, "契约目标 · 河岸撤离\n至少两名出战者从右侧边界撤出；不足两人则全员撤出。" if str(c.expedition.get("contract_id", "")) == World.EVACUATION_ID else "契约目的地 · 雨夜粮仓\n击退敌人，尽量保住粮食。", 17, controller.GOLD)
 	elif phase == "returning":
 		controller._text(actions, "收起战旗，准备返营", 22, controller.GOLD)
 		return_button = controller._button(actions, "返回灰岸营地", controller._return_to_camp)

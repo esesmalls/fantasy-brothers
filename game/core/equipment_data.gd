@@ -3,6 +3,10 @@ extends RefCounted
 ## inventories store stable instances that refer to these IDs.
 
 const SCHEMA := 1
+const BURDEN := {"armor_padded": 6, "armor_leather": 10, "armor_brigandine": 16, "armor_mail": 24,
+	"weapon_guard_sword": 10, "weapon_guard_cleaver": 15, "weapon_spear_long": 8,
+	"weapon_spear_hooked": 11, "weapon_archer_bow": 5, "weapon_archer_longbow": 9,
+	"weapon_skirmisher_blade": 4, "weapon_skirmisher_axe": 10, "weapon_hunter_bow": 5, "weapon_hunter_recurve": 7}
 const HUMAN_KINDS := ["guard", "spear", "archer", "skirmisher", "hunter"]
 
 const DEFINITIONS := {
@@ -97,7 +101,13 @@ const BASIC_ARMOR := {
 }
 
 static func get_definition(definition_id: String) -> Dictionary:
-	return DEFINITIONS.get(definition_id, {})
+	var result: Dictionary = DEFINITIONS.get(definition_id, {}).duplicate(true)
+	if not result.is_empty():
+		result.burden = int(BURDEN.get(definition_id, 0))
+	return result
+
+static func loadout_burden(loadout: Dictionary) -> int:
+	return int(BURDEN.get(loadout.get("weapon", ""), 0)) + int(BURDEN.get(loadout.get("armor", ""), 0))
 
 static func is_definition(definition_id: String) -> bool:
 	return DEFINITIONS.has(definition_id)

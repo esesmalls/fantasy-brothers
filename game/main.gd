@@ -11,6 +11,7 @@ const Equipment = preload("res://core/equipment_rules.gd")
 const EquipmentScreen = preload("res://presentation/equipment_screen.gd")
 const Characters = preload("res://core/character_rules.gd")
 const CharacterScreen = preload("res://presentation/character_screen.gd")
+const CompanyScreen = preload("res://presentation/company_screen.gd")
 const MotionReviewScene = preload("res://presentation/motion_review.tscn")
 const HandStyleReviewScene = preload("res://presentation/hand_style_review.tscn")
 const AStandardReview = preload("res://presentation/a_standard_review.gd")
@@ -75,13 +76,15 @@ var motion_review_dir := "user://motion-review"
 func _ready() -> void:
 	_build_theme()
 	var arguments := OS.get_cmdline_user_args()
-	if arguments.has("--paperdoll") or arguments.has("--asset-smoke"):
+	if arguments.has("--paperdoll") or arguments.has("--asset-smoke") or arguments.has("--asset-review-smoke"):
 		var editor = AssetWorkbench.new(); add_child(editor)
 		editor.closed.connect(func(): get_tree().quit())
 		for flag: String in arguments:
 			if flag.begins_with("--paperdoll-project="): editor.open_project(flag.trim_prefix("--paperdoll-project="))
 		if arguments.has("--asset-smoke"):
 			var runner = load("res://tests/asset_workbench_smoke.gd").new(); add_child(runner); runner.call_deferred("run", editor)
+		elif arguments.has("--asset-review-smoke"):
+			var runner = load("res://tests/asset_review_smoke.gd").new(); add_child(runner); runner.call_deferred("run", editor)
 		return
 	if arguments.has("--paperdoll") or arguments.has("--paperdoll-capture") or arguments.has("--paperdoll-smoke") or arguments.has("--paperdoll-nesting-test") or arguments.has("--paperdoll-modular-test"):
 		var workbench=PaperdollWorkbench.new();add_child(workbench)
@@ -144,7 +147,20 @@ func _ready() -> void:
 			motion_review_dir = str(arguments[index + 1])
 	_build_shell()
 	_show_title()
-	if motion_review_mode:
+	if arguments.has("--battle-fixes-smoke"):
+		smoke_mode = true
+		save_path = "user://qa/battle-fixes-campaign.json"
+		manual_path = "user://qa/battle-fixes-manual.json"
+		var runner = load("res://tests/battle_fixes_smoke.gd").new()
+		add_child(runner)
+		runner.call_deferred("run", self)
+	elif arguments.has("--foundation-smoke"):
+		smoke_mode = true
+		save_path = "user://qa/foundation-campaign.json"
+		var runner = load("res://tests/foundation_smoke.gd").new()
+		add_child(runner)
+		runner.call_deferred("run", self)
+	elif motion_review_mode:
 		call_deferred("_open_motion_review", motion_review_smoke)
 	elif smoke_mode:
 		call_deferred("_run_smoke")
@@ -203,7 +219,7 @@ func _build_shell() -> void:
 	_button(heading, "手动保存", _manual_save)
 	_button(heading, "读取手动档", _confirm_load)
 	_button(heading, "主菜单", _confirm_menu)
-	resources = _label("边境佣兵纪事   /   最小可玩验证 0.1.5.1", 17, MUTED)
+	resources = _label("边境佣兵纪事   /   战术与佣兵团原型 0.1.6.1", 17, MUTED)
 	screen.add_child(resources)
 	banner = _label("", 16, GOLD)
 	screen.add_child(banner)
@@ -275,7 +291,7 @@ func _panel(parent: Node, width: float = 0.0, expand: bool = true) -> VBoxContai
 func _show_title() -> void:
 	_clear_body()
 	banner.text = "序章   /   渡桥的钟声"
-	resources.text = "边境佣兵纪事   /   最小可玩验证 0.1.5.1"
+	resources.text = "边境佣兵纪事   /   战术与佣兵团原型 0.1.6.1"
 	var columns: HBoxContainer = HBoxContainer.new()
 	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	body.add_child(columns)
@@ -286,7 +302,7 @@ func _show_title() -> void:
 	_text(intro, "整备队伍  →  决定承诺  →  指挥战斗\n承担后果  →  选择成长  →  带着经历回营", 20)
 	_text(intro, "三次远征形成一个短篇结尾，此后仍可继续。试着保住粮仓、让盾卫为长枪制造破绽，或用油火和水汽改变战线。", 18, MUTED)
 	_text(intro, "人物帐 · 四项属性、个人升级与营地训练。决定谁练得更稳、谁转用新武器，让本领随着旅程留下来。", 18, GOLD)
-	_text(intro, "原型边界：两类佣兵团、六个条件事件、一张机制战场、少量成长。当前用于判断玩法，不代表最终内容量与商业美术。", 16, MUTED)
+	_text(intro, "抢占高地、管理疲劳，守住士气与阵线。两张小战场、差异契约与四人轮换用于验证战术；资产与平衡仍会继续调整。", 16, MUTED)
 	var setup: VBoxContainer = _panel(columns, 410, false)
 	_text(setup, "接过这面旗帜", 26, GOLD)
 	var loaded: Dictionary = Saves.load_campaign(save_path)
@@ -442,7 +458,9 @@ func _show_campaign() -> void:
 		_text(story, str(campaign.expedition.title), 32)
 		_text(story, "行军路线 · " + str(campaign.expedition.get("route_name", "渡口旧道")), 18, GOLD)
 		_text(story, str(campaign.last_report), 20)
-		_text(story, "目标：击退所有敌人。\n额外承诺：保住粮仓，带回粮食与谢礼。\n死亡永久保留；生命与护甲损耗需要回营恢复。", 18, MUTED)
+		var objective_text := "目标：击退所有敌人，保住粮仓。"
+		if campaign.expedition.get("contract_kind", "") == "evacuation": objective_text = "目标：至少两名出战者到达右侧边缘并执行撤出；不足两人则全部撤出。清敌不等于完成任务。"
+		_text(story, objective_text + "\n倒地者本场失能；胜利后可能重伤幸存。败退时未能带回的失能队员会死亡。", 18, MUTED)
 		_text(actions, "抵达战场", 24, GOLD)
 		_text(actions, "报酬 %d 金\n敌情 %s\n油瓶 %d · 火种 %d · 水具 %d" % [int(campaign.expedition.reward), ["小股劫匪", "有备而来", "增援集结"][int(campaign.expedition.difficulty)], int(campaign.expedition.supplies.oil), int(campaign.expedition.supplies.fire), int(campaign.expedition.supplies.water)], 18)
 		_button(actions, "进入战场", _enter_battle)
@@ -506,6 +524,7 @@ func _show_camp(story: VBoxContainer, actions: VBoxContainer) -> void:
 	_text(actions, "整备与启程", 24, GOLD)
 	character_button = _button(actions, "人物帐 · 属性与培养", _show_characters)
 	equipment_button = _button(actions, "军需帐 · 装备与交易", _show_equipment)
+	_button(actions, "团务帐 · 招聘、维护与出战", _show_company)
 	_text(actions, "先恢复生命与护甲。\n准备好后回到地图接取契约。", 16, MUTED)
 	_button(actions, "休养一天", func(): _camp_action("rest"), "有粮消耗2粮，每人恢复18生命；缺粮恢复8。")
 	_button(actions, "补给口粮", func(): _camp_action("resupply"), "12金币购买最多6粮；缺钱缺粮时短工换粮。")
@@ -522,6 +541,18 @@ func _show_camp(story: VBoxContainer, actions: VBoxContainer) -> void:
 
 func _camp_action(action: String) -> void:
 	_handle_campaign(Campaign.camp_action(campaign, action))
+
+func _show_company(message: String = "") -> void:
+	if campaign.get("phase", "") != "camp": return
+	_clear_body()
+	_update_resources()
+	banner.text = "团务帐 · 招聘与部署"
+	var panel := CompanyScreen.new()
+	body.add_child(panel)
+	panel.build(self, message)
+
+func _accept_contract(contract_id: String, route_id: String) -> void:
+	_handle_campaign(Campaign.accept_contract(campaign, contract_id, route_id))
 
 func _start_expedition(route_id: String = "road") -> void:
 	camp_detail = false
@@ -581,7 +612,7 @@ func _handle_campaign(result: Dictionary) -> void:
 func _enter_battle() -> void:
 	if str(campaign.phase) != "ready":
 		return
-	var battle: Dictionary = Battle.create_battle(campaign.roster, int(campaign.seed) + int(campaign.expedition.index) * 7919, Campaign.battle_config(campaign))
+	var battle: Dictionary = Battle.create_battle(Campaign.battle_roster(campaign), int(campaign.seed) + int(campaign.expedition.index) * 7919, Campaign.battle_config(campaign))
 	var result: Dictionary = Campaign.begin_battle(campaign, battle)
 	if not result.get("ok", false):
 		_popup("无法进入战场", str(result.get("reason", "")))
@@ -620,7 +651,7 @@ func _refresh_battle(events: Array = []) -> void:
 	board.play_events(events)
 	var active: Dictionary = Battle.active_unit(b)
 	var done: bool = not str(b.outcome).is_empty()
-	var player: bool = not active.is_empty() and str(active.team) == "player" and str(active.kind) != "dog"
+	var player: bool = not active.is_empty() and str(active.team) == "player" and str(active.kind) != "dog" and int(active.get("morale", 3)) > 0
 	if player:
 		var known_action := false
 		for action: Dictionary in Battle.get_actions(b, str(active.id)):
@@ -647,21 +678,23 @@ func _refresh_battle(events: Array = []) -> void:
 	preview_label.text = "选择攻击或技能显示范围；移到目标格查看结果，单击执行。" if player else "敌方正在行动……" if not done and str(active.get("team", "")) == "enemy" else "战犬正在执行指令……"
 	preview_label.add_theme_color_override("font_color", CREAM)
 	if not done:
-		for prop: Dictionary in b.props:
-			if str(prop.kind) == "grain":
-				outcome_label.text = "粮仓 %d/%d  ·  %s" % [maxi(0, int(prop.hp)), int(prop.max_hp), "击退敌人，守住粮食" if int(prop.hp) > 0 else "粮仓已毁，仍可完成契约"]
+		if Battle._evacuation(b):
+			outcome_label.text = "右侧撤离 %d/%d · 移至最右列后使用「撤离战场」" % [b.objective.evacuated_ids.size(), int(b.objective.required_count)]
+		else:
+			for prop: Dictionary in b.props:
+				if str(prop.kind) == "grain":
+					outcome_label.text = "粮仓 %d/%d  ·  %s" % [maxi(0, int(prop.hp)), int(prop.max_hp), "击退敌人，守住粮食" if int(prop.hp) > 0 else "粮仓已毁，仍可完成契约"]
 	if player and int(active.ap) < 2:
 		preview_label.text = "行动点即将耗尽。可以结束此人的回合。"
 	if done:
 		var names: Dictionary = {"victory": "胜利 · 敌人已被击退", "defeat": "败北 · 队伍无人幸存", "retreat": "撤离 · 誓约留下了代价"}
 		outcome_label.text = str(names.get(b.outcome, b.outcome))
+		if Battle._evacuation(b) and b.outcome == "victory":
+			outcome_label.text = "胜利 · 撤离目标已完成"
 		preview_label.text = "战斗结果已保存。清点伤亡与报酬后，决定佣兵团接下来的路。"
 	reachable = []
 	if player and not done and selected_action == "move":
-		for q in range(9):
-			for r in range(7):
-				if Battle.preview(b, str(active.id), "move", {"q": q, "r": r}).ok:
-					reachable.append({"q": q, "r": r})
+		reachable = Battle.movement_reachable(b, str(active.id))
 	board.set_preview({"reachable": reachable})
 	var overlay: Dictionary = {}
 	if player and not done:
@@ -675,6 +708,12 @@ func _refresh_battle(events: Array = []) -> void:
 	_hide_inspection()
 	if hovered_cell.x >= 0 and hovered_cell.y >= 0:
 		_on_cell_hovered(hovered_cell.x, hovered_cell.y)
+	if not done and Battle._evacuation(b):
+		var enemies_remain := false
+		for unit: Dictionary in b.units:
+			if unit.team == "enemy" and Battle._available(b, unit): enemies_remain = true
+		if not enemies_remain:
+			preview_label.text = "敌人已清除；仍需从右侧撤离 %d 人。移至最右列，再点击「撤离战场」。" % maxi(0, int(b.objective.required_count) - b.objective.evacuated_ids.size())
 
 func _choose_action(action: String) -> void:
 	if not _can_command():
@@ -696,7 +735,7 @@ func _can_command() -> bool:
 	if board.has_pending_animation():
 		return false
 	var active: Dictionary = Battle.active_unit(campaign.battle)
-	return not active.is_empty() and str(active.team) == "player" and str(active.kind) != "dog"
+	return not active.is_empty() and str(active.team) == "player" and str(active.kind) != "dog" and int(active.get("morale", 3)) > 0
 
 func _on_unit_hovered(unit_id: String) -> void:
 	hovered_unit_id = unit_id
@@ -766,7 +805,7 @@ func _process(delta: float) -> void:
 	if ai_timer > 0.0:
 		return
 	var active: Dictionary = Battle.active_unit(campaign.battle)
-	if active.is_empty() or (str(active.team) == "player" and str(active.kind) != "dog"):
+	if active.is_empty() or (str(active.team) == "player" and str(active.kind) != "dog" and int(active.get("morale", 3)) > 0):
 		return
 	var result: Dictionary = Battle.ai_step(campaign.battle)
 	_autosave()
@@ -835,7 +874,7 @@ func _popup(title: String, message: String) -> void:
 	dialog.popup_centered()
 
 func _show_help() -> void:
-	_popup("行军手册", "地图上比较路线并接约，按“继续行军”逐站前进。\n事件在途中触发，选择后继续赶往粮仓；每一步自动保存。\n战后清点战果、选择成长，再返营休养、补给、修甲和补员。\n营地人物帐可分配升级点、训练属性和学习驯兽；武器改变招式，已有本领随人保留。\n体魄提高最大生命，近战/远程决定对应武器命中，防御降低敌人命中。\n点击地图地点仅查看详情，不会出发或扣费。\n\n每人每回合 6 行动点。移动每格 2 点，攻击通常 3 点。\n友军可穿过，不能停在同一格；敌人和障碍仍会挡路。\n金色双环与头顶箭头指示当前行动者。\n点击攻击/技能显示射程，叉号表示遮挡，准星表示合法目标。\n先选择底部动作，再指向棋盘看预览，单击执行。\n悬停默认显示色条和状态图标；按Alt切换详细说明，再按收起。\n详细卡片用滚轮翻阅；底部行动队列也可悬停。\n左上角战报可以展开。\n\n盾击命中制造破绽；长枪攻击消耗破绽获得命中优势。\n攻击先损护甲，再损生命；火区直接伤害生命，也伤友军。\n油与火形成火区；水可以灭火，产生遮挡远程的蒸汽。\n主动脱离贴身敌人可能遭反击，推开不触发脱离反击。\n具备驯兽本领的队员花行动点下令，战犬在自己的回合跟随、牵制或撤回。\n\n消灭敌人获胜，保护粮仓获得额外回报；随时可以撤退。\n空格结束当前队员回合，Esc 切回移动。\n每次行动自动保存；手动存档独立保留，读取不会重抽候选。\n正常 / 加速 / 跳过仅改变表现，不改变结算。")
+	_popup("行军手册", "地图上比较路线并接约，按“继续行军”逐站前进。\n事件在途中触发，选择后继续赶往粮仓；每一步自动保存。\n战后清点战果、选择成长，再返营休养、补给、修甲和补员。\n营地人物帐可分配升级点、训练属性和学习驯兽；武器改变招式，已有本领随人保留。\n体魄提高最大生命，近战/远程决定对应武器命中，防御降低敌人命中。\n点击地图地点仅查看详情，不会出发或扣费。\n\n每人每回合 6 行动点。平地移动2点、困难地形3点、上坡另加1点，攻击通常3点。\n友军可穿过，不能停在同一格；敌人和障碍仍会挡路。\n金色双环与头顶箭头指示当前行动者。\n点击攻击/技能显示射程，叉号表示遮挡，准星表示合法目标。\n先选择底部动作，再指向棋盘看预览，单击执行。\n悬停默认显示色条和状态图标；按Alt切换详细说明，再按收起。\n详细卡片用滚轮翻阅；底部行动队列也可悬停。\n左上角战报可以展开。\n\n盾击命中制造破绽；长枪攻击消耗破绽获得命中优势。\n攻击先损护甲，再损生命；火区直接伤害生命，也伤友军。\n油与火形成火区；水可以灭火，产生遮挡远程的蒸汽。\n主动脱离贴身敌人可能遭反击，推开不触发脱离反击。\n具备驯兽本领的队员花行动点下令，战犬在自己的回合跟随、牵制或撤回。\n\n粮仓契约击退敌人；撤离契约须从右侧出口撤出指定人数。\n装备与行动积累疲劳；恢复消耗3行动点，下一轮先手考虑负担。\n鼓舞稳定友军士气；溃逃者会自动寻找撤退路线。\n倒地先失能，战后确定重伤幸存或死亡；逃离不是死亡。\n团务帐招募与安排四人出战，重伤休养者可由替补轮换。\n空格结束当前队员回合，Esc 切回移动。\n每次行动自动保存；手动存档独立保留，读取不会重抽候选。\n正常 / 加速 / 跳过仅改变表现，不改变结算。")
 
 func _run_smoke() -> void:
 	var smoke = load("res://tests/ui_smoke.gd").new()

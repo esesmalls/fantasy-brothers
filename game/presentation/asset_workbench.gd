@@ -22,6 +22,7 @@ var library: ItemList
 var layers: Tree
 var search: LineEdit
 var category: OptionButton
+var review_filter: OptionButton
 var tag_filter: LineEdit
 var inspector: VBoxContainer
 var canvas: Control
@@ -31,6 +32,7 @@ var status: Label
 var adapt_choice: OptionButton
 var action_choice: OptionButton
 var left_panel: VBoxContainer
+var left_scroll: ScrollContainer
 var right_panel: ScrollContainer
 var file_dialog: FileDialog
 var pending_file_action := ""
@@ -50,27 +52,48 @@ var import_drag := false
 var import_id: LineEdit
 var import_name: LineEdit
 var import_category: LineEdit
+var import_slot: LineEdit
 var import_hint: Label
 var unsaved_dialog: ConfirmationDialog
 var pending_close: Callable
 var status_note := ""
 var same_values := false
 var inspector_values: Dictionary = {}
+var ui_scale := 1.0
+const UI_SCALE_CHOICES := [1.0, 1.25, 1.5, 1.75, 2.0, 2.5]
+
+static func automatic_ui_scale(screen_scale: float, dpi: int, physical_height: int) -> float:
+	var density := float(dpi) / 96.0 if dpi > 0 else 1.0
+	var height_hint := float(physical_height) / 1080.0 if physical_height >= 1440 else 1.0
+	return clampf(maxf(1.0, maxf(screen_scale, maxf(density, height_hint))), 1.0, 2.5)
+
+func detected_ui_scale() -> float:
+	return automatic_ui_scale(DisplayServer.screen_get_scale(), DisplayServer.screen_get_dpi(), DisplayServer.screen_get_size().y)
 
 func _ready() -> void:
 	get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	get_window().content_scale_size = Vector2i.ZERO
+	var config := ConfigFile.new()
+	config.load("user://asset-workbench-ui.cfg")
+	var stored_scale: float = float(config.get_value("display", "scale", 0.0))
+	ui_scale = clampf(stored_scale if stored_scale > 0 else detected_ui_scale(), 1.0, 2.5)
+	get_window().content_scale_factor = ui_scale
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_build_theme()
 	var root := VBoxContainer.new(); root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); add_child(root)
-	var menu := HBoxContainer.new(); root.add_child(menu)
+	var menu := HFlowContainer.new(); root.add_child(menu)
 	menu_button(menu, "文件", ["打开工程", "保存工程", "另存为", "导入图片／图集", "应用到游戏", "恢复上次应用", "导出截图", "关闭"], file_menu)
 	menu_button(menu, "编辑", ["撤销", "重做", "恢复所选默认参数", "移出参考组合", "独显所选／取消独显", "将所选建立编辑组"], edit_menu)
 	menu_button(menu, "视图", ["显示／隐藏资产面板", "显示／隐藏属性面板", "适应画布", "定位所选", "1×实际尺寸", "叠加／隐藏默认基准", "参考叠图透明度…"], view_menu)
+	var ui_scale_choice := OptionButton.new(); menu.add_child(ui_scale_choice)
+	ui_scale_choice.add_item("界面 自动")
+	for value in UI_SCALE_CHOICES: ui_scale_choice.add_item("界面 %d%%" % roundi(value * 100))
+	ui_scale_choice.select(UI_SCALE_CHOICES.find(stored_scale) + 1 if stored_scale in UI_SCALE_CHOICES else 0)
+	ui_scale_choice.item_selected.connect(func(index): set_ui_scale(0.0 if index == 0 else UI_SCALE_CHOICES[index - 1]))
 	menu_button(menu, "帮助", ["操作与数据说明"], func(_i): show_text("装配台", "资产参数用于游戏表现；参考组合不决定游戏装备。\n点击选中，Ctrl 增减，Shift 连续／框选追加。\n空格或中键平移，滚轮缩放，F 定位。\nCtrl+Z 撤销，Ctrl+Shift+Z 重做，Ctrl+S 保存。\n眼睛、锁定与独显只影响编辑。\n源图区域是图片像素；位置是游戏逻辑像素；角度为度。\n保存草案后可另行应用，普通游戏重新进入场景或重启生效。"))
 	var spacer := Control.new(); spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL; menu.add_child(spacer)
 	label(menu, "PAPERDOLL  /  资产表现", 14)
-	var bar := HBoxContainer.new(); root.add_child(bar)
+	var bar := HFlowContainer.new(); root.add_child(bar)
 	var tool_group := ButtonGroup.new()
 	for entry in [["选择 V", "select"], ["移动 G", "move"], ["旋转 R", "rotate"], ["缩放 S", "scale"]]:
 		var button := button(bar, entry[0], func(): canvas.mode = entry[1]; canvas.queue_redraw())
@@ -83,20 +106,26 @@ func _ready() -> void:
 	choice(bar, ["共同中心", "各自枢轴"], func(value): canvas.individual = value == "各自枢轴")
 	button(bar, "保存", save)
 	button(bar, "应用…", review_apply)
-	var main := HSplitContainer.new(); main.size_flags_vertical = Control.SIZE_EXPAND_FILL; root.add_child(main)
-	left_panel = VBoxContainer.new(); left_panel.custom_minimum_size.x = 230; main.add_child(left_panel)
+	var main_scroll := ScrollContainer.new(); main_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL; main_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; root.add_child(main_scroll)
+	var main := HSplitContainer.new(); main.custom_minimum_size.x = 850; main.size_flags_horizontal = Control.SIZE_EXPAND_FILL; main.size_flags_vertical = Control.SIZE_EXPAND_FILL; main_scroll.add_child(main)
+	left_scroll = ScrollContainer.new(); left_scroll.custom_minimum_size.x = 250; left_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; main.add_child(left_scroll)
+	left_panel = VBoxContainer.new(); left_panel.custom_minimum_size.x = 230; left_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL; left_scroll.add_child(left_panel)
 	var lib_header := HBoxContainer.new(); left_panel.add_child(lib_header)
 	label(lib_header, "资产库", 16); button(lib_header, "+ 导入", func(): browse("import")); button(lib_header, "刷新", refresh_assets)
 	search = LineEdit.new(); search.placeholder_text = "搜索名称或 ID"; left_panel.add_child(search); search.text_changed.connect(func(_v): refresh_library())
 	category = OptionButton.new(); left_panel.add_child(category); category.item_selected.connect(func(_i): refresh_library())
+	review_filter = choice(left_panel, ["全部评审状态", "未处理", "存疑", "待处理／存疑", "已处理"], func(_value): refresh_library())
 	tag_filter = LineEdit.new(); tag_filter.placeholder_text = "标签筛选"; left_panel.add_child(tag_filter); tag_filter.text_changed.connect(func(_v): refresh_library())
 	library = ItemList.new(); library.custom_minimum_size.y = 170; library.size_flags_vertical = Control.SIZE_EXPAND_FILL; library.fixed_icon_size = Vector2i(38, 38); left_panel.add_child(library)
 	library.item_selected.connect(func(index): select([library.get_item_metadata(index)]))
 	library.item_activated.connect(func(index): add_to_scene(library.get_item_metadata(index)))
 	button(left_panel, "添加所选到参考组合", func():
 		for id in selected: add_to_scene(id))
+	var batch := HFlowContainer.new(); left_panel.add_child(batch)
+	button(batch, "装入待处理／存疑", func(): replace_scene("pending"))
+	button(batch, "随机装配", func(): replace_scene("random"))
 	button(left_panel, "人物整体 · 棋格内摆放", select_placement)
-	var selection_bar := HBoxContainer.new(); left_panel.add_child(selection_bar)
+	var selection_bar := HFlowContainer.new(); left_panel.add_child(selection_bar)
 	button(selection_bar, "选择整个装配", select_assembly)
 	check_box(selection_bar, "穿透框选", false, func(on): through_box = on)
 	var scene_header := HBoxContainer.new(); left_panel.add_child(scene_header)
@@ -111,7 +140,7 @@ func _ready() -> void:
 	button(order, "上移层", func(): reorder(1)); button(order, "下移层", func(): reorder(-1)); button(order, "独显", toggle_solo)
 	var center_right := HSplitContainer.new(); center_right.size_flags_horizontal = Control.SIZE_EXPAND_FILL; main.add_child(center_right)
 	var center_column := VBoxContainer.new(); center_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL; center_right.add_child(center_column)
-	var context := HBoxContainer.new(); center_column.add_child(context)
+	var context := HFlowContainer.new(); center_column.add_child(context)
 	label(context, "编辑：", 13)
 	adapt_choice = OptionButton.new(); context.add_child(adapt_choice); adapt_choice.item_selected.connect(func(index): adaptation = adapt_choice.get_item_metadata(index); refresh())
 	button(context, "+ 适配", new_adaptation)
@@ -201,6 +230,33 @@ func menu_button(parent: Node, title: String, entries: Array, callback: Callable
 func message(value: String) -> void:
 	status_note = value; refresh_status()
 
+func set_ui_scale(value: float, persist: bool = true) -> void:
+	ui_scale = clampf(value if value > 0 else detected_ui_scale(), 1.0, 2.5)
+	get_window().content_scale_factor = ui_scale
+	if persist:
+		var config := ConfigFile.new()
+		config.set_value("display", "scale", value)
+		config.save("user://asset-workbench-ui.cfg")
+	message("界面缩放 %d%%" % roundi(ui_scale * 100))
+
+func review_label(id: String) -> String:
+	var a: Dictionary = doc.data.assets[id]
+	var state := doc.review_state(id)
+	var tags := []
+	if not bool(state.handled): tags.append("未处理")
+	if bool(state.flagged): tags.append("存疑")
+	return str(a.name) + ("  [" + " / ".join(tags) + "]" if not tags.is_empty() else "")
+
+func replace_scene(mode: String) -> void:
+	var result := doc.replace_scene(mode, -1, adaptation)
+	if int(result.changed) > 0:
+		var mapping: Dictionary = result.mapping
+		for i in range(selected.size()): selected[i] = mapping.get(selected[i], selected[i])
+		for i in range(solo.size()): solo[i] = mapping.get(solo[i], solo[i])
+		message("已替换 %d 个参考资产，可一次撤销；请继续检查装配位置。" % int(result.changed))
+	else: message(str(result.get("reason", "没有可替换素材")))
+	refresh()
+
 func refresh_status() -> void:
 	if status == null: return
 	status.text = ("● 未保存" if doc.dirty() else "已保存") + "  |  " + ("默认参数" if adaptation.is_empty() else "适配：" + adaptation) + "  |  " + status_note
@@ -251,16 +307,22 @@ func refresh_library() -> void:
 	library.clear()
 	var query := search.text.to_lower()
 	var filter := category.get_item_text(category.selected) if category.item_count else "全部分类"
+	var review_choice := review_filter.get_item_text(review_filter.selected) if review_filter.item_count else "全部评审状态"
 	for id: String in doc.data.assets:
 		var a: Dictionary = doc.data.assets[id]
+		var state := doc.review_state(id)
 		if not query.is_empty() and not (str(a.name) + id).to_lower().contains(query): continue
 		if filter != "全部分类" and a.category != filter: continue
+		if review_choice == "未处理" and bool(state.handled): continue
+		if review_choice == "存疑" and not bool(state.flagged): continue
+		if review_choice == "待处理／存疑" and bool(state.handled) and not bool(state.flagged): continue
+		if review_choice == "已处理" and not bool(state.handled): continue
 		if not tag_filter.text.is_empty() and not ",".join(a.tags).contains(tag_filter.text): continue
 		var tex := Visuals.texture(a, doc.base_dir)
 		var icon: AtlasTexture
 		if tex != null:
 			icon = AtlasTexture.new(); icon.atlas = tex; icon.region = Rect2(a.rect[0], a.rect[1], a.rect[2], a.rect[3])
-		var index := library.add_item(a.name, icon); library.set_item_metadata(index, id); library.set_item_tooltip(index, id + "\n双击添加到参考组合")
+		var index := library.add_item(review_label(id), icon); library.set_item_metadata(index, id); library.set_item_tooltip(index, id + "\n功能槽：" + Document.functional_slot(id, a) + "\n双击添加到参考组合")
 
 func refresh_layers() -> void:
 	if layers == null: return
@@ -271,7 +333,7 @@ func refresh_layers() -> void:
 		if not doc.data.assets.has(id): continue
 		var row := layers.create_item(root); rows[id] = row
 		var a: Dictionary = doc.asset(id, adaptation)
-		row.set_text(0, a.name); row.set_metadata(0, id); row.set_tooltip_text(0, id + (" → " + a.parent + ":" + a.anchor if not a.parent.is_empty() else ""))
+		row.set_text(0, review_label(id)); row.set_metadata(0, id); row.set_tooltip_text(0, id + (" → " + a.parent + ":" + a.anchor if not a.parent.is_empty() else ""))
 		for col in [1, 2]: row.set_cell_mode(col, TreeItem.CELL_MODE_CHECK); row.set_editable(col, true); row.set_selectable(col, false)
 		row.set_checked(1, id not in doc.data.editor.hidden); row.set_checked(2, id in doc.data.editor.locked)
 		row.set_custom_color(0, Color("8ec4ff") if id in selected else Color("dde1e8"))
@@ -359,6 +421,12 @@ func refresh_inspector() -> void:
 	var id: String = selected[-1]; var a := doc.asset(id, adaptation)
 	label(inspector, a.name if selected.size() == 1 else "已选择 %d 个资产" % selected.size(), 16)
 	label(inspector, id if selected.size() == 1 else "数值调整默认为增量", 12)
+	if not animation_mode:
+		label(inspector, "评审状态 · 保存在当前工程", 14)
+		var state := doc.review_state(id)
+		check_box(inspector, "已处理", bool(state.handled), func(on): doc.set_review_bulk(selected, "handled", on); refresh())
+		check_box(inspector, "存疑 · 稍后复看", bool(state.flagged), func(on): doc.set_review_bulk(selected, "flagged", on); refresh())
+		if selected.size() == 1: check_box(inspector, "水平翻转（仅图像，不移动锚点）", bool(a.get("flip_h", false)), func(on): set_field(id, "flip_h", on))
 	if id in doc.data.editor.locked:
 		label(inspector, "已锁定，请在场景层解锁", 14); return
 	if animation_mode:
@@ -391,6 +459,7 @@ func refresh_inspector() -> void:
 		button(inspector, "恢复所选默认参数", reset_selected); return
 	text_field(inspector, "名称", a.name, func(v): set_field(id, "name", v))
 	text_field(inspector, "分类", a.category, func(v): set_field(id, "category", v))
+	text_field(inspector, "功能槽（同类批量替换，空白按 ID 识别）", str(doc.data.assets[id].get("slot", "")), func(v): set_field(id, "slot", v.strip_edges()))
 	text_field(inspector, "标签（逗号分隔）", ",".join(a.tags), func(v): set_field(id, "tags", Array(v.split(",", false))))
 	label(inspector, "显示尺寸 / 枢轴", 14)
 	for field: String in ["size", "pivot"]:
@@ -779,6 +848,7 @@ func open_import(file: String, existing: String = "") -> void:
 	import_id = text_field(box, "稳定 ID（多块自动添加编号）", file.get_file().get_basename().replace(" ", "_"), func(_v): pass)
 	import_name = text_field(box, "名称", file.get_file().get_basename(), func(_v): pass)
 	import_category = text_field(box, "分类", "未分类", func(_v): pass)
+	import_slot = text_field(box, "功能槽（如 sword、axe、shield；同槽才会批量替换）", "", func(_v): pass)
 	import_dialog.confirmed.connect(func():
 		if not existing.is_empty():
 			if import_regions.size() != 1: message("修改源图区域需框选一块"); return
@@ -790,6 +860,7 @@ func open_import(file: String, existing: String = "") -> void:
 			var error := doc.import_png(import_path, import_id.text + suffix, import_name.text + suffix, import_category.text, regions[i])
 			if not error.is_empty():
 				doc.data = before; doc.history.resize(history_count); doc.future = previous_future; message(error); return
+			if not import_slot.text.strip_edges().is_empty(): doc.data.assets[import_id.text + suffix].slot = import_slot.text.strip_edges()
 		doc.history.resize(history_count); doc.history.append({"label": "导入图片／图集", "data": before})
 		import_dialog.queue_free(); refresh(); message("已登记到资产库；双击资产加入参考组合。"))
 	import_dialog.popup_centered(Vector2i(760, 740))

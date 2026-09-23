@@ -20,6 +20,7 @@ static func template_info(template_id: String) -> Dictionary:
 	return catalog().get("templates", {}).get(template_id, {})
 
 static func supports(unit: Dictionary) -> bool:
+	if AssetRuntime.supports(unit): return true
 	if VisualProfile.supports(unit):
 		return str(unit.get("kind", "")) != "dog"
 	if str(unit.get("kind", "")) == "dog":
@@ -37,6 +38,8 @@ static func _texture(path: String) -> Texture2D:
 	return _textures[path]
 
 static func draw_actor(canvas: CanvasItem, unit: Dictionary, origin: Vector2, scale: float = 1.0, pose: Dictionary = {}) -> bool:
+	if AssetRuntime.supports(unit) and AssetRuntime.draw_unit(canvas, unit, origin, scale, pose):
+		return true
 	if (VisualProfile.supports(unit) or unit.has("visual_assets")) and AssetRuntime.draw_unit(canvas, unit, origin, scale, pose):
 		return true
 	if not supports(unit):

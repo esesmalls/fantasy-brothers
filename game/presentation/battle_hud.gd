@@ -247,10 +247,12 @@ func refresh_actor(active: Dictionary, battle: Dictionary) -> void:
 	var friendly := 0
 	var hostile := 0
 	for unit: Dictionary in battle.units:
-		if int(unit.hp) > 0:
+		if int(unit.hp) > 0 and not bool(unit.get("escaped", false)):
 			if str(unit.team) == "player": friendly += 1
 			else: hostile += 1
 	turn_label.text = "第 %d 轮   ·   我方 %d   /   敌方 %d" % [int(battle.round), friendly, hostile]
+	if battle.get("objective", {}).get("kind", "") == "evacuation":
+		turn_label.text += "   ·   右侧撤离 %d/%d" % [battle.objective.evacuated_ids.size(), int(battle.objective.required_count)]
 	if active.is_empty():
 		actor_stats.text = "胜败与伤亡已定\n清点后继续佣兵团的旅程"
 		actor_glyph.set_glyph("defend")
@@ -262,6 +264,8 @@ func refresh_actor(active: Dictionary, battle: Dictionary) -> void:
 		if active.has("level"):
 			var stats: Dictionary = active.get("effective_stats", active)
 			actor_stats.text += "\n近战 %d   远程 %d   防御 %d" % [int(stats.get("melee_skill", active.get("accuracy", 0))), int(stats.get("ranged_skill", active.get("accuracy", 0))), int(stats.get("defense", 0))]
+		if active.has("fatigue"):
+			actor_stats.text += "\n疲劳 %d/%d · %s" % [int(active.fatigue), int(active.max_fatigue), ["溃逃", "崩溃", "动摇", "稳定", "振奋"][clampi(int(active.get("morale", 3)), 0, 4)]]
 	retreat_button.disabled = not str(battle.outcome).is_empty()
 	refresh_queue(battle)
 	update_log(battle)
@@ -279,7 +283,7 @@ func refresh_queue(battle: Dictionary) -> void:
 		var unit: Dictionary = {}
 		for candidate: Dictionary in battle.units:
 			if str(candidate.id) == id: unit = candidate; break
-		if unit.is_empty() or int(unit.hp) <= 0:
+		if unit.is_empty() or int(unit.hp) <= 0 or bool(unit.get("escaped", false)):
 			continue
 		if order_index == 0 and step > 0:
 			_label(queue_box, "下轮 ›", 11, MUTED)

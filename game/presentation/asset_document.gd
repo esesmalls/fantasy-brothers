@@ -6,6 +6,7 @@ const Motion = preload("res://presentation/static_bust_motion.gd")
 const SCHEMA := 5
 const PROPERTIES := ["x", "y", "rotation", "scale_x", "scale_y", "visible"]
 static var storage_override := ""
+static var publication_serial := 0
 var data: Dictionary = {}
 var defaults: Dictionary = {}
 var history: Array = []
@@ -156,6 +157,13 @@ func validate(value: Dictionary = {}, check_images: bool = true) -> Array:
 		for id in d.editor[field]:
 			if not d.assets.has(id): errors.append("编辑状态引用缺失资产: " + str(id))
 	if not d.editor.get("view", {}) is Dictionary or not d.editor.get("groups", {}) is Dictionary: errors.append("编辑视图或分组格式无效")
+	var review: Variant = d.editor.get("review", {})
+	if not review is Dictionary: errors.append("资产评审状态无效")
+	else:
+		for id in review:
+			if not d.assets.has(id): errors.append("评审状态引用缺失资产: " + str(id)); continue
+			var state: Variant = review[id]
+			if not state is Dictionary or not state.get("handled", false) is bool or not state.get("flagged", false) is bool: errors.append("评审状态无效: " + str(id))
 	for id in d.masks:
 		var mask: Variant = d.masks[id]
 		if not mask is Dictionary: errors.append("遮罩格式无效"); continue
@@ -176,6 +184,8 @@ func validate(value: Dictionary = {}, check_images: bool = true) -> Array:
 			if not a.get(field) is String: errors.append(str(id) + " 字段需为字符串: " + field); structural = true
 		if structural: continue
 		if not a.get("source") is Dictionary: errors.append(str(id) + " 来源记录缺失")
+		if not a.get("flip_h", false) is bool: errors.append(str(id) + " 水平翻转必须是布尔值")
+		if not a.get("slot", "") is String: errors.append(str(id) + " 功能槽必须是文字")
 		if not a.get("masks") is Array or not a.get("tags") is Array: errors.append(str(id) + " 标签与遮罩需为数组"); continue
 		for field: String in ["position", "size", "scale", "pivot"]:
 			if not finite_array(a.get(field), 2): errors.append(str(id) + "." + field + " 必须为两个有限数值")
@@ -319,6 +329,103 @@ func import_png(file: String, id: String, name: String, category: String, region
 	data.assets[id] = a; data.baseline[id] = a.duplicate(true)
 	return ""
 
+static func functional_slot(id: String, asset_data: Dictionary) -> String:
+	# Explicit slots let imported assets participate without guessing from broad categories.
+	var explicit: String = str(asset_data.get("slot", ""))
+	if not explicit.is_empty(): return explicit
+	if id == "skin" or id.begins_with("body_"): return "skin"
+	if id.begins_with("outer_"): return "outer_damaged" if id.ends_with("_damaged") else "outer"
+	if id.begins_with("padded_"): return "padded_damaged" if id.ends_with("_damaged") else "padded"
+	for prefix in ["face", "hair", "beard", "linen", "shield", "sword", "axe", "spear", "bow", "scar", "bandage", "blood"]:
+		if id == prefix or id.begins_with(prefix + "_"): return prefix
+	if id in ["mail", "mail_damaged"]: return "outer_damaged" if id.ends_with("damaged") else "outer"
+	return id
+
+func review_state(id: String) -> Dictionary:
+	return data.editor.get("review", {}).get(id, {"handled": false, "flagged": false})
+
+func set_review(id: String, field: String, value: bool) -> bool:
+	if not data.assets.has(id) or field not in ["handled", "flagged"]: return false
+	return set_review_bulk([id], field, value) > 0
+
+func set_review_bulk(ids: Array, field: String, value: bool) -> int:
+	if field not in ["handled", "flagged"]: return 0
+	var valid: Array = ids.filter(func(id): return data.assets.has(id) and bool(review_state(id).get(field, false)) != value)
+	if valid.is_empty(): return 0
+	checkpoint("资产评审")
+	if not data.editor.has("review"): data.editor.review = {}
+	for id: String in valid:
+		var state: Dictionary = review_state(id).duplicate(true)
+		state[field] = value
+		if not state.handled and not state.flagged: data.editor.review.erase(id)
+		else: data.editor.review[id] = state
+	return valid.size()
+
+func _reattach_scene(adaptation: String) -> void:
+	var selected_by_slot := {}
+	for id: String in data.editor.scene:
+		selected_by_slot[functional_slot(id, data.assets[id])] = id
+	for id: String in data.editor.scene:
+		var a := asset(id, adaptation)
+		for field in ["parent", "clip_to"]:
+			var reference: String = str(a.get(field, ""))
+			if reference.is_empty() or not data.assets.has(reference): continue
+			if reference in data.editor.scene: continue
+			var selected_reference: String = selected_by_slot.get(functional_slot(reference, data.assets[reference]), "")
+			if selected_reference.is_empty() or selected_reference == reference: continue
+			if field == "parent" and not data.assets[selected_reference].get("anchors", {}).has(str(a.get("anchor", "origin"))): continue
+			set_value(id, field, selected_reference, adaptation)
+
+func replace_scene(mode: String, seed: int = -1, adaptation: String = "") -> Dictionary:
+	if mode not in ["pending", "random"]: return {"changed": 0, "slots": 0, "reason": "未知替换模式"}
+	var available := {}
+	for id: String in data.assets:
+		var slot := functional_slot(id, data.assets[id])
+		if mode == "pending":
+			var state := review_state(id)
+			if bool(state.handled) and not bool(state.flagged): continue
+		if not available.has(slot): available[slot] = []
+		available[slot].append(id)
+	for slot in available:
+		available[slot].sort_custom(func(left, right):
+			var first := review_state(left)
+			var second := review_state(right)
+			if bool(first.flagged) != bool(second.flagged): return bool(first.flagged)
+			return str(left) < str(right))
+	var rng := RandomNumberGenerator.new()
+	if seed < 0: rng.randomize()
+	else: rng.seed = seed
+	var chosen: Dictionary = {}
+	var original := data.duplicate(true)
+	var old_scene: Array = data.editor.scene.duplicate()
+	for old_id: String in old_scene:
+		if not data.assets.has(old_id) or old_id in data.editor.locked: continue
+		var slot := functional_slot(old_id, data.assets[old_id])
+		var options: Array = available.get(slot, []).filter(func(id): return id != old_id and id not in data.editor.scene and id not in data.editor.locked)
+		if options.is_empty(): continue
+		if mode == "random":
+			for i in range(options.size() - 1, 0, -1):
+				var j := rng.randi_range(0, i)
+				var swap: Variant = options[i]
+				options[i] = options[j]
+				options[j] = swap
+		for next_id: String in options:
+			var trial := data.duplicate(true)
+			data.editor.scene[data.editor.scene.find(old_id)] = next_id
+			var was_hidden: bool = old_id in data.editor.hidden
+			data.editor.hidden.erase(old_id)
+			data.editor.hidden.erase(next_id)
+			if was_hidden: data.editor.hidden.append(next_id)
+			for group in data.editor.get("groups", {}):
+				var index: int = data.editor.groups[group].find(old_id)
+				if index >= 0: data.editor.groups[group][index] = next_id
+			_reattach_scene(adaptation)
+			if validate({}, false).is_empty(): chosen[old_id] = next_id; break
+			data = trial
+	if chosen.is_empty(): return {"changed": 0, "slots": 0, "reason": "没有可替换的同类素材"}
+	history.append({"label": "批量替换素材", "data": original}); future.clear()
+	return {"changed": chosen.size(), "slots": chosen.size(), "mapping": chosen}
+
 func runtime_data() -> Dictionary:
 	var result := data.duplicate(true)
 	result.erase("editor"); result.erase("baseline"); result.erase("applied_revision")
@@ -363,6 +470,7 @@ func apply() -> String:
 	if revision() != expected_revision: return "应用冲突：当前版本已改变"
 	error = publish_pointer({"revision": next, "previous": expected_revision})
 	if error.is_empty(): expected_revision = next; data.applied_revision = next
+	if error.is_empty(): publication_serial += 1
 	return error
 
 func rollback() -> String:
@@ -372,6 +480,7 @@ func rollback() -> String:
 	var previous: String = pointer.get("previous", "")
 	var error := publish_pointer({"revision": previous, "previous": expected_revision})
 	if error.is_empty(): expected_revision = previous; data.applied_revision = previous
+	if error.is_empty(): publication_serial += 1
 	return error
 
 func publish_pointer(pointer: Dictionary) -> String:
@@ -392,7 +501,8 @@ func transact(operations: Array) -> Array:
 			data[section][operation.get("id", "")] = operation.get("value")
 			continue
 		var id: String = operation.get("id", "")
-		if not data.assets.has(id) or not data.assets[id].has(operation.get("field", "")) or operation.get("field") == "id": data = before; return ["未知资产或属性"]
+		var field: String = operation.get("field", "")
+		if not data.assets.has(id) or (not data.assets[id].has(field) and field not in ["flip_h", "slot"]) or field == "id": data = before; return ["未知资产或属性"]
 		set_value(id, operation.field, operation.get("value"), operation.get("adaptation", ""))
 	var errors := validate()
 	if not errors.is_empty(): data = before; return errors

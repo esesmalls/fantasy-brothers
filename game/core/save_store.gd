@@ -4,13 +4,16 @@ extends RefCounted
 const World = preload("res://core/world_data.gd")
 const Equipment = preload("res://core/equipment_rules.gd")
 const Character = preload("res://core/character_rules.gd")
+const Appearance = preload("res://core/appearance_rules.gd")
+const Company = preload("res://core/company_rules.gd")
 
 const FORMAT_VERSION = 1
 const MAX_BYTES = 8 * 1024 * 1024
 const MAX_JSON_DEPTH = 40
 const MAX_SAFE_JSON_INT = 9007199254740991
 const RNG_MAX = 2147483646
-const BATTLE_RULES_VERSION = "prototype-0.1.5"
+const BATTLE_RULES_VERSION = "prototype-0.1.6"
+const CHARACTER_BATTLE_RULES_VERSION = "prototype-0.1.5"
 const PREVIOUS_BATTLE_RULES_VERSION = "prototype-0.1.4"
 const LEGACY_BATTLE_RULES_VERSION = "prototype-0.1.1"
 const ORIGINAL_BATTLE_RULES_VERSION = "prototype-0.1"
@@ -102,7 +105,7 @@ static func _read(path: String) -> Dictionary:
 	var upgraded: bool = _upgrade_loaded(data)
 	if not validate(data).is_empty():
 		return {"ok": false}
-	return {"ok": true, "campaign": data, "upgraded": upgraded, "reason": "已读取存档；旧版战役已兼容，后续新战斗使用0.1.5人物规则。" if upgraded else "已读取存档"}
+	return {"ok": true, "campaign": data, "upgraded": upgraded, "reason": "已读取存档；保留进行中的旧战斗，后续新战斗使用0.1.6战术规则。" if upgraded else "已读取存档"}
 
 static func _upgrade_loaded(c: Dictionary) -> bool:
 	# Only upgrade after checksum and full structural validation. Never reroll
@@ -141,6 +144,8 @@ static func _upgrade_loaded(c: Dictionary) -> bool:
 		upgraded = true
 	var character_upgrade := Character.ensure_campaign(c)
 	upgraded = upgraded or bool(character_upgrade.get("changed", false))
+	if Company.ensure(c):
+		upgraded = true
 	return upgraded
 
 static func _upgrade_world_for_legacy_phase(c: Dictionary) -> void:
@@ -241,6 +246,9 @@ static func validate(c: Dictionary, allow_legacy_equipment: bool = false) -> Str
 	var character_problem := Character.validate_campaign(c, allow_legacy_equipment)
 	if not character_problem.is_empty():
 		return character_problem
+	var company_problem := Company.validate(c, allow_legacy_equipment)
+	if not company_problem.is_empty():
+		return company_problem
 	for key in c.claimed:
 		if not key is String or str(key).is_empty() or c.claimed[key] != true:
 			return "远征领取记录损坏。"
@@ -310,13 +318,14 @@ static func _validate_world(c: Dictionary) -> String:
 		if str(world.company_location_id) != World.CAMP_ID or not str(world.active_contract_id).is_empty() or not travel.is_empty():
 			return "营地阶段残留未完成旅行。"
 		return ""
-	if travel.is_empty() or str(world.active_contract_id) != World.CONTRACT_ID:
+	var contract_id := str(world.active_contract_id)
+	if travel.is_empty() or not contract_id in [World.CONTRACT_ID, World.EVACUATION_ID]:
 		return "当前阶段缺少活动契约旅行。"
 	var required := ["id", "contract_id", "origin_id", "destination_id", "route_id", "route_path", "edge_ids", "current_edge_index", "food_cost", "days", "event_instance_id", "event_step", "status"]
 	if not travel.has_all(required):
 		return "旅行字段缺失。"
 	var expedition_id: String = str(c.expedition.get("id", ""))
-	if str(travel.id) != expedition_id or str(travel.contract_id) != World.CONTRACT_ID or str(c.expedition.get("travel_id", "")) != expedition_id or str(c.expedition.get("contract_id", "")) != World.CONTRACT_ID:
+	if str(travel.id) != expedition_id or str(travel.contract_id) != contract_id or str(c.expedition.get("travel_id", "")) != expedition_id or str(c.expedition.get("contract_id", "")) != contract_id:
 		return "旅行、契约与远征编号不一致。"
 	if str(travel.origin_id) != World.CAMP_ID or str(travel.destination_id) != "loc_granary" or not str(travel.route_id) in ["road", "ridge"]:
 		return "旅行端点或路线损坏。"
@@ -472,7 +481,7 @@ static func _validate_growth(offers: Array, expedition_id: String) -> String:
 	return ""
 
 static func _validate_battle(b: Dictionary, expedition_id: String) -> String:
-	if not _is_integer(b.get("schema", null), 1, 1) or not str(b.get("rules_version", "")) in [BATTLE_RULES_VERSION, PREVIOUS_BATTLE_RULES_VERSION, LEGACY_BATTLE_RULES_VERSION, ORIGINAL_BATTLE_RULES_VERSION]:
+	if not _is_integer(b.get("schema", null), 1, 1) or not str(b.get("rules_version", "")) in [BATTLE_RULES_VERSION, CHARACTER_BATTLE_RULES_VERSION, PREVIOUS_BATTLE_RULES_VERSION, LEGACY_BATTLE_RULES_VERSION, ORIGINAL_BATTLE_RULES_VERSION]:
 		return "战斗版本不兼容。"
 	if str(b.get("id", "")) != expedition_id:
 		return "战斗与远征编号不匹配。"
@@ -493,7 +502,7 @@ static func _validate_battle(b: Dictionary, expedition_id: String) -> String:
 			return "战斗区域或任务字段缺失。"
 	if not _valid_units(b.units):
 		return "战斗单位损坏。"
-	if str(b.rules_version) == BATTLE_RULES_VERSION:
+	if str(b.rules_version) in [BATTLE_RULES_VERSION, CHARACTER_BATTLE_RULES_VERSION]:
 		for unit: Dictionary in b.units:
 			if not unit.has_all(["defense", "melee_skill", "ranged_skill", "level", "background_name", "capability_tags"]):
 				return "新版战斗缺少人物属性快照。"
@@ -513,7 +522,7 @@ static func _validate_battle(b: Dictionary, expedition_id: String) -> String:
 		unit_ids[unit_id] = true
 		if not _is_integer(unit.q, 0, int(b.width) - 1) or not _is_integer(unit.r, 0, int(b.height) - 1):
 			return "战斗单位位置越界。"
-		if int(unit.hp) > 0:
+		if int(unit.hp) > 0 and not bool(unit.get("escaped", false)):
 			var position := "%d,%d" % [int(unit.q), int(unit.r)]
 			if occupied.has(position):
 				return "存活战斗单位位置重叠。"
@@ -543,6 +552,54 @@ static func _validate_battle(b: Dictionary, expedition_id: String) -> String:
 		return "战场物件损坏。"
 	if not _valid_supplies(b.supplies):
 		return "战斗补给损坏。"
+	if str(b.rules_version) == BATTLE_RULES_VERSION:
+		return _validate_tactical(b)
+	return ""
+
+static func _validate_tactical(b: Dictionary) -> String:
+	if not _is_integer(b.get("casualty_rng_state"), 1, RNG_MAX) or not b.get("casualties") is Array:
+		return "伤亡随机记录损坏。"
+	for cell: Dictionary in b.cells.values():
+		if cell.get("terrain", "") not in ["flat", "mud", "rubble"] or not _is_integer(cell.get("elevation"), 0, 1):
+			return "地形或高度损坏。"
+	var units := {}
+	for unit: Dictionary in b.units:
+		units[str(unit.id)] = unit
+		if not _is_integer(unit.get("max_fatigue"), 1, 100000) or not _is_integer(unit.get("fatigue"), 0, int(unit.max_fatigue)):
+			return "疲劳状态损坏。"
+		if not _is_integer(unit.get("morale"), 0, 4) or not _is_integer(unit.get("resolve"), 0, 100):
+			return "士气状态损坏。"
+		if not unit.get("incapacitated") is bool or not unit.get("escaped") is bool:
+			return "作战资格状态损坏。"
+		if bool(unit.incapacitated) != (int(unit.hp) <= 0) or (bool(unit.escaped) and bool(unit.incapacitated)):
+			return "伤亡和撤离状态矛盾。"
+	var seen := {}
+	if b.get("mission", {}).get("contract_kind", "") == "evacuation":
+		var objective = b.get("objective")
+		if not objective is Dictionary or objective.get("kind", "") != "evacuation" or not objective.get("participant_ids") is Array or not objective.get("evacuated_ids") is Array:
+			return "撤离目标缺失。"
+		if not _unique_nonempty_strings(objective.participant_ids) or not _unique_strings(objective.evacuated_ids) or not _is_integer(objective.get("required_count"), 1, 2):
+			return "撤离目标计数损坏。"
+		var actual: Array = []
+		for unit: Dictionary in b.units:
+			if unit.team == "player": actual.append(str(unit.id))
+		if actual.size() != objective.participant_ids.size() or int(objective.required_count) != mini(2, actual.size()):
+			return "撤离目标与出战名单不符。"
+		for id in objective.participant_ids:
+			if str(id) not in actual: return "撤离目标引用未知队员。"
+		for id in objective.evacuated_ids:
+			if str(id) not in actual or not units[str(id)].get("escaped", false) or int(units[str(id)].q) != int(b.width) - 1:
+				return "撤离进度没有真实出口记录。"
+	for record in b.casualties:
+		if not record is Dictionary or not units.has(str(record.get("unit_id", ""))) or seen.has(str(record.get("unit_id", ""))):
+			return "伤亡人物记录损坏。"
+		seen[str(record.unit_id)] = true
+		if str(record.get("id", "")).is_empty() or str(record.get("battle_id", "")) != str(b.id) or not _is_integer(record.get("roll"), 0, 99):
+			return "伤亡判定损坏。"
+		if record.get("status", "") not in ["pending", "survived", "dead", "enemy_incapacitated"]:
+			return "伤亡结果损坏。"
+		if not str(b.outcome).is_empty() and record.status == "pending":
+			return "终局伤亡未结算。"
 	return ""
 
 static func _valid_units(units: Array, expected_team: String = "") -> bool:
@@ -551,6 +608,8 @@ static func _valid_units(units: Array, expected_team: String = "") -> bool:
 		if not raw_unit is Dictionary:
 			return false
 		var unit: Dictionary = raw_unit
+		if not Appearance.validate(unit).is_empty():
+			return false
 		if not unit.has_all(["id", "name", "kind", "team", "hp", "max_hp", "armor", "max_armor", "ap", "max_ap", "attack", "accuracy", "range", "q", "r", "statuses", "perks"]):
 			return false
 		var unit_id: String = str(unit.id)
