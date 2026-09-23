@@ -18,16 +18,16 @@
   ],
   "parts": {
     "head": {
-      "atlas": "res://assets/art/static-bust/body-head.png",
+      "atlas": "res://assets/art/static-bust/body-mild-proof.png",
       "rect": [
-        68,
-        40,
-        477,
-        516
+        75,
+        44,
+        548,
+        548
       ],
       "size": [
-        34.0,
-        36.77987
+        36.78,
+        36.78
       ],
       "position": [
         3.0,
@@ -39,16 +39,16 @@
       ]
     },
     "wounded": {
-      "atlas": "res://assets/art/static-bust/body-head.png",
+      "atlas": "res://assets/art/static-bust/body-mild-proof.png",
       "rect": [
-        682,
-        655,
-        477,
-        516
+        627,
+        627,
+        535,
+        535
       ],
       "size": [
-        34.0,
-        36.77987
+        36.78,
+        36.78
       ],
       "position": [
         3.0,
@@ -102,16 +102,16 @@
       ]
     },
     "base": {
-      "atlas": "res://assets/art/static-bust/anatomy.png",
+      "atlas": "res://assets/art/static-bust/body-mild-proof.png",
       "rect": [
-        17,
-        918,
-        643,
-        260
+        18,
+        919,
+        609,
+        259
       ],
       "size": [
         64.0,
-        25.87869
+        27.21921
       ],
       "position": [
         0,

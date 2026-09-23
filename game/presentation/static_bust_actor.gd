@@ -121,7 +121,13 @@ static func part_uv(part:Dictionary,point:Vector2) -> Vector2:
 static func owner_regions(part:Dictionary) -> Array[PackedVector2Array]:
 	var key:String=part.atlas+str(part.rect)
 	if not _outlines.has(key):
+		if not ResourceLoader.exists(part.atlas):
+			_outlines[key]=[]
+			return []
 		var texture:Texture2D=load(part.atlas)
+		if texture==null:
+			_outlines[key]=[]
+			return []
 		var source:Array=part.rect
 		var region:=texture.get_image().get_region(Rect2i(source[0],source[1],source[2],source[3]))
 		var bitmap:=BitMap.new();bitmap.create_from_image_alpha(region,.3)
@@ -138,8 +144,9 @@ static func draw_clipped_part(c:CanvasItem,id:String,origin:Vector2,scale_value:
 	var data:Dictionary=parts() if catalog_data.is_empty() else catalog_data.parts
 	var part:Dictionary=data[id]
 	var path:String=part.atlas
-	if not _textures.has(path):_textures[path]=load(path)
+	if not _textures.has(path):_textures[path]=load(path) if ResourceLoader.exists(path) else null
 	var texture:Texture2D=_textures[path]
+	if texture==null:return
 	var sz:=Vector2(part.size[0],part.size[1])
 	var rectangle:=PackedVector2Array()
 	for p in [Vector2.ZERO,Vector2(sz.x,0),sz,Vector2(0,sz.y)]:rectangle.append(part_point(part,p))
@@ -224,8 +231,9 @@ static func draw_part(c: CanvasItem, id: String, origin: Vector2, scale_value: f
 	var part: Dictionary = (parts() if catalog_parts.is_empty() else catalog_parts)[id]
 	angle+=part.get("rotation",0.0)
 	var path: String = part.atlas
-	if not _textures.has(path):_textures[path]=load(path)
+	if not _textures.has(path):_textures[path]=load(path) if ResourceLoader.exists(path) else null
 	var texture: Texture2D = _textures[path]
+	if texture == null:return
 	var sz := Vector2(part.size[0],part.size[1])
 	var pivot := Vector2(part.pivot[0],part.pivot[1])*sz
 	var pos := Vector2(part.position[0],part.position[1])+offset

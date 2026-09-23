@@ -59,7 +59,7 @@
 
 ## 运行时视觉映射
 
-当前棋盘样板使用 [runtime-profile.json](../game/assets/art/static-bust/runtime-profile.json)。它由 `my_test-v2.json` 的最新组件调整提升为运行时视觉 profile：每个单位所在棋格的中心点是该单位的绘制原点，所有部件的 `position`、`size`、`pivot` 与组件变换都相对于这个点组装；没有特殊 profile 覆盖时，同一组件在不同人物配置中保持相同参数。`modular_actor.gd` 对 `crew_1` 或显式 `visual_profile` 单位读取该 profile，其他单位继续走原模块化或程序绘制回退。
+当前棋盘样板使用 [runtime-profile.json](../game/assets/art/static-bust/runtime-profile.json)。头、伤头和底座取自仍在目录中的 `body-mild-proof.png`；拆件头面取自 `modular-proof.png`。它由 `my_test-v2.json` 的最新组件调整提升为运行时视觉 profile：每个单位所在棋格的中心点是该单位的绘制原点，所有部件的 `position`、`size`、`pivot` 与组件变换都相对于这个点组装；没有特殊 profile 覆盖时，同一组件在不同人物配置中保持相同参数。`modular_actor.gd` 对 `crew_1` 或显式 `visual_profile` 单位读取该 profile，其他单位继续走原模块化或程序绘制回退。
 
 目前 profile 是显式提升的运行时样板，不会因保存任意外部草案而自动覆盖正式资源；确认新的装配结果后，应更新 profile 并重新运行模块与静态半身回归。
 

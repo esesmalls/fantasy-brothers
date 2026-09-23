@@ -4,7 +4,8 @@
   "revision": "U50-nested-wear",
   "compatible_draft_baselines": [
     "862d93ad989f013500b2a28197ad8bba4244e8075b112d68830666ffff16e45d",
-    "b5f4c53b71af8c1a95b2c1f1adfe22b373abfb78a2436281f48f76d2e42c9688"
+    "b5f4c53b71af8c1a95b2c1f1adfe22b373abfb78a2436281f48f76d2e42c9688",
+    "b411dfd57a4efb9bbf1c866f2d37f8dbfbc351d838431da5403719e1c678123e"
   ],
   "base_surface_pixels": {
     "center": [
@@ -22,16 +23,16 @@
   ],
   "parts": {
     "head": {
-      "atlas": "res://assets/art/static-bust/body-head.png",
+      "atlas": "res://assets/art/static-bust/body-mild-proof.png",
       "rect": [
-        68,
-        40,
-        477,
-        516
+        75,
+        44,
+        548,
+        548
       ],
       "size": [
-        34.0,
-        36.77987
+        36.78,
+        36.78
       ],
       "position": [
         3.0,
@@ -43,16 +44,16 @@
       ]
     },
     "wounded": {
-      "atlas": "res://assets/art/static-bust/body-head.png",
+      "atlas": "res://assets/art/static-bust/body-mild-proof.png",
       "rect": [
-        682,
-        655,
-        477,
-        516
+        627,
+        627,
+        535,
+        535
       ],
       "size": [
-        34.0,
-        36.77987
+        36.78,
+        36.78
       ],
       "position": [
         3.0,
@@ -106,16 +107,16 @@
       ]
     },
     "base": {
-      "atlas": "res://assets/art/static-bust/anatomy.png",
+      "atlas": "res://assets/art/static-bust/body-mild-proof.png",
       "rect": [
-        17,
-        918,
-        643,
-        260
+        18,
+        919,
+        609,
+        259
       ],
       "size": [
         64.0,
-        25.87869
+        27.21921
       ],
       "position": [
         0,
