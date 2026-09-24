@@ -3579,7 +3579,7 @@
 			"layer": 110.0,
 			"masks": [],
 			"name": "头部绷带",
-			"parent": "face",
+			"parent": "face_03",
 			"pivot": [
 				0.5,
 				0.0
@@ -3624,7 +3624,7 @@
 			"layer": 110.0,
 			"masks": [],
 			"name": "额部布带",
-			"parent": "face",
+			"parent": "face_04",
 			"pivot": [
 				0.5,
 				0.0
@@ -3674,7 +3674,7 @@
 			"layer": 110.0,
 			"masks": [],
 			"name": "斜缠额带",
-			"parent": "face",
+			"parent": "face_04",
 			"pivot": [
 				0.5,
 				0.0
@@ -3774,7 +3774,7 @@
 			"layer": 110.0,
 			"masks": [],
 			"name": "遮眼绷带",
-			"parent": "face",
+			"parent": "face_01",
 			"pivot": [
 				0.5,
 				0.0
@@ -3874,7 +3874,7 @@
 			"layer": 90.0,
 			"masks": [],
 			"name": "胡须",
-			"parent": "face",
+			"parent": "face_01",
 			"pivot": [
 				0.5,
 				0.0
@@ -3969,14 +3969,14 @@
 			"layer": 90.0,
 			"masks": [],
 			"name": "深色山羊须",
-			"parent": "face",
+			"parent": "face_03",
 			"pivot": [
 				0.5,
 				0.0
 			],
 			"position": [
-				3.68000030517578,
-				-17.4799995422363
+				5.65999984741211,
+				-13.4799995422363
 			],
 			"rect": [
 				0.0,
@@ -4019,14 +4019,14 @@
 			"layer": 90.0,
 			"masks": [],
 			"name": "赤褐编须",
-			"parent": "face",
+			"parent": "face_04",
 			"pivot": [
 				0.5,
 				0.0
 			],
 			"position": [
 				3.68000030517578,
-				-17.4799995422363
+				-15.4799995422363
 			],
 			"rect": [
 				0.0,
@@ -4069,7 +4069,7 @@
 			"layer": 90.0,
 			"masks": [],
 			"name": "灰色短须",
-			"parent": "face",
+			"parent": "face_04",
 			"pivot": [
 				0.5,
 				0.0
@@ -4160,7 +4160,7 @@
 				]
 			},
 			"category": "身体",
-			"clip_to": "skin",
+			"clip_to": "body_02",
 			"id": "blood_01",
 			"image": "images/dcb845b46881936d660c2505ecef9f3823dba4c6f26124ca94c871c80ccbca8d.png",
 			"layer": 20.0,
@@ -4168,7 +4168,7 @@
 				"bust"
 			],
 			"name": "旧血迹",
-			"parent": "skin",
+			"parent": "body_02",
 			"pivot": [
 				0.5,
 				0.5
@@ -4212,7 +4212,7 @@
 				]
 			},
 			"category": "身体",
-			"clip_to": "skin",
+			"clip_to": "body_01",
 			"id": "blood_02",
 			"image": "images/509aedb2b62115579e0fdd465dd84db8ddc298cb05a1cfb12e9ab753780b8007.png",
 			"layer": 20.0,
@@ -4220,7 +4220,7 @@
 				"bust"
 			],
 			"name": "新鲜血痕",
-			"parent": "skin",
+			"parent": "body_01",
 			"pivot": [
 				0.5,
 				0.5
@@ -4264,7 +4264,7 @@
 				]
 			},
 			"category": "身体",
-			"clip_to": "skin",
+			"clip_to": "body_01",
 			"id": "blood_03",
 			"image": "images/2864b993edd7669d12db795e3b4ba538492a39770bd202dc701a1ad7a1a98308.png",
 			"layer": 20.0,
@@ -4272,7 +4272,7 @@
 				"bust"
 			],
 			"name": "细密血点",
-			"parent": "skin",
+			"parent": "body_01",
 			"pivot": [
 				0.5,
 				0.5
@@ -4316,7 +4316,7 @@
 				]
 			},
 			"category": "身体",
-			"clip_to": "skin",
+			"clip_to": "body_01",
 			"id": "blood_04",
 			"image": "images/1f987364764760d170f22dab5a06b011fba881e6927db23490d630a9e586f14e.png",
 			"layer": 20.0,
@@ -4324,7 +4324,7 @@
 				"bust"
 			],
 			"name": "干涸血痕",
-			"parent": "skin",
+			"parent": "body_01",
 			"pivot": [
 				0.5,
 				0.5
@@ -5119,7 +5119,7 @@
 			"layer": 100.0,
 			"masks": [],
 			"name": "发型",
-			"parent": "face",
+			"parent": "face_03",
 			"pivot": [
 				0.5,
 				0.0
@@ -5214,7 +5214,7 @@
 			"layer": 100.0,
 			"masks": [],
 			"name": "深棕卷发",
-			"parent": "face",
+			"parent": "face_03",
 			"pivot": [
 				0.5,
 				0.0
@@ -5264,7 +5264,7 @@
 			"layer": 100.0,
 			"masks": [],
 			"name": "浅金束发",
-			"parent": "face",
+			"parent": "face_04",
 			"pivot": [
 				0.5,
 				0.0
@@ -5314,14 +5314,14 @@
 			"layer": 100.0,
 			"masks": [],
 			"name": "银灰短发",
-			"parent": "face",
+			"parent": "face_04",
 			"pivot": [
 				0.5,
 				0.0
 			],
 			"position": [
 				-2.75999999046326,
-				-35.4199981689453
+				-37.4199981689453
 			],
 			"rect": [
 				0.0,
@@ -6723,13 +6723,13 @@
 				]
 			},
 			"category": "头面",
-			"clip_to": "face",
+			"clip_to": "face_04",
 			"id": "scar",
 			"image": "res://assets/art/static-bust/modular-proof.png",
 			"layer": 80.0,
 			"masks": [],
 			"name": "脸部伤痕",
-			"parent": "face",
+			"parent": "face_04",
 			"pivot": [
 				0.5,
 				0.0
@@ -6768,13 +6768,13 @@
 				]
 			},
 			"category": "头面",
-			"clip_to": "face",
+			"clip_to": "face_01",
 			"id": "scar_01",
 			"image": "images/50939d3cf534bc55d18fad7ee3b8c7d8cbdb106a2ed1392b441f9db58ffbe693.png",
 			"layer": 80.0,
 			"masks": [],
 			"name": "脸部划伤",
-			"parent": "face",
+			"parent": "face_01",
 			"pivot": [
 				0.5,
 				0.0
@@ -6818,13 +6818,13 @@
 				]
 			},
 			"category": "头面",
-			"clip_to": "face",
+			"clip_to": "face_04",
 			"id": "scar_02",
 			"image": "images/f32ba9ca06700b5bd05d70e60b7ef5ad9de7f1ce09f8e033caf8b29ab53e2d2f.png",
 			"layer": 80.0,
 			"masks": [],
 			"name": "交叉旧疤",
-			"parent": "face",
+			"parent": "face_04",
 			"pivot": [
 				0.5,
 				0.0
@@ -6918,13 +6918,13 @@
 				]
 			},
 			"category": "头面",
-			"clip_to": "face",
+			"clip_to": "face_02",
 			"id": "scar_04",
 			"image": "images/28a1298a2b73d72d1751bc249458a30e74ae86b57178c66626c73c86184ba487.png",
 			"layer": 80.0,
 			"masks": [],
 			"name": "面颊灼疤",
-			"parent": "face",
+			"parent": "face_02",
 			"pivot": [
 				0.5,
 				0.0
@@ -8901,30 +8901,88 @@
 	"editor": {
 		"hidden": [],
 		"locked": [],
+		"review": {
+			"bandage": {
+				"flagged": false,
+				"handled": true
+			},
+			"base": {
+				"flagged": false,
+				"handled": true
+			},
+			"beard": {
+				"flagged": false,
+				"handled": true
+			},
+			"blood": {
+				"flagged": false,
+				"handled": true
+			},
+			"body": {
+				"flagged": false,
+				"handled": true
+			},
+			"face": {
+				"flagged": false,
+				"handled": true
+			},
+			"hair": {
+				"flagged": false,
+				"handled": true
+			},
+			"linen": {
+				"flagged": false,
+				"handled": true
+			},
+			"mail": {
+				"flagged": false,
+				"handled": true
+			},
+			"padded": {
+				"flagged": false,
+				"handled": true
+			},
+			"scar": {
+				"flagged": false,
+				"handled": true
+			},
+			"shield": {
+				"flagged": false,
+				"handled": true
+			},
+			"skin": {
+				"flagged": false,
+				"handled": true
+			},
+			"sword": {
+				"flagged": false,
+				"handled": true
+			}
+		},
 		"scene": [
 			"base",
-			"skin",
-			"blood",
+			"body_01",
+			"blood_02",
 			"body",
-			"linen",
-			"padded",
-			"mail",
-			"face",
+			"linen_03",
+			"padded_02",
+			"outer_03",
+			"face_04",
 			"scar",
-			"beard",
-			"hair",
-			"bandage",
+			"beard_03",
+			"hair_04",
+			"bandage_02",
 			"shield",
-			"sword"
+			"sword_04"
 		],
 		"view": {
 			"adaptation": "",
 			"grid": true,
 			"pan": [
-				0.0,
-				0.0
+				-32.0459518432617,
+				-142.153274536133
 			],
-			"zoom": 4.0
+			"zoom": 5.5923309625943
 		}
 	},
 	"game": {

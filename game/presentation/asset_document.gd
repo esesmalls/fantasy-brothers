@@ -330,9 +330,13 @@ func import_png(file: String, id: String, name: String, category: String, region
 	return ""
 
 static func functional_slot(id: String, asset_data: Dictionary) -> String:
-	# Explicit slots let imported assets participate without guessing from broad categories.
-	var explicit: String = str(asset_data.get("slot", ""))
+	# slot is the concrete component type, independent of the broad library category.
+	var explicit: String = str(asset_data.get("slot", "")).strip_edges()
 	if not explicit.is_empty(): return explicit
+	# Keep the established one-handed sword slot while preventing named two-handed
+	# variants from silently joining it. Other new types need an explicit slot.
+	if id.begins_with("sword_2h") or id.begins_with("sword_twohand") or id.begins_with("greatsword"): return "sword_2h"
+	if id.begins_with("sword_1h"): return "sword"
 	if id == "skin" or id.begins_with("body_"): return "skin"
 	if id.begins_with("outer_"): return "outer_damaged" if id.ends_with("_damaged") else "outer"
 	if id.begins_with("padded_"): return "padded_damaged" if id.ends_with("_damaged") else "padded"
@@ -340,6 +344,10 @@ static func functional_slot(id: String, asset_data: Dictionary) -> String:
 		if id == prefix or id.begins_with(prefix + "_"): return prefix
 	if id in ["mail", "mail_damaged"]: return "outer_damaged" if id.ends_with("damaged") else "outer"
 	return id
+
+static func slot_label(slot: String) -> String:
+	var known := {"face": "脸", "hair": "头发", "beard": "胡须", "skin": "身体底层", "body": "基础衣身", "linen": "亚麻衣", "padded": "绗缝身甲", "padded_damaged": "破损绗缝身甲", "outer": "外层身甲", "outer_damaged": "破损外层身甲", "helmet_layer2": "第二层头盔", "shield": "盾", "sword": "单手剑", "sword_2h": "双手剑", "axe": "斧", "spear": "长矛", "bow": "弓", "scar": "脸部伤痕", "bandage": "绷带", "blood": "血迹"}
+	return str(known.get(slot, slot)) + " [" + slot + "]" if known.has(slot) else slot
 
 func review_state(id: String) -> Dictionary:
 	return data.editor.get("review", {}).get(id, {"handled": false, "flagged": false})
@@ -425,6 +433,189 @@ func replace_scene(mode: String, seed: int = -1, adaptation: String = "") -> Dic
 	if chosen.is_empty(): return {"changed": 0, "slots": 0, "reason": "没有可替换的同类素材"}
 	history.append({"label": "批量替换素材", "data": original}); future.clear()
 	return {"changed": chosen.size(), "slots": chosen.size(), "mapping": chosen}
+
+func alignment_candidates(sources: Dictionary, scope: String = "all", ungrouped: bool = false) -> Dictionary:
+	var errors := []
+	if scope not in ["all", "unhandled", "flagged", "pending"]: errors.append("未知目标范围")
+	for slot in sources:
+		var id: String = str(sources[slot])
+		if not data.assets.has(id) or functional_slot(id, data.assets.get(id, {})) != str(slot):
+			errors.append("参考组件与具体分类不一致: " + id)
+	var rows := []
+	var skipped := []
+	if not errors.is_empty(): return {"rows": rows, "skipped": skipped, "errors": errors}
+	var source_ids: Array = sources.values()
+	var assigned := {}
+	for group in data.editor.get("groups", {}):
+		for id in data.editor.groups[group]: assigned[id] = true
+	var ids: Array = data.assets.keys()
+	ids.sort()
+	for id: String in ids:
+		var slot := functional_slot(id, data.assets[id])
+		if not sources.has(slot) or id in source_ids: continue
+		if id in data.editor.locked:
+			skipped.append({"id": id, "reason": "已锁定"}); continue
+		var state := review_state(id)
+		if scope == "unhandled" and bool(state.handled): continue
+		if scope == "flagged" and not bool(state.flagged): continue
+		if scope == "pending" and bool(state.handled) and not bool(state.flagged): continue
+		if ungrouped and assigned.has(id): continue
+		rows.append({"id": id, "source": sources[slot], "slot": slot})
+	return {"rows": rows, "skipped": skipped, "errors": errors}
+
+func alignment_plan(mapping: Dictionary, preset: String = "fit", adaptation: String = "") -> Dictionary:
+	var result := {"trial": data.duplicate(true), "changes": [], "skipped": [], "warnings": [], "errors": [], "signature": JSON.stringify(data).sha256_text()}
+	if preset not in ["position", "fit", "exact"]: result.errors.append("未知对齐方式"); return result
+	if not adaptation.is_empty() and not data.adaptations.has(adaptation): result.errors.append("适配配置不存在"); return result
+	var source_ids: Array = mapping.values()
+	var targets: Array = mapping.keys()
+	targets.sort_custom(func(left, right):
+		var left_depth := _alignment_depth(str(left), data)
+		var right_depth := _alignment_depth(str(right), data)
+		return left_depth < right_depth if left_depth != right_depth else str(left) < str(right))
+	for target: String in targets:
+		var source: String = str(mapping[target])
+		if not data.assets.has(target) or not data.assets.has(source):
+			result.skipped.append({"id": target, "reason": "组件不存在"}); continue
+		if target == source or target in source_ids or target in data.editor.locked:
+			result.skipped.append({"id": target, "reason": "来源或锁定组件不可修改"}); continue
+		if functional_slot(target, data.assets[target]) != functional_slot(source, data.assets[source]):
+			result.skipped.append({"id": target, "reason": "具体分类不同"}); continue
+		var aligned := _alignment_values(data, result.trial, target, source, preset, adaptation)
+		if aligned.has("error"):
+			result.skipped.append({"id": target, "reason": aligned.error}); continue
+		if preset == "exact":
+			var source_quad := Visuals.quad(Visuals.resolve(data, source, adaptation), Visuals.world_transform(data, source, adaptation))
+			var target_quad := Visuals.quad(Visuals.resolve(result.trial, target, adaptation), Visuals.world_transform(result.trial, target, adaptation))
+			var source_ratio := (source_quad[1] - source_quad[0]).length() / (source_quad[3] - source_quad[0]).length()
+			var target_ratio := (target_quad[1] - target_quad[0]).length() / (target_quad[3] - target_quad[0]).length()
+			if absf(log(source_ratio / target_ratio)) > 0.02: result.warnings.append({"id": target, "reason": "原图宽高比不同，完全重合可能拉伸"})
+		var values: Dictionary = aligned.values
+		var current: Dictionary = Visuals.resolve(result.trial, target, adaptation)
+		var changed := false
+		for field in values:
+			if not _alignment_near(current[field], values[field]): changed = true
+			_alignment_set(result.trial, target, field, values[field], adaptation)
+		if changed: result.changes.append({"id": target, "source": source, "slot": functional_slot(target, data.assets[target]), "fields": values.keys()})
+	result.errors.append_array(validate(result.trial, false))
+	return result
+
+func alignment_adjust(plan: Dictionary, target: String, world_offset: Vector2, uniform_scale: float, adaptation: String = "") -> Dictionary:
+	var result: Dictionary = plan.duplicate(true)
+	if not result.get("errors", []).is_empty(): return result
+	if str(result.get("signature", "")) != JSON.stringify(data).sha256_text(): result.errors.append("工程已变化，请重新预览对齐"); return result
+	if is_nan(uniform_scale) or is_inf(uniform_scale) or uniform_scale < 0.05 or uniform_scale > 8.0:
+		result.errors.append("预览缩放超出范围"); return result
+	var trial: Dictionary = result.get("trial", {})
+	if not trial.get("assets", {}).has(target) or target in data.editor.locked: result.errors.append("目标组件不可编辑"); return result
+	var asset_data := Visuals.resolve(trial, target, adaptation)
+	var points := Visuals.quad(asset_data, Visuals.world_transform(trial, target, adaptation))
+	var center := (points[0] + points[2]) * 0.5 + world_offset
+	var x_axis := (points[1] - points[0]) * uniform_scale
+	var y_axis := (points[3] - points[0]) * uniform_scale
+	var parent_result := _alignment_parent_frame(trial, asset_data, adaptation)
+	if parent_result.has("error"): result.errors.append(parent_result.error); return result
+	var aligned := _alignment_box_values(asset_data, parent_result.frame, center, x_axis, y_axis)
+	if aligned.has("error"): result.errors.append(aligned.error); return result
+	for field in aligned.values: _alignment_set(trial, target, field, aligned.values[field], adaptation)
+	var before := Visuals.resolve(data, target, adaptation)
+	var after := Visuals.resolve(trial, target, adaptation)
+	var changed_fields := []
+	for field in ["position", "rotation", "scale"]:
+		if not _alignment_near(before[field], after[field]): changed_fields.append(field)
+	result.changes = result.changes.filter(func(item): return item.id != target)
+	result.skipped = result.skipped.filter(func(item): return item.id != target)
+	if not changed_fields.is_empty(): result.changes.append({"id": target, "slot": functional_slot(target, data.assets[target]), "fields": changed_fields})
+	result.errors.append_array(validate(trial, false))
+	return result
+
+func apply_alignment(plan: Dictionary) -> String:
+	if not plan.get("errors", []).is_empty(): return "对齐预览未通过校验"
+	if str(plan.get("signature", "")) != JSON.stringify(data).sha256_text(): return "工程已变化，请重新预览对齐"
+	if plan.get("changes", []).is_empty(): return "没有需要修改的组件"
+	var trial: Dictionary = plan.get("trial", {})
+	var errors := validate(trial, false)
+	if not errors.is_empty(): return "\n".join(errors)
+	checkpoint("按具体分类快速对齐")
+	data = trial.duplicate(true)
+	return ""
+
+static func _alignment_depth(id: String, document: Dictionary) -> int:
+	var depth := 0
+	var parent: String = str(document.assets.get(id, {}).get("parent", ""))
+	while not parent.is_empty() and document.assets.has(parent) and depth <= document.assets.size():
+		depth += 1
+		parent = str(document.assets[parent].get("parent", ""))
+	return depth
+
+static func _alignment_near(first: Variant, second: Variant) -> bool:
+	if first is Array and second is Array and first.size() == second.size():
+		for i in range(first.size()):
+			if not is_equal_approx(float(first[i]), float(second[i])): return false
+		return true
+	return is_equal_approx(float(first), float(second))
+
+static func _alignment_set(document: Dictionary, id: String, field: String, value: Variant, adaptation: String) -> void:
+	if adaptation.is_empty(): document.assets[id][field] = value
+	else:
+		if not document.adaptations[adaptation].has(id): document.adaptations[adaptation][id] = {}
+		document.adaptations[adaptation][id][field] = value
+
+static func _alignment_values(original: Dictionary, trial: Dictionary, target: String, source: String, preset: String, adaptation: String) -> Dictionary:
+	var source_asset := Visuals.resolve(original, source, adaptation)
+	var target_asset := Visuals.resolve(trial, target, adaptation)
+	var source_quad := Visuals.quad(source_asset, Visuals.world_transform(original, source, adaptation))
+	var target_world := Visuals.world_transform(trial, target, adaptation)
+	var target_quad := Visuals.quad(target_asset, target_world)
+	var source_center := (source_quad[0] + source_quad[2]) * 0.5
+	var target_center := (target_quad[0] + target_quad[2]) * 0.5
+	var desired_x := target_quad[1] - target_quad[0]
+	var desired_y := target_quad[3] - target_quad[0]
+	var source_x := source_quad[1] - source_quad[0]
+	var source_y := source_quad[3] - source_quad[0]
+	if minf(desired_x.length(), desired_y.length()) < 0.0001 or minf(source_x.length(), source_y.length()) < 0.0001:
+		return {"error": "显示框尺寸过小"}
+	if preset == "fit":
+		var factor := minf(source_x.length() / desired_x.length(), source_y.length() / desired_y.length())
+		desired_x = source_x.normalized() * desired_x.length() * factor
+		desired_y = source_y.normalized() * desired_y.length() * factor
+	elif preset == "exact":
+		desired_x = source_x
+		desired_y = source_y
+	var parent_result := _alignment_parent_frame(trial, target_asset, adaptation)
+	if parent_result.has("error"): return parent_result
+	var parent_frame: Transform2D = parent_result.frame
+	if preset == "position":
+		var local_point := parent_frame.affine_inverse() * (target_world.origin + source_center - target_center)
+		return {"values": {"position": [local_point.x, local_point.y]}}
+	return _alignment_box_values(target_asset, parent_frame, source_center, desired_x, desired_y)
+
+static func _alignment_parent_frame(trial: Dictionary, target_asset: Dictionary, adaptation: String) -> Dictionary:
+	var parent_frame := Transform2D(0.0, Visuals.placement(trial))
+	var parent: String = str(target_asset.get("parent", ""))
+	if not parent.is_empty():
+		if not trial.assets.has(parent): return {"error": "父组件不存在"}
+		var owner := Visuals.resolve(trial, parent, adaptation)
+		var anchor: String = str(target_asset.get("anchor", "origin"))
+		if not owner.get("anchors", {}).has(anchor): return {"error": "父组件锚点不存在"}
+		parent_frame = Visuals.world_transform(trial, parent, adaptation) * Transform2D(0.0, Visuals.vector(owner.anchors[anchor]))
+	if absf(parent_frame.determinant()) < 0.000001: return {"error": "父组件变换不可逆"}
+	return {"frame": parent_frame}
+
+static func _alignment_box_values(target_asset: Dictionary, parent_frame: Transform2D, desired_center: Vector2, desired_x: Vector2, desired_y: Vector2) -> Dictionary:
+	var size := Visuals.vector(target_asset.size)
+	var pivot := Visuals.vector(target_asset.pivot)
+	var world_x := desired_x / size.x
+	var world_y := desired_y / size.y
+	var world_origin := desired_center - desired_x * (0.5 - pivot.x) - desired_y * (0.5 - pivot.y)
+	var local := parent_frame.affine_inverse() * Transform2D(world_x, world_y, world_origin)
+	var x_length := local.x.length()
+	var y_length := local.y.length()
+	if minf(x_length, y_length) < 0.0001: return {"error": "结果缩放过小"}
+	if absf(local.x.dot(local.y) / (x_length * y_length)) > 0.0005:
+		return {"error": "父级与来源角度产生斜切，无法无损对齐"}
+	var y_scale := y_length if local.x.cross(local.y) > 0 else -y_length
+	return {"values": {"position": [local.origin.x, local.origin.y], "rotation": rad_to_deg(local.x.angle()), "scale": [x_length, y_scale]}}
 
 func runtime_data() -> Dictionary:
 	var result := data.duplicate(true)

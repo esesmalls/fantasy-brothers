@@ -17,6 +17,8 @@ try {
     if (-not $SkipTests) {
         & $engine --headless --path game --script res://tests/test_asset_workbench.gd
         if ($LASTEXITCODE -ne 0) { throw 'Asset workbench checks failed.' }
+        & $engine --headless --path game --script res://tests/test_asset_alignment.gd
+        if ($LASTEXITCODE -ne 0) { throw 'Asset alignment checks failed.' }
         & $engine --headless --path game --script res://tests/test_motion_events.gd
         if ($LASTEXITCODE -ne 0) { throw 'Authored motion timing checks failed.' }
         & $engine --headless --path game --script res://tests/test_paperdoll.gd

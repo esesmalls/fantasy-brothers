@@ -4,6 +4,7 @@ const Document = preload("res://presentation/asset_document.gd")
 const Visuals = preload("res://presentation/asset_visuals.gd")
 const Canvas = preload("res://presentation/asset_canvas.gd")
 const Timeline = preload("res://presentation/asset_timeline.gd")
+const AlignmentPreview = preload("res://presentation/asset_alignment_preview.gd")
 var doc := Document.new()
 var selected: Array = []
 var placement_selected := false
@@ -59,6 +60,28 @@ var pending_close: Callable
 var status_note := ""
 var same_values := false
 var inspector_values: Dictionary = {}
+var alignment_dialog: ConfirmationDialog
+var alignment_source_mode: OptionButton
+var alignment_scope: OptionButton
+var alignment_ungrouped: CheckBox
+var alignment_preset: OptionButton
+var alignment_sources_box: VBoxContainer
+var alignment_tree: Tree
+var alignment_preview: Control
+var alignment_summary: Label
+var alignment_source_choices: Dictionary = {}
+var alignment_rows: Dictionary = {}
+var alignment_sources: Dictionary = {}
+var alignment_plan_data: Dictionary = {}
+var alignment_base_plan_data: Dictionary = {}
+var alignment_mapping: Dictionary = {}
+var alignment_candidate_skipped: Array = []
+var alignment_active_target := ""
+var alignment_manual_target := ""
+var alignment_manual_offset := Vector2.ZERO
+var alignment_manual_scale := 1.0
+var alignment_drag_start_offset := Vector2.ZERO
+var alignment_drag_start_scale := 1.0
 var ui_scale := 1.0
 const UI_SCALE_CHOICES := [1.0, 1.25, 1.5, 1.75, 2.0, 2.5]
 
@@ -124,6 +147,7 @@ func _ready() -> void:
 	var batch := HFlowContainer.new(); left_panel.add_child(batch)
 	button(batch, "装入待处理／存疑", func(): replace_scene("pending"))
 	button(batch, "随机装配", func(): replace_scene("random"))
+	button(batch, "快速对齐…", open_alignment_dialog)
 	button(left_panel, "人物整体 · 棋格内摆放", select_placement)
 	var selection_bar := HFlowContainer.new(); left_panel.add_child(selection_bar)
 	button(selection_bar, "选择整个装配", select_assembly)
@@ -257,6 +281,232 @@ func replace_scene(mode: String) -> void:
 	else: message(str(result.get("reason", "没有可替换素材")))
 	refresh()
 
+func open_alignment_dialog() -> void:
+	if animation_mode: message("请先退出动作模式，再对齐基础姿态。"); return
+	if alignment_dialog != null and is_instance_valid(alignment_dialog): alignment_dialog.popup_centered(); return
+	alignment_source_choices.clear(); alignment_rows.clear(); alignment_sources.clear(); alignment_active_target = ""
+	alignment_base_plan_data.clear(); alignment_mapping.clear(); _alignment_clear_manual()
+	var dialog := ConfirmationDialog.new(); alignment_dialog = dialog
+	dialog.title = "快速对齐 · 按具体组件类型"; dialog.ok_button_text = "对齐到当前草案"; dialog.cancel_button_text = "取消"
+	add_child(dialog)
+	var logical_window := Vector2(get_window().size) / ui_scale
+	var popup_size := Vector2i(maxi(380, mini(650, roundi(logical_window.x) - 32)), maxi(270, mini(540, roundi(logical_window.y) - 32)))
+	var scroll := ScrollContainer.new(); scroll.custom_minimum_size = Vector2(popup_size.x - 42, popup_size.y - 105); dialog.add_child(scroll)
+	var box := VBoxContainer.new(); box.size_flags_horizontal = Control.SIZE_EXPAND_FILL; scroll.add_child(box)
+	var tip := label(box, "来源的蓝色显示框作为棋格内基准。此操作不改裁图、枢轴、附着、遮罩或评审状态。", 12)
+	tip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	var source_row := HBoxContainer.new(); box.add_child(source_row)
+	label(source_row, "来源", 13)
+	alignment_source_mode = choice(source_row, ["所选单件", "当前参考组合"], func(_value): _alignment_clear_manual(); _alignment_rebuild_sources())
+	if selected.size() != 1: alignment_source_mode.select(1)
+	alignment_sources_box = VBoxContainer.new(); box.add_child(alignment_sources_box)
+	var filters := HFlowContainer.new(); box.add_child(filters)
+	label(filters, "目标", 13)
+	alignment_scope = choice(filters, ["全部同类", "未处理", "存疑", "未处理／存疑"], func(_value): _alignment_clear_manual(); _alignment_refresh_targets())
+	alignment_ungrouped = check_box(filters, "只看未分组", false, func(_value): _alignment_clear_manual(); _alignment_refresh_targets())
+	var mode_row := HFlowContainer.new(); box.add_child(mode_row)
+	label(mode_row, "复制范围", 13)
+	alignment_preset = choice(mode_row, ["位置＋等比尺寸＋角度", "仅位置", "蓝框完全一致"], func(_value): _alignment_clear_manual(); _alignment_update_plan())
+	button(mode_row, "重置预览手调", func(): _alignment_clear_manual(); _alignment_update_plan())
+	var selection_row := HFlowContainer.new(); box.add_child(selection_row)
+	button(selection_row, "全选候选", func(): _alignment_check_all(true))
+	button(selection_row, "全不选", func(): _alignment_check_all(false))
+	button(selection_row, "只选高亮一件", _alignment_check_highlighted)
+	alignment_summary = label(box, "", 12); alignment_summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	var panels := HSplitContainer.new(); panels.custom_minimum_size.y = 240; box.add_child(panels)
+	alignment_tree = Tree.new(); alignment_tree.hide_root = true; alignment_tree.custom_minimum_size = Vector2(260, 220); panels.add_child(alignment_tree)
+	alignment_tree.item_edited.connect(_alignment_update_plan)
+	alignment_tree.item_selected.connect(_alignment_target_selected)
+	var visual := VBoxContainer.new(); visual.custom_minimum_size.x = 205; panels.add_child(visual)
+	alignment_preview = AlignmentPreview.new(); alignment_preview.custom_minimum_size = Vector2(205, 205); visual.add_child(alignment_preview)
+	alignment_preview.edit_started.connect(_alignment_manual_begin)
+	alignment_preview.edit_changed.connect(_alignment_manual_changed)
+	var legend := label(visual, "金色：来源　灰色：原目标　蓝色：对齐后", 11)
+	legend.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	var edit_hint := label(visual, "只勾选一件时，可拖动蓝框调整位置；拖动右下角方块等比缩放。", 11)
+	edit_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	dialog.confirmed.connect(_alignment_commit)
+	dialog.visibility_changed.connect(func():
+		if not dialog.visible:
+			if alignment_dialog == dialog: alignment_dialog = null
+			dialog.queue_free())
+	_alignment_rebuild_sources()
+	dialog.popup_centered(popup_size)
+
+func _alignment_grouped_sources() -> Dictionary:
+	var groups := {}
+	for id: String in doc.data.editor.scene:
+		if not doc.data.assets.has(id): continue
+		var slot := Document.functional_slot(id, doc.data.assets[id])
+		if not groups.has(slot): groups[slot] = []
+		groups[slot].append(id)
+	return groups
+
+func _alignment_rebuild_sources() -> void:
+	for child in alignment_sources_box.get_children(): alignment_sources_box.remove_child(child); child.queue_free()
+	if alignment_source_mode.selected == 0:
+		label(alignment_sources_box, ("所选：" + str(doc.data.assets[selected[0]].name) + " [" + selected[0] + "] · " + Document.slot_label(Document.functional_slot(selected[0], doc.data.assets[selected[0]]))) if selected.size() == 1 else "请先在资产库或场景层选中一件来源", 12)
+	else:
+		var groups := _alignment_grouped_sources()
+		var slots: Array = groups.keys(); slots.sort()
+		label(alignment_sources_box, "参考组合共 %d 类；同类有多件时请选择一件来源。" % slots.size(), 12)
+		for slot: String in slots:
+			var ids: Array = groups[slot]
+			if ids.size() < 2: continue
+			var row := HBoxContainer.new(); alignment_sources_box.add_child(row)
+			label(row, Document.slot_label(slot), 12)
+			var picker := OptionButton.new(); row.add_child(picker)
+			picker.add_item("请选择参考组件")
+			for id: String in ids: picker.add_item(str(doc.data.assets[id].name) + " [" + id + "]")
+			var chosen: String = str(alignment_source_choices.get(slot, ""))
+			if chosen in ids: picker.select(ids.find(chosen) + 1)
+			var slot_name := str(slot)
+			var options := ids.duplicate()
+			picker.item_selected.connect(func(index):
+				if index == 0: alignment_source_choices.erase(slot_name)
+				else: alignment_source_choices[slot_name] = options[index - 1]
+				_alignment_clear_manual()
+				_alignment_refresh_targets())
+	_alignment_refresh_targets()
+
+func _alignment_source_map() -> Dictionary:
+	var sources := {}
+	var unresolved := []
+	if alignment_source_mode.selected == 0:
+		if selected.size() != 1 or not doc.data.assets.has(selected[0]): unresolved.append("请选择一件来源")
+		else:
+			var id: String = selected[0]
+			sources[Document.functional_slot(id, doc.data.assets[id])] = id
+	else:
+		var groups := _alignment_grouped_sources()
+		for slot in groups:
+			var ids: Array = groups[slot]
+			if ids.size() == 1: sources[slot] = ids[0]
+			elif alignment_source_choices.has(slot) and alignment_source_choices[slot] in ids: sources[slot] = alignment_source_choices[slot]
+			else: unresolved.append(str(slot))
+	return {"sources": sources, "unresolved": unresolved}
+
+func _alignment_scope_key() -> String:
+	return ["all", "unhandled", "flagged", "pending"][alignment_scope.selected]
+
+func _alignment_preset_key() -> String:
+	return ["fit", "position", "exact"][alignment_preset.selected]
+
+func _alignment_refresh_targets() -> void:
+	if alignment_tree == null: return
+	var checked := {}
+	for id in alignment_rows: checked[id] = alignment_rows[id].is_checked(0)
+	alignment_rows.clear(); alignment_tree.clear()
+	var root := alignment_tree.create_item()
+	var source_result := _alignment_source_map()
+	alignment_sources = source_result.sources
+	var candidates := doc.alignment_candidates(alignment_sources, _alignment_scope_key(), alignment_ungrouped.button_pressed)
+	alignment_candidate_skipped = candidates.skipped
+	var group_rows := {}
+	for item: Dictionary in candidates.rows:
+		var slot: String = item.slot
+		if not group_rows.has(slot):
+			var header := alignment_tree.create_item(root); header.set_text(0, Document.slot_label(slot)); header.set_selectable(0, false); group_rows[slot] = header
+		var id: String = item.id
+		var row := alignment_tree.create_item(group_rows[slot]); alignment_rows[id] = row
+		row.set_cell_mode(0, TreeItem.CELL_MODE_CHECK); row.set_editable(0, true)
+		row.set_text(0, str(doc.data.assets[id].name) + " [" + id + "]")
+		row.set_tooltip_text(0, "来源：" + str(item.source) + "\n具体类型：" + Document.slot_label(slot) + "\n状态：" + ("已处理" if doc.review_state(id).handled else "未处理") + ("／存疑" if doc.review_state(id).flagged else ""))
+		row.set_metadata(0, id); row.set_checked(0, bool(checked.get(id, true)))
+	_alignment_update_plan()
+	if not source_result.unresolved.is_empty():
+		var missing := []
+		for slot in source_result.unresolved: missing.append(Document.slot_label(str(slot)))
+		alignment_summary.text = "请先指定这些具体分类的来源：" + "、".join(missing)
+		alignment_dialog.get_ok_button().disabled = true
+	elif not candidates.errors.is_empty():
+		alignment_summary.text = "\n".join(candidates.errors)
+		alignment_dialog.get_ok_button().disabled = true
+
+func _alignment_target_selected() -> void:
+	var row := alignment_tree.get_selected()
+	if row != null and row.get_metadata(0) is String: alignment_active_target = row.get_metadata(0)
+	_alignment_update_preview()
+
+func _alignment_check_all(value: bool) -> void:
+	for id in alignment_rows: alignment_rows[id].set_checked(0, value)
+	_alignment_update_plan()
+
+func _alignment_check_highlighted() -> void:
+	var row := alignment_tree.get_selected()
+	if row == null or not row.get_metadata(0) is String:
+		message("请先在目标列表高亮一件组件"); return
+	var chosen: String = row.get_metadata(0)
+	for id in alignment_rows: alignment_rows[id].set_checked(0, id == chosen)
+	alignment_active_target = chosen
+	_alignment_update_plan()
+
+func _alignment_clear_manual() -> void:
+	alignment_manual_target = ""
+	alignment_manual_offset = Vector2.ZERO; alignment_manual_scale = 1.0
+	alignment_drag_start_offset = Vector2.ZERO; alignment_drag_start_scale = 1.0
+
+func _alignment_manual_begin() -> void:
+	alignment_drag_start_offset = alignment_manual_offset
+	alignment_drag_start_scale = alignment_manual_scale
+
+func _alignment_manual_changed(world_offset: Vector2, uniform_scale: float) -> void:
+	if alignment_mapping.size() != 1 or alignment_manual_target.is_empty(): return
+	alignment_manual_offset = alignment_drag_start_offset + world_offset
+	alignment_manual_scale = clampf(alignment_drag_start_scale * uniform_scale, 0.05, 8.0)
+	_alignment_apply_manual()
+
+func _alignment_update_plan() -> void:
+	if alignment_dialog == null or alignment_preset == null or alignment_tree == null: return
+	var mapping := {}
+	for id in alignment_rows:
+		if not alignment_rows[id].is_checked(0): continue
+		var slot := Document.functional_slot(id, doc.data.assets[id])
+		if alignment_sources.has(slot): mapping[id] = alignment_sources[slot]
+	var only_target: String = str(mapping.keys()[0]) if mapping.size() == 1 else ""
+	if only_target != alignment_manual_target:
+		_alignment_clear_manual()
+		alignment_manual_target = only_target
+	alignment_mapping = mapping
+	alignment_base_plan_data = doc.alignment_plan(mapping, _alignment_preset_key(), adaptation)
+	_alignment_apply_manual()
+
+func _alignment_apply_manual() -> void:
+	alignment_plan_data = alignment_base_plan_data
+	if alignment_mapping.size() == 1 and (not alignment_manual_offset.is_zero_approx() or not is_equal_approx(alignment_manual_scale, 1.0)):
+		alignment_plan_data = doc.alignment_adjust(alignment_base_plan_data, alignment_manual_target, alignment_manual_offset, alignment_manual_scale, adaptation)
+	var details := []
+	for item: Dictionary in alignment_candidate_skipped.slice(0, 3): details.append(str(item.id) + "：" + str(item.reason))
+	for item: Dictionary in alignment_plan_data.skipped.slice(0, 4): details.append(str(item.id) + "：" + str(item.reason))
+	for item: Dictionary in alignment_plan_data.warnings.slice(0, 3): details.append(str(item.id) + "：" + str(item.reason))
+	var extra := maxi(0, alignment_candidate_skipped.size() - 3) + maxi(0, alignment_plan_data.skipped.size() - 4)
+	extra += maxi(0, alignment_plan_data.warnings.size() - 3)
+	if extra > 0: details.append("另有 %d 件跳过" % extra)
+	var errors: Array = alignment_plan_data.errors
+	var disabled_reason := ""
+	if errors.is_empty():
+		if alignment_mapping.is_empty(): disabled_reason = "请先勾选至少一件目标。"
+		elif alignment_plan_data.changes.is_empty():
+			disabled_reason = "本次没有可写入的目标，请查看跳过原因。" if not alignment_plan_data.skipped.is_empty() else "所选目标在当前复制范围内的蓝框参数已与来源一致，无需重复写入。若图像轮廓仍不齐，请检查透明边距或单件裁图。"
+	alignment_summary.text = "勾选 %d 件，预计修改 %d 件；写入%s。%s%s%s" % [alignment_mapping.size(), alignment_plan_data.changes.size(), "默认参数" if adaptation.is_empty() else "适配「" + adaptation + "」", "\n" + "；".join(details) if not details.is_empty() else "", "\n" + "；".join(errors) if not errors.is_empty() else "", "\n" + disabled_reason if not disabled_reason.is_empty() else ""]
+	alignment_dialog.get_ok_button().disabled = alignment_mapping.is_empty() or alignment_plan_data.changes.is_empty() or not errors.is_empty()
+	if alignment_active_target not in alignment_mapping: alignment_active_target = str(alignment_mapping.keys()[0]) if not alignment_mapping.is_empty() else ""
+	_alignment_update_preview()
+
+func _alignment_update_preview() -> void:
+	if alignment_preview == null or not is_instance_valid(alignment_preview): return
+	if alignment_active_target.is_empty() or alignment_plan_data.is_empty():
+		alignment_preview.show_pair({}, {}, "", "", adaptation, doc.base_dir); return
+	var slot := Document.functional_slot(alignment_active_target, doc.data.assets[alignment_active_target])
+	alignment_preview.show_pair(doc.data, alignment_plan_data.trial, str(alignment_sources.get(slot, "")), alignment_active_target, adaptation, doc.base_dir, alignment_mapping.size() == 1 and alignment_base_plan_data.get("errors", []).is_empty())
+
+func _alignment_commit() -> void:
+	var changed: int = alignment_plan_data.get("changes", []).size()
+	var error := doc.apply_alignment(alignment_plan_data)
+	if not error.is_empty(): message(error); return
+	message("已按具体分类对齐 %d 件；可一次撤销。请逐件复看后保存或应用。" % changed)
+	refresh()
+
 func refresh_status() -> void:
 	if status == null: return
 	status.text = ("● 未保存" if doc.dirty() else "已保存") + "  |  " + ("默认参数" if adaptation.is_empty() else "适配：" + adaptation) + "  |  " + status_note
@@ -322,7 +572,7 @@ func refresh_library() -> void:
 		var icon: AtlasTexture
 		if tex != null:
 			icon = AtlasTexture.new(); icon.atlas = tex; icon.region = Rect2(a.rect[0], a.rect[1], a.rect[2], a.rect[3])
-		var index := library.add_item(review_label(id), icon); library.set_item_metadata(index, id); library.set_item_tooltip(index, id + "\n功能槽：" + Document.functional_slot(id, a) + "\n双击添加到参考组合")
+		var index := library.add_item(review_label(id), icon); library.set_item_metadata(index, id); library.set_item_tooltip(index, id + "\n具体类型：" + Document.slot_label(Document.functional_slot(id, a)) + "\n双击添加到参考组合")
 
 func refresh_layers() -> void:
 	if layers == null: return
@@ -459,7 +709,9 @@ func refresh_inspector() -> void:
 		button(inspector, "恢复所选默认参数", reset_selected); return
 	text_field(inspector, "名称", a.name, func(v): set_field(id, "name", v))
 	text_field(inspector, "分类", a.category, func(v): set_field(id, "category", v))
-	text_field(inspector, "功能槽（同类批量替换，空白按 ID 识别）", str(doc.data.assets[id].get("slot", "")), func(v): set_field(id, "slot", v.strip_edges()))
+	text_field(inspector, "具体组件类型", str(doc.data.assets[id].get("slot", "")), func(v): set_field(id, "slot", v.strip_edges()))
+	var type_hint := label(inspector, "同值才批量对齐／替换；如 face、hair、skin、helmet_layer2、sword、sword_2h。空白时只对旧类型按 ID 推断。", 11)
+	type_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	text_field(inspector, "标签（逗号分隔）", ",".join(a.tags), func(v): set_field(id, "tags", Array(v.split(",", false))))
 	label(inspector, "显示尺寸 / 枢轴", 14)
 	for field: String in ["size", "pivot"]:
@@ -848,7 +1100,7 @@ func open_import(file: String, existing: String = "") -> void:
 	import_id = text_field(box, "稳定 ID（多块自动添加编号）", file.get_file().get_basename().replace(" ", "_"), func(_v): pass)
 	import_name = text_field(box, "名称", file.get_file().get_basename(), func(_v): pass)
 	import_category = text_field(box, "分类", "未分类", func(_v): pass)
-	import_slot = text_field(box, "功能槽（如 sword、axe、shield；同槽才会批量替换）", "", func(_v): pass)
+	import_slot = text_field(box, "具体组件类型（如 sword、sword_2h、helmet_layer2）", "", func(_v): pass)
 	import_dialog.confirmed.connect(func():
 		if not existing.is_empty():
 			if import_regions.size() != 1: message("修改源图区域需框选一块"); return
