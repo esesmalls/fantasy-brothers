@@ -2,14 +2,21 @@ extends SceneTree
 ## Presentation timing checks. BattleBoard may read snapshots and events, but it may
 ## never change rules, RNG, action history or the already-settled result.
 
-const Battle = preload("res://core/battle_rules.gd")
+const Battle = preload("res://tests/legacy_battle_rules.gd") # Fixed event fixtures before dynamic initiative.
 const Board = preload("res://presentation/battle_board.gd")
 const ReviewScene = preload("res://presentation/motion_review.tscn")
+const AssetDocument = preload("res://presentation/asset_document.gd")
 
 var checks := 0
 var failures: Array[String] = []
 
 func _initialize() -> void:
+	# Isolate from the user's published art. Explicit timings exercise the new contract.
+	AssetDocument.storage_override = AssetDocument.project_root().path_join("builds/asset-workbench/motion-unit")
+	var document := AssetDocument.new()
+	document.data.actions["test-slash"] = {"id": "test-slash", "duration": 1.2, "events": [{"id": "contact", "time": 0.31}], "tracks": []}
+	document.data.actions["test-bash"] = {"id": "test-bash", "duration": 0.8, "events": [{"id": "contact", "time": 0.4}], "tracks": []}
+	_check(document.apply().is_empty(), "isolated authored motion fixture publishes")
 	_test_catalog_timings()
 	_test_shield_action_lookup_and_single_speed()
 	_test_contact_snapshot_and_skip()
@@ -34,6 +41,7 @@ func _fixture(target_hp: int = 30, target_armor: int = 0) -> Dictionary:
 		"visual_loadout": {"weapon": "weapon_guard_sword", "armor": "armor_mail"}, "perks": []
 	}], 7711, {"id": "motion-test"})
 	var actor := _unit(battle, "crew_1")
+	actor.visual_actions = {"slash": "test-slash", "shield_bash": "test-bash"}
 	var target := _unit(battle, "enemy_0")
 	target.q = int(actor.q) + 1
 	target.r = int(actor.r)
@@ -74,7 +82,8 @@ func _test_shield_action_lookup_and_single_speed() -> void:
 	_check(board._pending_impacts.size() == 1 and board._pending_impacts[0].events.size() == 2, "same-root shield hit and exposed status stay grouped until contact")
 	board._process(0.15)
 	pose = board.get_motion_pose("crew_1")
-	_check(float(pose.progress) > 0.40 and float(pose.progress) < 0.55, "2x speed advances once instead of dividing duration and time together")
+	_check(is_equal_approx(float(board._motions.crew_1.duration), 0.8), "authored shield duration reaches real board")
+	_check(is_equal_approx(float(pose.progress), 0.375), "2x speed advances once across authored duration")
 	_check(JSON.stringify(settled) == rules_after, "animation playback leaves rules, RNG and action history unchanged")
 	board.queue_free()
 
@@ -93,7 +102,8 @@ func _test_contact_snapshot_and_skip() -> void:
 	board._process(0.0)
 	var target_id := "enemy_0"
 	_check(int(board._display_units.get(target_id, {}).get("hp", 0)) == 3, "lethal target keeps its old visual snapshot before contact")
-	var contact_time: float = Board.motion_duration("a", "slash") * Board.motion_contact("a")
+	var contact_time := 0.31
+	_check(is_equal_approx(float(board._motions.crew_1.duration), 1.2), "authored slash duration overrides legacy template")
 	board._process(contact_time - 0.002)
 	_check(int(board._display_units.get(target_id, {}).get("hp", 0)) == 3 and str(board.get_motion_pose(target_id).action) != "death", "death does not appear one frame before contact")
 	board._process(0.004)

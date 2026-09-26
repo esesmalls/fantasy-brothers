@@ -1,7 +1,7 @@
 extends SceneTree
 
 const Rules = preload("res://core/campaign_rules.gd")
-const Battle = preload("res://core/battle_rules.gd")
+const Battle = preload("res://tests/legacy_battle_rules.gd") # Original campaign fixtures; new casualties tested in foundation integration.
 
 var checks := 0
 var failures: Array[String] = []
@@ -249,7 +249,7 @@ func _test_result_claims_casualties_and_recovery() -> void:
 	choose_first(retreat_company)
 	retreat_company.roster[0].hp = 7
 	var retreat := Rules.resolve_battle(retreat_company, battle_result(retreat_company, "retreat", [], false, 2))
-	check(retreat.ok and retreat_company.phase == "returning" and int(retreat_company.roster[0].hp) == 7 and int(retreat_company.gold) == 78, "retreat preserves injuries and only pays bounded scavenged loot")
+	check(retreat.ok and retreat_company.phase == "returning" and int(retreat_company.roster[0].hp) == 7 and int(retreat_company.gold) == 62, "retreat preserves injuries and pays bounded loot after two days of maintenance")
 	check(Rules.return_to_camp(retreat_company).ok, "retreat can always return to camp")
 
 func _test_three_expedition_closure() -> void:

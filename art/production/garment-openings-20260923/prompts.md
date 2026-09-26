@@ -1,0 +1,33 @@
+# 内置 image_gen 原始编辑提示
+
+每次调用仅提供该件原稿作为 `referenced_image_paths`。下列是完整发送文本；`outer_04` 前两次请求因网络错误未出图，第三次简化提示成功。
+
+## padded_02
+
+> Use case: precise-object-edit. Edit target: the attached transparent PNG of the green medieval padded coat, padded_02. Preserve the exact 650x731 canvas, same full silhouette, position, size, three-quarter orientation, olive textile color, vertical quilting, seams, four leather buckles, collar rim thickness, sleeve openings and all antialiased outside edges. Change ONLY the central throat opening inside the tall raised collar: remove the prepainted very dark quilted lining that currently fills the space where a neck and real underlying garment should be visible. Make that interior aperture genuinely RGBA transparent (alpha zero in its center), following the inner rim's perspective ellipse. Keep the tangible olive rear collar inner wall and the front rolled rim with their shading; only remove the fixed fabric blocking the wearer's neck hole. Do not redraw the coat, change any details, add a body, add an under-shirt, add a solid dark/black fill, or add background. Transparent canvas and clean natural alpha at aperture edge.
+
+注：此提示中的 `650x731` 是发送时估计尺寸，原件实际为 655×736；导出以原件实际规格为准。
+
+## padded_03
+
+> Use case: precise-object-edit. Asset type: transparent PNG game garment layer. Edit target: the attached red quilted gambeson padded_03. Preserve original exact full silhouette, position, red chevron quilting, shoulder patches, stitches, collar rim and sleeve opening thickness, lower front split, three-quarter direction and transparent outside. Remove only the prepainted dark fabric filling the central throat cavity inside the circular standing collar; make the central aperture truly transparent RGBA so the actual shirt or body behind can appear. Keep the red rear collar inner wall and rolled collar lip as material of this coat. In the very lower front split, remove only fixed dark fake underlayer where the gap should reveal actual garment behind; preserve both red edged flaps. No new garment or background, no redesign. Transparent background and clean antialiased alpha at openings. Keep image framing and normal-size readability.
+
+## padded_04
+
+> Use case: precise-object-edit. Asset type: transparent PNG game garment layer. Edit target: the attached blue-gray horizontally quilted padded coat padded_04. Preserve original exact full silhouette, position, fabric texture, quilting, stitch repairs, four toggle ties, front closure edges, raised collar rim and sleeve openings, three-quarter direction and transparent outside. Remove only the prepainted dark material blocking the central neck hole inside the standing collar, making the central cavity truly transparent RGBA so actual worn layer behind can appear. Keep the blue-gray rear collar inner wall and tangible front lapel edges and folds. In lower front split remove only fixed dark fake underlayer between the edged flaps; maintain geometry. No body, no new shirt, no background, no redesign. Transparent background and clean antialiased alpha at openings. Keep image framing and normal-size readability.
+
+## outer_02
+
+> Use case: precise-object-edit. Asset type: transparent PNG game garment layer. Edit target: attached brown riveted medieval plate coat outer_02. Preserve exact complete armor silhouette, scale, position, plate layout, leather piping, rivets, weathered steel colors, shoulder caps, sleeves, copper-brown raised neck rim, front lower split and outer transparent edges. The inner neck cavity is currently filled by beige quilted undergarment prepainted into this outer armor. Remove ONLY that fixed beige fabric from the center of neck opening so that the actual independently worn padded coat can show through with genuinely transparent RGBA; retain the copper front rim and any actual rear collar material, correct edge thickness and shading. Also remove only the fixed beige cloth plugging the lower center front split, preserve armored flaps and edge. Do not alter plate geometry or add a new layer or background. Transparent background and clean antialiased alpha at openings. Keep image framing and normal-size readability.
+
+## outer_04：第一次失败
+
+> Use case: precise-object-edit. Asset type: transparent PNG game garment layer. Edit target: attached dark metallic scale armor outer_04. Preserve exact complete silhouette, scale, position, overlapping fish-scale rows, leather shoulder straps, studs, bronze raised collar rim, sleeves, lower front split, three-quarter orientation, exterior alpha edge. Inside the neck opening a dark checkered padded garment has been prepainted into the armor. Remove ONLY that fixed checkered textile from the central neck cavity, leaving genuinely transparent RGBA to reveal the independently equipped real inner layer. Keep metal and leather collar rim, correct rear collar inner wall and shadows. Remove only the fixed dark fabric plugging the lower front split while preserving split edges and armor flaps. Do not redesign, add a body or another garment, or add a background. Transparent background and clean antialiased alpha at openings. Keep image framing and normal-size readability.
+
+## outer_04：第二次失败
+
+> Use case: precise-object-edit. Asset type: transparent PNG game garment layer. Edit target: attached dark metallic scale armor outer_04. Preserve exact complete silhouette, scale, position, overlapping fish-scale rows, leather shoulder straps, studs, bronze raised collar rim, sleeves, lower front split, three-quarter orientation, exterior alpha edge. Inside the neck opening a dark checkered padded garment has been prepainted into the armor. Remove ONLY that fixed checkered textile from the central neck cavity, leaving genuinely transparent RGBA to reveal the independently equipped real inner layer. Keep metal and leather collar rim, correct rear collar inner wall and shadows. Remove only the fixed dark fabric plugging the lower front split while preserving split edges and armor flaps. Do not redesign, add a body or another garment, or add a background. Transparent background and clean antialiased alpha at openings. Keep original composition and normal-size readability.
+
+## outer_04：第三次成功（`sources/outer_04-imagegen.png`）
+
+> Precise object edit of attached outer_04 scale armor PNG. Preserve the armor silhouette and orientation, the bronze collar rim, dark overlapping metal scales, shoulder leather, sleeves, lower split, texture, and transparent outer background. Remove only the prepainted dark checkered padded undergarment from the central neck opening and the small lower front split. Those spaces must have true RGBA zero alpha, while the armor's own rim and rear inner wall stay opaque. No replacement lining, no body, no new garment, no redesign.

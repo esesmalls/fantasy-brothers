@@ -3,6 +3,9 @@ extends RefCounted
 ## All coordinates below are board logical pixels, relative to the ground origin.
 
 const CATALOG_PATH := "res://assets/art/motion/catalog.json"
+const VisualProfile = preload("res://presentation/visual_profile.gd")
+const StaticBustActor = preload("res://presentation/static_bust_actor.gd")
+const AssetRuntime = preload("res://presentation/asset_runtime.gd")
 static var _catalog: Dictionary = {}
 static var _textures: Dictionary = {}
 
@@ -17,6 +20,9 @@ static func template_info(template_id: String) -> Dictionary:
 	return catalog().get("templates", {}).get(template_id, {})
 
 static func supports(unit: Dictionary) -> bool:
+	if AssetRuntime.supports(unit): return true
+	if VisualProfile.supports(unit):
+		return str(unit.get("kind", "")) != "dog"
 	if str(unit.get("kind", "")) == "dog":
 		return false
 	if str(unit.get("id", "")) not in catalog().get("sample_unit_ids", ["crew_1"]) and not bool(unit.get("presentation_sample", false)):
@@ -32,8 +38,21 @@ static func _texture(path: String) -> Texture2D:
 	return _textures[path]
 
 static func draw_actor(canvas: CanvasItem, unit: Dictionary, origin: Vector2, scale: float = 1.0, pose: Dictionary = {}) -> bool:
+	if AssetRuntime.supports(unit) and AssetRuntime.draw_unit(canvas, unit, origin, scale, pose):
+		return true
+	if (VisualProfile.supports(unit) or unit.has("visual_assets")) and AssetRuntime.draw_unit(canvas, unit, origin, scale, pose):
+		return true
 	if not supports(unit):
 		return false
+	if VisualProfile.supports(unit):
+		var armor_id:=str(unit.get("visual_loadout", {}).get("armor", "armor_mail"))
+		var armor: String = AssetRuntime.ARMORS.get(armor_id, "bare")
+		var weapon_id:=str(unit.get("visual_loadout", {}).get("weapon", "weapon_guard_sword"))
+		var weapon: String = AssetRuntime.WEAPONS.get(weapon_id, "none")
+		var armor_ratio:=clampf(float(unit.get("armor", 0))/maxf(1.0,float(unit.get("max_armor", 1))),0.0,1.0)
+		var hp_ratio:=clampf(float(unit.get("hp", 0))/maxf(1.0,float(unit.get("max_hp", 1))),0.0,1.0)
+		StaticBustActor.draw_runtime_actor(canvas,origin,scale,armor,weapon,armor_ratio<0.67,hp_ratio<0.74,float(pose.get("progress",0.0)),"hit",[],Color.WHITE)
+		return true
 	var template_id := str(pose.get("template", "b"))
 	var info := template_info(template_id)
 	if info.is_empty():

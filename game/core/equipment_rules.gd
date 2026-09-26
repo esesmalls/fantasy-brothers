@@ -74,7 +74,7 @@ static func get_view(c: Dictionary, unit_id: String = "") -> Dictionary:
 			slots.append({
 				"slot": slot, "name": str(definition.get("name", "无")),
 				"instance_id": instance_id, "definition_id": str(definition.get("id", "")),
-				"description": _instance_description(instance, definition)
+				"description": _instance_description(instance, definition) + "\n装备负担：%d" % int(definition.get("burden", 0))
 			})
 	var inventory: Array = []
 	for instance: Dictionary in c.get("equipment", {}).get("instances", []):
@@ -104,7 +104,7 @@ static func get_view(c: Dictionary, unit_id: String = "") -> Dictionary:
 		shop.append({
 			"id": definition_id, "definition_id": definition_id,
 			"slot": str(definition.slot), "name": str(definition.name),
-			"description": str(definition.description), "price": int(definition.price),
+			"description": str(definition.description) + "\n装备负担：%d" % int(definition.get("burden", 0)), "price": int(definition.price),
 			"available": reason.is_empty(), "reason": "可以买入仓库。" if reason.is_empty() else reason,
 			"kinds": definition.allowed_kinds.duplicate(),
 			"comparison": _comparison(c, selected_unit, definition)

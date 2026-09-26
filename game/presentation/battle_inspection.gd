@@ -54,6 +54,9 @@ static func _compact(battle: Dictionary, unit: Dictionary, prop: Dictionary, cel
 		bars.append({"id": "hp", "glyph": "heart", "value": int(unit.hp), "max": int(unit.max_hp), "color": "b95f57"})
 		bars.append({"id": "armor", "glyph": "guard", "value": int(unit.armor), "max": int(unit.max_armor), "color": "789ead"})
 		bars.append({"id": "ap", "glyph": "hourglass", "value": 0 if int(unit.hp) <= 0 else int(unit.ap), "max": int(unit.max_ap), "color": "c5a561"})
+		if unit.has("fatigue"):
+			bars.append({"id": "fatigue", "glyph": "hourglass", "value": int(unit.fatigue), "max": int(unit.max_fatigue), "color": "b68f68"})
+			badges.append({"id": "morale", "glyph": "defend", "label": ["溃逃", "崩溃", "动摇", "稳定", "振奋"][clampi(int(unit.get("morale", 3)), 0, 4)], "color": "c5a561"})
 		turn = _turn_line(battle, unit).trim_prefix("行动顺序：").replace("此前还有 ", "再过 ").replace(" 名单位行动", " 人行动")
 		stats = [{"glyph": "attack", "value": str(unit.get("attack", 0))}, {"glyph": "archer", "value": str(unit.get("range", 0))}, {"glyph": "defend", "value": str(unit.get("defense", 0))}]
 		var status_names := {"defending": ["defend", "戒备", "b9c6a0"], "exposed": ["broken_shield", "破绽", "e29873"], "marked": ["mark", "标记", "e29873"], "pinned": ["pin", "牵制", "e29873"]}
@@ -83,16 +86,23 @@ static func _compact(battle: Dictionary, unit: Dictionary, prop: Dictionary, cel
 
 static func _fill_unit(result: Dictionary, battle: Dictionary, unit: Dictionary) -> void:
 	var dead := int(unit.get("hp", 0)) <= 0
+	var fate := str(unit.get("casualty_status", "pending"))
+	var incapacitated := dead and bool(unit.get("incapacitated", false)) and fate != "dead"
 	var role := str(KIND_NAMES.get(str(unit.get("kind", "")), str(unit.get("kind", "未知岗位"))))
 	var side := "我方" if str(unit.get("team", "")) == "player" else "敌方"
 	result.title = str(unit.get("name", "未命名单位"))
 	result.subtitle = "%s · %s%s" % [side, role, " · 已倒下" if dead else ""]
 	if unit.has("level"):
 		result.subtitle += " · %d级" % int(unit.level)
-	result.glyph = "†" if dead else ("犬" if str(unit.get("kind", "")) == "dog" else ("我" if str(unit.get("team", "")) == "player" else "敌"))
+	result.glyph = ("倒" if incapacitated else "†") if dead else ("犬" if str(unit.get("kind", "")) == "dog" else ("我" if str(unit.get("team", "")) == "player" else "敌"))
 	result.team = str(unit.get("team", "neutral"))
 	var lines: Array[String] = result.lines
-	lines.append("生命：%d / %d%s" % [int(unit.get("hp", 0)), int(unit.get("max_hp", 0)), "（死亡）" if dead else ""])
+	var fate_text := "（重伤幸存，待撤回营地）" if fate == "survived" else ("（本场失能，战后清点）" if incapacitated else "（死亡）")
+	lines.append("生命：%d / %d%s" % [int(unit.get("hp", 0)), int(unit.get("max_hp", 0)), fate_text if dead else ""])
+	if bool(unit.get("escaped", false)): lines.append("已撤出战场；并非死亡。")
+	if unit.has("fatigue"):
+		lines.append("疲劳：%d / %d · 装备负担：%d" % [int(unit.fatigue), int(unit.max_fatigue), int(unit.get("equipment_burden", 0))])
+		lines.append("士气：%s · 意志：%d" % [["溃逃", "崩溃", "动摇", "稳定", "振奋"][clampi(int(unit.get("morale", 3)), 0, 4)], int(unit.get("resolve", 50))])
 	lines.append("护甲：%d / %d" % [int(unit.get("armor", 0)), int(unit.get("max_armor", 0))])
 	if dead:
 		lines.append("行动点：—（已倒下，不会再行动）")
@@ -145,6 +155,8 @@ static func _append_other_occupants(lines: Array[String], battle: Dictionary, un
 		lines.append("同格物件：%s（耐久 %d / %d；%s）" % [str(PROP_NAMES.get(str(primary_prop.get("kind", "")), primary_prop.get("kind", "未知"))), int(primary_prop.get("hp", 0)), int(primary_prop.get("max_hp", 0)), _prop_outcome(str(primary_prop.get("kind", "")))])
 
 static func _append_cell(lines: Array[String], battle: Dictionary, cell: Dictionary, unit: Dictionary) -> void:
+	if cell.has("terrain"):
+		lines.append("地形：%s · 高度 %d" % [{"flat": "平地", "mud": "泥地", "rubble": "碎石"}.get(str(cell.terrain), str(cell.terrain)), int(cell.get("elevation", 0))])
 	if bool(cell.get("blocked", false)):
 		lines.append("地形：不可通行")
 	var surface := str(cell.get("surface", "dry"))

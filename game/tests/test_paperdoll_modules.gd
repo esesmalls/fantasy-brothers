@@ -1,6 +1,8 @@
 extends SceneTree
 const D=preload("res://presentation/paperdoll_document.gd")
 const A=preload("res://presentation/static_bust_actor.gd")
+const VisualProfile=preload("res://presentation/visual_profile.gd")
+const ModularActor=preload("res://presentation/modular_actor.gd")
 var passed:=0
 var failed:=0
 func check(ok:bool,label:String) -> void:
@@ -8,6 +10,17 @@ func check(ok:bool,label:String) -> void:
 	else:failed+=1;printerr("MODULES: "+label)
 func _initialize() -> void:call_deferred("run")
 func run() -> void:
+	var latest:=D.new()
+	check(latest.load_project(ProjectSettings.globalize_path("../my_test-v2.json"))=="","latest my_test-v2 loads")
+	var runtime:=A.runtime_catalog()
+	var expected_runtime:=latest.composed()
+	check(VisualProfile.profile().get("anchor_space","")=="cell_center","runtime profile uses the unit cell center")
+	check(runtime.get("assembly",{}).get("head","")=="modular","runtime profile preserves my_test-v2 appearance")
+	check(Vector2(runtime.parts.head.position[0],runtime.parts.head.position[1]).distance_to(Vector2(expected_runtime.parts.head.position[0],expected_runtime.parts.head.position[1]))<0.001,"head uses board-origin mapping")
+	check(Vector2(runtime.parts.mail.position[0],runtime.parts.mail.position[1]).distance_to(Vector2(expected_runtime.parts.mail.position[0],expected_runtime.parts.mail.position[1]))<0.001,"mail uses board-origin mapping")
+	var sample:={"id":"crew_1","kind":"guard","visual_loadout":{"armor":"armor_mail","weapon":"weapon_guard_sword"},"hp":30,"max_hp":40,"armor":20,"max_armor":24}
+	check(VisualProfile.supports(sample) and ModularActor.supports(sample),"formal board accepts the runtime visual profile")
+	check(runtime.get("bust_crop",{}).get("radius",[])[0]==30.25,"runtime crop comes from my_test-v2")
 	var d=D.new()
 	check(d.change("spear",Vector2(-60,45),1.6,true,-30),"wide move, scale and rotation accepted")
 	check(not d.change("head",Vector2.ZERO,1,true,181),"rotation bounded")

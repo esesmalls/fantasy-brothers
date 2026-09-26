@@ -5,6 +5,9 @@ const SCHEMA := 1
 const CONTENT_VERSION := "world-0.1"
 const CAMP_ID := "loc_greyshore_camp"
 const CONTRACT_ID := "contract_rain_granary"
+const EVACUATION_ID := "contract_river_evacuation"
+const SHORT_WORK_ID := "contract_short_work"
+const CONTRACT_IDS := [CONTRACT_ID, EVACUATION_ID, SHORT_WORK_ID]
 
 const LOCATIONS: Array[Dictionary] = [
 	{"id": CAMP_ID, "name": "灰岸营地", "description": "佣兵团休养、补给与补员的固定落脚处。", "x": 0.13, "y": 0.72, "kind": "camp"},

@@ -4,6 +4,7 @@ extends RefCounted
 
 const Data = preload("res://core/character_data.gd")
 const EquipmentData = preload("res://core/equipment_data.gd")
+const Appearance = preload("res://core/appearance_rules.gd")
 
 const RANGED_STYLES := ["archer", "hunter"]
 const BASIC_TRAINING := {
@@ -34,10 +35,11 @@ static func ensure_campaign(c: Dictionary) -> Dictionary:
 	return {"ok": true, "changed": changed}
 
 static func ensure_character(unit: Dictionary, equipment_context: Dictionary = {}) -> Dictionary:
+	var appearance_changed := Appearance.ensure_unit(unit)
 	if _has_ledger(unit):
 		var previous := JSON.stringify(unit)
 		recompute_character(unit, equipment_context)
-		return {"ok": true, "changed": JSON.stringify(unit) != previous}
+		return {"ok": true, "changed": appearance_changed or JSON.stringify(unit) != previous}
 	var background_id := str(unit.get("background_id", Data.background_for_kind(str(unit.get("kind", "guard")))))
 	var background := Data.background(background_id)
 	if background.is_empty():
@@ -107,6 +109,12 @@ static func recompute_character(unit: Dictionary, equipment_context: Dictionary 
 	unit.melee_skill = int(effective.melee_skill)
 	unit.ranged_skill = int(effective.ranged_skill)
 	unit.level = int(unit.progression.get("level", 1))
+	unit.equipment_burden = EquipmentData.loadout_burden(unit.get("visual_loadout", {}))
+	unit.max_fatigue = maxi(30, 80 + int(effective.vitality) / 2 - int(unit.equipment_burden))
+	if "lasting_wound" in unit.get("permanent_injuries", []):
+		unit.max_fatigue = maxi(30, int(unit.max_fatigue) - 8)
+	unit.initiative = 100 + int(effective.defense)
+	unit.resolve = clampi(45 + int(unit.level) * 2, 30, 85)
 	unit.accuracy = int(effective[accuracy_stat])
 	var combat: Dictionary = unit.combat_sources
 	combat.equipment_attack = int(weapon.get("attack", 0))
@@ -281,6 +289,7 @@ static func apply_battle_progression(c: Dictionary, battle: Dictionary, outcome:
 				note += "并获得%d属性点" % gained_points
 		unit.character_history.append(note + "。")
 		awards.append({"unit_id": str(unit.id), "xp": amount, "levels": gained_levels})
+		recompute_character(unit, c)
 	return {"ok": true, "reason": "人物经历已经结算。", "awards": awards}
 
 static func validate_campaign(c: Dictionary, allow_legacy: bool = false) -> String:

@@ -42,14 +42,17 @@ func run(workbench:Control,output:String) -> void:
 	for resolution in [Vector2i(1440,960),Vector2i(1180,740)]:
 		ui.get_window().size=resolution;ui.get_window().content_scale_size=resolution;await settle()
 		check(ui.stage.size.x>=600 and ui.stage.size.y>=570,"usable canvas "+str(resolution))
-		var rect:Rect2=ui.layer_list.get_item_rect(1)
+		ui.focus_part_row("head");await settle()
+		var rect:Rect2=ui.part_row_rect("head")
 		await click(ui.layer_list.global_position+rect.get_center())
 		check(ui.selected=="head","pointer selects head "+str(resolution))
-		var start:Vector2=ui.stage.global_position+ui.camera().origin+Vector2(0,-45)*ui.camera().scale
+		ui.weapon="none";ui.refresh();await settle()
+		var start:Vector2=ui.stage.global_position+ui.pointer_for("head")
 		var prior:float=ui.document.transform_for("head").offset[0]
 		await move(start);await press(start,true)
 		await move(start+Vector2(2*ui.camera().scale,0),true);await press(start+Vector2(2*ui.camera().scale,0),false)
 		check(is_equal_approx(ui.x_field.value,prior+2),"pointer drag updates field "+str(resolution))
+		ui.weapon="sword";ui.refresh()
 		await click(ui.undo_button.get_global_rect().get_center())
 		check(is_equal_approx(ui.x_field.value,prior),"pointer undo "+str(resolution))
 		await click(ui.redo_button.get_global_rect().get_center())

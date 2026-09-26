@@ -1,0 +1,228 @@
+extends SceneTree
+const Document=preload("res://presentation/paperdoll_document.gd")
+const Workbench=preload("res://presentation/paperdoll_workbench.gd")
+const Actor=preload("res://presentation/static_bust_actor.gd")
+const Motion=preload("res://presentation/static_bust_motion.gd")
+var passed:=0
+var failed:=0
+
+func check(value:bool,message:String) -> void:
+	if value:passed+=1
+	else:failed+=1;printerr("AUTHORING: "+message)
+
+func _initialize() -> void:call_deferred("run")
+
+func run() -> void:
+	var original:=JSON.stringify(Actor.catalog())
+	for weapon in ["sword","spear","bow"]:
+		for p in [0.0,.25,.42,.53,.64,1.0]:
+			var a:=Motion.sample(weapon,p)
+			var b:=Motion.sample(weapon,p,"hit",Motion.default_action(weapon))
+			check(a.position.distance_to(b.position)<.000001 and absf(a.angle-b.angle)<.000001,weapon+" default action matches hardcoded sample "+str(p))
+		check(Motion.default_action(weapon).id==weapon,weapon+" keeps a stable action id")
+		for key in Motion.default_action(weapon).keyframes:
+			check(str(key.id).begins_with(weapon+"."),weapon+" keyframe id is stable: "+str(key.id))
+	var d=Document.new()
+	check(d.composed()==d.baseline and d.crop.is_empty() and d.actions.is_empty(),"authoring defaults keep existing composition")
+	check(d.crop_spec()==d.baseline.bust_crop,"crop default equals current catalog window")
+	var crop:=d.default_crop()
+	check(not d.change_crop(Vector2(crop.center[0],crop.center[1]),Vector2(crop.radius[0],crop.radius[1]),crop.top),"writing the current crop is a no-op")
+	check(d.change_crop(Vector2(crop.center[0]+4,crop.center[1]-2),Vector2(36,10),-90),"crop can expand past the old window")
+	check(d.composed().bust_crop.radius[0]==36 and d.payload().schema==3,"edited crop is saved as schema 3")
+	check(d.composed().parts.head==d.baseline.parts.head,"crop edit does not move parts")
+	d.undo();check(d.crop.is_empty() and d.composed().bust_crop==d.baseline.bust_crop,"undo restores locked default crop")
+	check(d.change("base",Vector2(3,-2),1),"base anchor is now editable")
+	check(d.composed().parts.base.position==[3.0,-2.0],"base offset reaches the pedestal")
+	check(d.composed().bust_crop==d.baseline.bust_crop,"base move leaves default crop")
+	check(not d.change("base",Vector2(3,-2),1.2),"base scale stays locked")
+	check(d.change_shared(["head","mail"],Vector2(1,-1),1.2,15),"shared scale and rotation apply together")
+	check(is_equal_approx(d.transform_for("head").scale,1.2) and is_equal_approx(d.transform_for("mail").scale,1.2),"shared scale written")
+	check(is_equal_approx(d.transform_for("head").angle,15) and is_equal_approx(d.transform_for("mail").angle,15),"shared rotation written")
+	check(d.nudge_shared(["head","mail"],Vector2(2,0)),"shared nudge uses one history step")
+	check(is_equal_approx(d.transform_for("head").offset[0],3) and is_equal_approx(d.transform_for("mail").offset[0],3),"shared offset nudged")
+	d.undo();check(is_equal_approx(d.transform_for("head").offset[0],1),"shared nudge undoes as one step")
+	var sword:=d.action_for("sword")
+	for key in sword.keyframes:
+		if key.id=="sword.contact":key.x=40;key.y=-36
+	check(d.set_action("sword",sword),"authored sword path is stored")
+	check(d.actions.sword.id=="sword" and d.payload().schema==3,"weapon action keeps a stable id")
+	var authored:=Motion.sample("sword",.42,"hit",d.action_for("sword"))
+	var stock:=Motion.sample("sword",.42)
+	check(authored.position.x>stock.position.x,"preview uses the authored contact pose")
+	check(Actor.motion_action("sword",d.composed()).id=="sword","composed catalog carries the action")
+	check(d.reset_action("sword") and not d.actions.has("sword"),"reset returns the built-in sword path")
+	check(Motion.sample("sword",.42)==stock,"reset preview matches the original resolve path")
+	var invalid:=d.payload();invalid.schema=3;invalid.crop={"center":[0,0],"radius":[1,1],"top":-90}
+	check(not d.validate(invalid).is_empty(),"tiny crop rejected")
+	invalid=d.payload();invalid.schema=3;invalid.actions={"sword":{"id":"sword","weapon":"sword","duration":.86,"contact":.2,"release":.4,"keyframes":[]}}
+	check(not d.validate(invalid).is_empty(),"empty action rejected")
+	var dir:="user://paperdoll-authoring";DirAccess.make_dir_recursive_absolute(dir)
+	d.change_crop(Vector2(crop.center[0],crop.center[1]),Vector2(40,12),-80)
+	check(d.save_project(dir+"/stage.json")=="","save authored crop")
+	var restored=Document.new();check(restored.load_project(dir+"/stage.json")=="","load authored crop")
+	check(restored.crop.radius[0]==40 and restored.composed().bust_crop.top==-80,"crop roundtrip")
+	d.reset_all()
+	var stack:=Actor.visible_draw_ids("mail",false,false,"sword",{},[],0.0,"hit")
+	check(stack==["base","body","linen","padded","mail","head","shield","sword"],"default sword stack")
+	check(Actor.sort_draw_ids(stack,{})==stack,"default ranks keep the historical order")
+	check(Actor.sort_draw_ids(stack,{"sword":-10})[0]=="sword","lower layer rank draws first")
+	var bow_ids:=Actor.visible_draw_ids("mail",false,false,"bow",{},[],0.0,"hit")
+	check(bow_ids[bow_ids.size()-2]=="bow" and bow_ids[bow_ids.size()-1]=="arrow","nocked arrow stays with the bow")
+	var released:=Actor.visible_draw_ids("mail",false,false,"bow",{},[],1.0,"hit")
+	check(released[released.size()-1]=="bow" and not released.has("arrow"),"released arrow is not a body layer")
+	var worn:=Document.new()
+	worn.set_appearance("head","modular");worn.set_appearance("blood",true);worn.set_appearance("scar",true);worn.set_appearance("bandage",true)
+	var worn_ids:=Actor.visible_draw_ids("mail",false,false,"sword",worn.composed(),[],0.0,"hit")
+	check(worn_ids==["base","skin","blood","body","linen","padded","mail","face","scar","beard","hair","bandage","shield","sword"],"modular stack matches the old paint order")
+	check(Actor.sort_draw_ids(worn_ids,{})==worn_ids,"modular default ranks do not reorder")
+	var layered:=Document.new()
+	check(layered.change("head",Vector2(10,1),1.2,true,5),"layer test keeps a transform")
+	var head_pos:Array=layered.composed().parts.head.position.duplicate()
+	check(layered.set_layer_rank("head",200) and layered.payload().schema==4,"changed layer rank is schema 4")
+	check(layered.composed().parts.head.position==head_pos,"layer rank does not move the part")
+	check(is_equal_approx(layered.transform_for("head").scale,1.2) and is_equal_approx(layered.transform_for("head").angle,5),"layer rank leaves scale and rotation")
+	check(layered.composed().layer_ranks.head==200,"preview catalog carries the rank")
+	check(layered.set_layer_rank("head",int(Actor.DRAW_RANK.head)) and layered.layers.is_empty() and layered.payload().schema==2,"default rank is omitted")
+	check(not layered.set_layer_rank("bust",10) and not layered.set_layer_rank("crop",10),"bust and crop have no layer rank")
+	layered.set_layer_rank("mail",5);layered.undo();check(not layered.layers.has("mail"),"layer edit undoes by itself")
+	var legacy:=layered.payload();legacy.schema=4;legacy.layers={"bust":10}
+	check(not layered.validate(legacy).is_empty(),"unknown layer target is rejected")
+	var multi:=Document.new()
+	multi.change("head",Vector2(10,1),1.0,true,5);multi.change("linen",Vector2(4,-3),1.5,true,0)
+	check(multi.nudge_shared(["head","linen"],Vector2(1,0)),"multi nudge adds the same offset")
+	check(is_equal_approx(multi.transform_for("head").offset[0],11) and is_equal_approx(multi.transform_for("head").offset[1],1),"head keeps its own y")
+	check(is_equal_approx(multi.transform_for("linen").offset[0],5) and is_equal_approx(multi.transform_for("linen").scale,1.5) and is_zero_approx(multi.transform_for("linen").angle),"linen keeps scale and angle")
+	check(multi.nudge_scale(["head","linen"],.2) and is_equal_approx(multi.transform_for("head").scale,1.2) and is_equal_approx(multi.transform_for("linen").scale,1.7),"scale delta is independent")
+	check(is_equal_approx(multi.transform_for("head").angle,5),"scale delta does not copy rotation")
+	check(multi.nudge_layer(["head","linen"],10) and multi.layer_rank("head")==80 and multi.layer_rank("linen")==50,"layer delta keeps each starting rank")
+	check(is_equal_approx(multi.transform_for("head").offset[0],11),"layer delta does not move")
+	check(multi.align_to(["head","linen"],"linen"),"align copies the primary part")
+	check(is_equal_approx(multi.transform_for("head").offset[0],5) and is_equal_approx(multi.transform_for("head").offset[1],-3),"aligned offset")
+	check(is_equal_approx(multi.transform_for("head").scale,1.7) and is_zero_approx(multi.transform_for("head").angle) and multi.layer_rank("head")==50,"aligned scale, angle, and layer")
+	multi.undo();check(is_equal_approx(multi.transform_for("head").offset[0],11) and multi.layer_rank("head")==80,"align is one undo step")
+	var carried:=Document.new()
+	carried.change("head",Vector2.ZERO,2.0)
+	var hair_before:float=carried.composed().parts.hair.position[0]
+	var head_before:float=carried.composed().parts.head.position[0]
+	check(carried.nudge_shared(["head","hair"],Vector2(6,0)),"parent and child move as one step")
+	check(is_equal_approx(carried.transform_for("head").offset[0],6) and is_zero_approx(carried.transform_for("hair").offset[0]),"child offset is not added again")
+	check(is_equal_approx(carried.composed().parts.hair.position[0]-hair_before,6) and is_equal_approx(carried.composed().parts.head.position[0]-head_before,6),"scaled parent carries the child the same distance")
+	check(carried.nudge_shared(["hair"],Vector2(2,0)) and is_equal_approx(carried.transform_for("hair").offset[0],2),"a child alone still keeps its own offset")
+	var whole:=Document.new()
+	var linen_before:float=whole.composed().parts.linen.position[0]
+	var sword_before:float=whole.composed().parts.sword.position[0]
+	check(whole.nudge_shared(["bust","linen","head","sword"],Vector2(4,0)),"the whole figure carries body parts once")
+	check(is_equal_approx(whole.transform_for("bust").offset[0],4) and is_zero_approx(whole.transform_for("linen").offset[0]) and is_zero_approx(whole.transform_for("head").offset[0]),"body parts are not shifted a second time")
+	check(is_equal_approx(whole.transform_for("sword").offset[0],4),"a weapon is not a child of the whole figure")
+	check(is_equal_approx(whole.composed().parts.linen.position[0]-linen_before,4) and is_equal_approx(whole.composed().parts.sword.position[0]-sword_before,4),"body and weapon travel the same distance")
+	whole.undo();check(is_zero_approx(whole.transform_for("bust").offset[0]) and is_zero_approx(whole.transform_for("sword").offset[0]),"one carried move undoes together")
+	var old:=Document.new()
+	var saved:Dictionary={"schema":2,"kind":"fantasy-brothers-paperdoll","baseline_sha256":old.fingerprint,"modules_sha256":old.modules_fingerprint,"appearance":old.appearance.duplicate(true),"edits":{"head":{"offset":[2,0],"scale":1,"angle":0}}}
+	check(old.validate(saved).is_empty(),"schema 2 without layers still validates")
+	var dir2:="user://paperdoll-authoring";DirAccess.make_dir_recursive_absolute(dir2)
+	check(Document.write_json(dir2+"/legacy.json",saved)=="","write schema 2")
+	var loaded:=Document.new();check(loaded.load_project(dir2+"/legacy.json")=="" and loaded.layers.is_empty() and is_equal_approx(loaded.transform_for("head").offset[0],2),"old draft loads without a layer rank")
+	for mode in ["type","layer","name"]:
+		var seen:={};var sections:Array=Document.browser_sections(mode)
+		for section in sections:
+			for group in section.groups:
+				check(not seen.has(group),mode+" lists "+group+" once");seen[group]=true
+		for group in Document.SELECT_ORDER:check(seen.has(group),mode+" includes "+group)
+	var hex:=Workbench.board_hex_points(Vector2.ZERO,1.0)
+	check(hex.size()==6 and abs(hex[0].angle()-deg_to_rad(30.0))<0.001 and abs(hex[0].length()-33.0)<0.001,"board hex matches the pointy battle cell")
+	var neighbor:=Workbench.board_cell_center(Vector2.ZERO,1,0,1.0)
+	check(abs(neighbor.x-sqrt(3.0)*34.0)<0.001 and abs(neighbor.y)<0.001,"neighbor cell uses the battle spacing")
+	var ui=Workbench.new();root.add_child(ui);await process_frame;await process_frame
+	ui.select_group("crop")
+	check(ui.crop_box.visible and not ui.transform_box.visible,"crop editor shown")
+	ui.crop_rx.value=40;check(is_equal_approx(ui.document.crop_spec().radius[0],40),"crop field writes the window")
+	ui.document.undo();ui.refresh();check(ui.document.crop.is_empty(),"crop undo restores default")
+	ui.select_groups(["head","linen"])
+	check(ui.selected_groups==["head","linen"],"multi-select keeps both groups")
+	ui.size_field.value=120
+	check(is_equal_approx(ui.document.transform_for("head").scale,1.2) and is_equal_approx(ui.document.transform_for("linen").scale,1.2),"multi-select scale")
+	ui.angle_field.value=-10
+	check(is_equal_approx(ui.document.transform_for("head").angle,-10) and is_equal_approx(ui.document.transform_for("linen").angle,-10),"multi-select rotation")
+	check(ui._find_leaf("head")!=null and ui._find_leaf("head").get_text(1)==Document.label_for("head"),"type browser shows the head name")
+	ui.select_group("head");ui.toggle_part("mail");ui.toggle_part("linen")
+	check(ui.selected_groups==["head","mail","linen"],"clicking parts accumulates a multi-selection")
+	ui.toggle_part("head");check(ui.selected_groups==["mail","linen"],"clicking a selected part removes only that part")
+	ui.select_group("head")
+	var mail_row:=ui._find_leaf("mail");mail_row.set_checked(0,true);ui.apply_tree_item_check(mail_row)
+	var sword_row:=ui._find_leaf("sword");sword_row.set_checked(0,true);ui.apply_tree_item_check(sword_row)
+	check(ui.selected_groups==["head","mail","sword"],"checks from different categories stay together")
+	check(ui._find_leaf("head").is_checked(0) and mail_row.is_checked(0) and sword_row.is_checked(0),"checked parts stay marked across categories")
+	var armor:TreeItem=mail_row.get_parent();armor.set_checked(0,false);ui.apply_tree_item_check(armor)
+	check(ui.selected_groups==["head","sword"] and not mail_row.is_checked(0),"clearing one category keeps the others")
+	ui._set_group_mode("layer");check(ui._find_leaf("shield")!=null,"layer browser contains shield")
+	ui._set_group_mode("name");check(ui._find_leaf("crop")!=null,"name browser keeps the flat list")
+	ui._set_group_mode("type")
+	ui.document.change("head",Vector2(10,1),1.0,true,5);ui.document.change("mail",Vector2(4,-2),1.1,true,0)
+	ui.select_groups(["head","mail"])
+	check(is_equal_approx(ui.x_field.value,4),"multi field shows the last selection")
+	ui.x_field.value=5
+	check(is_equal_approx(ui.document.transform_for("head").offset[0],11) and is_equal_approx(ui.document.transform_for("head").offset[1],1),"field delta keeps the other head values")
+	check(is_equal_approx(ui.document.transform_for("mail").offset[0],5) and is_equal_approx(ui.document.transform_for("mail").scale,1.1) and is_zero_approx(ui.document.transform_for("mail").angle),"field delta keeps the mail values")
+	ui.document.set_layer_rank("head",90);ui.document.set_layer_rank("mail",40);ui.refresh()
+	ui.align_parameters()
+	check(is_equal_approx(ui.document.transform_for("head").scale,1.1) and is_zero_approx(ui.document.transform_for("head").angle) and ui.document.layer_rank("head")==40,"align button copies the primary part")
+	ui.select_group("sword")
+	var contact_index:=0
+	for i in range(ui.current_action().keyframes.size()):
+		if ui.current_action().keyframes[i].id=="sword.contact":contact_index=i
+	ui.select_keyframe(contact_index)
+	ui.key_x.value=48
+	check(is_equal_approx(ui.document.action_for("sword").keyframes[contact_index].x,48),"keyframe edit is stored")
+	check(ui.document.action_for("sword").id=="sword","edited action keeps the same id")
+	var preview:=Motion.sample("sword",.42,"hit",ui.document.action_for("sword"))
+	check(preview.position.x>30,"workbench preview samples the authored pose")
+	ui.document.reset_action("sword");ui.refresh()
+	check(not ui.document.actions.has("sword"),"workbench can restore the built-in path")
+	ui.document.set_appearance("head","modular")
+	ui.document.change("head",Vector2(1,0),1)
+	ui.document.change("hair",Vector2(3,0),1)
+	ui.select_groups(["head","hair"])
+	check(is_equal_approx(ui.x_field.value,3),"child field shows its own offset")
+	ui.x_field.value=4
+	check(is_equal_approx(ui.document.transform_for("head").offset[0],2) and is_equal_approx(ui.document.transform_for("hair").offset[0],3),"editing the child number moves only the selected parent")
+	check(is_equal_approx(ui.x_field.value,3),"child number stays on its own offset")
+	ui.weapon="none";ui.refresh()
+	ui.select_group("base")
+	var head_rect:Rect2=ui._quad_bounds(ui._part_quad("head"))
+	ui._box_add=false
+	ui._box_origin=head_rect.position
+	ui._box_current=head_rect.end
+	ui.apply_box_selection()
+	check("head" in ui.selected_groups and "base" not in ui.selected_groups,"box select replaces with the parts inside")
+	ui._box_add=true
+	ui._box_base=ui.selected_groups.duplicate()
+	var base_rect:Rect2=ui._quad_bounds(ui._part_quad("base"))
+	ui._box_origin=base_rect.position
+	ui._box_current=base_rect.end
+	ui.apply_box_selection()
+	check("head" in ui.selected_groups and "base" in ui.selected_groups,"shift box adds the base")
+	var kept:Array=ui.selected_groups.duplicate()
+	ui._box_add=false
+	ui._box_origin=Vector2(2,2)
+	ui._box_current=Vector2(12,12)
+	ui.apply_box_selection()
+	check(ui.selected_groups==kept,"a box on empty canvas keeps the current selection")
+	ui.document.set_appearance("head","legacy");ui.weapon="none";ui.refresh()
+	ui.select_group("head")
+	var point:Vector2=ui.pointer_for("head")
+	check(ui.group_at_point(point)=="head","pointer sample lands on the head")
+	var before:float=ui.document.transform_for("head").offset[0]
+	var press:=InputEventMouseButton.new();press.button_index=MOUSE_BUTTON_LEFT;press.pressed=true;press.position=point
+	ui.stage_input(press)
+	var motion:=InputEventMouseMotion.new();motion.position=point+Vector2(ui.camera().scale*2,0)
+	ui.stage_input(motion)
+	press.pressed=false;ui.stage_input(press)
+	check(is_equal_approx(ui.document.transform_for("head").offset[0],before+2),"dragging the part still moves it")
+	before=ui.document.transform_for("head").offset[0]
+	press.pressed=true;press.position=Vector2(2,2);ui.stage_input(press)
+	motion.position=Vector2(36,28);ui.stage_input(motion)
+	press.pressed=false;ui.stage_input(press)
+	check(is_equal_approx(ui.document.transform_for("head").offset[0],before),"dragging empty space does not move the part")
+	ui.queue_free();await process_frame
+	check(JSON.stringify(Actor.catalog())==original,"authoring tests do not mutate the catalog")
+	print("Paperdoll authoring checks: %d passed, %d failed"%[passed,failed]);quit(1 if failed else 0)

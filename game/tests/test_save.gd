@@ -2,7 +2,7 @@ extends SceneTree
 
 const Saves = preload("res://core/save_store.gd")
 const Campaign = preload("res://core/campaign_rules.gd")
-const Battle = preload("res://core/battle_rules.gd")
+const Battle = preload("res://tests/legacy_battle_rules.gd") # Frozen historical fixtures; tactical save coverage is separate.
 
 const SAVE_PATH := "user://qa/save_store_test/campaign.json"
 

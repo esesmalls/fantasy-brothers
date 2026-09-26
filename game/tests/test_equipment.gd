@@ -1,7 +1,7 @@
 extends SceneTree
 
 const Campaign = preload("res://core/campaign_rules.gd")
-const Battle = preload("res://core/battle_rules.gd")
+const Battle = preload("res://tests/legacy_battle_rules.gd") # Original equipment and old-battle compatibility fixtures.
 const Equipment = preload("res://core/equipment_rules.gd")
 const Saves = preload("res://core/save_store.gd")
 

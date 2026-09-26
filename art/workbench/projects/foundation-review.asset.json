@@ -1,0 +1,9048 @@
+{
+	"actions": {
+		"attack_weapon_archer_bow": {
+			"duration": 1.42,
+			"events": [
+				{
+					"id": "release",
+					"time": 0.639
+				},
+				{
+					"id": "contact",
+					"time": 1.065
+				}
+			],
+			"id": "attack_weapon_archer_bow",
+			"legacy_action": {
+				"contact": 0.75,
+				"duration": 1.42,
+				"id": "bow",
+				"keyframes": [
+					{
+						"angle": 1.45,
+						"id": "bow.rest",
+						"t": 0.0,
+						"x": 15.0,
+						"y": -12.0
+					},
+					{
+						"angle": 1.3,
+						"id": "bow.draw",
+						"t": 0.122727272727273,
+						"x": 37.0,
+						"y": -19.0
+					},
+					{
+						"angle": 0.25,
+						"id": "bow.raise",
+						"t": 0.286363636363636,
+						"x": 44.0,
+						"y": -42.0
+					},
+					{
+						"angle": -0.34,
+						"id": "bow.aim",
+						"t": 0.347727272727273,
+						"x": 40.0,
+						"y": -41.0
+					},
+					{
+						"angle": -0.34,
+						"id": "bow.release",
+						"t": 0.45,
+						"x": 40.0,
+						"y": -41.0
+					},
+					{
+						"angle": -0.29,
+						"id": "bow.recoil",
+						"t": 0.496875,
+						"x": 42.0,
+						"y": -40.0
+					},
+					{
+						"angle": -0.34,
+						"id": "bow.hold",
+						"t": 0.61875,
+						"x": 40.0,
+						"y": -41.0
+					},
+					{
+						"angle": 0.25,
+						"id": "bow.lower",
+						"t": 0.86,
+						"x": 44.0,
+						"y": -42.0
+					},
+					{
+						"angle": 1.3,
+						"id": "bow.drop",
+						"t": 0.958,
+						"x": 37.0,
+						"y": -19.0
+					},
+					{
+						"angle": 1.45,
+						"id": "bow.return",
+						"t": 1.0,
+						"x": 15.0,
+						"y": -12.0
+					}
+				],
+				"release": 0.45,
+				"weapon": "bow"
+			},
+			"legacy_weapon": "bow",
+			"tracks": [
+				{
+					"keys": [
+						{
+							"id": "bow.rest.x",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "bow.draw.x",
+							"interpolation": "smooth",
+							"time": 0.174272727272727,
+							"value": 22.0
+						},
+						{
+							"id": "bow.raise.x",
+							"interpolation": "smooth",
+							"time": 0.406636363636364,
+							"value": 29.0
+						},
+						{
+							"id": "bow.aim.x",
+							"interpolation": "smooth",
+							"time": 0.493772727272727,
+							"value": 25.0
+						},
+						{
+							"id": "bow.release.x",
+							"interpolation": "smooth",
+							"time": 0.639,
+							"value": 25.0
+						},
+						{
+							"id": "bow.recoil.x",
+							"interpolation": "smooth",
+							"time": 0.7055625,
+							"value": 27.0
+						},
+						{
+							"id": "bow.hold.x",
+							"interpolation": "smooth",
+							"time": 0.878625,
+							"value": 25.0
+						},
+						{
+							"id": "bow.lower.x",
+							"interpolation": "smooth",
+							"time": 1.2212,
+							"value": 29.0
+						},
+						{
+							"id": "bow.drop.x",
+							"interpolation": "smooth",
+							"time": 1.36036,
+							"value": 22.0
+						},
+						{
+							"id": "bow.return.x",
+							"interpolation": "smooth",
+							"time": 1.42,
+							"value": 0.0
+						}
+					],
+					"property": "x",
+					"target": "bow_01"
+				},
+				{
+					"keys": [
+						{
+							"id": "bow.rest.y",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "bow.draw.y",
+							"interpolation": "smooth",
+							"time": 0.174272727272727,
+							"value": -7.0
+						},
+						{
+							"id": "bow.raise.y",
+							"interpolation": "smooth",
+							"time": 0.406636363636364,
+							"value": -30.0
+						},
+						{
+							"id": "bow.aim.y",
+							"interpolation": "smooth",
+							"time": 0.493772727272727,
+							"value": -29.0
+						},
+						{
+							"id": "bow.release.y",
+							"interpolation": "smooth",
+							"time": 0.639,
+							"value": -29.0
+						},
+						{
+							"id": "bow.recoil.y",
+							"interpolation": "smooth",
+							"time": 0.7055625,
+							"value": -28.0
+						},
+						{
+							"id": "bow.hold.y",
+							"interpolation": "smooth",
+							"time": 0.878625,
+							"value": -29.0
+						},
+						{
+							"id": "bow.lower.y",
+							"interpolation": "smooth",
+							"time": 1.2212,
+							"value": -30.0
+						},
+						{
+							"id": "bow.drop.y",
+							"interpolation": "smooth",
+							"time": 1.36036,
+							"value": -7.0
+						},
+						{
+							"id": "bow.return.y",
+							"interpolation": "smooth",
+							"time": 1.42,
+							"value": 0.0
+						}
+					],
+					"property": "y",
+					"target": "bow_01"
+				},
+				{
+					"keys": [
+						{
+							"id": "bow.rest.rotation",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "bow.draw.rotation",
+							"interpolation": "smooth",
+							"time": 0.174272727272727,
+							"value": -8.59436692696234
+						},
+						{
+							"id": "bow.raise.rotation",
+							"interpolation": "smooth",
+							"time": 0.406636363636364,
+							"value": -68.7549354156988
+						},
+						{
+							"id": "bow.aim.rotation",
+							"interpolation": "smooth",
+							"time": 0.493772727272727,
+							"value": -102.559445328417
+						},
+						{
+							"id": "bow.release.rotation",
+							"interpolation": "smooth",
+							"time": 0.639,
+							"value": -102.559445328417
+						},
+						{
+							"id": "bow.recoil.rotation",
+							"interpolation": "smooth",
+							"time": 0.7055625,
+							"value": -99.6946563527632
+						},
+						{
+							"id": "bow.hold.rotation",
+							"interpolation": "smooth",
+							"time": 0.878625,
+							"value": -102.559445328417
+						},
+						{
+							"id": "bow.lower.rotation",
+							"interpolation": "smooth",
+							"time": 1.2212,
+							"value": -68.7549354156988
+						},
+						{
+							"id": "bow.drop.rotation",
+							"interpolation": "smooth",
+							"time": 1.36036,
+							"value": -8.59436692696234
+						},
+						{
+							"id": "bow.return.rotation",
+							"interpolation": "smooth",
+							"time": 1.42,
+							"value": 0.0
+						}
+					],
+					"property": "rotation",
+					"target": "bow_01"
+				}
+			]
+		},
+		"attack_weapon_archer_longbow": {
+			"duration": 1.42,
+			"events": [
+				{
+					"id": "release",
+					"time": 0.639
+				},
+				{
+					"id": "contact",
+					"time": 1.065
+				}
+			],
+			"id": "attack_weapon_archer_longbow",
+			"legacy_action": {
+				"contact": 0.75,
+				"duration": 1.42,
+				"id": "bow",
+				"keyframes": [
+					{
+						"angle": 1.45,
+						"id": "bow.rest",
+						"t": 0.0,
+						"x": 15.0,
+						"y": -12.0
+					},
+					{
+						"angle": 1.3,
+						"id": "bow.draw",
+						"t": 0.122727272727273,
+						"x": 37.0,
+						"y": -19.0
+					},
+					{
+						"angle": 0.25,
+						"id": "bow.raise",
+						"t": 0.286363636363636,
+						"x": 44.0,
+						"y": -42.0
+					},
+					{
+						"angle": -0.34,
+						"id": "bow.aim",
+						"t": 0.347727272727273,
+						"x": 40.0,
+						"y": -41.0
+					},
+					{
+						"angle": -0.34,
+						"id": "bow.release",
+						"t": 0.45,
+						"x": 40.0,
+						"y": -41.0
+					},
+					{
+						"angle": -0.29,
+						"id": "bow.recoil",
+						"t": 0.496875,
+						"x": 42.0,
+						"y": -40.0
+					},
+					{
+						"angle": -0.34,
+						"id": "bow.hold",
+						"t": 0.61875,
+						"x": 40.0,
+						"y": -41.0
+					},
+					{
+						"angle": 0.25,
+						"id": "bow.lower",
+						"t": 0.86,
+						"x": 44.0,
+						"y": -42.0
+					},
+					{
+						"angle": 1.3,
+						"id": "bow.drop",
+						"t": 0.958,
+						"x": 37.0,
+						"y": -19.0
+					},
+					{
+						"angle": 1.45,
+						"id": "bow.return",
+						"t": 1.0,
+						"x": 15.0,
+						"y": -12.0
+					}
+				],
+				"release": 0.45,
+				"weapon": "bow"
+			},
+			"legacy_weapon": "bow",
+			"tracks": [
+				{
+					"keys": [
+						{
+							"id": "bow.rest.x",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "bow.draw.x",
+							"interpolation": "smooth",
+							"time": 0.174272727272727,
+							"value": 22.0
+						},
+						{
+							"id": "bow.raise.x",
+							"interpolation": "smooth",
+							"time": 0.406636363636364,
+							"value": 29.0
+						},
+						{
+							"id": "bow.aim.x",
+							"interpolation": "smooth",
+							"time": 0.493772727272727,
+							"value": 25.0
+						},
+						{
+							"id": "bow.release.x",
+							"interpolation": "smooth",
+							"time": 0.639,
+							"value": 25.0
+						},
+						{
+							"id": "bow.recoil.x",
+							"interpolation": "smooth",
+							"time": 0.7055625,
+							"value": 27.0
+						},
+						{
+							"id": "bow.hold.x",
+							"interpolation": "smooth",
+							"time": 0.878625,
+							"value": 25.0
+						},
+						{
+							"id": "bow.lower.x",
+							"interpolation": "smooth",
+							"time": 1.2212,
+							"value": 29.0
+						},
+						{
+							"id": "bow.drop.x",
+							"interpolation": "smooth",
+							"time": 1.36036,
+							"value": 22.0
+						},
+						{
+							"id": "bow.return.x",
+							"interpolation": "smooth",
+							"time": 1.42,
+							"value": 0.0
+						}
+					],
+					"property": "x",
+					"target": "bow_02"
+				},
+				{
+					"keys": [
+						{
+							"id": "bow.rest.y",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "bow.draw.y",
+							"interpolation": "smooth",
+							"time": 0.174272727272727,
+							"value": -7.0
+						},
+						{
+							"id": "bow.raise.y",
+							"interpolation": "smooth",
+							"time": 0.406636363636364,
+							"value": -30.0
+						},
+						{
+							"id": "bow.aim.y",
+							"interpolation": "smooth",
+							"time": 0.493772727272727,
+							"value": -29.0
+						},
+						{
+							"id": "bow.release.y",
+							"interpolation": "smooth",
+							"time": 0.639,
+							"value": -29.0
+						},
+						{
+							"id": "bow.recoil.y",
+							"interpolation": "smooth",
+							"time": 0.7055625,
+							"value": -28.0
+						},
+						{
+							"id": "bow.hold.y",
+							"interpolation": "smooth",
+							"time": 0.878625,
+							"value": -29.0
+						},
+						{
+							"id": "bow.lower.y",
+							"interpolation": "smooth",
+							"time": 1.2212,
+							"value": -30.0
+						},
+						{
+							"id": "bow.drop.y",
+							"interpolation": "smooth",
+							"time": 1.36036,
+							"value": -7.0
+						},
+						{
+							"id": "bow.return.y",
+							"interpolation": "smooth",
+							"time": 1.42,
+							"value": 0.0
+						}
+					],
+					"property": "y",
+					"target": "bow_02"
+				},
+				{
+					"keys": [
+						{
+							"id": "bow.rest.rotation",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "bow.draw.rotation",
+							"interpolation": "smooth",
+							"time": 0.174272727272727,
+							"value": -8.59436692696234
+						},
+						{
+							"id": "bow.raise.rotation",
+							"interpolation": "smooth",
+							"time": 0.406636363636364,
+							"value": -68.7549354156988
+						},
+						{
+							"id": "bow.aim.rotation",
+							"interpolation": "smooth",
+							"time": 0.493772727272727,
+							"value": -102.559445328417
+						},
+						{
+							"id": "bow.release.rotation",
+							"interpolation": "smooth",
+							"time": 0.639,
+							"value": -102.559445328417
+						},
+						{
+							"id": "bow.recoil.rotation",
+							"interpolation": "smooth",
+							"time": 0.7055625,
+							"value": -99.6946563527632
+						},
+						{
+							"id": "bow.hold.rotation",
+							"interpolation": "smooth",
+							"time": 0.878625,
+							"value": -102.559445328417
+						},
+						{
+							"id": "bow.lower.rotation",
+							"interpolation": "smooth",
+							"time": 1.2212,
+							"value": -68.7549354156988
+						},
+						{
+							"id": "bow.drop.rotation",
+							"interpolation": "smooth",
+							"time": 1.36036,
+							"value": -8.59436692696234
+						},
+						{
+							"id": "bow.return.rotation",
+							"interpolation": "smooth",
+							"time": 1.42,
+							"value": 0.0
+						}
+					],
+					"property": "rotation",
+					"target": "bow_02"
+				}
+			]
+		},
+		"attack_weapon_guard_cleaver": {
+			"duration": 1.05,
+			"events": [
+				{
+					"id": "release",
+					"time": 0.42
+				},
+				{
+					"id": "contact",
+					"time": 0.651
+				}
+			],
+			"id": "attack_weapon_guard_cleaver",
+			"legacy_action": {
+				"contact": 0.62,
+				"duration": 1.05,
+				"id": "sword",
+				"keyframes": [
+					{
+						"angle": 0.62,
+						"id": "sword.rest",
+						"t": 0.0,
+						"x": 8.0,
+						"y": -12.0
+					},
+					{
+						"angle": 0.38,
+						"id": "sword.windup",
+						"t": 0.4,
+						"x": 26.0,
+						"y": -13.0
+					},
+					{
+						"angle": 1.55,
+						"id": "sword.contact",
+						"t": 0.62,
+						"x": 22.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.55,
+						"id": "sword.hold",
+						"t": 0.705,
+						"x": 22.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.44,
+						"id": "sword.recover",
+						"t": 0.79,
+						"x": 20.0,
+						"y": -30.0
+					},
+					{
+						"angle": 0.62,
+						"id": "sword.return",
+						"t": 1.0,
+						"x": 8.0,
+						"y": -12.0
+					}
+				],
+				"release": 0.4,
+				"weapon": "sword"
+			},
+			"legacy_weapon": "sword",
+			"tracks": [
+				{
+					"keys": [
+						{
+							"id": "sword.rest.x",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "sword.windup.x",
+							"interpolation": "smooth",
+							"time": 0.42,
+							"value": 21.6
+						},
+						{
+							"id": "sword.contact.x",
+							"interpolation": "smooth",
+							"time": 0.651,
+							"value": 16.8
+						},
+						{
+							"id": "sword.hold.x",
+							"interpolation": "smooth",
+							"time": 0.74025,
+							"value": 16.8
+						},
+						{
+							"id": "sword.recover.x",
+							"interpolation": "smooth",
+							"time": 0.8295,
+							"value": 14.4
+						},
+						{
+							"id": "sword.return.x",
+							"interpolation": "smooth",
+							"time": 1.05,
+							"value": 0.0
+						}
+					],
+					"property": "x",
+					"target": "sword_02"
+				},
+				{
+					"keys": [
+						{
+							"id": "sword.rest.y",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "sword.windup.y",
+							"interpolation": "smooth",
+							"time": 0.42,
+							"value": -1.0
+						},
+						{
+							"id": "sword.contact.y",
+							"interpolation": "smooth",
+							"time": 0.651,
+							"value": -19.0
+						},
+						{
+							"id": "sword.hold.y",
+							"interpolation": "smooth",
+							"time": 0.74025,
+							"value": -19.0
+						},
+						{
+							"id": "sword.recover.y",
+							"interpolation": "smooth",
+							"time": 0.8295,
+							"value": -18.0
+						},
+						{
+							"id": "sword.return.y",
+							"interpolation": "smooth",
+							"time": 1.05,
+							"value": 0.0
+						}
+					],
+					"property": "y",
+					"target": "sword_02"
+				},
+				{
+					"keys": [
+						{
+							"id": "sword.rest.rotation",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "sword.windup.rotation",
+							"interpolation": "smooth",
+							"time": 0.42,
+							"value": -15.9511450164422
+						},
+						{
+							"id": "sword.contact.rotation",
+							"interpolation": "smooth",
+							"time": 0.651,
+							"value": 61.8106869387133
+						},
+						{
+							"id": "sword.hold.rotation",
+							"interpolation": "smooth",
+							"time": 0.74025,
+							"value": 61.8106869387133
+						},
+						{
+							"id": "sword.recover.rotation",
+							"interpolation": "smooth",
+							"time": 0.8295,
+							"value": 54.4997454728439
+						},
+						{
+							"id": "sword.return.rotation",
+							"interpolation": "smooth",
+							"time": 1.05,
+							"value": 0.0
+						}
+					],
+					"property": "rotation",
+					"target": "sword_02"
+				}
+			]
+		},
+		"attack_weapon_guard_sword": {
+			"duration": 0.76,
+			"events": [
+				{
+					"id": "release",
+					"time": 0.19
+				},
+				{
+					"id": "contact",
+					"time": 0.3268
+				}
+			],
+			"id": "attack_weapon_guard_sword",
+			"legacy_action": {
+				"contact": 0.43,
+				"duration": 0.76,
+				"id": "sword",
+				"keyframes": [
+					{
+						"angle": 0.62,
+						"id": "sword.rest",
+						"t": 0.0,
+						"x": 8.0,
+						"y": -12.0
+					},
+					{
+						"angle": 0.38,
+						"id": "sword.windup",
+						"t": 0.25,
+						"x": 26.0,
+						"y": -13.0
+					},
+					{
+						"angle": 1.55,
+						"id": "sword.contact",
+						"t": 0.43,
+						"x": 22.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.55,
+						"id": "sword.hold",
+						"t": 0.515,
+						"x": 22.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.44,
+						"id": "sword.recover",
+						"t": 0.6,
+						"x": 20.0,
+						"y": -30.0
+					},
+					{
+						"angle": 0.62,
+						"id": "sword.return",
+						"t": 1.0,
+						"x": 8.0,
+						"y": -12.0
+					}
+				],
+				"release": 0.25,
+				"weapon": "sword"
+			},
+			"legacy_weapon": "sword",
+			"tracks": [
+				{
+					"keys": [
+						{
+							"id": "sword.rest.x",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "sword.windup.x",
+							"interpolation": "smooth",
+							"time": 0.19,
+							"value": 18.0
+						},
+						{
+							"id": "sword.contact.x",
+							"interpolation": "smooth",
+							"time": 0.3268,
+							"value": 14.0
+						},
+						{
+							"id": "sword.hold.x",
+							"interpolation": "smooth",
+							"time": 0.3914,
+							"value": 14.0
+						},
+						{
+							"id": "sword.recover.x",
+							"interpolation": "smooth",
+							"time": 0.456,
+							"value": 12.0
+						},
+						{
+							"id": "sword.return.x",
+							"interpolation": "smooth",
+							"time": 0.76,
+							"value": 0.0
+						}
+					],
+					"property": "x",
+					"target": "sword_01"
+				},
+				{
+					"keys": [
+						{
+							"id": "sword.rest.y",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "sword.windup.y",
+							"interpolation": "smooth",
+							"time": 0.19,
+							"value": -1.0
+						},
+						{
+							"id": "sword.contact.y",
+							"interpolation": "smooth",
+							"time": 0.3268,
+							"value": -19.0
+						},
+						{
+							"id": "sword.hold.y",
+							"interpolation": "smooth",
+							"time": 0.3914,
+							"value": -19.0
+						},
+						{
+							"id": "sword.recover.y",
+							"interpolation": "smooth",
+							"time": 0.456,
+							"value": -18.0
+						},
+						{
+							"id": "sword.return.y",
+							"interpolation": "smooth",
+							"time": 0.76,
+							"value": 0.0
+						}
+					],
+					"property": "y",
+					"target": "sword_01"
+				},
+				{
+					"keys": [
+						{
+							"id": "sword.rest.rotation",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "sword.windup.rotation",
+							"interpolation": "smooth",
+							"time": 0.19,
+							"value": -13.7509870831398
+						},
+						{
+							"id": "sword.contact.rotation",
+							"interpolation": "smooth",
+							"time": 0.3268,
+							"value": 53.2850749471666
+						},
+						{
+							"id": "sword.hold.rotation",
+							"interpolation": "smooth",
+							"time": 0.3914,
+							"value": 53.2850749471666
+						},
+						{
+							"id": "sword.recover.rotation",
+							"interpolation": "smooth",
+							"time": 0.456,
+							"value": 46.9825392007275
+						},
+						{
+							"id": "sword.return.rotation",
+							"interpolation": "smooth",
+							"time": 0.76,
+							"value": 0.0
+						}
+					],
+					"property": "rotation",
+					"target": "sword_01"
+				}
+			]
+		},
+		"attack_weapon_hunter_bow": {
+			"duration": 1.42,
+			"events": [
+				{
+					"id": "release",
+					"time": 0.639
+				},
+				{
+					"id": "contact",
+					"time": 1.065
+				}
+			],
+			"id": "attack_weapon_hunter_bow",
+			"legacy_action": {
+				"contact": 0.75,
+				"duration": 1.42,
+				"id": "bow",
+				"keyframes": [
+					{
+						"angle": 1.45,
+						"id": "bow.rest",
+						"t": 0.0,
+						"x": 15.0,
+						"y": -12.0
+					},
+					{
+						"angle": 1.3,
+						"id": "bow.draw",
+						"t": 0.122727272727273,
+						"x": 37.0,
+						"y": -19.0
+					},
+					{
+						"angle": 0.25,
+						"id": "bow.raise",
+						"t": 0.286363636363636,
+						"x": 44.0,
+						"y": -42.0
+					},
+					{
+						"angle": -0.34,
+						"id": "bow.aim",
+						"t": 0.347727272727273,
+						"x": 40.0,
+						"y": -41.0
+					},
+					{
+						"angle": -0.34,
+						"id": "bow.release",
+						"t": 0.45,
+						"x": 40.0,
+						"y": -41.0
+					},
+					{
+						"angle": -0.29,
+						"id": "bow.recoil",
+						"t": 0.496875,
+						"x": 42.0,
+						"y": -40.0
+					},
+					{
+						"angle": -0.34,
+						"id": "bow.hold",
+						"t": 0.61875,
+						"x": 40.0,
+						"y": -41.0
+					},
+					{
+						"angle": 0.25,
+						"id": "bow.lower",
+						"t": 0.86,
+						"x": 44.0,
+						"y": -42.0
+					},
+					{
+						"angle": 1.3,
+						"id": "bow.drop",
+						"t": 0.958,
+						"x": 37.0,
+						"y": -19.0
+					},
+					{
+						"angle": 1.45,
+						"id": "bow.return",
+						"t": 1.0,
+						"x": 15.0,
+						"y": -12.0
+					}
+				],
+				"release": 0.45,
+				"weapon": "bow"
+			},
+			"legacy_weapon": "bow",
+			"tracks": [
+				{
+					"keys": [
+						{
+							"id": "bow.rest.x",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "bow.draw.x",
+							"interpolation": "smooth",
+							"time": 0.174272727272727,
+							"value": 22.0
+						},
+						{
+							"id": "bow.raise.x",
+							"interpolation": "smooth",
+							"time": 0.406636363636364,
+							"value": 29.0
+						},
+						{
+							"id": "bow.aim.x",
+							"interpolation": "smooth",
+							"time": 0.493772727272727,
+							"value": 25.0
+						},
+						{
+							"id": "bow.release.x",
+							"interpolation": "smooth",
+							"time": 0.639,
+							"value": 25.0
+						},
+						{
+							"id": "bow.recoil.x",
+							"interpolation": "smooth",
+							"time": 0.7055625,
+							"value": 27.0
+						},
+						{
+							"id": "bow.hold.x",
+							"interpolation": "smooth",
+							"time": 0.878625,
+							"value": 25.0
+						},
+						{
+							"id": "bow.lower.x",
+							"interpolation": "smooth",
+							"time": 1.2212,
+							"value": 29.0
+						},
+						{
+							"id": "bow.drop.x",
+							"interpolation": "smooth",
+							"time": 1.36036,
+							"value": 22.0
+						},
+						{
+							"id": "bow.return.x",
+							"interpolation": "smooth",
+							"time": 1.42,
+							"value": 0.0
+						}
+					],
+					"property": "x",
+					"target": "bow_03"
+				},
+				{
+					"keys": [
+						{
+							"id": "bow.rest.y",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "bow.draw.y",
+							"interpolation": "smooth",
+							"time": 0.174272727272727,
+							"value": -7.0
+						},
+						{
+							"id": "bow.raise.y",
+							"interpolation": "smooth",
+							"time": 0.406636363636364,
+							"value": -30.0
+						},
+						{
+							"id": "bow.aim.y",
+							"interpolation": "smooth",
+							"time": 0.493772727272727,
+							"value": -29.0
+						},
+						{
+							"id": "bow.release.y",
+							"interpolation": "smooth",
+							"time": 0.639,
+							"value": -29.0
+						},
+						{
+							"id": "bow.recoil.y",
+							"interpolation": "smooth",
+							"time": 0.7055625,
+							"value": -28.0
+						},
+						{
+							"id": "bow.hold.y",
+							"interpolation": "smooth",
+							"time": 0.878625,
+							"value": -29.0
+						},
+						{
+							"id": "bow.lower.y",
+							"interpolation": "smooth",
+							"time": 1.2212,
+							"value": -30.0
+						},
+						{
+							"id": "bow.drop.y",
+							"interpolation": "smooth",
+							"time": 1.36036,
+							"value": -7.0
+						},
+						{
+							"id": "bow.return.y",
+							"interpolation": "smooth",
+							"time": 1.42,
+							"value": 0.0
+						}
+					],
+					"property": "y",
+					"target": "bow_03"
+				},
+				{
+					"keys": [
+						{
+							"id": "bow.rest.rotation",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "bow.draw.rotation",
+							"interpolation": "smooth",
+							"time": 0.174272727272727,
+							"value": -8.59436692696234
+						},
+						{
+							"id": "bow.raise.rotation",
+							"interpolation": "smooth",
+							"time": 0.406636363636364,
+							"value": -68.7549354156988
+						},
+						{
+							"id": "bow.aim.rotation",
+							"interpolation": "smooth",
+							"time": 0.493772727272727,
+							"value": -102.559445328417
+						},
+						{
+							"id": "bow.release.rotation",
+							"interpolation": "smooth",
+							"time": 0.639,
+							"value": -102.559445328417
+						},
+						{
+							"id": "bow.recoil.rotation",
+							"interpolation": "smooth",
+							"time": 0.7055625,
+							"value": -99.6946563527632
+						},
+						{
+							"id": "bow.hold.rotation",
+							"interpolation": "smooth",
+							"time": 0.878625,
+							"value": -102.559445328417
+						},
+						{
+							"id": "bow.lower.rotation",
+							"interpolation": "smooth",
+							"time": 1.2212,
+							"value": -68.7549354156988
+						},
+						{
+							"id": "bow.drop.rotation",
+							"interpolation": "smooth",
+							"time": 1.36036,
+							"value": -8.59436692696234
+						},
+						{
+							"id": "bow.return.rotation",
+							"interpolation": "smooth",
+							"time": 1.42,
+							"value": 0.0
+						}
+					],
+					"property": "rotation",
+					"target": "bow_03"
+				}
+			]
+		},
+		"attack_weapon_hunter_recurve": {
+			"duration": 1.42,
+			"events": [
+				{
+					"id": "release",
+					"time": 0.639
+				},
+				{
+					"id": "contact",
+					"time": 1.065
+				}
+			],
+			"id": "attack_weapon_hunter_recurve",
+			"legacy_action": {
+				"contact": 0.75,
+				"duration": 1.42,
+				"id": "bow",
+				"keyframes": [
+					{
+						"angle": 1.45,
+						"id": "bow.rest",
+						"t": 0.0,
+						"x": 15.0,
+						"y": -12.0
+					},
+					{
+						"angle": 1.3,
+						"id": "bow.draw",
+						"t": 0.122727272727273,
+						"x": 37.0,
+						"y": -19.0
+					},
+					{
+						"angle": 0.25,
+						"id": "bow.raise",
+						"t": 0.286363636363636,
+						"x": 44.0,
+						"y": -42.0
+					},
+					{
+						"angle": -0.34,
+						"id": "bow.aim",
+						"t": 0.347727272727273,
+						"x": 40.0,
+						"y": -41.0
+					},
+					{
+						"angle": -0.34,
+						"id": "bow.release",
+						"t": 0.45,
+						"x": 40.0,
+						"y": -41.0
+					},
+					{
+						"angle": -0.29,
+						"id": "bow.recoil",
+						"t": 0.496875,
+						"x": 42.0,
+						"y": -40.0
+					},
+					{
+						"angle": -0.34,
+						"id": "bow.hold",
+						"t": 0.61875,
+						"x": 40.0,
+						"y": -41.0
+					},
+					{
+						"angle": 0.25,
+						"id": "bow.lower",
+						"t": 0.86,
+						"x": 44.0,
+						"y": -42.0
+					},
+					{
+						"angle": 1.3,
+						"id": "bow.drop",
+						"t": 0.958,
+						"x": 37.0,
+						"y": -19.0
+					},
+					{
+						"angle": 1.45,
+						"id": "bow.return",
+						"t": 1.0,
+						"x": 15.0,
+						"y": -12.0
+					}
+				],
+				"release": 0.45,
+				"weapon": "bow"
+			},
+			"legacy_weapon": "bow",
+			"tracks": [
+				{
+					"keys": [
+						{
+							"id": "bow.rest.x",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "bow.draw.x",
+							"interpolation": "smooth",
+							"time": 0.174272727272727,
+							"value": 22.0
+						},
+						{
+							"id": "bow.raise.x",
+							"interpolation": "smooth",
+							"time": 0.406636363636364,
+							"value": 29.0
+						},
+						{
+							"id": "bow.aim.x",
+							"interpolation": "smooth",
+							"time": 0.493772727272727,
+							"value": 25.0
+						},
+						{
+							"id": "bow.release.x",
+							"interpolation": "smooth",
+							"time": 0.639,
+							"value": 25.0
+						},
+						{
+							"id": "bow.recoil.x",
+							"interpolation": "smooth",
+							"time": 0.7055625,
+							"value": 27.0
+						},
+						{
+							"id": "bow.hold.x",
+							"interpolation": "smooth",
+							"time": 0.878625,
+							"value": 25.0
+						},
+						{
+							"id": "bow.lower.x",
+							"interpolation": "smooth",
+							"time": 1.2212,
+							"value": 29.0
+						},
+						{
+							"id": "bow.drop.x",
+							"interpolation": "smooth",
+							"time": 1.36036,
+							"value": 22.0
+						},
+						{
+							"id": "bow.return.x",
+							"interpolation": "smooth",
+							"time": 1.42,
+							"value": 0.0
+						}
+					],
+					"property": "x",
+					"target": "bow_04"
+				},
+				{
+					"keys": [
+						{
+							"id": "bow.rest.y",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "bow.draw.y",
+							"interpolation": "smooth",
+							"time": 0.174272727272727,
+							"value": -7.0
+						},
+						{
+							"id": "bow.raise.y",
+							"interpolation": "smooth",
+							"time": 0.406636363636364,
+							"value": -30.0
+						},
+						{
+							"id": "bow.aim.y",
+							"interpolation": "smooth",
+							"time": 0.493772727272727,
+							"value": -29.0
+						},
+						{
+							"id": "bow.release.y",
+							"interpolation": "smooth",
+							"time": 0.639,
+							"value": -29.0
+						},
+						{
+							"id": "bow.recoil.y",
+							"interpolation": "smooth",
+							"time": 0.7055625,
+							"value": -28.0
+						},
+						{
+							"id": "bow.hold.y",
+							"interpolation": "smooth",
+							"time": 0.878625,
+							"value": -29.0
+						},
+						{
+							"id": "bow.lower.y",
+							"interpolation": "smooth",
+							"time": 1.2212,
+							"value": -30.0
+						},
+						{
+							"id": "bow.drop.y",
+							"interpolation": "smooth",
+							"time": 1.36036,
+							"value": -7.0
+						},
+						{
+							"id": "bow.return.y",
+							"interpolation": "smooth",
+							"time": 1.42,
+							"value": 0.0
+						}
+					],
+					"property": "y",
+					"target": "bow_04"
+				},
+				{
+					"keys": [
+						{
+							"id": "bow.rest.rotation",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "bow.draw.rotation",
+							"interpolation": "smooth",
+							"time": 0.174272727272727,
+							"value": -8.59436692696234
+						},
+						{
+							"id": "bow.raise.rotation",
+							"interpolation": "smooth",
+							"time": 0.406636363636364,
+							"value": -68.7549354156988
+						},
+						{
+							"id": "bow.aim.rotation",
+							"interpolation": "smooth",
+							"time": 0.493772727272727,
+							"value": -102.559445328417
+						},
+						{
+							"id": "bow.release.rotation",
+							"interpolation": "smooth",
+							"time": 0.639,
+							"value": -102.559445328417
+						},
+						{
+							"id": "bow.recoil.rotation",
+							"interpolation": "smooth",
+							"time": 0.7055625,
+							"value": -99.6946563527632
+						},
+						{
+							"id": "bow.hold.rotation",
+							"interpolation": "smooth",
+							"time": 0.878625,
+							"value": -102.559445328417
+						},
+						{
+							"id": "bow.lower.rotation",
+							"interpolation": "smooth",
+							"time": 1.2212,
+							"value": -68.7549354156988
+						},
+						{
+							"id": "bow.drop.rotation",
+							"interpolation": "smooth",
+							"time": 1.36036,
+							"value": -8.59436692696234
+						},
+						{
+							"id": "bow.return.rotation",
+							"interpolation": "smooth",
+							"time": 1.42,
+							"value": 0.0
+						}
+					],
+					"property": "rotation",
+					"target": "bow_04"
+				}
+			]
+		},
+		"attack_weapon_skirmisher_axe": {
+			"duration": 1.05,
+			"events": [
+				{
+					"id": "release",
+					"time": 0.42
+				},
+				{
+					"id": "contact",
+					"time": 0.651
+				}
+			],
+			"id": "attack_weapon_skirmisher_axe",
+			"legacy_action": {
+				"contact": 0.62,
+				"duration": 1.05,
+				"id": "sword",
+				"keyframes": [
+					{
+						"angle": 0.62,
+						"id": "sword.rest",
+						"t": 0.0,
+						"x": 8.0,
+						"y": -12.0
+					},
+					{
+						"angle": 0.38,
+						"id": "sword.windup",
+						"t": 0.4,
+						"x": 26.0,
+						"y": -13.0
+					},
+					{
+						"angle": 1.55,
+						"id": "sword.contact",
+						"t": 0.62,
+						"x": 22.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.55,
+						"id": "sword.hold",
+						"t": 0.705,
+						"x": 22.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.44,
+						"id": "sword.recover",
+						"t": 0.79,
+						"x": 20.0,
+						"y": -30.0
+					},
+					{
+						"angle": 0.62,
+						"id": "sword.return",
+						"t": 1.0,
+						"x": 8.0,
+						"y": -12.0
+					}
+				],
+				"release": 0.4,
+				"weapon": "sword"
+			},
+			"legacy_weapon": "sword",
+			"tracks": [
+				{
+					"keys": [
+						{
+							"id": "sword.rest.x",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "sword.windup.x",
+							"interpolation": "smooth",
+							"time": 0.42,
+							"value": 21.6
+						},
+						{
+							"id": "sword.contact.x",
+							"interpolation": "smooth",
+							"time": 0.651,
+							"value": 16.8
+						},
+						{
+							"id": "sword.hold.x",
+							"interpolation": "smooth",
+							"time": 0.74025,
+							"value": 16.8
+						},
+						{
+							"id": "sword.recover.x",
+							"interpolation": "smooth",
+							"time": 0.8295,
+							"value": 14.4
+						},
+						{
+							"id": "sword.return.x",
+							"interpolation": "smooth",
+							"time": 1.05,
+							"value": 0.0
+						}
+					],
+					"property": "x",
+					"target": "axe_01"
+				},
+				{
+					"keys": [
+						{
+							"id": "sword.rest.y",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "sword.windup.y",
+							"interpolation": "smooth",
+							"time": 0.42,
+							"value": -1.0
+						},
+						{
+							"id": "sword.contact.y",
+							"interpolation": "smooth",
+							"time": 0.651,
+							"value": -19.0
+						},
+						{
+							"id": "sword.hold.y",
+							"interpolation": "smooth",
+							"time": 0.74025,
+							"value": -19.0
+						},
+						{
+							"id": "sword.recover.y",
+							"interpolation": "smooth",
+							"time": 0.8295,
+							"value": -18.0
+						},
+						{
+							"id": "sword.return.y",
+							"interpolation": "smooth",
+							"time": 1.05,
+							"value": 0.0
+						}
+					],
+					"property": "y",
+					"target": "axe_01"
+				},
+				{
+					"keys": [
+						{
+							"id": "sword.rest.rotation",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "sword.windup.rotation",
+							"interpolation": "smooth",
+							"time": 0.42,
+							"value": -15.9511450164422
+						},
+						{
+							"id": "sword.contact.rotation",
+							"interpolation": "smooth",
+							"time": 0.651,
+							"value": 61.8106869387133
+						},
+						{
+							"id": "sword.hold.rotation",
+							"interpolation": "smooth",
+							"time": 0.74025,
+							"value": 61.8106869387133
+						},
+						{
+							"id": "sword.recover.rotation",
+							"interpolation": "smooth",
+							"time": 0.8295,
+							"value": 54.4997454728439
+						},
+						{
+							"id": "sword.return.rotation",
+							"interpolation": "smooth",
+							"time": 1.05,
+							"value": 0.0
+						}
+					],
+					"property": "rotation",
+					"target": "axe_01"
+				}
+			]
+		},
+		"attack_weapon_skirmisher_blade": {
+			"duration": 0.76,
+			"events": [
+				{
+					"id": "release",
+					"time": 0.19
+				},
+				{
+					"id": "contact",
+					"time": 0.3268
+				}
+			],
+			"id": "attack_weapon_skirmisher_blade",
+			"legacy_action": {
+				"contact": 0.43,
+				"duration": 0.76,
+				"id": "sword",
+				"keyframes": [
+					{
+						"angle": 0.62,
+						"id": "sword.rest",
+						"t": 0.0,
+						"x": 8.0,
+						"y": -12.0
+					},
+					{
+						"angle": 0.38,
+						"id": "sword.windup",
+						"t": 0.25,
+						"x": 26.0,
+						"y": -13.0
+					},
+					{
+						"angle": 1.55,
+						"id": "sword.contact",
+						"t": 0.43,
+						"x": 22.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.55,
+						"id": "sword.hold",
+						"t": 0.515,
+						"x": 22.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.44,
+						"id": "sword.recover",
+						"t": 0.6,
+						"x": 20.0,
+						"y": -30.0
+					},
+					{
+						"angle": 0.62,
+						"id": "sword.return",
+						"t": 1.0,
+						"x": 8.0,
+						"y": -12.0
+					}
+				],
+				"release": 0.25,
+				"weapon": "sword"
+			},
+			"legacy_weapon": "sword",
+			"tracks": [
+				{
+					"keys": [
+						{
+							"id": "sword.rest.x",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "sword.windup.x",
+							"interpolation": "smooth",
+							"time": 0.19,
+							"value": 18.0
+						},
+						{
+							"id": "sword.contact.x",
+							"interpolation": "smooth",
+							"time": 0.3268,
+							"value": 14.0
+						},
+						{
+							"id": "sword.hold.x",
+							"interpolation": "smooth",
+							"time": 0.3914,
+							"value": 14.0
+						},
+						{
+							"id": "sword.recover.x",
+							"interpolation": "smooth",
+							"time": 0.456,
+							"value": 12.0
+						},
+						{
+							"id": "sword.return.x",
+							"interpolation": "smooth",
+							"time": 0.76,
+							"value": 0.0
+						}
+					],
+					"property": "x",
+					"target": "sword_03"
+				},
+				{
+					"keys": [
+						{
+							"id": "sword.rest.y",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "sword.windup.y",
+							"interpolation": "smooth",
+							"time": 0.19,
+							"value": -1.0
+						},
+						{
+							"id": "sword.contact.y",
+							"interpolation": "smooth",
+							"time": 0.3268,
+							"value": -19.0
+						},
+						{
+							"id": "sword.hold.y",
+							"interpolation": "smooth",
+							"time": 0.3914,
+							"value": -19.0
+						},
+						{
+							"id": "sword.recover.y",
+							"interpolation": "smooth",
+							"time": 0.456,
+							"value": -18.0
+						},
+						{
+							"id": "sword.return.y",
+							"interpolation": "smooth",
+							"time": 0.76,
+							"value": 0.0
+						}
+					],
+					"property": "y",
+					"target": "sword_03"
+				},
+				{
+					"keys": [
+						{
+							"id": "sword.rest.rotation",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "sword.windup.rotation",
+							"interpolation": "smooth",
+							"time": 0.19,
+							"value": -13.7509870831398
+						},
+						{
+							"id": "sword.contact.rotation",
+							"interpolation": "smooth",
+							"time": 0.3268,
+							"value": 53.2850749471666
+						},
+						{
+							"id": "sword.hold.rotation",
+							"interpolation": "smooth",
+							"time": 0.3914,
+							"value": 53.2850749471666
+						},
+						{
+							"id": "sword.recover.rotation",
+							"interpolation": "smooth",
+							"time": 0.456,
+							"value": 46.9825392007275
+						},
+						{
+							"id": "sword.return.rotation",
+							"interpolation": "smooth",
+							"time": 0.76,
+							"value": 0.0
+						}
+					],
+					"property": "rotation",
+					"target": "sword_03"
+				}
+			]
+		},
+		"attack_weapon_spear_hooked": {
+			"duration": 0.83,
+			"events": [
+				{
+					"id": "release",
+					"time": 0.2407
+				},
+				{
+					"id": "contact",
+					"time": 0.3984
+				}
+			],
+			"id": "attack_weapon_spear_hooked",
+			"legacy_action": {
+				"contact": 0.48,
+				"duration": 0.83,
+				"id": "spear",
+				"keyframes": [
+					{
+						"angle": 1.3,
+						"id": "spear.rest",
+						"t": 0.0,
+						"x": 19.0,
+						"y": -26.0
+					},
+					{
+						"angle": 1.35,
+						"id": "spear.chamber",
+						"t": 0.29,
+						"x": 13.0,
+						"y": -25.0
+					},
+					{
+						"angle": 1.571,
+						"id": "spear.contact",
+						"t": 0.48,
+						"x": 35.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.571,
+						"id": "spear.hold",
+						"t": 0.57,
+						"x": 35.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.571,
+						"id": "spear.recover",
+						"t": 0.66,
+						"x": 31.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.3,
+						"id": "spear.return",
+						"t": 1.0,
+						"x": 19.0,
+						"y": -26.0
+					}
+				],
+				"release": 0.29,
+				"weapon": "spear"
+			},
+			"legacy_weapon": "spear",
+			"tracks": [
+				{
+					"keys": [
+						{
+							"id": "spear.rest.x",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "spear.chamber.x",
+							"interpolation": "smooth",
+							"time": 0.2407,
+							"value": -6.0
+						},
+						{
+							"id": "spear.contact.x",
+							"interpolation": "smooth",
+							"time": 0.3984,
+							"value": 16.0
+						},
+						{
+							"id": "spear.hold.x",
+							"interpolation": "smooth",
+							"time": 0.4731,
+							"value": 16.0
+						},
+						{
+							"id": "spear.recover.x",
+							"interpolation": "smooth",
+							"time": 0.5478,
+							"value": 12.0
+						},
+						{
+							"id": "spear.return.x",
+							"interpolation": "smooth",
+							"time": 0.83,
+							"value": 0.0
+						}
+					],
+					"property": "x",
+					"target": "spear_02"
+				},
+				{
+					"keys": [
+						{
+							"id": "spear.rest.y",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "spear.chamber.y",
+							"interpolation": "smooth",
+							"time": 0.2407,
+							"value": 1.0
+						},
+						{
+							"id": "spear.contact.y",
+							"interpolation": "smooth",
+							"time": 0.3984,
+							"value": -5.0
+						},
+						{
+							"id": "spear.hold.y",
+							"interpolation": "smooth",
+							"time": 0.4731,
+							"value": -5.0
+						},
+						{
+							"id": "spear.recover.y",
+							"interpolation": "smooth",
+							"time": 0.5478,
+							"value": -5.0
+						},
+						{
+							"id": "spear.return.y",
+							"interpolation": "smooth",
+							"time": 0.83,
+							"value": 0.0
+						}
+					],
+					"property": "y",
+					"target": "spear_02"
+				},
+				{
+					"keys": [
+						{
+							"id": "spear.rest.rotation",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "spear.chamber.rotation",
+							"interpolation": "smooth",
+							"time": 0.2407,
+							"value": 2.86478897565412
+						},
+						{
+							"id": "spear.contact.rotation",
+							"interpolation": "smooth",
+							"time": 0.3984,
+							"value": 15.5271562480453
+						},
+						{
+							"id": "spear.hold.rotation",
+							"interpolation": "smooth",
+							"time": 0.4731,
+							"value": 15.5271562480453
+						},
+						{
+							"id": "spear.recover.rotation",
+							"interpolation": "smooth",
+							"time": 0.5478,
+							"value": 15.5271562480453
+						},
+						{
+							"id": "spear.return.rotation",
+							"interpolation": "smooth",
+							"time": 0.83,
+							"value": 0.0
+						}
+					],
+					"property": "rotation",
+					"target": "spear_02"
+				}
+			]
+		},
+		"attack_weapon_spear_long": {
+			"duration": 0.83,
+			"events": [
+				{
+					"id": "release",
+					"time": 0.2407
+				},
+				{
+					"id": "contact",
+					"time": 0.3984
+				}
+			],
+			"id": "attack_weapon_spear_long",
+			"legacy_action": {
+				"contact": 0.48,
+				"duration": 0.83,
+				"id": "spear",
+				"keyframes": [
+					{
+						"angle": 1.3,
+						"id": "spear.rest",
+						"t": 0.0,
+						"x": 19.0,
+						"y": -26.0
+					},
+					{
+						"angle": 1.35,
+						"id": "spear.chamber",
+						"t": 0.29,
+						"x": 13.0,
+						"y": -25.0
+					},
+					{
+						"angle": 1.571,
+						"id": "spear.contact",
+						"t": 0.48,
+						"x": 35.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.571,
+						"id": "spear.hold",
+						"t": 0.57,
+						"x": 35.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.571,
+						"id": "spear.recover",
+						"t": 0.66,
+						"x": 31.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.3,
+						"id": "spear.return",
+						"t": 1.0,
+						"x": 19.0,
+						"y": -26.0
+					}
+				],
+				"release": 0.29,
+				"weapon": "spear"
+			},
+			"legacy_weapon": "spear",
+			"tracks": [
+				{
+					"keys": [
+						{
+							"id": "spear.rest.x",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "spear.chamber.x",
+							"interpolation": "smooth",
+							"time": 0.2407,
+							"value": -6.0
+						},
+						{
+							"id": "spear.contact.x",
+							"interpolation": "smooth",
+							"time": 0.3984,
+							"value": 16.0
+						},
+						{
+							"id": "spear.hold.x",
+							"interpolation": "smooth",
+							"time": 0.4731,
+							"value": 16.0
+						},
+						{
+							"id": "spear.recover.x",
+							"interpolation": "smooth",
+							"time": 0.5478,
+							"value": 12.0
+						},
+						{
+							"id": "spear.return.x",
+							"interpolation": "smooth",
+							"time": 0.83,
+							"value": 0.0
+						}
+					],
+					"property": "x",
+					"target": "spear_01"
+				},
+				{
+					"keys": [
+						{
+							"id": "spear.rest.y",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "spear.chamber.y",
+							"interpolation": "smooth",
+							"time": 0.2407,
+							"value": 1.0
+						},
+						{
+							"id": "spear.contact.y",
+							"interpolation": "smooth",
+							"time": 0.3984,
+							"value": -5.0
+						},
+						{
+							"id": "spear.hold.y",
+							"interpolation": "smooth",
+							"time": 0.4731,
+							"value": -5.0
+						},
+						{
+							"id": "spear.recover.y",
+							"interpolation": "smooth",
+							"time": 0.5478,
+							"value": -5.0
+						},
+						{
+							"id": "spear.return.y",
+							"interpolation": "smooth",
+							"time": 0.83,
+							"value": 0.0
+						}
+					],
+					"property": "y",
+					"target": "spear_01"
+				},
+				{
+					"keys": [
+						{
+							"id": "spear.rest.rotation",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "spear.chamber.rotation",
+							"interpolation": "smooth",
+							"time": 0.2407,
+							"value": 2.86478897565412
+						},
+						{
+							"id": "spear.contact.rotation",
+							"interpolation": "smooth",
+							"time": 0.3984,
+							"value": 15.5271562480453
+						},
+						{
+							"id": "spear.hold.rotation",
+							"interpolation": "smooth",
+							"time": 0.4731,
+							"value": 15.5271562480453
+						},
+						{
+							"id": "spear.recover.rotation",
+							"interpolation": "smooth",
+							"time": 0.5478,
+							"value": 15.5271562480453
+						},
+						{
+							"id": "spear.return.rotation",
+							"interpolation": "smooth",
+							"time": 0.83,
+							"value": 0.0
+						}
+					],
+					"property": "rotation",
+					"target": "spear_01"
+				}
+			]
+		},
+		"bow": {
+			"duration": 1.48,
+			"events": [
+				{
+					"id": "release",
+					"time": 0.6512
+				},
+				{
+					"id": "contact",
+					"time": 1.1248
+				}
+			],
+			"id": "bow",
+			"legacy_action": {
+				"contact": 0.76,
+				"duration": 1.48,
+				"id": "bow",
+				"keyframes": [
+					{
+						"angle": 1.45,
+						"id": "bow.rest",
+						"t": 0.0,
+						"x": 15.0,
+						"y": -12.0
+					},
+					{
+						"angle": 1.3,
+						"id": "bow.draw",
+						"t": 0.12,
+						"x": 37.0,
+						"y": -19.0
+					},
+					{
+						"angle": 0.25,
+						"id": "bow.raise",
+						"t": 0.28,
+						"x": 44.0,
+						"y": -42.0
+					},
+					{
+						"angle": -0.34,
+						"id": "bow.aim",
+						"t": 0.34,
+						"x": 40.0,
+						"y": -41.0
+					},
+					{
+						"angle": -0.34,
+						"id": "bow.release",
+						"t": 0.44,
+						"x": 40.0,
+						"y": -41.0
+					},
+					{
+						"angle": -0.29,
+						"id": "bow.recoil",
+						"t": 0.49,
+						"x": 42.0,
+						"y": -40.0
+					},
+					{
+						"angle": -0.34,
+						"id": "bow.hold",
+						"t": 0.62,
+						"x": 40.0,
+						"y": -41.0
+					},
+					{
+						"angle": 0.25,
+						"id": "bow.lower",
+						"t": 0.8,
+						"x": 44.0,
+						"y": -42.0
+					},
+					{
+						"angle": 1.3,
+						"id": "bow.drop",
+						"t": 0.94,
+						"x": 37.0,
+						"y": -19.0
+					},
+					{
+						"angle": 1.45,
+						"id": "bow.return",
+						"t": 1.0,
+						"x": 15.0,
+						"y": -12.0
+					}
+				],
+				"release": 0.44,
+				"weapon": "bow"
+			},
+			"legacy_weapon": "bow",
+			"tracks": [
+				{
+					"keys": [
+						{
+							"id": "bow.rest.x",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "bow.draw.x",
+							"interpolation": "smooth",
+							"time": 0.1776,
+							"value": 22.0
+						},
+						{
+							"id": "bow.raise.x",
+							"interpolation": "smooth",
+							"time": 0.4144,
+							"value": 29.0
+						},
+						{
+							"id": "bow.aim.x",
+							"interpolation": "smooth",
+							"time": 0.5032,
+							"value": 25.0
+						},
+						{
+							"id": "bow.release.x",
+							"interpolation": "smooth",
+							"time": 0.6512,
+							"value": 25.0
+						},
+						{
+							"id": "bow.recoil.x",
+							"interpolation": "smooth",
+							"time": 0.7252,
+							"value": 27.0
+						},
+						{
+							"id": "bow.hold.x",
+							"interpolation": "smooth",
+							"time": 0.9176,
+							"value": 25.0
+						},
+						{
+							"id": "bow.lower.x",
+							"interpolation": "smooth",
+							"time": 1.184,
+							"value": 29.0
+						},
+						{
+							"id": "bow.drop.x",
+							"interpolation": "smooth",
+							"time": 1.3912,
+							"value": 22.0
+						},
+						{
+							"id": "bow.return.x",
+							"interpolation": "smooth",
+							"time": 1.48,
+							"value": 0.0
+						}
+					],
+					"property": "x",
+					"target": "bow"
+				},
+				{
+					"keys": [
+						{
+							"id": "bow.rest.y",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "bow.draw.y",
+							"interpolation": "smooth",
+							"time": 0.1776,
+							"value": -7.0
+						},
+						{
+							"id": "bow.raise.y",
+							"interpolation": "smooth",
+							"time": 0.4144,
+							"value": -30.0
+						},
+						{
+							"id": "bow.aim.y",
+							"interpolation": "smooth",
+							"time": 0.5032,
+							"value": -29.0
+						},
+						{
+							"id": "bow.release.y",
+							"interpolation": "smooth",
+							"time": 0.6512,
+							"value": -29.0
+						},
+						{
+							"id": "bow.recoil.y",
+							"interpolation": "smooth",
+							"time": 0.7252,
+							"value": -28.0
+						},
+						{
+							"id": "bow.hold.y",
+							"interpolation": "smooth",
+							"time": 0.9176,
+							"value": -29.0
+						},
+						{
+							"id": "bow.lower.y",
+							"interpolation": "smooth",
+							"time": 1.184,
+							"value": -30.0
+						},
+						{
+							"id": "bow.drop.y",
+							"interpolation": "smooth",
+							"time": 1.3912,
+							"value": -7.0
+						},
+						{
+							"id": "bow.return.y",
+							"interpolation": "smooth",
+							"time": 1.48,
+							"value": 0.0
+						}
+					],
+					"property": "y",
+					"target": "bow"
+				},
+				{
+					"keys": [
+						{
+							"id": "bow.rest.rotation",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "bow.draw.rotation",
+							"interpolation": "smooth",
+							"time": 0.1776,
+							"value": -8.59436692696234
+						},
+						{
+							"id": "bow.raise.rotation",
+							"interpolation": "smooth",
+							"time": 0.4144,
+							"value": -68.7549354156988
+						},
+						{
+							"id": "bow.aim.rotation",
+							"interpolation": "smooth",
+							"time": 0.5032,
+							"value": -102.559445328417
+						},
+						{
+							"id": "bow.release.rotation",
+							"interpolation": "smooth",
+							"time": 0.6512,
+							"value": -102.559445328417
+						},
+						{
+							"id": "bow.recoil.rotation",
+							"interpolation": "smooth",
+							"time": 0.7252,
+							"value": -99.6946563527632
+						},
+						{
+							"id": "bow.hold.rotation",
+							"interpolation": "smooth",
+							"time": 0.9176,
+							"value": -102.559445328417
+						},
+						{
+							"id": "bow.lower.rotation",
+							"interpolation": "smooth",
+							"time": 1.184,
+							"value": -68.7549354156988
+						},
+						{
+							"id": "bow.drop.rotation",
+							"interpolation": "smooth",
+							"time": 1.3912,
+							"value": -8.59436692696234
+						},
+						{
+							"id": "bow.return.rotation",
+							"interpolation": "smooth",
+							"time": 1.48,
+							"value": 0.0
+						}
+					],
+					"property": "rotation",
+					"target": "bow"
+				}
+			]
+		},
+		"defend_shield": {
+			"duration": 0.5,
+			"events": [],
+			"id": "defend_shield",
+			"tracks": [
+				{
+					"keys": [
+						{
+							"id": "shield_bash.rest.x",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "shield_bash.brace.x",
+							"interpolation": "smooth",
+							"time": 0.15,
+							"value": 6.0
+						},
+						{
+							"id": "shield_bash.contact.x",
+							"interpolation": "smooth",
+							"time": 0.235,
+							"value": -4.0
+						},
+						{
+							"id": "shield_bash.rebound.x",
+							"interpolation": "smooth",
+							"time": 0.285,
+							"value": 1.0
+						},
+						{
+							"id": "shield_bash.recover.x",
+							"interpolation": "smooth",
+							"time": 0.345,
+							"value": 5.0
+						},
+						{
+							"id": "shield_bash.return.x",
+							"interpolation": "smooth",
+							"time": 0.5,
+							"value": 6.0
+						}
+					],
+					"property": "x",
+					"target": "shield"
+				},
+				{
+					"keys": [
+						{
+							"id": "shield_bash.rest.rotation",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "shield_bash.brace.rotation",
+							"interpolation": "smooth",
+							"time": 0.15,
+							"value": -8.0
+						},
+						{
+							"id": "shield_bash.contact.rotation",
+							"interpolation": "smooth",
+							"time": 0.235,
+							"value": 7.0
+						},
+						{
+							"id": "shield_bash.rebound.rotation",
+							"interpolation": "smooth",
+							"time": 0.285,
+							"value": -3.0
+						},
+						{
+							"id": "shield_bash.recover.rotation",
+							"interpolation": "smooth",
+							"time": 0.345,
+							"value": -5.0
+						},
+						{
+							"id": "shield_bash.return.rotation",
+							"interpolation": "smooth",
+							"time": 0.5,
+							"value": -5.0
+						}
+					],
+					"property": "rotation",
+					"target": "shield"
+				}
+			]
+		},
+		"shield_bash_weapon_guard_cleaver": {
+			"duration": 0.66,
+			"events": [
+				{
+					"id": "release",
+					"time": 0.198
+				},
+				{
+					"id": "contact",
+					"time": 0.3102
+				}
+			],
+			"id": "shield_bash_weapon_guard_cleaver",
+			"tracks": [
+				{
+					"keys": [
+						{
+							"id": "shield_bash.rest.x",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "shield_bash.brace.x",
+							"interpolation": "smooth",
+							"time": 0.198,
+							"value": -5.0
+						},
+						{
+							"id": "shield_bash.contact.x",
+							"interpolation": "smooth",
+							"time": 0.3102,
+							"value": 10.0
+						},
+						{
+							"id": "shield_bash.rebound.x",
+							"interpolation": "smooth",
+							"time": 0.3762,
+							"value": 12.0
+						},
+						{
+							"id": "shield_bash.recover.x",
+							"interpolation": "smooth",
+							"time": 0.4554,
+							"value": 3.0
+						},
+						{
+							"id": "shield_bash.return.x",
+							"interpolation": "smooth",
+							"time": 0.66,
+							"value": 0.0
+						}
+					],
+					"property": "x",
+					"target": "shield"
+				},
+				{
+					"keys": [
+						{
+							"id": "shield_bash.rest.rotation",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "shield_bash.brace.rotation",
+							"interpolation": "smooth",
+							"time": 0.198,
+							"value": -9.0
+						},
+						{
+							"id": "shield_bash.contact.rotation",
+							"interpolation": "smooth",
+							"time": 0.3102,
+							"value": 16.0
+						},
+						{
+							"id": "shield_bash.rebound.rotation",
+							"interpolation": "smooth",
+							"time": 0.3762,
+							"value": 10.0
+						},
+						{
+							"id": "shield_bash.recover.rotation",
+							"interpolation": "smooth",
+							"time": 0.4554,
+							"value": 4.0
+						},
+						{
+							"id": "shield_bash.return.rotation",
+							"interpolation": "smooth",
+							"time": 0.66,
+							"value": 0.0
+						}
+					],
+					"property": "rotation",
+					"target": "shield"
+				}
+			]
+		},
+		"shield_bash_weapon_guard_sword": {
+			"duration": 0.66,
+			"events": [
+				{
+					"id": "release",
+					"time": 0.198
+				},
+				{
+					"id": "contact",
+					"time": 0.3102
+				}
+			],
+			"id": "shield_bash_weapon_guard_sword",
+			"tracks": [
+				{
+					"keys": [
+						{
+							"id": "shield_bash.rest.x",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "shield_bash.brace.x",
+							"interpolation": "smooth",
+							"time": 0.198,
+							"value": -5.0
+						},
+						{
+							"id": "shield_bash.contact.x",
+							"interpolation": "smooth",
+							"time": 0.3102,
+							"value": 10.0
+						},
+						{
+							"id": "shield_bash.rebound.x",
+							"interpolation": "smooth",
+							"time": 0.3762,
+							"value": 12.0
+						},
+						{
+							"id": "shield_bash.recover.x",
+							"interpolation": "smooth",
+							"time": 0.4554,
+							"value": 3.0
+						},
+						{
+							"id": "shield_bash.return.x",
+							"interpolation": "smooth",
+							"time": 0.66,
+							"value": 0.0
+						}
+					],
+					"property": "x",
+					"target": "shield"
+				},
+				{
+					"keys": [
+						{
+							"id": "shield_bash.rest.rotation",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "shield_bash.brace.rotation",
+							"interpolation": "smooth",
+							"time": 0.198,
+							"value": -9.0
+						},
+						{
+							"id": "shield_bash.contact.rotation",
+							"interpolation": "smooth",
+							"time": 0.3102,
+							"value": 16.0
+						},
+						{
+							"id": "shield_bash.rebound.rotation",
+							"interpolation": "smooth",
+							"time": 0.3762,
+							"value": 10.0
+						},
+						{
+							"id": "shield_bash.recover.rotation",
+							"interpolation": "smooth",
+							"time": 0.4554,
+							"value": 4.0
+						},
+						{
+							"id": "shield_bash.return.rotation",
+							"interpolation": "smooth",
+							"time": 0.66,
+							"value": 0.0
+						}
+					],
+					"property": "rotation",
+					"target": "shield"
+				}
+			]
+		},
+		"spear": {
+			"duration": 0.82,
+			"events": [
+				{
+					"id": "release",
+					"time": 0.205
+				},
+				{
+					"id": "contact",
+					"time": 0.3444
+				}
+			],
+			"id": "spear",
+			"legacy_action": {
+				"contact": 0.42,
+				"duration": 0.82,
+				"id": "spear",
+				"keyframes": [
+					{
+						"angle": 1.3,
+						"id": "spear.rest",
+						"t": 0.0,
+						"x": 19.0,
+						"y": -26.0
+					},
+					{
+						"angle": 1.35,
+						"id": "spear.chamber",
+						"t": 0.25,
+						"x": 13.0,
+						"y": -25.0
+					},
+					{
+						"angle": 1.571,
+						"id": "spear.contact",
+						"t": 0.42,
+						"x": 35.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.571,
+						"id": "spear.hold",
+						"t": 0.53,
+						"x": 35.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.571,
+						"id": "spear.recover",
+						"t": 0.64,
+						"x": 31.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.3,
+						"id": "spear.return",
+						"t": 1.0,
+						"x": 19.0,
+						"y": -26.0
+					}
+				],
+				"release": 0.25,
+				"weapon": "spear"
+			},
+			"legacy_weapon": "spear",
+			"tracks": [
+				{
+					"keys": [
+						{
+							"id": "spear.rest.x",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "spear.chamber.x",
+							"interpolation": "smooth",
+							"time": 0.205,
+							"value": -6.0
+						},
+						{
+							"id": "spear.contact.x",
+							"interpolation": "smooth",
+							"time": 0.3444,
+							"value": 16.0
+						},
+						{
+							"id": "spear.hold.x",
+							"interpolation": "smooth",
+							"time": 0.4346,
+							"value": 16.0
+						},
+						{
+							"id": "spear.recover.x",
+							"interpolation": "smooth",
+							"time": 0.5248,
+							"value": 12.0
+						},
+						{
+							"id": "spear.return.x",
+							"interpolation": "smooth",
+							"time": 0.82,
+							"value": 0.0
+						}
+					],
+					"property": "x",
+					"target": "spear"
+				},
+				{
+					"keys": [
+						{
+							"id": "spear.rest.y",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "spear.chamber.y",
+							"interpolation": "smooth",
+							"time": 0.205,
+							"value": 1.0
+						},
+						{
+							"id": "spear.contact.y",
+							"interpolation": "smooth",
+							"time": 0.3444,
+							"value": -5.0
+						},
+						{
+							"id": "spear.hold.y",
+							"interpolation": "smooth",
+							"time": 0.4346,
+							"value": -5.0
+						},
+						{
+							"id": "spear.recover.y",
+							"interpolation": "smooth",
+							"time": 0.5248,
+							"value": -5.0
+						},
+						{
+							"id": "spear.return.y",
+							"interpolation": "smooth",
+							"time": 0.82,
+							"value": 0.0
+						}
+					],
+					"property": "y",
+					"target": "spear"
+				},
+				{
+					"keys": [
+						{
+							"id": "spear.rest.rotation",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "spear.chamber.rotation",
+							"interpolation": "smooth",
+							"time": 0.205,
+							"value": 2.86478897565412
+						},
+						{
+							"id": "spear.contact.rotation",
+							"interpolation": "smooth",
+							"time": 0.3444,
+							"value": 15.5271562480453
+						},
+						{
+							"id": "spear.hold.rotation",
+							"interpolation": "smooth",
+							"time": 0.4346,
+							"value": 15.5271562480453
+						},
+						{
+							"id": "spear.recover.rotation",
+							"interpolation": "smooth",
+							"time": 0.5248,
+							"value": 15.5271562480453
+						},
+						{
+							"id": "spear.return.rotation",
+							"interpolation": "smooth",
+							"time": 0.82,
+							"value": 0.0
+						}
+					],
+					"property": "rotation",
+					"target": "spear"
+				}
+			]
+		},
+		"sword": {
+			"duration": 0.86,
+			"events": [
+				{
+					"id": "release",
+					"time": 0.215
+				},
+				{
+					"id": "contact",
+					"time": 0.3612
+				}
+			],
+			"id": "sword",
+			"legacy_action": {
+				"contact": 0.42,
+				"duration": 0.86,
+				"id": "sword",
+				"keyframes": [
+					{
+						"angle": 0.62,
+						"id": "sword.rest",
+						"t": 0.0,
+						"x": 8.0,
+						"y": -12.0
+					},
+					{
+						"angle": 0.38,
+						"id": "sword.windup",
+						"t": 0.25,
+						"x": 26.0,
+						"y": -13.0
+					},
+					{
+						"angle": 1.55,
+						"id": "sword.contact",
+						"t": 0.42,
+						"x": 22.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.55,
+						"id": "sword.hold",
+						"t": 0.53,
+						"x": 22.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.44,
+						"id": "sword.recover",
+						"t": 0.64,
+						"x": 20.0,
+						"y": -30.0
+					},
+					{
+						"angle": 0.62,
+						"id": "sword.return",
+						"t": 1.0,
+						"x": 8.0,
+						"y": -12.0
+					}
+				],
+				"release": 0.25,
+				"weapon": "sword"
+			},
+			"legacy_weapon": "sword",
+			"tracks": [
+				{
+					"keys": [
+						{
+							"id": "sword.rest.x",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "sword.windup.x",
+							"interpolation": "smooth",
+							"time": 0.215,
+							"value": 18.0
+						},
+						{
+							"id": "sword.contact.x",
+							"interpolation": "smooth",
+							"time": 0.3612,
+							"value": 14.0
+						},
+						{
+							"id": "sword.hold.x",
+							"interpolation": "smooth",
+							"time": 0.4558,
+							"value": 14.0
+						},
+						{
+							"id": "sword.recover.x",
+							"interpolation": "smooth",
+							"time": 0.5504,
+							"value": 12.0
+						},
+						{
+							"id": "sword.return.x",
+							"interpolation": "smooth",
+							"time": 0.86,
+							"value": 0.0
+						}
+					],
+					"property": "x",
+					"target": "sword"
+				},
+				{
+					"keys": [
+						{
+							"id": "sword.rest.y",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "sword.windup.y",
+							"interpolation": "smooth",
+							"time": 0.215,
+							"value": -1.0
+						},
+						{
+							"id": "sword.contact.y",
+							"interpolation": "smooth",
+							"time": 0.3612,
+							"value": -19.0
+						},
+						{
+							"id": "sword.hold.y",
+							"interpolation": "smooth",
+							"time": 0.4558,
+							"value": -19.0
+						},
+						{
+							"id": "sword.recover.y",
+							"interpolation": "smooth",
+							"time": 0.5504,
+							"value": -18.0
+						},
+						{
+							"id": "sword.return.y",
+							"interpolation": "smooth",
+							"time": 0.86,
+							"value": 0.0
+						}
+					],
+					"property": "y",
+					"target": "sword"
+				},
+				{
+					"keys": [
+						{
+							"id": "sword.rest.rotation",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "sword.windup.rotation",
+							"interpolation": "smooth",
+							"time": 0.215,
+							"value": -13.7509870831398
+						},
+						{
+							"id": "sword.contact.rotation",
+							"interpolation": "smooth",
+							"time": 0.3612,
+							"value": 53.2850749471666
+						},
+						{
+							"id": "sword.hold.rotation",
+							"interpolation": "smooth",
+							"time": 0.4558,
+							"value": 53.2850749471666
+						},
+						{
+							"id": "sword.recover.rotation",
+							"interpolation": "smooth",
+							"time": 0.5504,
+							"value": 46.9825392007275
+						},
+						{
+							"id": "sword.return.rotation",
+							"interpolation": "smooth",
+							"time": 0.86,
+							"value": 0.0
+						}
+					],
+					"property": "rotation",
+					"target": "sword"
+				}
+			]
+		}
+	},
+	"adaptations": {},
+	"assets": {
+		"arrow": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "arrow",
+			"image": "res://assets/art/static-bust/weapons.png",
+			"layer": 150.0,
+			"masks": [],
+			"name": "箭矢",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				0.0,
+				0.0
+			],
+			"rect": [
+				591.0,
+				730.0,
+				75.0,
+				460.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				4.0,
+				24.53333
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/weapons.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"axe_01": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"flip_h": true,
+			"id": "axe_01",
+			"image": "images/9c10425c357ffc8c0155cb5de265561f23cefa3596055a4dcd315e2a0a1cc346.png",
+			"layer": 130.0,
+			"masks": [],
+			"name": "新月战斧",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.82
+			],
+			"position": [
+				2.0,
+				-14.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				337.0,
+				736.0
+			],
+			"rotation": 35.523383298111,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				22.5,
+				72.48649
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/axe_01.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "One-handed bearded battle axe, worn dark steel, weathered wood, no hand, transparent background",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"axe"
+			]
+		},
+		"axe_02": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"flip_h": true,
+			"id": "axe_02",
+			"image": "images/7d8d2ac44b7bd00ad6d8120fa66db6a599c1420d18f16aef56802b438bf57678.png",
+			"layer": 130.0,
+			"masks": [],
+			"name": "长钩战斧",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.82
+			],
+			"position": [
+				2.0,
+				-14.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				583.0,
+				736.0
+			],
+			"rotation": 35.523383298111,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				22.5,
+				72.48649
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/axe_02.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Slender tapering long-beard raider axe, plain ash haft and linen grip, no hand, transparent background",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"axe"
+			]
+		},
+		"axe_03": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"flip_h": true,
+			"id": "axe_03",
+			"image": "images/7bd59332d0a81e69881a53d33924a84495310fde2d97392636a9eb2ac1827ad8.png",
+			"layer": 130.0,
+			"masks": [],
+			"name": "伐木战斧",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.82
+			],
+			"position": [
+				2.0,
+				-14.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				702.0,
+				736.0
+			],
+			"rotation": 35.523383298111,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				22.5,
+				72.48649
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/axe_03.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Compact rectangular crescent woodcutter battle axe, reddish haft and leather grip, no hand, transparent background",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"axe"
+			]
+		},
+		"axe_04": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "axe_04",
+			"image": "images/97cbea38a26ab2ce3021f27d8d69ba6fb0b06f62337901df9289bc965507da71.png",
+			"layer": 130.0,
+			"masks": [],
+			"name": "双刃军斧",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.82
+			],
+			"position": [
+				2.0,
+				-14.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				430.0,
+				736.0
+			],
+			"rotation": 35.523383298111,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				22.5,
+				72.48649
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/axe_04.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Broad dark steel double crescent officer axe, restrained brass and blue leather, no hand, transparent background",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"axe"
+			]
+		},
+		"bandage": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "bandage",
+			"image": "res://assets/art/static-bust/modular-proof.png",
+			"layer": 110.0,
+			"masks": [],
+			"name": "头部绷带",
+			"parent": "face_03",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				-1.8400000333786,
+				-27.5999984741211
+			],
+			"rect": [
+				510.0,
+				630.0,
+				510.0,
+				288.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				34.96,
+				19.74211808
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/modular-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"bandage_01": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "bandage_01",
+			"image": "images/1b71a150e686269f4df449f55366aaed2c7ec446c3915b2f2b9166e7428779a8.png",
+			"layer": 110.0,
+			"masks": [],
+			"name": "额部布带",
+			"parent": "face_04",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				-1.8400000333786,
+				-27.5999984741211
+			],
+			"rect": [
+				0.0,
+				0.0,
+				510.0,
+				288.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				34.96,
+				19.74211808
+			],
+			"source": {
+				"image": "game/assets/art/static-bust/modular-proof.png",
+				"origin": "approved current atlas",
+				"prompt": "",
+				"tool": "atlas crop"
+			},
+			"tags": [
+				"foundation-20260923",
+				"bandage"
+			]
+		},
+		"bandage_02": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "bandage_02",
+			"image": "images/48bcc494150e9a240bce94e81d7c3abace8c202a64eb1af70c2d90d844b96768.png",
+			"layer": 110.0,
+			"masks": [],
+			"name": "斜缠额带",
+			"parent": "face_04",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				-1.8400000333786,
+				-27.5999984741211
+			],
+			"rect": [
+				0.0,
+				0.0,
+				736.0,
+				407.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				34.96,
+				19.74211808
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/bandage_02.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Two narrow diagonal linen wraps crossing forehead; isolated overlay, H painterly medieval fantasy, transparent alpha",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"bandage"
+			]
+		},
+		"bandage_03": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "bandage_03",
+			"image": "images/d62bb9727d5163f45f206a74906ab3cb6d26c93748366473ad20b59791b3faa1.png",
+			"layer": 110.0,
+			"masks": [],
+			"name": "下颌绷带",
+			"parent": "face",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				-1.8400000333786,
+				-27.5999984741211
+			],
+			"rect": [
+				0.0,
+				0.0,
+				736.0,
+				459.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				34.96,
+				19.74211808
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/bandage_03.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Broad linen bandage around crown and beneath jaw; isolated overlay, H painterly medieval fantasy, transparent alpha",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"bandage"
+			]
+		},
+		"bandage_04": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "bandage_04",
+			"image": "images/0c710790bbef17122be0ba5808a0214da76c68827b07223a1c6ec7cec635e671.png",
+			"layer": 110.0,
+			"masks": [],
+			"name": "遮眼绷带",
+			"parent": "face_01",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				-1.8400000333786,
+				-27.5999984741211
+			],
+			"rect": [
+				0.0,
+				0.0,
+				736.0,
+				414.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				34.96,
+				19.74211808
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/bandage_04.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Asymmetrical linen eye patch and head wrap; isolated overlay, H painterly medieval fantasy, transparent alpha",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"bandage"
+			]
+		},
+		"base": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "参照",
+			"clip_to": "",
+			"id": "base",
+			"image": "images/c4f16f76ed930caff39a46e328e55245db393d7491d89332f26086cd025f0489.png",
+			"layer": 0.0,
+			"masks": [],
+			"name": "铁质底座",
+			"parent": "",
+			"pivot": [
+				0.5,
+				1.0
+			],
+			"position": [
+				0.0,
+				0.0
+			],
+			"rect": [
+				0.0,
+				0.0,
+				609.0,
+				259.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				64.0,
+				27.21921
+			],
+			"source": {
+				"image": "game/assets/art/static-bust/body-mild-proof.png",
+				"origin": "approved current atlas",
+				"prompt": "",
+				"tool": "atlas crop"
+			},
+			"tags": [
+				"foundation-20260923",
+				"base"
+			]
+		},
+		"beard": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "beard",
+			"image": "res://assets/art/static-bust/modular-proof.png",
+			"layer": 90.0,
+			"masks": [],
+			"name": "胡须",
+			"parent": "face_01",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				3.68000030517578,
+				-17.4799995422363
+			],
+			"rect": [
+				1150.0,
+				303.0,
+				350.0,
+				280.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				23.46,
+				18.768
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/modular-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"beard_01": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "beard_01",
+			"image": "images/2a23c30041530b75d7e562b73355cbc596c7e5d1751a8d965184f402be7c5eee.png",
+			"layer": 90.0,
+			"masks": [],
+			"name": "棕灰全须",
+			"parent": "face",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				3.68000030517578,
+				-17.4799995422363
+			],
+			"rect": [
+				0.0,
+				0.0,
+				350.0,
+				280.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				23.46,
+				18.768
+			],
+			"source": {
+				"image": "game/assets/art/static-bust/modular-proof.png",
+				"origin": "approved current atlas",
+				"prompt": "",
+				"tool": "atlas crop"
+			},
+			"tags": [
+				"foundation-20260923",
+				"beard"
+			]
+		},
+		"beard_02": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "beard_02",
+			"image": "images/6f83bc92a27cc5036a6a2d9802390ae64abd34c97e95af642d390268c4f41f61.png",
+			"layer": 90.0,
+			"masks": [],
+			"name": "深色山羊须",
+			"parent": "face_03",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				5.65999984741211,
+				-13.4799995422363
+			],
+			"rect": [
+				0.0,
+				0.0,
+				736.0,
+				544.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				23.46,
+				18.768
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/beard_02.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Short dark goatee and moustache separate overlay; H painterly medieval fantasy, slight right angle, transparent, no face",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"beard"
+			]
+		},
+		"beard_03": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "beard_03",
+			"image": "images/be21faed94361a00774d602c9183d28629b42f92ffb3ed33656a513c0b36b191.png",
+			"layer": 90.0,
+			"masks": [],
+			"name": "赤褐编须",
+			"parent": "face_04",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				3.68000030517578,
+				-15.4799995422363
+			],
+			"rect": [
+				0.0,
+				0.0,
+				736.0,
+				656.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				23.46,
+				18.768
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/beard_03.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Long forked auburn beard with braided tips separate overlay; H painterly medieval fantasy, slight right angle, transparent, no face",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"beard"
+			]
+		},
+		"beard_04": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "beard_04",
+			"image": "images/9c422ec90d51e4a33ba66803722a608d42cd91ac79078d35c1b9e3c6d7a277bb.png",
+			"layer": 90.0,
+			"masks": [],
+			"name": "灰色短须",
+			"parent": "face_04",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				3.68000030517578,
+				-17.4799995422363
+			],
+			"rect": [
+				0.0,
+				0.0,
+				736.0,
+				606.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				23.46,
+				18.768
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/beard_04.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Grey close-cropped stubble and drooping moustache separate overlay; H painterly medieval fantasy, slight right angle, transparent, no face",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"beard"
+			]
+		},
+		"blood": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "身体",
+			"clip_to": "skin",
+			"id": "blood",
+			"image": "res://assets/art/static-bust/modular-proof.png",
+			"layer": 20.0,
+			"masks": [
+				"bust"
+			],
+			"name": "皮肤血迹",
+			"parent": "skin",
+			"pivot": [
+				0.5,
+				0.5
+			],
+			"position": [
+				11.5,
+				17.5
+			],
+			"rect": [
+				1130.0,
+				680.0,
+				305.0,
+				280.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				17.0,
+				15.606557
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/modular-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"blood_01": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "身体",
+			"clip_to": "body_02",
+			"id": "blood_01",
+			"image": "images/dcb845b46881936d660c2505ecef9f3823dba4c6f26124ca94c871c80ccbca8d.png",
+			"layer": 20.0,
+			"masks": [
+				"bust"
+			],
+			"name": "旧血迹",
+			"parent": "body_02",
+			"pivot": [
+				0.5,
+				0.5
+			],
+			"position": [
+				11.5,
+				17.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				305.0,
+				280.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				17.0,
+				15.606557
+			],
+			"source": {
+				"image": "game/assets/art/static-bust/modular-proof.png",
+				"origin": "approved current atlas",
+				"prompt": "",
+				"tool": "atlas crop"
+			},
+			"tags": [
+				"foundation-20260923",
+				"blood"
+			]
+		},
+		"blood_02": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "身体",
+			"clip_to": "body_01",
+			"id": "blood_02",
+			"image": "images/509aedb2b62115579e0fdd465dd84db8ddc298cb05a1cfb12e9ab753780b8007.png",
+			"layer": 20.0,
+			"masks": [
+				"bust"
+			],
+			"name": "新鲜血痕",
+			"parent": "body_01",
+			"pivot": [
+				0.5,
+				0.5
+			],
+			"position": [
+				11.5,
+				17.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				736.0,
+				715.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				17.0,
+				15.606557
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/blood_02.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Fresh dark red diagonal smear and droplets; isolated overlay, H painterly medieval fantasy, transparent alpha",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"blood"
+			]
+		},
+		"blood_03": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "身体",
+			"clip_to": "body_01",
+			"id": "blood_03",
+			"image": "images/2864b993edd7669d12db795e3b4ba538492a39770bd202dc701a1ad7a1a98308.png",
+			"layer": 20.0,
+			"masks": [
+				"bust"
+			],
+			"name": "细密血点",
+			"parent": "body_01",
+			"pivot": [
+				0.5,
+				0.5
+			],
+			"position": [
+				11.5,
+				17.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				736.0,
+				731.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				17.0,
+				15.606557
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/blood_03.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Uneven droplets and central dark stain; isolated overlay, H painterly medieval fantasy, transparent alpha",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"blood"
+			]
+		},
+		"blood_04": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "身体",
+			"clip_to": "body_01",
+			"id": "blood_04",
+			"image": "images/1f987364764760d170f22dab5a06b011fba881e6927db23490d630a9e586f14e.png",
+			"layer": 20.0,
+			"masks": [
+				"bust"
+			],
+			"name": "干涸血痕",
+			"parent": "body_01",
+			"pivot": [
+				0.5,
+				0.5
+			],
+			"position": [
+				11.5,
+				17.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				736.0,
+				624.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				17.0,
+				15.606557
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/blood_04.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Curved dried brown-red blood smear; isolated overlay, H painterly medieval fantasy, transparent alpha",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"blood"
+			]
+		},
+		"body": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "身体",
+			"clip_to": "",
+			"id": "body",
+			"image": "res://assets/art/static-bust/full-garments.png",
+			"layer": 30.0,
+			"masks": [
+				"bust"
+			],
+			"name": "基础内衣",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				2.25,
+				-42.25
+			],
+			"rect": [
+				110.0,
+				78.0,
+				470.0,
+				546.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				71.0,
+				82.48085
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/full-garments.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"body_01": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "身体",
+			"clip_to": "",
+			"id": "body_01",
+			"image": "images/fe84bb21213a02c37c4cacb0b43397ea8ea582877719d05fd4bdd23e082ce186.png",
+			"layer": 10.0,
+			"masks": [
+				"bust"
+			],
+			"name": "原型肤色躯干",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				0.75,
+				-39.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				647.0,
+				353.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				52.0,
+				28.370943
+			],
+			"source": {
+				"image": "game/assets/art/static-bust/body-mild-proof.png",
+				"origin": "approved current atlas",
+				"prompt": "",
+				"tool": "atlas crop"
+			},
+			"tags": [
+				"foundation-20260923",
+				"body"
+			]
+		},
+		"body_02": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "身体",
+			"clip_to": "",
+			"id": "body_02",
+			"image": "images/3a4c9a4ed4967a3639181fafb0df6b12ef238cae62dd01c255cdbd38fcfac376.png",
+			"layer": 10.0,
+			"masks": [
+				"bust"
+			],
+			"name": "深肤精瘦躯干",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				0.75,
+				-39.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				647.0,
+				353.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				52.0,
+				28.370943
+			],
+			"source": {
+				"image": "art/production/bodies-20260923/body_02.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Use case: precise-object-edit\nAsset type: clothed-looking neutral paperdoll base component for a 2D medieval fantasy tactical game, body_02. The user requests deliberately simplified and non-anatomical chest detail.\nInput image 1 is a geometry reference ONLY: preserve the same short wide shoulder-and-upper-torso silhouette, three-quarter orientation toward viewer's right, small neck socket, shallow curved lower cutoff, and no hands. Do not preserve any bare-chest internal anatomy from the reference. Input image 2 is a color reference ONLY for warm deep-brown skin shade.\nCreate a smooth featureless mannequin-like torso foundation in warm deep-brown matte color, for armor and clothing overlays. The front is a continuous plain surface with soft value shading, no breast or pectoral outline, no nipples, areolae, chest crease, body hair, pores, veins, or anatomical texture. Limit age/strength cues to subtle shoulder and collar area planes; do not widen the existing shoulders. Short empty neck socket for separate head asset. Refined hand-painted H fantasy illustration finish but intentionally low anatomical detail, clear silhouette at normal game scale. Single isolated transparent RGBA sprite, no setting or floor. No head, face, arms, hands, clothing, jewelry, text, symbols or extra objects.",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"body"
+			]
+		},
+		"body_03": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "身体",
+			"clip_to": "",
+			"id": "body_03",
+			"image": "images/8d03420e7ce8d478de15cf5697cc1695544e8df4f9195b87fe0ab3ddfb5f502c.png",
+			"layer": 10.0,
+			"masks": [
+				"bust"
+			],
+			"name": "浅肤年长躯干",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				0.75,
+				-39.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				647.0,
+				353.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				52.0,
+				28.370943
+			],
+			"source": {
+				"image": "art/production/bodies-20260923/body_03.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Use case: precise-object-edit\nAsset type: smooth non-anatomical paperdoll torso base for a 2D medieval fantasy tactical game, body_03.\nInput image 1 is the EDIT TARGET: preserve its full shoulder-and-upper-torso contour, three-quarter lean toward viewer's right, empty short neck socket, shallow curved bottom edge, limited shoulder span, and smooth featureless front. Input image 2 is only a color reference for the pale mature complexion of face_03.\nChange the base color to pale warm skin with a modest ruddy shoulder/neck tint and gently aged matte value variation at the shoulder and collar planes. Keep the entire chest surface simple, flat and mannequin-like, with no nipples, areolae, chest or pectoral grooves, breast forms, hair, pores, veins, or detailed anatomy. Do not make shoulders wider. This is a neutral modular foundation to be covered by clothing and armor. H static-bust refined painted oil/gouache style, soft practical lighting. Isolated one-piece genuine transparent RGBA sprite. No head, face, hands, arms, garments, jewelry, backdrop, lettering or objects.",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"body"
+			]
+		},
+		"body_04": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "身体",
+			"clip_to": "",
+			"id": "body_04",
+			"image": "images/365a89ecfbe732b4d3d742eda9ea5b90c2176e8ea37d3538ea0e780bd331aa66.png",
+			"layer": 10.0,
+			"masks": [
+				"bust"
+			],
+			"name": "暖棕健壮躯干",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				0.75,
+				-39.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				647.0,
+				353.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				52.0,
+				28.370943
+			],
+			"source": {
+				"image": "art/production/bodies-20260923/body_04.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Use case: precise-object-edit\nAsset type: color correction of a smooth neutral paperdoll torso base, body_04, for a 2D medieval fantasy game.\nInput image 1 is the EDIT TARGET. Preserve EVERY contour, shoulder span, short neck socket, three-quarter right-facing perspective, shallow lower cut, matte painted texture and transparent alpha exactly. Keep the featureless non-anatomical front unchanged. Input image 2 is the complexion COLOR REFERENCE for face_04. Make the entire torso a lighter warm olive-brown skin shade that matches the visible midtone of face_04 when assembled, clearly lighter than the deep-brown body_02. Keep the highlights and shadows coherent with the existing image and H hand-painted oil/gouache style. Do not add any nipples, areolae, pectoral grooves, chest anatomy, body hair, head, hands, arms, clothing, objects, scenery, text or matte background. Change color only; output genuine transparent RGBA PNG.",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"body"
+			]
+		},
+		"bow": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "bow",
+			"image": "res://assets/art/static-bust/weapons.png",
+			"layer": 150.0,
+			"masks": [],
+			"name": "弓",
+			"parent": "",
+			"pivot": [
+				0.8,
+				0.51
+			],
+			"position": [
+				6.75,
+				-21.75
+			],
+			"rect": [
+				990.0,
+				87.0,
+				134.0,
+				580.0
+			],
+			"rotation": 58.0788802939694,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				17.5,
+				75.74627
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/weapons.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"bow_01": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "bow_01",
+			"image": "images/870b494c56fcef91a1b051783416d932aa222ef0f74fad13d84628d9b86cec12.png",
+			"layer": 150.0,
+			"masks": [],
+			"name": "紫杉木弓",
+			"parent": "",
+			"pivot": [
+				0.8,
+				0.51
+			],
+			"position": [
+				6.75,
+				-21.75
+			],
+			"rect": [
+				0.0,
+				0.0,
+				134.0,
+				580.0
+			],
+			"rotation": 58.0788802939694,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				17.5,
+				75.74627
+			],
+			"source": {
+				"image": "game/assets/art/static-bust/weapons.png",
+				"origin": "approved current atlas",
+				"prompt": "",
+				"tool": "atlas crop"
+			},
+			"tags": [
+				"foundation-20260923",
+				"bow"
+			]
+		},
+		"bow_02": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "bow_02",
+			"image": "images/da333239b8063f899cd491c0e49ee647be55bee56a378ffcdbb780ee9710e8de.png",
+			"layer": 150.0,
+			"masks": [],
+			"name": "细长长弓",
+			"parent": "",
+			"pivot": [
+				0.8,
+				0.51
+			],
+			"position": [
+				6.75,
+				-21.75
+			],
+			"rect": [
+				0.0,
+				0.0,
+				106.0,
+				736.0
+			],
+			"rotation": 58.0788802939694,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				17.5,
+				75.74627
+			],
+			"source": {
+				"image": "art/production/weapons-20260923/bow_02.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Use case: precise-object-edit\nAsset type: isolated 2D medieval fantasy bow sprite, bow_02, H static half-bust art.\nInput image 1 is a reference for vertical orientation, string on the viewer's LEFT and wooden bow body bulging to the viewer's RIGHT, plus painterly finish. Create a distinct tall slender English-style longbow made of a single stave of weathered yew, with a long smooth D-shaped arc, narrow limbs, plain dark leather central grip, small horn nocks, taut thin bowstring from top to bottom on left. Taller and visibly slimmer/less ornate than bow_01. Full bow upright, same center grip height and string side for later attachment. Realistic hand-painted oil/gouache wood grain and modest highlights, genuine alpha PNG. No arrow, hands, person, extra bow, ornament, text, landscape, ground, quiver or matte. Shape difference must be structural, not recoloring.",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"bow"
+			]
+		},
+		"bow_03": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "bow_03",
+			"image": "images/fadffbe2e434863258d9b689d2b9bc440e40e931fc12980804c7eca84bffec38.png",
+			"layer": 150.0,
+			"masks": [],
+			"name": "短猎弓",
+			"parent": "",
+			"pivot": [
+				0.8,
+				0.51
+			],
+			"position": [
+				6.75,
+				-21.75
+			],
+			"rect": [
+				0.0,
+				0.0,
+				201.0,
+				736.0
+			],
+			"rotation": 58.0788802939694,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				17.5,
+				75.74627
+			],
+			"source": {
+				"image": "art/production/weapons-20260923/bow_03.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Use case: precise-object-edit\nAsset type: isolated 2D medieval fantasy bow sprite, bow_03, H static half-bust art.\nInput image 1 is a reference for upright bow direction and grip position, with string on viewer's LEFT and limbs arcing to RIGHT. Create a truly distinct compact hunting bow of laminated dark horn and honey-brown wood: noticeably shorter and broader-limbed than a tall longbow, thick central handle with practical stitched leather wrap, slight asymmetry from handmade construction, small plain horn tips, taut readable string on left. Its bow tips are simple, not strongly recurved; preserve bow_04 for the recurve silhouette. Complete centered bow upright, same grip zone as bow_01 for later paperdoll anchoring. Refined worn hand-painted oil/gouache texture matching H medieval art; true transparent alpha PNG. No hand, figure, arrow, quiver, decoration, text, second bow, scenery, ground or baked black backdrop.",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"bow"
+			]
+		},
+		"bow_04": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "bow_04",
+			"image": "images/49c271aeaa97d7e212885b9f0f219768520247c43f43c4c6104b7cc71c9e5aab.png",
+			"layer": 150.0,
+			"masks": [],
+			"name": "反曲复合弓",
+			"parent": "",
+			"pivot": [
+				0.8,
+				0.51
+			],
+			"position": [
+				6.75,
+				-21.75
+			],
+			"rect": [
+				0.0,
+				0.0,
+				170.0,
+				736.0
+			],
+			"rotation": 58.0788802939694,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				17.5,
+				75.74627
+			],
+			"source": {
+				"image": "art/production/weapons-20260923/bow_04.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Use case: precise-object-edit\nAsset type: isolated 2D medieval fantasy bow sprite, bow_04, H static half-bust art.\nInput image 1 is only a reference for upright display, grip area, painterly rendering and string on the LEFT. Create an unmistakable RECURVE bow rather than a longbow: compact horn-and-wood composite stave, thick central grip, both outer limb tips curl BACK TOWARD the bowstring at top and bottom to make a clear S-shaped double-recurve silhouette. The center of bow arcs to viewer's RIGHT; both terminal tips visibly hook to viewer's LEFT. Thin taut bowstring runs along viewer's LEFT from top nock to bottom nock, attached correctly. Single complete vertical bow, center grip comparable to bow_01 for anchor alignment. Refined worn hand-painted oil/gouache medieval craft, dark horn over warm wood and plain leather wrapping, clear at game scale. Genuine transparent alpha PNG with no aura. No hand, human, arrow, quiver, second bow, text, ground, scenery or opaque background. Do not depict an ordinary D-shaped longbow.",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"bow"
+			]
+		},
+		"face": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "face",
+			"image": "res://assets/art/static-bust/modular-proof.png",
+			"layer": 70.0,
+			"masks": [],
+			"name": "净面头",
+			"parent": "",
+			"pivot": [
+				0.5,
+				1.0
+			],
+			"position": [
+				0.25,
+				-32.5
+			],
+			"rect": [
+				50.0,
+				80.0,
+				415.0,
+				480.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				28.52,
+				32.98698824
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/modular-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"face_01": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "face_01",
+			"image": "images/69b6926076d6e522bf3bd2fc24b794a37c8133459c8c9fa8520488d1efd9b2f4.png",
+			"layer": 70.0,
+			"masks": [],
+			"name": "沧桑方脸",
+			"parent": "",
+			"pivot": [
+				0.5,
+				1.0
+			],
+			"position": [
+				0.25,
+				-32.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				415.0,
+				480.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				28.52,
+				32.98698824
+			],
+			"source": {
+				"image": "game/assets/art/static-bust/modular-proof.png",
+				"origin": "approved current atlas",
+				"prompt": "",
+				"tool": "atlas crop"
+			},
+			"tags": [
+				"foundation-20260923",
+				"face"
+			]
+		},
+		"face_02": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "face_02",
+			"image": "images/302a8cb9750fceed6701f417202ab24961574bd44d2a255c3fe54958582e8243.png",
+			"layer": 70.0,
+			"masks": [],
+			"name": "深肤锐脸",
+			"parent": "",
+			"pivot": [
+				0.5,
+				1.0
+			],
+			"position": [
+				0.25,
+				-32.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				615.0,
+				736.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				28.52,
+				32.98698824
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/face_02.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Adult dark-skinned angular face, bald and clean-shaven, slight right angle, transparent, H painterly style",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"face"
+			]
+		},
+		"face_03": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "face_03",
+			"image": "images/7f3c37558c939a8dca53daea6090c7f949c538332c8f2df951a333f14bdfc152.png",
+			"layer": 70.0,
+			"masks": [],
+			"name": "浅肤宽脸",
+			"parent": "",
+			"pivot": [
+				0.5,
+				1.0
+			],
+			"position": [
+				0.25,
+				-32.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				621.0,
+				736.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				28.52,
+				32.98698824
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/face_03.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Middle-aged pale ruddy broad face, bald and clean-shaven, slight right angle, transparent, H painterly style",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"face"
+			]
+		},
+		"face_04": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "face_04",
+			"image": "images/e7770b584a14b34f31c56b014a496f658987007f0e09dbf6684ba8919e10db34.png",
+			"layer": 70.0,
+			"masks": [],
+			"name": "暖棕年长脸",
+			"parent": "",
+			"pivot": [
+				0.5,
+				1.0
+			],
+			"position": [
+				0.25,
+				-32.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				628.0,
+				736.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				28.52,
+				32.98698824
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/face_04.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Older olive-skinned face with age lines, bald and clean-shaven, slight right angle, transparent, H painterly style",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"face"
+			]
+		},
+		"hair": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "hair",
+			"image": "res://assets/art/static-bust/modular-proof.png",
+			"layer": 100.0,
+			"masks": [],
+			"name": "发型",
+			"parent": "face_03",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				-2.75999999046326,
+				-35.4199981689453
+			],
+			"rect": [
+				497.0,
+				54.0,
+				515.0,
+				490.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				35.88,
+				34.13825232
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/modular-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"hair_01": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "hair_01",
+			"image": "images/75c5ae4d3cdd6b43bcd04fc3ae3d41f5fc87327fcfc655c22a6ae2ac9d37dc46.png",
+			"layer": 100.0,
+			"masks": [],
+			"name": "棕色后梳发",
+			"parent": "face",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				-2.75999999046326,
+				-35.4199981689453
+			],
+			"rect": [
+				0.0,
+				0.0,
+				515.0,
+				490.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				35.88,
+				34.13825232
+			],
+			"source": {
+				"image": "game/assets/art/static-bust/modular-proof.png",
+				"origin": "approved current atlas",
+				"prompt": "",
+				"tool": "atlas crop"
+			},
+			"tags": [
+				"foundation-20260923",
+				"hair"
+			]
+		},
+		"hair_02": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "hair_02",
+			"image": "images/5de0025899935a296a1eee3cc29ba5f2d8675b3557697f163794a69e9c73c190.png",
+			"layer": 100.0,
+			"masks": [],
+			"name": "深棕卷发",
+			"parent": "face_03",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				-2.75999999046326,
+				-35.4199981689453
+			],
+			"rect": [
+				0.0,
+				0.0,
+				736.0,
+				575.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				35.88,
+				34.13825232
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/hair_02.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Dark short curly hair separate overlay; H painterly medieval fantasy, slight right angle, transparent, no face",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"hair"
+			]
+		},
+		"hair_03": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "hair_03",
+			"image": "images/634c9477f5b838618948999fc53398f9c2b25fb32bcdf56171adecd7e1d35821.png",
+			"layer": 100.0,
+			"masks": [],
+			"name": "浅金束发",
+			"parent": "face_04",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				-2.75999999046326,
+				-35.4199981689453
+			],
+			"rect": [
+				0.0,
+				0.0,
+				736.0,
+				703.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				35.88,
+				34.13825232
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/hair_03.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Long ash-blond hair tied low separate overlay; H painterly medieval fantasy, slight right angle, transparent, no face",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"hair"
+			]
+		},
+		"hair_04": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "hair_04",
+			"image": "images/c9ef5688be385cfb503e64bcad008ba79fd630d14a07eb9f210069dc67a95b96.png",
+			"layer": 100.0,
+			"masks": [],
+			"name": "银灰短发",
+			"parent": "face_04",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				-2.75999999046326,
+				-37.4199981689453
+			],
+			"rect": [
+				0.0,
+				0.0,
+				736.0,
+				592.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				35.88,
+				34.13825232
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/hair_04.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Cropped silver receding hair separate overlay; H painterly medieval fantasy, slight right angle, transparent, no face",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"hair"
+			]
+		},
+		"head": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "head",
+			"image": "res://assets/art/static-bust/body-mild-proof.png",
+			"layer": 70.0,
+			"masks": [],
+			"name": "整头 · 完好",
+			"parent": "",
+			"pivot": [
+				0.5,
+				1.0
+			],
+			"position": [
+				0.25,
+				-32.5
+			],
+			"rect": [
+				75.0,
+				44.0,
+				548.0,
+				548.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				33.8376,
+				33.8376
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/body-mild-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"impact": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "身体",
+			"clip_to": "",
+			"id": "impact",
+			"image": "res://assets/art/static-bust/weapons.png",
+			"layer": 0.0,
+			"masks": [],
+			"name": "impact",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.5
+			],
+			"position": [
+				0.0,
+				0.0
+			],
+			"rect": [
+				883.0,
+				812.0,
+				313.0,
+				297.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				20.0,
+				18.97764
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/weapons.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"linen": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "linen",
+			"image": "res://assets/art/static-bust/full-garments-nested.png",
+			"layer": 40.0,
+			"masks": [
+				"bust"
+			],
+			"name": "亚麻内衬",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				1.5,
+				-42.5
+			],
+			"rect": [
+				726.0,
+				78.0,
+				478.0,
+				546.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				72.0,
+				82.24268
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/full-garments-nested.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"linen_01": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "linen_01",
+			"image": "images/8a3cfc2fc92efd51e1c30fcc8c8df3401ab1817708424f667c74e0aa78e01a3f.png",
+			"layer": 40.0,
+			"masks": [
+				"bust"
+			],
+			"name": "深灰亚麻衫",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				1.5,
+				-42.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				478.0,
+				546.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				72.0,
+				82.24268
+			],
+			"source": {
+				"image": "game/assets/art/static-bust/full-garments-nested.png",
+				"origin": "approved current atlas",
+				"prompt": "",
+				"tool": "atlas crop"
+			},
+			"tags": [
+				"foundation-20260923",
+				"linen"
+			]
+		},
+		"linen_02": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "linen_02",
+			"image": "images/5611f041ae66c9eea8f2d727f66884d04f99f5d3c41e1a92fe18e3a1cb85cb90.png",
+			"layer": 40.0,
+			"masks": [
+				"bust"
+			],
+			"name": "原白亚麻衫",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				1.5,
+				-42.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				655.0,
+				736.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				72.0,
+				82.24268
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/linen_02.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Off-white coarse homespun tunic with neck lacing; isolated no-head no-hands half-bust, H painterly medieval fantasy, slight right angle, transparent",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"linen"
+			]
+		},
+		"linen_03": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "linen_03",
+			"image": "images/c84b8499c363f15fe73b30469f4c2e61606b8dc5903d7a7e39d95d49d1f36f07.png",
+			"layer": 40.0,
+			"masks": [
+				"bust"
+			],
+			"name": "靛蓝亚麻衫",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				1.5,
+				-42.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				665.0,
+				736.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				72.0,
+				82.24268
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/linen_03.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Faded indigo linen tunic with embroidery; isolated no-head no-hands half-bust, H painterly medieval fantasy, slight right angle, transparent",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"linen"
+			]
+		},
+		"linen_04": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "linen_04",
+			"image": "images/3dc329cce0f80e1e43484aa473328f195d75f2e2ba85a1a09b1af1289ad5e46b.png",
+			"layer": 40.0,
+			"masks": [
+				"bust"
+			],
+			"name": "锈红亚麻衫",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				1.5,
+				-42.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				639.0,
+				736.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				72.0,
+				82.24268
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/linen_04.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Rusty red-brown patched linen tunic; isolated no-head no-hands half-bust, H painterly medieval fantasy, slight right angle, transparent",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"linen"
+			]
+		},
+		"mail": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "mail",
+			"image": "res://assets/art/static-bust/full-garments-nested.png",
+			"layer": 60.0,
+			"masks": [
+				"bust"
+			],
+			"name": "链甲 · 完好",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				3.0,
+				-46.0
+			],
+			"rect": [
+				731.0,
+				644.0,
+				497.0,
+				560.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.69014
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/full-garments-nested.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"mail_damaged": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "mail_damaged",
+			"image": "res://assets/art/static-bust/full-damaged-nested.png",
+			"layer": 60.0,
+			"masks": [
+				"bust"
+			],
+			"name": "链甲 · 破损",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				3.0,
+				-46.0
+			],
+			"rect": [
+				731.0,
+				644.0,
+				497.0,
+				560.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.69014
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/full-damaged-nested.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"outer_01": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "outer_01",
+			"image": "images/4ba3ad0155d27191f62397443da7affba61b9f72c006a45f8248cc18ca3938b8.png",
+			"layer": 60.0,
+			"masks": [
+				"bust"
+			],
+			"name": "锁子甲",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				3.0,
+				-46.0
+			],
+			"rect": [
+				0.0,
+				0.0,
+				497.0,
+				560.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.69014
+			],
+			"source": {
+				"image": "game/assets/art/static-bust/full-garments-nested.png",
+				"origin": "approved current atlas",
+				"prompt": "",
+				"tool": "atlas crop"
+			},
+			"tags": [
+				"foundation-20260923",
+				"outer"
+			]
+		},
+		"outer_01_damaged": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "outer_01_damaged",
+			"image": "images/6655bde27aaf30e68f4df1211cbe614d3433dd3c5b2aad216721021eddc48f86.png",
+			"layer": 60.0,
+			"masks": [
+				"bust"
+			],
+			"name": "锁子甲（破损）",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				3.0,
+				-46.0
+			],
+			"rect": [
+				0.0,
+				0.0,
+				497.0,
+				560.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.69014
+			],
+			"source": {
+				"image": "game/assets/art/static-bust/full-damaged-nested.png",
+				"origin": "approved current atlas",
+				"prompt": "",
+				"tool": "atlas crop"
+			},
+			"tags": [
+				"foundation-20260923",
+				"outer"
+			]
+		},
+		"outer_02": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "outer_02",
+			"image": "images/d9b22c929c24b28d6aa040eef3124e4c9bc146118ab46f6420cc6fae32edce06.png",
+			"layer": 60.0,
+			"masks": [
+				"bust"
+			],
+			"name": "铆钉布面甲",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				3.0,
+				-46.0
+			],
+			"rect": [
+				0.0,
+				0.0,
+				642.0,
+				722.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.69014
+			],
+			"source": {
+				"image": "art/production/garment-openings-20260923/assets/outer_02.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Weathered leather brigandine with riveted plates; isolated no-head no-hands half-bust, H painterly medieval fantasy, slight right angle, transparent",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"outer"
+			]
+		},
+		"outer_02_damaged": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "outer_02_damaged",
+			"image": "images/d542b457f7d74ace5c7cbdc2417eb19777e075944bd0124dd87a94c2fc3d014f.png",
+			"layer": 60.0,
+			"masks": [
+				"bust"
+			],
+			"name": "铆钉布面甲（破损）",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				3.0,
+				-46.0
+			],
+			"rect": [
+				0.0,
+				0.0,
+				658.0,
+				736.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.69014
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/outer_02_damaged.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Independent damage edit of matching normal garment; preserve material, silhouette and transparent collar/front opening; add visible seams, tears or armor damage.",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"outer"
+			]
+		},
+		"outer_03": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "outer_03",
+			"image": "images/58f31ba7131e92dc1ea6bfc1437dbb5bb769dec30ad935a0761bff6083796b1b.png",
+			"layer": 60.0,
+			"masks": [
+				"bust"
+			],
+			"name": "硬化皮甲",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				3.0,
+				-46.0
+			],
+			"rect": [
+				0.0,
+				0.0,
+				736.0,
+				709.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.69014
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/outer_03_leather.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Hardened dark umber stitched leather armor, no metal plate, transparent neck and front openings, no head or hands, H painterly fantasy",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"outer"
+			]
+		},
+		"outer_03_damaged": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "outer_03_damaged",
+			"image": "images/c46faf2dd15cf43af162694095604bcde6385ec4b25948628c5739e1b819516d.png",
+			"layer": 60.0,
+			"masks": [
+				"bust"
+			],
+			"name": "硬化皮甲（破损）",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				3.0,
+				-46.0
+			],
+			"rect": [
+				0.0,
+				0.0,
+				736.0,
+				712.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.69014
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/outer_03_damaged.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Independent damage edit of matching normal garment; preserve material, silhouette and transparent collar/front opening; add visible seams, tears or armor damage.",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"outer"
+			]
+		},
+		"outer_04": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "outer_04",
+			"image": "images/36b22338252707f54056b8a9bd35e8b5e15cb5c3a35ef405f0474f791b79d98f.png",
+			"layer": 60.0,
+			"masks": [
+				"bust"
+			],
+			"name": "钢鳞甲",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				3.0,
+				-46.0
+			],
+			"rect": [
+				0.0,
+				0.0,
+				632.0,
+				666.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.69014
+			],
+			"source": {
+				"image": "art/production/garment-openings-20260923/assets/outer_04.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Dull steel scale armor with bronze trim; isolated no-head no-hands half-bust, H painterly medieval fantasy, slight right angle, transparent",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"outer"
+			]
+		},
+		"outer_04_damaged": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "outer_04_damaged",
+			"image": "images/f69a368f234e41b53a92d15ca15528f9b49d8f3ba0987dfe27430328a3db1382.png",
+			"layer": 60.0,
+			"masks": [
+				"bust"
+			],
+			"name": "钢鳞甲（破损）",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				3.0,
+				-46.0
+			],
+			"rect": [
+				0.0,
+				0.0,
+				710.0,
+				736.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.69014
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/outer_04_damaged.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Independent damage edit of matching normal garment; preserve material, silhouette and transparent collar/front opening; add visible seams, tears or armor damage.",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"outer"
+			]
+		},
+		"padded": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "padded",
+			"image": "res://assets/art/static-bust/full-garments-nested.png",
+			"layer": 50.0,
+			"masks": [
+				"bust"
+			],
+			"name": "绗缝甲 · 完好",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				2.5,
+				-44.5
+			],
+			"rect": [
+				105.0,
+				644.0,
+				496.0,
+				557.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.41633
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/full-garments-nested.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"padded_01": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "padded_01",
+			"image": "images/8933c054ade50de4111255ab3d8177da9e5cc40429caaa5cf5150fdb80989a8b.png",
+			"layer": 50.0,
+			"masks": [
+				"bust"
+			],
+			"name": "赭黄绗缝衣",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				2.5,
+				-44.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				496.0,
+				557.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.41633
+			],
+			"source": {
+				"image": "game/assets/art/static-bust/full-garments-nested.png",
+				"origin": "approved current atlas",
+				"prompt": "",
+				"tool": "atlas crop"
+			},
+			"tags": [
+				"foundation-20260923",
+				"padded"
+			]
+		},
+		"padded_01_damaged": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "padded_01_damaged",
+			"image": "images/a1efedc9344581450f594f21f0c56dcc071e7440d89dba8df741a59399d49663.png",
+			"layer": 50.0,
+			"masks": [
+				"bust"
+			],
+			"name": "赭黄绗缝衣（破损）",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				2.5,
+				-44.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				496.0,
+				557.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.41633
+			],
+			"source": {
+				"image": "game/assets/art/static-bust/full-damaged-nested.png",
+				"origin": "approved current atlas",
+				"prompt": "",
+				"tool": "atlas crop"
+			},
+			"tags": [
+				"foundation-20260923",
+				"padded"
+			]
+		},
+		"padded_02": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "padded_02",
+			"image": "images/011757959821bd291d35380246019d4eb3dbb9813d1f7a39912d304890886081.png",
+			"layer": 50.0,
+			"masks": [
+				"bust"
+			],
+			"name": "苔绿竖纹绗缝衣",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				2.5,
+				-44.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				635.0,
+				709.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.41633
+			],
+			"source": {
+				"image": "art/production/garment-openings-20260923/assets/padded_02.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Moss-green vertically quilted padded gambeson; isolated no-head no-hands half-bust, H painterly medieval fantasy, slight right angle, transparent",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"padded"
+			]
+		},
+		"padded_02_damaged": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "padded_02_damaged",
+			"image": "images/dadb14e9d9959f227969cd25d5ff4d01c4d4da7050838ed780fad7ea24f863d9.png",
+			"layer": 50.0,
+			"masks": [
+				"bust"
+			],
+			"name": "苔绿竖纹绗缝衣（破损）",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				2.5,
+				-44.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				668.0,
+				736.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.41633
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/padded_02_damaged.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Independent damage edit of matching normal garment; preserve material, silhouette and transparent collar/front opening; add visible seams, tears or armor damage.",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"padded"
+			]
+		},
+		"padded_03": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "padded_03",
+			"image": "images/f350634d1aae6d809a08b7b76569e30890bcad68e54d87565fbbb03417c0c644.png",
+			"layer": 50.0,
+			"masks": [
+				"bust"
+			],
+			"name": "酒红V纹绗缝衣",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				2.5,
+				-44.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				666.0,
+				725.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.41633
+			],
+			"source": {
+				"image": "art/production/garment-openings-20260923/assets/padded_03.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Deep burgundy chevron quilted gambeson; isolated no-head no-hands half-bust, H painterly medieval fantasy, slight right angle, transparent",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"padded"
+			]
+		},
+		"padded_03_damaged": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "padded_03_damaged",
+			"image": "images/903d0fa3a9f7fe564b7a1ad7ac8a5f4463a07c2efaf9c760f0f270c20ca1a9e1.png",
+			"layer": 50.0,
+			"masks": [
+				"bust"
+			],
+			"name": "酒红V纹绗缝衣（破损）",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				2.5,
+				-44.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				672.0,
+				736.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.41633
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/padded_03_damaged.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Independent damage edit of matching normal garment; preserve material, silhouette and transparent collar/front opening; add visible seams, tears or armor damage.",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"padded"
+			]
+		},
+		"padded_04": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "padded_04",
+			"image": "images/3a47272edfe404f28949899b79c67aee30d64e17acd4da7ed054c209f6ab5995.png",
+			"layer": 50.0,
+			"masks": [
+				"bust"
+			],
+			"name": "灰蓝横纹绗缝衣",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				2.5,
+				-44.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				645.0,
+				722.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.41633
+			],
+			"source": {
+				"image": "art/production/garment-openings-20260923/assets/padded_04.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Slate blue-grey horizontally quilted padded gambeson; isolated no-head no-hands half-bust, H painterly medieval fantasy, slight right angle, transparent",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"padded"
+			]
+		},
+		"padded_04_damaged": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "padded_04_damaged",
+			"image": "images/47d8fe9a08de32e0cd55fae0c9784bf03b79ade3e6bfd60ec6891e36a26e839d.png",
+			"layer": 50.0,
+			"masks": [
+				"bust"
+			],
+			"name": "灰蓝横纹绗缝衣（破损）",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				2.5,
+				-44.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				651.0,
+				736.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.41633
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/padded_04_damaged.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Independent damage edit of matching normal garment; preserve material, silhouette and transparent collar/front opening; add visible seams, tears or armor damage.",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"padded"
+			]
+		},
+		"padded_damaged": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "padded_damaged",
+			"image": "res://assets/art/static-bust/full-damaged-nested.png",
+			"layer": 50.0,
+			"masks": [
+				"bust"
+			],
+			"name": "绗缝甲 · 破损",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				2.5,
+				-44.5
+			],
+			"rect": [
+				105.0,
+				644.0,
+				496.0,
+				557.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.41633
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/full-damaged-nested.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"scar": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "face_04",
+			"id": "scar",
+			"image": "res://assets/art/static-bust/modular-proof.png",
+			"layer": 80.0,
+			"masks": [],
+			"name": "脸部伤痕",
+			"parent": "face_04",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				1.6100001335144,
+				-14.2600021362305
+			],
+			"rect": [
+				210.0,
+				680.0,
+				150.0,
+				140.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				6.44,
+				6.01066636
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/modular-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"scar_01": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "face_01",
+			"id": "scar_01",
+			"image": "images/50939d3cf534bc55d18fad7ee3b8c7d8cbdb106a2ed1392b441f9db58ffbe693.png",
+			"layer": 80.0,
+			"masks": [],
+			"name": "脸部划伤",
+			"parent": "face_01",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				1.6100001335144,
+				-14.2600021362305
+			],
+			"rect": [
+				0.0,
+				0.0,
+				150.0,
+				140.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				6.44,
+				6.01066636
+			],
+			"source": {
+				"image": "game/assets/art/static-bust/modular-proof.png",
+				"origin": "approved current atlas",
+				"prompt": "",
+				"tool": "atlas crop"
+			},
+			"tags": [
+				"foundation-20260923",
+				"scar"
+			]
+		},
+		"scar_02": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "face_04",
+			"id": "scar_02",
+			"image": "images/f32ba9ca06700b5bd05d70e60b7ef5ad9de7f1ce09f8e033caf8b29ab53e2d2f.png",
+			"layer": 80.0,
+			"masks": [],
+			"name": "交叉旧疤",
+			"parent": "face_04",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				1.6100001335144,
+				-14.2600021362305
+			],
+			"rect": [
+				0.0,
+				0.0,
+				541.0,
+				736.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				6.44,
+				6.01066636
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/scar_02.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Two pale raised diagonal cuts crossing; isolated overlay, H painterly medieval fantasy, transparent alpha",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"scar"
+			]
+		},
+		"scar_03": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "face",
+			"id": "scar_03",
+			"image": "images/fd56f32739fc78d2eb067739e5f29fc8a676ecfab1457ae1461d9d7b4595fd06.png",
+			"layer": 80.0,
+			"masks": [],
+			"name": "锯齿长疤",
+			"parent": "face",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				1.6100001335144,
+				-14.2600021362305
+			],
+			"rect": [
+				0.0,
+				0.0,
+				688.0,
+				736.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				6.44,
+				6.01066636
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/scar_03.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Long jagged puckered purple scar; isolated overlay, H painterly medieval fantasy, transparent alpha",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"scar"
+			]
+		},
+		"scar_04": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "face_02",
+			"id": "scar_04",
+			"image": "images/28a1298a2b73d72d1751bc249458a30e74ae86b57178c66626c73c86184ba487.png",
+			"layer": 80.0,
+			"masks": [],
+			"name": "面颊灼疤",
+			"parent": "face_02",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				1.6100001335144,
+				-14.2600021362305
+			],
+			"rect": [
+				0.0,
+				0.0,
+				736.0,
+				728.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				6.44,
+				6.01066636
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/scar_04.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Irregular pale healed burn scar patch; isolated overlay, H painterly medieval fantasy, transparent alpha",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"scar"
+			]
+		},
+		"shield": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "shield",
+			"image": "res://assets/art/static-bust/weapons.png",
+			"layer": 120.0,
+			"masks": [],
+			"name": "盾",
+			"parent": "",
+			"pivot": [
+				0.5,
+				1.0
+			],
+			"position": [
+				22.25,
+				-1.75
+			],
+			"rect": [
+				81.0,
+				737.0,
+				305.0,
+				455.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				32.0,
+				47.7377
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/weapons.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"shield_01": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "shield_01",
+			"image": "images/60a46113b15b47a1388a77cdbadadf8a641092be88656316ec66fa3e08301dfd.png",
+			"layer": 120.0,
+			"masks": [],
+			"name": "红白鸢盾",
+			"parent": "",
+			"pivot": [
+				0.5,
+				1.0
+			],
+			"position": [
+				22.25,
+				-1.75
+			],
+			"rect": [
+				0.0,
+				0.0,
+				305.0,
+				455.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				32.0,
+				47.7377
+			],
+			"source": {
+				"image": "game/assets/art/static-bust/weapons.png",
+				"origin": "approved current atlas",
+				"prompt": "",
+				"tool": "atlas crop"
+			},
+			"tags": [
+				"foundation-20260923",
+				"shield"
+			]
+		},
+		"shield_02": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"flip_h": true,
+			"id": "shield_02",
+			"image": "images/7fb1aeaf24a7d073d803b6a4f7b3ce81f361d79873796b4a7404034156c611f2.png",
+			"layer": 120.0,
+			"masks": [],
+			"name": "蓝日圆盾",
+			"parent": "",
+			"pivot": [
+				0.5,
+				1.0
+			],
+			"position": [
+				22.25,
+				-1.75
+			],
+			"rect": [
+				0.0,
+				0.0,
+				666.0,
+				736.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				32.0,
+				47.7377
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/shield_02.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Weathered oak round shield with blue sunray paint; isolated overlay, H painterly medieval fantasy, transparent alpha",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"shield"
+			]
+		},
+		"shield_03": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"flip_h": true,
+			"id": "shield_03",
+			"image": "images/b4b3ad5e7c1bc680d4530cd3e2aa55ceeccc3b44f0efda88de5f2384069a48b7.png",
+			"layer": 120.0,
+			"masks": [],
+			"name": "黑白纹盾",
+			"parent": "",
+			"pivot": [
+				0.5,
+				1.0
+			],
+			"position": [
+				22.25,
+				-1.75
+			],
+			"rect": [
+				0.0,
+				0.0,
+				457.0,
+				736.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				32.0,
+				47.7377
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/shield_03.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Narrow heater shield with cream and black quartering; isolated overlay, H painterly medieval fantasy, transparent alpha",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"shield"
+			]
+		},
+		"shield_04": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "shield_04",
+			"image": "images/8c6736057550ee108249ee5a5b7ebc82fd3ebb9b731bf6c134a5e8cd888ecbaa.png",
+			"layer": 120.0,
+			"masks": [],
+			"name": "铁质圆盾",
+			"parent": "",
+			"pivot": [
+				0.5,
+				1.0
+			],
+			"position": [
+				22.25,
+				-1.75
+			],
+			"rect": [
+				0.0,
+				0.0,
+				624.0,
+				736.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				32.0,
+				47.7377
+			],
+			"source": {
+				"image": "art/production/foundation-20260923/sources/shield_04.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Compact blackened steel buckler with brass engraving; isolated overlay, H painterly medieval fantasy, transparent alpha",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"shield"
+			]
+		},
+		"skin": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "身体",
+			"clip_to": "",
+			"id": "skin",
+			"image": "res://assets/art/static-bust/body-mild-proof.png",
+			"layer": 10.0,
+			"masks": [
+				"bust"
+			],
+			"name": "身体 · 裸身",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				0.75,
+				-39.5
+			],
+			"rect": [
+				583.0,
+				301.0,
+				647.0,
+				353.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				52.0,
+				28.370943
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/body-mild-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"spear": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "spear",
+			"image": "res://assets/art/static-bust/weapons.png",
+			"layer": 140.0,
+			"masks": [],
+			"name": "长矛",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.7
+			],
+			"position": [
+				2.75,
+				-25.0
+			],
+			"rect": [
+				600.0,
+				42.0,
+				55.0,
+				630.0
+			],
+			"rotation": 64.984513367007,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				8.4,
+				96.21818
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/weapons.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"spear_01": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "spear_01",
+			"image": "images/a9ad5e49449c219b11a2a067d4c2b01f1db11a61694a73555315a08a593e6912.png",
+			"layer": 140.0,
+			"masks": [],
+			"name": "铁制长矛",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.7
+			],
+			"position": [
+				2.75,
+				-25.0
+			],
+			"rect": [
+				0.0,
+				0.0,
+				55.0,
+				630.0
+			],
+			"rotation": 64.984513367007,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				8.4,
+				96.21818
+			],
+			"source": {
+				"image": "game/assets/art/static-bust/weapons.png",
+				"origin": "approved current atlas",
+				"prompt": "",
+				"tool": "atlas crop"
+			},
+			"tags": [
+				"foundation-20260923",
+				"spear"
+			]
+		},
+		"spear_02": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "spear_02",
+			"image": "images/6fc687ed2b80f983b9c5e81d49c506ad0b4bb9a3f29ed0b9e6cee5e588203a24.png",
+			"layer": 140.0,
+			"masks": [],
+			"name": "钩刃长矛",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.7
+			],
+			"position": [
+				2.75,
+				-25.0
+			],
+			"rect": [
+				0.0,
+				0.0,
+				69.0,
+				736.0
+			],
+			"rotation": 64.984513367007,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				8.4,
+				96.21818
+			],
+			"source": {
+				"image": "art/production/weapons-20260923/spear_02.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Use case: precise-object-edit\nAsset type: isolated 2D medieval fantasy weapon sprite, spear_02, H static half-bust art.\nInput image 1 is the visual reference for upright direction, shaft position, scale and realistic painterly material. Create a genuinely different hook-blade long spear: narrow forward steel thrusting point at the top with one clearly readable side hook just below it, forged socket, long straight ash shaft, dark leather binding in lower grip area, plain iron butt cap. Keep hook practical and compact, not a fantasy crescent. Full weapon centered upright, point up, grip/butt down, same shaft axis as spear_01 for later anchor alignment. Worn iron, subtle warm wood oil/gouache brushwork, clean edge and true transparent PNG. No hand, body, clothing, armor, shield, second spear, loose parts, text, scenery, ground or baked matte. Hook changes silhouette, not a recolor.",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"spear"
+			]
+		},
+		"spear_03": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "spear_03",
+			"image": "images/bdf2923a20dd96be70d2ace89c53f94f3ee2574b49f199f1979ff2607940f497.png",
+			"layer": 140.0,
+			"masks": [],
+			"name": "叶刃长矛",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.7
+			],
+			"position": [
+				2.75,
+				-25.0
+			],
+			"rect": [
+				0.0,
+				0.0,
+				67.0,
+				736.0
+			],
+			"rotation": 64.984513367007,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				8.4,
+				96.21818
+			],
+			"source": {
+				"image": "art/production/weapons-20260923/spear_03.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Use case: precise-object-edit\nAsset type: isolated 2D medieval fantasy weapon sprite, spear_03, H static half-bust art.\nInput image 1 is a reference for upright orientation and brushwork. Create a distinct broad leaf-bladed infantry spear, with a long symmetric leaf-shaped double-edged steel head and pronounced central rib, head materially broader and longer than spear_01's slim diamond point. Socket joins a simple straight weathered dark ash shaft with restrained lower leather hand grip and iron butt. Complete single weapon on same central vertical axis, tip up, grip/butt down for matching paperdoll anchor; realistic painted oil/gouache iron/wood texture, clear contour at game size. Genuine alpha transparency. No hand, arm, human, banner, second weapon, text, glowing magic, background, ground, or cropped tip/butt. Different blade shape, not merely color.",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"spear"
+			]
+		},
+		"spear_04": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "spear_04",
+			"image": "images/f7334860fcd11d3bdf44775fb915d5cea90863bf28382a4606a856f6be1856b5.png",
+			"layer": 140.0,
+			"masks": [],
+			"name": "翼刃长矛",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.7
+			],
+			"position": [
+				2.75,
+				-25.0
+			],
+			"rect": [
+				0.0,
+				0.0,
+				95.0,
+				736.0
+			],
+			"rotation": 64.984513367007,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				8.4,
+				96.21818
+			],
+			"source": {
+				"image": "art/production/weapons-20260923/spear_04.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Use case: precise-object-edit\nAsset type: isolated 2D medieval fantasy weapon sprite, spear_04, H static half-bust art.\nInput image 1 guides the same upright spear direction, shaft/grip axis, and painterly iron-and-wood finish. Create a genuinely different winged boar spear: slender elongated central steel thrusting head with TWO short symmetrical horizontal lugs/wings directly below the socket, clearly visible but practical and not a giant trident, straight long dark ash shaft, leather lower grip and blunt iron butt cap. Full single spear centered; central point up, grip and butt down, same handle alignment as spear_01 for later attachment. Refined worn realistic oil/gouache hand paint, true alpha-transparent background, clean edges at small game size. No hands, human, armor, second spear, detached parts, banner, text, scenery, ground or opaque matte. Wings must alter silhouette.",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"spear"
+			]
+		},
+		"state_dead": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "状态",
+			"clip_to": "",
+			"id": "state_dead",
+			"image": "images/b68ee3b295273ad9b2397fb32ead5efa43dc4d543e5eddf8096e52a2de7047aa.png",
+			"layer": -10.0,
+			"masks": [],
+			"name": "确认死亡 · 暗血与终局阴影",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.7
+			],
+			"position": [
+				0.0,
+				0.0
+			],
+			"rect": [
+				0.0,
+				0.0,
+				1254.0,
+				1254.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				90.0,
+				90.0
+			],
+			"source": {
+				"image": "state_dead.png",
+				"origin": "openai-generated",
+				"prompt_record": "prompts.md",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"terminal",
+				"confirmed-dead"
+			]
+		},
+		"state_down": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "状态",
+			"clip_to": "",
+			"id": "state_down",
+			"image": "images/18d62d90471e84b2f220e469101c90e7699e7ca620a455d2a2b475ea363c7b7a.png",
+			"layer": -10.0,
+			"masks": [],
+			"name": "倒地 · 接触阴影与尘擦",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.7
+			],
+			"position": [
+				0.0,
+				0.0
+			],
+			"rect": [
+				0.0,
+				0.0,
+				1254.0,
+				1254.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				90.0,
+				90.0
+			],
+			"source": {
+				"image": "state_down.png",
+				"origin": "openai-generated",
+				"prompt_record": "prompts.md",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"terminal",
+				"downed",
+				"may-survive"
+			]
+		},
+		"sword": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "sword",
+			"image": "res://assets/art/static-bust/weapons.png",
+			"layer": 130.0,
+			"masks": [],
+			"name": "剑",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.82
+			],
+			"position": [
+				2.0,
+				-14.5
+			],
+			"rect": [
+				141.0,
+				75.0,
+				185.0,
+				596.0
+			],
+			"rotation": 35.523383298111,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				22.5,
+				72.48649
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/weapons.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"sword_01": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "sword_01",
+			"image": "images/e54634c92e21b324a2b998c1fc2c9342de8456fe37d7fbd57838a47909424993.png",
+			"layer": 130.0,
+			"masks": [],
+			"name": "铁制长剑",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.82
+			],
+			"position": [
+				2.0,
+				-14.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				185.0,
+				596.0
+			],
+			"rotation": 35.523383298111,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				22.5,
+				72.48649
+			],
+			"source": {
+				"image": "game/assets/art/static-bust/weapons.png",
+				"origin": "approved current atlas",
+				"prompt": "",
+				"tool": "atlas crop"
+			},
+			"tags": [
+				"foundation-20260923",
+				"sword"
+			]
+		},
+		"sword_02": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "sword_02",
+			"image": "images/db49b6d873fd5450f39102fcc72cd3686e446df02d0585b58bb89bb2fc75cfcf.png",
+			"layer": 130.0,
+			"masks": [],
+			"name": "重刃砍刀",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.82
+			],
+			"position": [
+				2.0,
+				-14.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				181.0,
+				736.0
+			],
+			"rotation": 35.523383298111,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				22.5,
+				72.48649
+			],
+			"source": {
+				"image": "art/production/weapons-20260923/sword_02.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Use case: precise-object-edit\nAsset type: isolated 2D medieval fantasy weapon sprite, sword_02, for H static half-bust character art.\nInput image 1 is a reference for brushwork, scale, lighting, and vertical presentation, not a finished blade to recolor. Generate a genuinely different single-edged heavy falchion: broad forward-weighted slightly curving steel blade with a clipped point, thick dark spine, a simple short iron crossguard, dark leather one-hand grip, and modest round pommel. Blade tip straight up, grip down, complete silhouette centered vertically, consistent with sword_01's orientation and handle location for later paperdoll anchoring. Refined realistic hand-painted oil/gouache texture, weathered iron and wood/leather, restrained warm highlight. True transparent PNG, no ground or backdrop. No hand, arm, person, sheath, text, emblem, duplicate weapon, excessive ornament, or broad artificial glow. Distinct blade geometry, not merely color change.",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"sword"
+			]
+		},
+		"sword_03": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "sword_03",
+			"image": "images/890961141f380f0660a1e56827acacaac9f80772b561aad749a2d723d3ed92c2.png",
+			"layer": 130.0,
+			"masks": [],
+			"name": "宽刃短剑",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.82
+			],
+			"position": [
+				2.0,
+				-14.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				253.0,
+				736.0
+			],
+			"rotation": 35.523383298111,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				22.5,
+				72.48649
+			],
+			"source": {
+				"image": "art/production/weapons-20260923/sword_03.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Use case: precise-object-edit\nAsset type: isolated 2D medieval fantasy weapon sprite, sword_03, H static half-bust art.\nInput image 1 is a visual reference for the realistic hand-painted oil/gouache material, vertical direction, and handle placement. Make a distinct compact short arming sword with a noticeably shorter, wider triangular double-edged blade, broad base rapidly tapering to a stout acute point, straight narrow utilitarian crossguard, faceted dark wood grip, and small plain disk pommel. Steel is worn and bright at edges. Blade tip up, grip down, same upright orientation as sword_01, centered full weapon with ample transparent margin. True transparent PNG. No hand, arm, person, scabbard, second weapon, floating parts, insignia, text, ground, glow or background. Difference must be silhouette and proportions, not only color.",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"sword"
+			]
+		},
+		"sword_04": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "sword_04",
+			"image": "images/75e6ae7d3d03abc5550e5bf93bc91422c6ea6d83eeb021b2e286a4fe3a81a890.png",
+			"layer": 130.0,
+			"masks": [],
+			"name": "骑兵弯刃",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.82
+			],
+			"position": [
+				2.0,
+				-14.5
+			],
+			"rect": [
+				0.0,
+				0.0,
+				171.0,
+				736.0
+			],
+			"rotation": 35.523383298111,
+			"scale": [
+				0.990000000005239,
+				1.0
+			],
+			"size": [
+				22.5,
+				72.48649
+			],
+			"source": {
+				"image": "art/production/weapons-20260923/sword_04.png",
+				"origin": "OpenAI built-in image_gen",
+				"prompt": "Use case: precise-object-edit\nAsset type: isolated 2D medieval fantasy weapon sprite, sword_04, H static half-bust art.\nInput image 1 is the style and vertical grip reference. Create a genuinely distinct one-handed curved cavalry saber: long narrow single-edged blade swept gently to the viewer's right toward the tip, sharpened outer edge, modest hooked knuckle guard and short forward quillon, simple dark leather grip and flattened pommel. Keep blade tip at top, handle at bottom and the grip position comparable to sword_01 for later anchoring. Restrained worn steel, warm iron and leather, detailed realistic hand-painted oil/gouache marks, clean readable contour at game size. Single complete weapon on genuine alpha transparency. No hand, arm, figure, sheath, second blade, extravagant ornament, text, background, ground or black matte. Distinct curved geometry, not recolored original.",
+				"tool": "built-in image_gen"
+			},
+			"tags": [
+				"foundation-20260923",
+				"sword"
+			]
+		},
+		"wounded": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "wounded",
+			"image": "res://assets/art/static-bust/body-mild-proof.png",
+			"layer": 70.0,
+			"masks": [],
+			"name": "整头 · 受伤",
+			"parent": "",
+			"pivot": [
+				0.5,
+				1.0
+			],
+			"position": [
+				0.25,
+				-32.5
+			],
+			"rect": [
+				627.0,
+				627.0,
+				535.0,
+				535.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				33.8376,
+				33.8376
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/body-mild-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		}
+	},
+	"baseline": {
+		"arrow": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "arrow",
+			"image": "res://assets/art/static-bust/weapons.png",
+			"layer": 150.0,
+			"masks": [],
+			"name": "箭矢",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				0.0,
+				0.0
+			],
+			"rect": [
+				591.0,
+				730.0,
+				75.0,
+				460.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				4.0,
+				24.53333
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/weapons.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"bandage": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "bandage",
+			"image": "res://assets/art/static-bust/modular-proof.png",
+			"layer": 110.0,
+			"masks": [],
+			"name": "头部绷带",
+			"parent": "face",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				-1.8400000333786,
+				-27.5999984741211
+			],
+			"rect": [
+				510.0,
+				630.0,
+				510.0,
+				288.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				34.96,
+				19.74211808
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/modular-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"base": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "参照",
+			"clip_to": "",
+			"id": "base",
+			"image": "res://assets/art/static-bust/body-mild-proof.png",
+			"layer": 0.0,
+			"masks": [],
+			"name": "底座",
+			"parent": "",
+			"pivot": [
+				0.5,
+				1.0
+			],
+			"position": [
+				0.0,
+				0.0
+			],
+			"rect": [
+				18.0,
+				919.0,
+				609.0,
+				259.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				64.0,
+				27.21921
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/body-mild-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"beard": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "beard",
+			"image": "res://assets/art/static-bust/modular-proof.png",
+			"layer": 90.0,
+			"masks": [],
+			"name": "胡须",
+			"parent": "face",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				3.68000030517578,
+				-17.4799995422363
+			],
+			"rect": [
+				1150.0,
+				303.0,
+				350.0,
+				280.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				23.46,
+				18.768
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/modular-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"blood": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "身体",
+			"clip_to": "skin",
+			"id": "blood",
+			"image": "res://assets/art/static-bust/modular-proof.png",
+			"layer": 20.0,
+			"masks": [
+				"bust"
+			],
+			"name": "皮肤血迹",
+			"parent": "skin",
+			"pivot": [
+				0.5,
+				0.5
+			],
+			"position": [
+				11.5,
+				17.5
+			],
+			"rect": [
+				1130.0,
+				680.0,
+				305.0,
+				280.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				17.0,
+				15.606557
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/modular-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"body": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "身体",
+			"clip_to": "",
+			"id": "body",
+			"image": "res://assets/art/static-bust/full-garments.png",
+			"layer": 30.0,
+			"masks": [
+				"bust"
+			],
+			"name": "基础内衣",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				2.25,
+				-42.25
+			],
+			"rect": [
+				110.0,
+				78.0,
+				470.0,
+				546.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				71.0,
+				82.48085
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/full-garments.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"bow": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "bow",
+			"image": "res://assets/art/static-bust/weapons.png",
+			"layer": 150.0,
+			"masks": [],
+			"name": "弓",
+			"parent": "",
+			"pivot": [
+				0.8,
+				0.51
+			],
+			"position": [
+				6.75,
+				-21.75
+			],
+			"rect": [
+				990.0,
+				87.0,
+				134.0,
+				580.0
+			],
+			"rotation": 58.0788802939694,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				17.5,
+				75.74627
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/weapons.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"face": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "face",
+			"image": "res://assets/art/static-bust/modular-proof.png",
+			"layer": 70.0,
+			"masks": [],
+			"name": "净面头",
+			"parent": "",
+			"pivot": [
+				0.5,
+				1.0
+			],
+			"position": [
+				0.25,
+				-32.5
+			],
+			"rect": [
+				50.0,
+				80.0,
+				415.0,
+				480.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				28.52,
+				32.98698824
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/modular-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"hair": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "hair",
+			"image": "res://assets/art/static-bust/modular-proof.png",
+			"layer": 100.0,
+			"masks": [],
+			"name": "发型",
+			"parent": "face",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				-2.75999999046326,
+				-35.4199981689453
+			],
+			"rect": [
+				497.0,
+				54.0,
+				515.0,
+				490.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				35.88,
+				34.13825232
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/modular-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"head": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "head",
+			"image": "res://assets/art/static-bust/body-mild-proof.png",
+			"layer": 70.0,
+			"masks": [],
+			"name": "整头 · 完好",
+			"parent": "",
+			"pivot": [
+				0.5,
+				1.0
+			],
+			"position": [
+				0.25,
+				-32.5
+			],
+			"rect": [
+				75.0,
+				44.0,
+				548.0,
+				548.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				33.8376,
+				33.8376
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/body-mild-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"impact": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "身体",
+			"clip_to": "",
+			"id": "impact",
+			"image": "res://assets/art/static-bust/weapons.png",
+			"layer": 0.0,
+			"masks": [],
+			"name": "impact",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.5
+			],
+			"position": [
+				0.0,
+				0.0
+			],
+			"rect": [
+				883.0,
+				812.0,
+				313.0,
+				297.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				20.0,
+				18.97764
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/weapons.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"linen": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "linen",
+			"image": "res://assets/art/static-bust/full-garments-nested.png",
+			"layer": 40.0,
+			"masks": [
+				"bust"
+			],
+			"name": "亚麻内衬",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				1.5,
+				-42.5
+			],
+			"rect": [
+				726.0,
+				78.0,
+				478.0,
+				546.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				72.0,
+				82.24268
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/full-garments-nested.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"mail": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "mail",
+			"image": "res://assets/art/static-bust/full-garments-nested.png",
+			"layer": 60.0,
+			"masks": [
+				"bust"
+			],
+			"name": "链甲 · 完好",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				3.0,
+				-46.0
+			],
+			"rect": [
+				731.0,
+				644.0,
+				497.0,
+				560.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.69014
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/full-garments-nested.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"mail_damaged": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "mail_damaged",
+			"image": "res://assets/art/static-bust/full-damaged-nested.png",
+			"layer": 60.0,
+			"masks": [
+				"bust"
+			],
+			"name": "链甲 · 破损",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				3.0,
+				-46.0
+			],
+			"rect": [
+				731.0,
+				644.0,
+				497.0,
+				560.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.69014
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/full-damaged-nested.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"padded": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "padded",
+			"image": "res://assets/art/static-bust/full-garments-nested.png",
+			"layer": 50.0,
+			"masks": [
+				"bust"
+			],
+			"name": "绗缝甲 · 完好",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				2.5,
+				-44.5
+			],
+			"rect": [
+				105.0,
+				644.0,
+				496.0,
+				557.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.41633
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/full-garments-nested.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"padded_damaged": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "padded_damaged",
+			"image": "res://assets/art/static-bust/full-damaged-nested.png",
+			"layer": 50.0,
+			"masks": [
+				"bust"
+			],
+			"name": "绗缝甲 · 破损",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				2.5,
+				-44.5
+			],
+			"rect": [
+				105.0,
+				644.0,
+				496.0,
+				557.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.41633
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/full-damaged-nested.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"scar": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "face",
+			"id": "scar",
+			"image": "res://assets/art/static-bust/modular-proof.png",
+			"layer": 80.0,
+			"masks": [],
+			"name": "脸部伤痕",
+			"parent": "face",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				1.6100001335144,
+				-14.2600021362305
+			],
+			"rect": [
+				210.0,
+				680.0,
+				150.0,
+				140.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				6.44,
+				6.01066636
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/modular-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"shield": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "shield",
+			"image": "res://assets/art/static-bust/weapons.png",
+			"layer": 120.0,
+			"masks": [],
+			"name": "盾",
+			"parent": "",
+			"pivot": [
+				0.5,
+				1.0
+			],
+			"position": [
+				22.25,
+				-1.75
+			],
+			"rect": [
+				81.0,
+				737.0,
+				305.0,
+				455.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				32.0,
+				47.7377
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/weapons.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"skin": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "身体",
+			"clip_to": "",
+			"id": "skin",
+			"image": "res://assets/art/static-bust/body-mild-proof.png",
+			"layer": 10.0,
+			"masks": [
+				"bust"
+			],
+			"name": "身体 · 裸身",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				0.75,
+				-39.5
+			],
+			"rect": [
+				583.0,
+				301.0,
+				647.0,
+				353.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				52.0,
+				28.370943
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/body-mild-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"spear": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "spear",
+			"image": "res://assets/art/static-bust/weapons.png",
+			"layer": 140.0,
+			"masks": [],
+			"name": "长矛",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.7
+			],
+			"position": [
+				2.75,
+				-25.0
+			],
+			"rect": [
+				600.0,
+				42.0,
+				55.0,
+				630.0
+			],
+			"rotation": 64.984513367007,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				8.4,
+				96.21818
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/weapons.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"sword": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "sword",
+			"image": "res://assets/art/static-bust/weapons.png",
+			"layer": 130.0,
+			"masks": [],
+			"name": "剑",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.82
+			],
+			"position": [
+				2.0,
+				-14.5
+			],
+			"rect": [
+				141.0,
+				75.0,
+				185.0,
+				596.0
+			],
+			"rotation": 35.523383298111,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				22.5,
+				72.48649
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/weapons.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"wounded": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "wounded",
+			"image": "res://assets/art/static-bust/body-mild-proof.png",
+			"layer": 70.0,
+			"masks": [],
+			"name": "整头 · 受伤",
+			"parent": "",
+			"pivot": [
+				0.5,
+				1.0
+			],
+			"position": [
+				0.25,
+				-32.5
+			],
+			"rect": [
+				627.0,
+				627.0,
+				535.0,
+				535.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				33.8376,
+				33.8376
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/body-mild-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		}
+	},
+	"editor": {
+		"hidden": [],
+		"locked": [],
+		"review": {
+			"bandage": {
+				"flagged": false,
+				"handled": true
+			},
+			"base": {
+				"flagged": false,
+				"handled": true
+			},
+			"beard": {
+				"flagged": false,
+				"handled": true
+			},
+			"blood": {
+				"flagged": false,
+				"handled": true
+			},
+			"body": {
+				"flagged": false,
+				"handled": true
+			},
+			"face": {
+				"flagged": false,
+				"handled": true
+			},
+			"hair": {
+				"flagged": false,
+				"handled": true
+			},
+			"linen": {
+				"flagged": false,
+				"handled": true
+			},
+			"mail": {
+				"flagged": false,
+				"handled": true
+			},
+			"padded": {
+				"flagged": false,
+				"handled": true
+			},
+			"scar": {
+				"flagged": false,
+				"handled": true
+			},
+			"shield": {
+				"flagged": false,
+				"handled": true
+			},
+			"skin": {
+				"flagged": false,
+				"handled": true
+			},
+			"sword": {
+				"flagged": false,
+				"handled": true
+			}
+		},
+		"scene": [
+			"base",
+			"body_01",
+			"blood_02",
+			"body",
+			"linen_03",
+			"padded_02",
+			"outer_03",
+			"face_04",
+			"scar",
+			"beard_03",
+			"hair_04",
+			"bandage_02",
+			"shield",
+			"sword_04"
+		],
+		"view": {
+			"adaptation": "",
+			"grid": true,
+			"pan": [
+				-32.0459518432617,
+				-142.153274536133
+			],
+			"zoom": 5.5923309625943
+		}
+	},
+	"game": {
+		"appearance": {
+			"bandage": true,
+			"beard": true,
+			"blood": true,
+			"hair": true,
+			"head": "modular",
+			"scar": true,
+			"skin": true
+		},
+		"foundation": {
+			"complete": true,
+			"pending": [],
+			"ready": 60.0
+		},
+		"placement": [
+			0.0,
+			24.8999996185303
+		],
+		"terminal": {
+			"dead": {
+				"offset": [
+					-15.0,
+					-3.0
+				],
+				"rotation": 86.0,
+				"scale": [
+					0.8,
+					0.55
+				]
+			},
+			"incapacitated": {
+				"offset": [
+					-15.0,
+					-3.0
+				],
+				"rotation": 72.0,
+				"scale": [
+					0.8,
+					0.55
+				]
+			}
+		}
+	},
+	"kind": "asset-workbench",
+	"masks": {
+		"bust": {
+			"center": [
+				0.0,
+				-17.25
+			],
+			"radius": [
+				30.25,
+				7.25
+			],
+			"top": -120.0,
+			"type": "bust"
+		}
+	},
+	"schema": 5.0
+}

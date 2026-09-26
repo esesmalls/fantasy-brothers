@@ -3,6 +3,7 @@ extends Control
 
 const CharacterPortrait = preload("res://presentation/character_portrait.gd")
 const ModularActor = preload("res://presentation/modular_actor.gd")
+const WeaponFeedback = preload("res://presentation/weapon_feedback.gd")
 
 signal cell_clicked(q: int, r: int)
 signal cell_hovered(q: int, r: int)
@@ -46,6 +47,14 @@ var _display_units: Dictionary = {}
 var _pending_impacts: Array = []
 var _motion_template := "b"
 var _motion_review_actor := "crew_1"
+var _weapon_feedback := WeaponFeedback.new()
+var _audio_queue: Array = []
+var _audio_result: Dictionary = {}
+var _ambient_animated := false
+var _ambient_elapsed := 0.0
+
+func _init() -> void:
+	add_child(_weapon_feedback)
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -66,6 +75,9 @@ func set_battle(state: Dictionary) -> void:
 		_old_positions[str(unit.get("id", ""))] = _hex_center(int(unit.get("q", 0)), int(unit.get("r", 0)))
 		_before_units[str(unit.get("id", ""))] = unit.duplicate(true)
 	_battle = state.duplicate(true)
+	_ambient_animated = false
+	for cell: Dictionary in _battle.get("cells", {}).values():
+		if cell.get("field", "") in ["fire", "steam"]: _ambient_animated = true; break
 	queue_redraw()
 
 func set_selected(unit_id: String) -> void:
@@ -112,6 +124,11 @@ func has_pending_animation() -> bool:
 
 func skip_animations() -> void:
 	# Flush the view to the already-settled snapshot. Never call a rules method here.
+	_weapon_feedback.stop_process_sounds()
+	if not _audio_result.is_empty():
+		_weapon_feedback.skip_to_result(str(_audio_result.weapon), str(_audio_result.outcome), str(_audio_result.material))
+	_audio_result.clear()
+	_audio_queue.clear()
 	_event_queue.clear()
 	_pending_impacts.clear()
 	_motions.clear()
@@ -127,6 +144,7 @@ func get_motion_pose(unit_id: String) -> Dictionary:
 	var action := "idle"
 	var progress := 0.0
 	var direction := Vector2.RIGHT
+	var outcome := "hit"
 	var visible: Dictionary = _display_units.get(unit_id, unit)
 	if int(visible.get("hp", 1)) <= 0:
 		action = "death"
@@ -139,7 +157,11 @@ func get_motion_pose(unit_id: String) -> Dictionary:
 		action = str(motion.get("action", motion.get("kind", "idle")))
 		progress = clampf(float(motion.time) / float(motion.duration), 0.0, 1.0)
 		direction = motion.get("direction", Vector2.RIGHT)
-	return {"template": _motion_template, "action": action, "progress": progress, "direction": direction, "clock": _clock}
+		outcome = str(motion.get("outcome", "hit"))
+	var pose := {"template": _motion_template, "action": action, "progress": progress, "direction": direction, "clock": _clock, "outcome": outcome}
+	if _motions.has(unit_id) and _motions[unit_id].has("target_position"):
+		pose.target_position = _motions[unit_id].target_position
+	return pose
 
 static func motion_duration(template_id: String, action: String) -> float:
 	var timings := {"a": [0.42, 0.40], "b": [0.68, 0.60], "c": [0.92, 0.78]}
@@ -161,6 +183,9 @@ func _action_for_event(event: Dictionary) -> String:
 	return "attack" # Reactive strikes share another actor's root action.
 
 func play_events(events: Array, speed: float = 1.0) -> void:
+	if speed <= 0.001 or _animation_speed <= 0.001:
+		var result := _audio_from_events(events)
+		if not result.is_empty(): _audio_result = result
 	if speed <= 0.001:
 		skip_animations()
 		return
@@ -169,6 +194,7 @@ func play_events(events: Array, speed: float = 1.0) -> void:
 	if not is_equal_approx(speed, 1.0):
 		set_animation_speed(speed)
 	if _animation_speed <= 0.001:
+		skip_animations()
 		return
 	var attack: Dictionary = {}
 	for item in events:
@@ -176,11 +202,11 @@ func play_events(events: Array, speed: float = 1.0) -> void:
 			continue
 		var event: Dictionary = item.duplicate(true)
 		var target := str(event.get("target", ""))
-		if str(event.get("type", "")) in ["hit", "death"] and not _unit_by_id(target).is_empty():
+		if str(event.get("type", "")) in ["hit", "death", "incapacitated"] and not _unit_by_id(target).is_empty():
 			event["_after_unit"] = _unit_by_id(target).duplicate(true)
 			if not _display_units.has(target) and _before_units.has(target):
 				_display_units[target] = _before_units[target].duplicate(true)
-		if not attack.is_empty() and str(event.get("type", "")) in ["hit", "miss", "death", "status"] and int(event.get("root_action", -1)) == int(attack.get("root_action", -2)) and str(event.get("actor", "")) == str(attack.get("actor", "")):
+		if not attack.is_empty() and str(event.get("type", "")) in ["hit", "miss", "death", "incapacitated", "status"] and int(event.get("root_action", -1)) == int(attack.get("root_action", -2)) and str(event.get("actor", "")) == str(attack.get("actor", "")):
 			attack._feedback.append(event)
 			continue
 		attack = {}
@@ -195,8 +221,17 @@ func play_events(events: Array, speed: float = 1.0) -> void:
 	queue_redraw()
 
 func _process(delta: float) -> void:
+	var was_animating := has_pending_animation()
 	_clock += delta
+	_ambient_elapsed += delta
 	var elapsed: float = delta * maxf(_animation_speed, 0.01)
+	for index in range(_audio_queue.size() - 1, -1, -1):
+		_audio_queue[index].remaining -= elapsed
+		if float(_audio_queue[index].remaining) <= 0:
+			var cue: Dictionary = _audio_queue[index]
+			_audio_queue.remove_at(index)
+			_weapon_feedback.play_cue(str(cue.weapon), str(cue.phase), str(cue.outcome), str(cue.material), _animation_speed)
+			if cue.phase == "contact": _audio_result.clear()
 	_event_remaining -= elapsed
 	if _event_remaining <= 0.0 and not _event_queue.is_empty():
 		_begin_event(_event_queue.pop_front())
@@ -223,7 +258,10 @@ func _process(delta: float) -> void:
 				collection.remove_at(index)
 	if not has_pending_animation():
 		_display_units.clear()
-	queue_redraw()
+	# Static board/units do not require rebuilding polygons at the monitor rate.
+	if was_animating or has_pending_animation() or (_ambient_animated and _ambient_elapsed >= 0.05):
+		_ambient_elapsed = 0.0
+		queue_redraw()
 
 func _begin_event(event: Dictionary) -> void:
 	var kind: String = str(event.get("type", ""))
@@ -244,8 +282,20 @@ func _begin_event(event: Dictionary) -> void:
 			var reach: Vector2 = origin.direction_to(point) * 12.0
 			var action := "shield_bash" if str(event.get("_action", "")) == "shield_bash" else "slash"
 			var duration := motion_duration(_motion_template, action)
+			var authored: Dictionary = ModularActor.AssetRuntime.action_for_unit(unit, action) if ModularActor.supports(unit) or unit.has("visual_assets") else {}
+			var contact := duration * motion_contact(_motion_template)
+			if not authored.is_empty():
+				duration = float(authored.duration)
+				contact = duration * 0.42
+				for marker: Dictionary in authored.get("events", []):
+					if marker.id == "contact": contact = float(marker.time)
 			_motions[actor] = {"from": origin, "to": origin + reach, "time": 0.0, "duration": duration, "kind": "attack", "action": action, "direction": origin.direction_to(point)}
-			_pending_impacts.append({"remaining": duration * motion_contact(_motion_template), "events": event.get("_feedback", [])})
+			var victim: Dictionary = _before_units.get(target, _unit_by_id(target))
+			_motions[actor].target_position = point + ModularActor.AssetRuntime.impact_offset(victim)
+			for feedback: Dictionary in event.get("_feedback", []):
+				if feedback.get("type", "") == "miss": _motions[actor].outcome = str(feedback.get("outcome", "miss"))
+			_pending_impacts.append({"remaining": contact, "events": event.get("_feedback", [])})
+			_queue_weapon_audio(event, unit, authored, duration, contact)
 			_event_remaining = duration
 	else:
 		_show_feedback(event)
@@ -261,20 +311,57 @@ func _show_feedback(event: Dictionary) -> void:
 		_float_text(point, "−%s" % str(event.get("amount", "")), Color("f2ae85"))
 		_feedback_motion(target, "hit", point)
 	elif kind == "miss":
-		_float_text(point, "闪避", IVORY)
-	elif kind == "death":
+		var blocked: bool = event.get("outcome", "") == "block"
+		_float_text(point, "格挡" if blocked else "闪避", IVORY)
+		if blocked: _feedback_motion(target, "defend", point)
+	elif kind in ["death", "incapacitated"]:
 		_float_text(point, "倒下", Color("c9826d"))
 		_feedback_motion(target, "death", point)
 	elif kind == "fire" or kind == "water":
 		var color: Color = Color("e79b52") if kind == "fire" else Color("8fcbcc")
 		_rings.append({"point": point, "color": color, "time": 0.0, "duration": 0.55})
-	elif kind == "status":
+	elif kind in ["status", "morale", "escape", "recover"]:
 		var message: String = str(event.get("text", "状态变化"))
 		if message.length() > 10:
 			message = message.substr(0, 10) + "…"
 		_float_text(point, message, Color("d8c583"))
 		if _unit_by_id(target).get("statuses", {}).has("defending"):
 			_feedback_motion(target, "defend", point)
+
+func _audio_from_events(events: Array) -> Dictionary:
+	var result := {}
+	for event: Dictionary in events:
+		if event.get("type", "") == "attack":
+			var unit := _unit_by_id(str(event.get("actor", "")))
+			if unit.is_empty() or unit.get("kind", "") == "dog": continue
+			result = {"weapon": "shield_bash" if _action_for_event(event) == "shield_bash" else str(unit.get("visual_loadout", {}).get("weapon", "")), "outcome": "hit", "material": "flesh"}
+		elif not result.is_empty() and event.get("type", "") == "miss": result.outcome = str(event.get("outcome", "miss"))
+		elif not result.is_empty() and event.get("type", "") == "hit":
+			result.material = "armor" if int(event.get("armor_damage", 0)) > 0 else "flesh"
+	return result
+
+func _queue_weapon_audio(event: Dictionary, unit: Dictionary, action: Dictionary, duration: float, contact: float) -> void:
+	if unit.get("kind", "") == "dog": return
+	var events: Array = [event]
+	events.append_array(event.get("_feedback", []))
+	var result := _audio_from_events(events)
+	if result.is_empty(): return
+	_audio_result = result.duplicate(true)
+	var template := WeaponFeedback.action_template(str(result.weapon))
+	var release := duration * float(template.release)
+	for marker: Dictionary in action.get("events", []):
+		if marker.id == "release": release = float(marker.time)
+	for phase: String in ["prepare", "release", "contact", "recover"]:
+		var cue := result.duplicate(true)
+		cue.phase = phase
+		cue.remaining = contact if phase == "contact" else (release if phase == "release" else duration * float(template[phase]))
+		_audio_queue.append(cue)
+	if WeaponFeedback.weapon_type(str(result.weapon)) == "bow":
+		for phase: String in ["aim", "flight"]:
+			var cue := result.duplicate(true)
+			cue.phase = phase
+			cue.remaining = release * 0.35 if phase == "aim" else lerpf(release, contact, 0.3)
+			_audio_queue.append(cue)
 
 func _feedback_motion(target: String, action: String, point: Vector2) -> void:
 	if _unit_by_id(target).is_empty():
@@ -524,6 +611,9 @@ func _draw_cell(q: int, r: int) -> void:
 	var cells: Dictionary = _battle.get("cells", {})
 	var cell: Dictionary = cells.get("%d,%d" % [q, r], {})
 	var color := Color("34413a") if (q + r) % 2 == 0 else Color("303d36")
+	if cell.get("terrain", "flat") == "mud": color = Color("554638")
+	elif cell.get("terrain", "flat") == "rubble": color = Color("555950")
+	if int(cell.get("elevation", 0)) > 0: color = color.lightened(0.14)
 	if bool(cell.get("blocked", false)):
 		color = Color("30312c")
 	var surface: String = str(cell.get("surface", "dry"))
@@ -535,6 +625,12 @@ func _draw_cell(q: int, r: int) -> void:
 	draw_colored_polygon(polygon, color)
 	polygon.append(polygon[0])
 	draw_polyline(polygon, Color("718067", 0.44), 0.85, true)
+	if _battle.get("objective", {}).get("kind", "") == "evacuation" and q == int(_battle.get("width", 9)) - 1:
+		draw_polyline(polygon, Color("84c9ac"), 2.5, true)
+		_text("撤出 →", point + Vector2(-22, 15), 10, Color("a3ddc1"))
+	if int(cell.get("elevation", 0)) > 0:
+		draw_polyline(PackedVector2Array([point + Vector2(-28, 18), point + Vector2(0, 34), point + Vector2(28, 18)]), Color("a5a889"), 2.5, true)
+		_text("↑1", point + Vector2(-11, 25), 10, Color("d0ceb4"))
 	if surface == "oil":
 		_ellipse(point, Vector2(22, 13), Color("171e20"))
 		draw_arc(point + Vector2(-2, 0), 14, 0.2, 2.7, 14, Color("8e794b"), 1.4, true)
@@ -676,6 +772,7 @@ func _draw_prop(prop: Dictionary) -> void:
 	draw_rect(Rect2(point + Vector2(-17, 12), Vector2(34 * ratio, 3)), Color("af9662"))
 
 func _draw_unit(unit: Dictionary) -> void:
+	if bool(unit.get("escaped", false)): return
 	var unit_id: String = str(unit.get("id", ""))
 	var visible: Dictionary = _display_units.get(unit_id, unit)
 	var point: Vector2 = _unit_display_point(visible)
@@ -685,7 +782,7 @@ func _draw_unit(unit: Dictionary) -> void:
 	if _flashes.has(unit_id):
 		point.x += sin(_clock * 95.0) * 2.5
 		accent = accent.lerp(IVORY, 0.45)
-	var modular: bool = (unit_id == _motion_review_actor or bool(visible.get("presentation_sample", false))) and ModularActor.supports(visible)
+	var modular: bool = ModularActor.supports(visible)
 	if int(visible.get("hp", 0)) <= 0:
 		if modular and ModularActor.draw_actor(self, visible, point, 1.0, get_motion_pose(unit_id)):
 			return

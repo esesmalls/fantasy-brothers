@@ -35,7 +35,7 @@ func run(workbench:Control,output:String) -> void:
 	await click(ui.undo_button.get_global_rect().get_center());check(ui.angle_field.value==0,"rotation undo button")
 	await click(ui.redo_button.get_global_rect().get_center());check(ui.angle_field.value==12,"rotation redo button")
 	ui.document.undo();ui.refresh()
-	ui.select_group("spear");var start:Vector2=ui.stage.global_position+ui.camera().origin+Vector2(-10,-15)*ui.camera().scale
+	ui.select_group("spear");var start:Vector2=ui.stage.global_position+ui.pointer_for("spear")
 	await move(start);await press(start,true);await move(start+Vector2(-25*ui.camera().scale,0),true);await press(start+Vector2(-25*ui.camera().scale,0),false)
 	check(is_equal_approx(ui.x_field.value,-45),"pointer moves beyond former -20 limit")
 	await key(KEY_Z,true);check(is_equal_approx(ui.x_field.value,-20),"one drag is one undo")

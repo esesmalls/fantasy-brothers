@@ -1,0 +1,90 @@
+{
+  "schema": 1,
+  "batch": "weapons-20260923",
+  "generation_tool": "OpenAI built-in image_gen",
+  "style_reference": "art/production/foundation-20260923/assets/{sword_01,spear_01,bow_01}.png",
+  "export_note": "Raw RGBA PNGs; production_assets owns any normalization and foundation project integration.",
+  "items": {
+    "sword_02": {
+      "id": "sword_02",
+      "name": "Heavy single-edge falchion",
+      "file": "sword_02.png",
+      "reference": "art/production/foundation-20260923/assets/sword_01.png",
+      "source": "C:/Users/esmalls/.codex/generated_images/01a0ce08-9705-77d3-ba97-d137d4943b37/exec-0de29a70-c053-4db9-881d-d7a4be22261c.png",
+      "origin": "OpenAI built-in image_gen",
+      "prompt": "Use case: precise-object-edit\nAsset type: isolated 2D medieval fantasy weapon sprite, sword_02, for H static half-bust character art.\nInput image 1 is a reference for brushwork, scale, lighting, and vertical presentation, not a finished blade to recolor. Generate a genuinely different single-edged heavy falchion: broad forward-weighted slightly curving steel blade with a clipped point, thick dark spine, a simple short iron crossguard, dark leather one-hand grip, and modest round pommel. Blade tip straight up, grip down, complete silhouette centered vertically, consistent with sword_01's orientation and handle location for later paperdoll anchoring. Refined realistic hand-painted oil/gouache texture, weathered iron and wood/leather, restrained warm highlight. True transparent PNG, no ground or backdrop. No hand, arm, person, sheath, text, emblem, duplicate weapon, excessive ornament, or broad artificial glow. Distinct blade geometry, not merely color change."
+    },
+    "sword_03": {
+      "id": "sword_03",
+      "name": "Compact arming sword",
+      "file": "sword_03.png",
+      "reference": "art/production/foundation-20260923/assets/sword_01.png",
+      "source": "C:/Users/esmalls/.codex/generated_images/01a0ce08-9705-77d3-ba97-d137d4943b37/exec-330c9697-5c11-4763-908d-a06353ac86ad.png",
+      "origin": "OpenAI built-in image_gen",
+      "prompt": "Use case: precise-object-edit\nAsset type: isolated 2D medieval fantasy weapon sprite, sword_03, H static half-bust art.\nInput image 1 is a visual reference for the realistic hand-painted oil/gouache material, vertical direction, and handle placement. Make a distinct compact short arming sword with a noticeably shorter, wider triangular double-edged blade, broad base rapidly tapering to a stout acute point, straight narrow utilitarian crossguard, faceted dark wood grip, and small plain disk pommel. Steel is worn and bright at edges. Blade tip up, grip down, same upright orientation as sword_01, centered full weapon with ample transparent margin. True transparent PNG. No hand, arm, person, scabbard, second weapon, floating parts, insignia, text, ground, glow or background. Difference must be silhouette and proportions, not only color."
+    },
+    "sword_04": {
+      "id": "sword_04",
+      "name": "Curved cavalry saber",
+      "file": "sword_04.png",
+      "reference": "art/production/foundation-20260923/assets/sword_01.png",
+      "source": "C:/Users/esmalls/.codex/generated_images/01a0ce08-9705-77d3-ba97-d137d4943b37/exec-d5d4eaa8-bd47-402d-992b-e40d810717fc.png",
+      "origin": "OpenAI built-in image_gen",
+      "prompt": "Use case: precise-object-edit\nAsset type: isolated 2D medieval fantasy weapon sprite, sword_04, H static half-bust art.\nInput image 1 is the style and vertical grip reference. Create a genuinely distinct one-handed curved cavalry saber: long narrow single-edged blade swept gently to the viewer's right toward the tip, sharpened outer edge, modest hooked knuckle guard and short forward quillon, simple dark leather grip and flattened pommel. Keep blade tip at top, handle at bottom and the grip position comparable to sword_01 for later anchoring. Restrained worn steel, warm iron and leather, detailed realistic hand-painted oil/gouache marks, clean readable contour at game size. Single complete weapon on genuine alpha transparency. No hand, arm, figure, sheath, second blade, extravagant ornament, text, background, ground or black matte. Distinct curved geometry, not recolored original."
+    },
+    "spear_02": {
+      "id": "spear_02",
+      "name": "Hook-blade spear",
+      "file": "spear_02.png",
+      "reference": "art/production/foundation-20260923/assets/spear_01.png",
+      "source": "C:/Users/esmalls/.codex/generated_images/01a0ce08-9705-77d3-ba97-d137d4943b37/exec-47776589-df55-4cc6-be35-b15c37195e0b.png",
+      "origin": "OpenAI built-in image_gen",
+      "prompt": "Use case: precise-object-edit\nAsset type: isolated 2D medieval fantasy weapon sprite, spear_02, H static half-bust art.\nInput image 1 is the visual reference for upright direction, shaft position, scale and realistic painterly material. Create a genuinely different hook-blade long spear: narrow forward steel thrusting point at the top with one clearly readable side hook just below it, forged socket, long straight ash shaft, dark leather binding in lower grip area, plain iron butt cap. Keep hook practical and compact, not a fantasy crescent. Full weapon centered upright, point up, grip/butt down, same shaft axis as spear_01 for later anchor alignment. Worn iron, subtle warm wood oil/gouache brushwork, clean edge and true transparent PNG. No hand, body, clothing, armor, shield, second spear, loose parts, text, scenery, ground or baked matte. Hook changes silhouette, not a recolor."
+    },
+    "spear_03": {
+      "id": "spear_03",
+      "name": "Broad leaf spear",
+      "file": "spear_03.png",
+      "reference": "art/production/foundation-20260923/assets/spear_01.png",
+      "source": "C:/Users/esmalls/.codex/generated_images/01a0ce08-9705-77d3-ba97-d137d4943b37/exec-036f386e-22a5-4166-b8ea-e331552b4f3b.png",
+      "origin": "OpenAI built-in image_gen",
+      "prompt": "Use case: precise-object-edit\nAsset type: isolated 2D medieval fantasy weapon sprite, spear_03, H static half-bust art.\nInput image 1 is a reference for upright orientation and brushwork. Create a distinct broad leaf-bladed infantry spear, with a long symmetric leaf-shaped double-edged steel head and pronounced central rib, head materially broader and longer than spear_01's slim diamond point. Socket joins a simple straight weathered dark ash shaft with restrained lower leather hand grip and iron butt. Complete single weapon on same central vertical axis, tip up, grip/butt down for matching paperdoll anchor; realistic painted oil/gouache iron/wood texture, clear contour at game size. Genuine alpha transparency. No hand, arm, human, banner, second weapon, text, glowing magic, background, ground, or cropped tip/butt. Different blade shape, not merely color."
+    },
+    "spear_04": {
+      "id": "spear_04",
+      "name": "Winged spear",
+      "file": "spear_04.png",
+      "reference": "art/production/foundation-20260923/assets/spear_01.png",
+      "source": "C:/Users/esmalls/.codex/generated_images/01a0ce08-9705-77d3-ba97-d137d4943b37/exec-930ae0ac-83c2-4823-b8ce-0ae62e0a1689.png",
+      "origin": "OpenAI built-in image_gen",
+      "prompt": "Use case: precise-object-edit\nAsset type: isolated 2D medieval fantasy weapon sprite, spear_04, H static half-bust art.\nInput image 1 guides the same upright spear direction, shaft/grip axis, and painterly iron-and-wood finish. Create a genuinely different winged boar spear: slender elongated central steel thrusting head with TWO short symmetrical horizontal lugs/wings directly below the socket, clearly visible but practical and not a giant trident, straight long dark ash shaft, leather lower grip and blunt iron butt cap. Full single spear centered; central point up, grip and butt down, same handle alignment as spear_01 for later attachment. Refined worn realistic oil/gouache hand paint, true alpha-transparent background, clean edges at small game size. No hands, human, armor, second spear, detached parts, banner, text, scenery, ground or opaque matte. Wings must alter silhouette."
+    },
+    "bow_02": {
+      "id": "bow_02",
+      "name": "Tall straight longbow",
+      "file": "bow_02.png",
+      "reference": "art/production/foundation-20260923/assets/bow_01.png",
+      "source": "C:/Users/esmalls/.codex/generated_images/01a0ce08-9705-77d3-ba97-d137d4943b37/exec-df1a9b1e-1d39-4195-a3e6-2b422a622f03.png",
+      "origin": "OpenAI built-in image_gen",
+      "prompt": "Use case: precise-object-edit\nAsset type: isolated 2D medieval fantasy bow sprite, bow_02, H static half-bust art.\nInput image 1 is a reference for vertical orientation, string on the viewer's LEFT and wooden bow body bulging to the viewer's RIGHT, plus painterly finish. Create a distinct tall slender English-style longbow made of a single stave of weathered yew, with a long smooth D-shaped arc, narrow limbs, plain dark leather central grip, small horn nocks, taut thin bowstring from top to bottom on left. Taller and visibly slimmer/less ornate than bow_01. Full bow upright, same center grip height and string side for later attachment. Realistic hand-painted oil/gouache wood grain and modest highlights, genuine alpha PNG. No arrow, hands, person, extra bow, ornament, text, landscape, ground, quiver or matte. Shape difference must be structural, not recoloring."
+    },
+    "bow_03": {
+      "id": "bow_03",
+      "name": "Compact horn-wood hunting bow",
+      "file": "bow_03.png",
+      "reference": "art/production/foundation-20260923/assets/bow_01.png",
+      "source": "C:/Users/esmalls/.codex/generated_images/01a0ce08-9705-77d3-ba97-d137d4943b37/exec-b39682d7-9492-4450-9375-7780d2ce3037.png",
+      "origin": "OpenAI built-in image_gen",
+      "prompt": "Use case: precise-object-edit\nAsset type: isolated 2D medieval fantasy bow sprite, bow_03, H static half-bust art.\nInput image 1 is a reference for upright bow direction and grip position, with string on viewer's LEFT and limbs arcing to RIGHT. Create a truly distinct compact hunting bow of laminated dark horn and honey-brown wood: noticeably shorter and broader-limbed than a tall longbow, thick central handle with practical stitched leather wrap, slight asymmetry from handmade construction, small plain horn tips, taut readable string on left. Its bow tips are simple, not strongly recurved; preserve bow_04 for the recurve silhouette. Complete centered bow upright, same grip zone as bow_01 for later paperdoll anchoring. Refined worn hand-painted oil/gouache texture matching H medieval art; true transparent alpha PNG. No hand, figure, arrow, quiver, decoration, text, second bow, scenery, ground or baked black backdrop."
+    },
+    "bow_04": {
+      "id": "bow_04",
+      "name": "Recurve bow",
+      "file": "bow_04.png",
+      "reference": "art/production/foundation-20260923/assets/bow_01.png",
+      "source": "C:/Users/esmalls/.codex/generated_images/01a0ce08-9705-77d3-ba97-d137d4943b37/exec-8038c590-cae0-4b1a-bd95-3c79d630e3a3.png",
+      "origin": "OpenAI built-in image_gen",
+      "prompt": "Use case: precise-object-edit\nAsset type: isolated 2D medieval fantasy bow sprite, bow_04, H static half-bust art.\nInput image 1 is only a reference for upright display, grip area, painterly rendering and string on the LEFT. Create an unmistakable RECURVE bow rather than a longbow: compact horn-and-wood composite stave, thick central grip, both outer limb tips curl BACK TOWARD the bowstring at top and bottom to make a clear S-shaped double-recurve silhouette. The center of bow arcs to viewer's RIGHT; both terminal tips visibly hook to viewer's LEFT. Thin taut bowstring runs along viewer's LEFT from top nock to bottom nock, attached correctly. Single complete vertical bow, center grip comparable to bow_01 for anchor alignment. Refined worn hand-painted oil/gouache medieval craft, dark horn over warm wood and plain leather wrapping, clear at game scale. Genuine transparent alpha PNG with no aura. No hand, human, arrow, quiver, second bow, text, ground, scenery or opaque background. Do not depict an ordinary D-shaped longbow."
+    }
+  }
+}

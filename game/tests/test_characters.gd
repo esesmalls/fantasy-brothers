@@ -2,7 +2,7 @@ extends SceneTree
 
 const Character = preload("res://core/character_rules.gd")
 const Campaign = preload("res://core/campaign_rules.gd")
-const Battle = preload("res://core/battle_rules.gd")
+const Battle = preload("res://tests/legacy_battle_rules.gd") # Fixed pre-tactical progression fixtures.
 const Equipment = preload("res://core/equipment_rules.gd")
 const Saves = preload("res://core/save_store.gd")
 

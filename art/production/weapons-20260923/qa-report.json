@@ -1,0 +1,272 @@
+{
+  "sword_02": {
+    "sha256": "5bf7bcdee929079c2120b64d6b838cbafce5ddaf6c5a72f7ce76c29f92fb83b4",
+    "size": [
+      726,
+      2166
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "bbox_alpha_1": [
+      76,
+      12,
+      712,
+      2132
+    ],
+    "bbox_alpha_32": [
+      122,
+      14,
+      606,
+      2127
+    ],
+    "corner_alpha": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "sword_03": {
+    "sha256": "fd80188e2eab50f96bfa758155de58bfd8be07c7d512fd7f55980949e5a543cc",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      254
+    ],
+    "bbox_alpha_1": [
+      65,
+      37,
+      938,
+      1496
+    ],
+    "bbox_alpha_32": [
+      286,
+      100,
+      738,
+      1472
+    ],
+    "corner_alpha": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "sword_04": {
+    "sha256": "9320fd4e4822336e22ec6c4e6276c7475dbbcea2c0e1a595abc8c63ce642b70c",
+    "size": [
+      725,
+      2170
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "bbox_alpha_1": [
+      23,
+      16,
+      705,
+      2152
+    ],
+    "bbox_alpha_32": [
+      132,
+      18,
+      590,
+      2150
+    ],
+    "corner_alpha": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "spear_02": {
+    "sha256": "90cae5bacc97286e7aee6635ff94ebd019bf0fc2b66ed4f37c48fc65e1c22338",
+    "size": [
+      725,
+      2170
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "bbox_alpha_1": [
+      162,
+      11,
+      566,
+      2152
+    ],
+    "bbox_alpha_32": [
+      320,
+      13,
+      477,
+      2147
+    ],
+    "corner_alpha": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "spear_03": {
+    "sha256": "0ad01ada51a38d79683f731d391644cd6b9fbd7fead0cb28546a68818e2ea8c2",
+    "size": [
+      725,
+      2170
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "bbox_alpha_1": [
+      114,
+      12,
+      606,
+      2158
+    ],
+    "bbox_alpha_32": [
+      287,
+      14,
+      438,
+      2156
+    ],
+    "corner_alpha": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "spear_04": {
+    "sha256": "dce56453aa5b312fd1f37cb03c38b8c69265901c6bbaaf15ef246e0c2042d1eb",
+    "size": [
+      725,
+      2170
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "bbox_alpha_1": [
+      90,
+      22,
+      606,
+      2151
+    ],
+    "bbox_alpha_32": [
+      246,
+      25,
+      480,
+      2145
+    ],
+    "corner_alpha": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "bow_02": {
+    "sha256": "7bbe0dfd8a4fc7f053c8e9f0d1ba991964b4a4396163ac66f18fdf44a3fb065e",
+    "size": [
+      725,
+      2170
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "bbox_alpha_1": [
+      223,
+      10,
+      606,
+      2153
+    ],
+    "bbox_alpha_32": [
+      230,
+      13,
+      495,
+      2150
+    ],
+    "corner_alpha": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "bow_03": {
+    "sha256": "2ee8e9da465fbe227ef11f70ffae379550538af534bda048f7ee853fa1d1677d",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      254
+    ],
+    "bbox_alpha_1": [
+      65,
+      10,
+      892,
+      1506
+    ],
+    "bbox_alpha_32": [
+      315,
+      13,
+      698,
+      1504
+    ],
+    "corner_alpha": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "bow_04": {
+    "sha256": "777130f5a55d1db356dde8e73bdff8298ce9199e49558545b462ae734f96b133",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      254
+    ],
+    "bbox_alpha_1": [
+      65,
+      8,
+      834,
+      1510
+    ],
+    "bbox_alpha_32": [
+      370,
+      11,
+      689,
+      1508
+    ],
+    "corner_alpha": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

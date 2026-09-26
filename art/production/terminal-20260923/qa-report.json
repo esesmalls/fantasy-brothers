@@ -1,0 +1,50 @@
+{
+  "state_down": {
+    "sha256": "18d62d90471e84b2f220e469101c90e7699e7ca620a455d2a2b475ea363c7b7a",
+    "pixel_size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "alpha_min_max": [
+      0,
+      254
+    ],
+    "alpha_32_bbox": [
+      96,
+      832,
+      1198,
+      951
+    ],
+    "alpha_128_bbox": [
+      106,
+      835,
+      1179,
+      948
+    ]
+  },
+  "state_dead": {
+    "sha256": "b68ee3b295273ad9b2397fb32ead5efa43dc4d543e5eddf8096e52a2de7047aa",
+    "pixel_size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "alpha_min_max": [
+      0,
+      253
+    ],
+    "alpha_32_bbox": [
+      108,
+      833,
+      1145,
+      942
+    ],
+    "alpha_128_bbox": [
+      170,
+      837,
+      1099,
+      934
+    ]
+  }
+}

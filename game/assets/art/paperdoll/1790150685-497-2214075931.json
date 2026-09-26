@@ -1,0 +1,1722 @@
+{
+	"actions": {
+		"bow": {
+			"duration": 1.48,
+			"events": [
+				{
+					"id": "release",
+					"time": 0.6512
+				},
+				{
+					"id": "contact",
+					"time": 1.1248
+				}
+			],
+			"id": "bow",
+			"legacy_action": {
+				"contact": 0.76,
+				"duration": 1.48,
+				"id": "bow",
+				"keyframes": [
+					{
+						"angle": 1.45,
+						"id": "bow.rest",
+						"t": 0.0,
+						"x": 15.0,
+						"y": -12.0
+					},
+					{
+						"angle": 1.3,
+						"id": "bow.draw",
+						"t": 0.12,
+						"x": 37.0,
+						"y": -19.0
+					},
+					{
+						"angle": 0.25,
+						"id": "bow.raise",
+						"t": 0.28,
+						"x": 44.0,
+						"y": -42.0
+					},
+					{
+						"angle": -0.34,
+						"id": "bow.aim",
+						"t": 0.34,
+						"x": 40.0,
+						"y": -41.0
+					},
+					{
+						"angle": -0.34,
+						"id": "bow.release",
+						"t": 0.44,
+						"x": 40.0,
+						"y": -41.0
+					},
+					{
+						"angle": -0.29,
+						"id": "bow.recoil",
+						"t": 0.49,
+						"x": 42.0,
+						"y": -40.0
+					},
+					{
+						"angle": -0.34,
+						"id": "bow.hold",
+						"t": 0.62,
+						"x": 40.0,
+						"y": -41.0
+					},
+					{
+						"angle": 0.25,
+						"id": "bow.lower",
+						"t": 0.8,
+						"x": 44.0,
+						"y": -42.0
+					},
+					{
+						"angle": 1.3,
+						"id": "bow.drop",
+						"t": 0.94,
+						"x": 37.0,
+						"y": -19.0
+					},
+					{
+						"angle": 1.45,
+						"id": "bow.return",
+						"t": 1.0,
+						"x": 15.0,
+						"y": -12.0
+					}
+				],
+				"release": 0.44,
+				"weapon": "bow"
+			},
+			"legacy_weapon": "bow",
+			"tracks": [
+				{
+					"keys": [
+						{
+							"id": "bow.rest.x",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "bow.draw.x",
+							"interpolation": "smooth",
+							"time": 0.1776,
+							"value": 22.0
+						},
+						{
+							"id": "bow.raise.x",
+							"interpolation": "smooth",
+							"time": 0.4144,
+							"value": 29.0
+						},
+						{
+							"id": "bow.aim.x",
+							"interpolation": "smooth",
+							"time": 0.5032,
+							"value": 25.0
+						},
+						{
+							"id": "bow.release.x",
+							"interpolation": "smooth",
+							"time": 0.6512,
+							"value": 25.0
+						},
+						{
+							"id": "bow.recoil.x",
+							"interpolation": "smooth",
+							"time": 0.7252,
+							"value": 27.0
+						},
+						{
+							"id": "bow.hold.x",
+							"interpolation": "smooth",
+							"time": 0.9176,
+							"value": 25.0
+						},
+						{
+							"id": "bow.lower.x",
+							"interpolation": "smooth",
+							"time": 1.184,
+							"value": 29.0
+						},
+						{
+							"id": "bow.drop.x",
+							"interpolation": "smooth",
+							"time": 1.3912,
+							"value": 22.0
+						},
+						{
+							"id": "bow.return.x",
+							"interpolation": "smooth",
+							"time": 1.48,
+							"value": 0.0
+						}
+					],
+					"property": "x",
+					"target": "bow"
+				},
+				{
+					"keys": [
+						{
+							"id": "bow.rest.y",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "bow.draw.y",
+							"interpolation": "smooth",
+							"time": 0.1776,
+							"value": -7.0
+						},
+						{
+							"id": "bow.raise.y",
+							"interpolation": "smooth",
+							"time": 0.4144,
+							"value": -30.0
+						},
+						{
+							"id": "bow.aim.y",
+							"interpolation": "smooth",
+							"time": 0.5032,
+							"value": -29.0
+						},
+						{
+							"id": "bow.release.y",
+							"interpolation": "smooth",
+							"time": 0.6512,
+							"value": -29.0
+						},
+						{
+							"id": "bow.recoil.y",
+							"interpolation": "smooth",
+							"time": 0.7252,
+							"value": -28.0
+						},
+						{
+							"id": "bow.hold.y",
+							"interpolation": "smooth",
+							"time": 0.9176,
+							"value": -29.0
+						},
+						{
+							"id": "bow.lower.y",
+							"interpolation": "smooth",
+							"time": 1.184,
+							"value": -30.0
+						},
+						{
+							"id": "bow.drop.y",
+							"interpolation": "smooth",
+							"time": 1.3912,
+							"value": -7.0
+						},
+						{
+							"id": "bow.return.y",
+							"interpolation": "smooth",
+							"time": 1.48,
+							"value": 0.0
+						}
+					],
+					"property": "y",
+					"target": "bow"
+				},
+				{
+					"keys": [
+						{
+							"id": "bow.rest.rotation",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "bow.draw.rotation",
+							"interpolation": "smooth",
+							"time": 0.1776,
+							"value": -8.59436692696234
+						},
+						{
+							"id": "bow.raise.rotation",
+							"interpolation": "smooth",
+							"time": 0.4144,
+							"value": -68.7549354156988
+						},
+						{
+							"id": "bow.aim.rotation",
+							"interpolation": "smooth",
+							"time": 0.5032,
+							"value": -102.559445328417
+						},
+						{
+							"id": "bow.release.rotation",
+							"interpolation": "smooth",
+							"time": 0.6512,
+							"value": -102.559445328417
+						},
+						{
+							"id": "bow.recoil.rotation",
+							"interpolation": "smooth",
+							"time": 0.7252,
+							"value": -99.6946563527632
+						},
+						{
+							"id": "bow.hold.rotation",
+							"interpolation": "smooth",
+							"time": 0.9176,
+							"value": -102.559445328417
+						},
+						{
+							"id": "bow.lower.rotation",
+							"interpolation": "smooth",
+							"time": 1.184,
+							"value": -68.7549354156988
+						},
+						{
+							"id": "bow.drop.rotation",
+							"interpolation": "smooth",
+							"time": 1.3912,
+							"value": -8.59436692696234
+						},
+						{
+							"id": "bow.return.rotation",
+							"interpolation": "smooth",
+							"time": 1.48,
+							"value": 0.0
+						}
+					],
+					"property": "rotation",
+					"target": "bow"
+				}
+			]
+		},
+		"spear": {
+			"duration": 0.82,
+			"events": [
+				{
+					"id": "release",
+					"time": 0.205
+				},
+				{
+					"id": "contact",
+					"time": 0.3444
+				}
+			],
+			"id": "spear",
+			"legacy_action": {
+				"contact": 0.42,
+				"duration": 0.82,
+				"id": "spear",
+				"keyframes": [
+					{
+						"angle": 1.3,
+						"id": "spear.rest",
+						"t": 0.0,
+						"x": 19.0,
+						"y": -26.0
+					},
+					{
+						"angle": 1.35,
+						"id": "spear.chamber",
+						"t": 0.25,
+						"x": 13.0,
+						"y": -25.0
+					},
+					{
+						"angle": 1.571,
+						"id": "spear.contact",
+						"t": 0.42,
+						"x": 35.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.571,
+						"id": "spear.hold",
+						"t": 0.53,
+						"x": 35.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.571,
+						"id": "spear.recover",
+						"t": 0.64,
+						"x": 31.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.3,
+						"id": "spear.return",
+						"t": 1.0,
+						"x": 19.0,
+						"y": -26.0
+					}
+				],
+				"release": 0.25,
+				"weapon": "spear"
+			},
+			"legacy_weapon": "spear",
+			"tracks": [
+				{
+					"keys": [
+						{
+							"id": "spear.rest.x",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "spear.chamber.x",
+							"interpolation": "smooth",
+							"time": 0.205,
+							"value": -6.0
+						},
+						{
+							"id": "spear.contact.x",
+							"interpolation": "smooth",
+							"time": 0.3444,
+							"value": 16.0
+						},
+						{
+							"id": "spear.hold.x",
+							"interpolation": "smooth",
+							"time": 0.4346,
+							"value": 16.0
+						},
+						{
+							"id": "spear.recover.x",
+							"interpolation": "smooth",
+							"time": 0.5248,
+							"value": 12.0
+						},
+						{
+							"id": "spear.return.x",
+							"interpolation": "smooth",
+							"time": 0.82,
+							"value": 0.0
+						}
+					],
+					"property": "x",
+					"target": "spear"
+				},
+				{
+					"keys": [
+						{
+							"id": "spear.rest.y",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "spear.chamber.y",
+							"interpolation": "smooth",
+							"time": 0.205,
+							"value": 1.0
+						},
+						{
+							"id": "spear.contact.y",
+							"interpolation": "smooth",
+							"time": 0.3444,
+							"value": -5.0
+						},
+						{
+							"id": "spear.hold.y",
+							"interpolation": "smooth",
+							"time": 0.4346,
+							"value": -5.0
+						},
+						{
+							"id": "spear.recover.y",
+							"interpolation": "smooth",
+							"time": 0.5248,
+							"value": -5.0
+						},
+						{
+							"id": "spear.return.y",
+							"interpolation": "smooth",
+							"time": 0.82,
+							"value": 0.0
+						}
+					],
+					"property": "y",
+					"target": "spear"
+				},
+				{
+					"keys": [
+						{
+							"id": "spear.rest.rotation",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "spear.chamber.rotation",
+							"interpolation": "smooth",
+							"time": 0.205,
+							"value": 2.86478897565412
+						},
+						{
+							"id": "spear.contact.rotation",
+							"interpolation": "smooth",
+							"time": 0.3444,
+							"value": 15.5271562480453
+						},
+						{
+							"id": "spear.hold.rotation",
+							"interpolation": "smooth",
+							"time": 0.4346,
+							"value": 15.5271562480453
+						},
+						{
+							"id": "spear.recover.rotation",
+							"interpolation": "smooth",
+							"time": 0.5248,
+							"value": 15.5271562480453
+						},
+						{
+							"id": "spear.return.rotation",
+							"interpolation": "smooth",
+							"time": 0.82,
+							"value": 0.0
+						}
+					],
+					"property": "rotation",
+					"target": "spear"
+				}
+			]
+		},
+		"sword": {
+			"duration": 0.86,
+			"events": [
+				{
+					"id": "release",
+					"time": 0.215
+				},
+				{
+					"id": "contact",
+					"time": 0.3612
+				}
+			],
+			"id": "sword",
+			"legacy_action": {
+				"contact": 0.42,
+				"duration": 0.86,
+				"id": "sword",
+				"keyframes": [
+					{
+						"angle": 0.62,
+						"id": "sword.rest",
+						"t": 0.0,
+						"x": 8.0,
+						"y": -12.0
+					},
+					{
+						"angle": 0.38,
+						"id": "sword.windup",
+						"t": 0.25,
+						"x": 26.0,
+						"y": -13.0
+					},
+					{
+						"angle": 1.55,
+						"id": "sword.contact",
+						"t": 0.42,
+						"x": 22.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.55,
+						"id": "sword.hold",
+						"t": 0.53,
+						"x": 22.0,
+						"y": -31.0
+					},
+					{
+						"angle": 1.44,
+						"id": "sword.recover",
+						"t": 0.64,
+						"x": 20.0,
+						"y": -30.0
+					},
+					{
+						"angle": 0.62,
+						"id": "sword.return",
+						"t": 1.0,
+						"x": 8.0,
+						"y": -12.0
+					}
+				],
+				"release": 0.25,
+				"weapon": "sword"
+			},
+			"legacy_weapon": "sword",
+			"tracks": [
+				{
+					"keys": [
+						{
+							"id": "sword.rest.x",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "sword.windup.x",
+							"interpolation": "smooth",
+							"time": 0.215,
+							"value": 18.0
+						},
+						{
+							"id": "sword.contact.x",
+							"interpolation": "smooth",
+							"time": 0.3612,
+							"value": 14.0
+						},
+						{
+							"id": "sword.hold.x",
+							"interpolation": "smooth",
+							"time": 0.4558,
+							"value": 14.0
+						},
+						{
+							"id": "sword.recover.x",
+							"interpolation": "smooth",
+							"time": 0.5504,
+							"value": 12.0
+						},
+						{
+							"id": "sword.return.x",
+							"interpolation": "smooth",
+							"time": 0.86,
+							"value": 0.0
+						}
+					],
+					"property": "x",
+					"target": "sword"
+				},
+				{
+					"keys": [
+						{
+							"id": "sword.rest.y",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "sword.windup.y",
+							"interpolation": "smooth",
+							"time": 0.215,
+							"value": -1.0
+						},
+						{
+							"id": "sword.contact.y",
+							"interpolation": "smooth",
+							"time": 0.3612,
+							"value": -19.0
+						},
+						{
+							"id": "sword.hold.y",
+							"interpolation": "smooth",
+							"time": 0.4558,
+							"value": -19.0
+						},
+						{
+							"id": "sword.recover.y",
+							"interpolation": "smooth",
+							"time": 0.5504,
+							"value": -18.0
+						},
+						{
+							"id": "sword.return.y",
+							"interpolation": "smooth",
+							"time": 0.86,
+							"value": 0.0
+						}
+					],
+					"property": "y",
+					"target": "sword"
+				},
+				{
+					"keys": [
+						{
+							"id": "sword.rest.rotation",
+							"interpolation": "smooth",
+							"time": 0.0,
+							"value": 0.0
+						},
+						{
+							"id": "sword.windup.rotation",
+							"interpolation": "smooth",
+							"time": 0.215,
+							"value": -13.7509870831398
+						},
+						{
+							"id": "sword.contact.rotation",
+							"interpolation": "smooth",
+							"time": 0.3612,
+							"value": 53.2850749471666
+						},
+						{
+							"id": "sword.hold.rotation",
+							"interpolation": "smooth",
+							"time": 0.4558,
+							"value": 53.2850749471666
+						},
+						{
+							"id": "sword.recover.rotation",
+							"interpolation": "smooth",
+							"time": 0.5504,
+							"value": 46.9825392007275
+						},
+						{
+							"id": "sword.return.rotation",
+							"interpolation": "smooth",
+							"time": 0.86,
+							"value": 0.0
+						}
+					],
+					"property": "rotation",
+					"target": "sword"
+				}
+			]
+		}
+	},
+	"adaptations": {},
+	"assets": {
+		"arrow": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "arrow",
+			"image": "res://assets/art/static-bust/weapons.png",
+			"layer": 150.0,
+			"masks": [],
+			"name": "箭矢",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				0.0,
+				0.0
+			],
+			"rect": [
+				591.0,
+				730.0,
+				75.0,
+				460.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				4.0,
+				24.53333
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/weapons.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"bandage": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "bandage",
+			"image": "res://assets/art/static-bust/modular-proof.png",
+			"layer": 110.0,
+			"masks": [],
+			"name": "头部绷带",
+			"parent": "face",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				-1.8400000333786,
+				-27.5999984741211
+			],
+			"rect": [
+				510.0,
+				630.0,
+				510.0,
+				288.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				34.96,
+				19.74211808
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/modular-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"base": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "参照",
+			"clip_to": "",
+			"id": "base",
+			"image": "res://assets/art/static-bust/body-mild-proof.png",
+			"layer": 0.0,
+			"masks": [],
+			"name": "底座",
+			"parent": "",
+			"pivot": [
+				0.5,
+				1.0
+			],
+			"position": [
+				0.0,
+				0.0
+			],
+			"rect": [
+				18.0,
+				919.0,
+				609.0,
+				259.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				64.0,
+				27.21921
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/body-mild-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"beard": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "beard",
+			"image": "res://assets/art/static-bust/modular-proof.png",
+			"layer": 90.0,
+			"masks": [],
+			"name": "胡须",
+			"parent": "face",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				3.68000030517578,
+				-17.4799995422363
+			],
+			"rect": [
+				1150.0,
+				303.0,
+				350.0,
+				280.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				23.46,
+				18.768
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/modular-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"blood": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "身体",
+			"clip_to": "skin",
+			"id": "blood",
+			"image": "res://assets/art/static-bust/modular-proof.png",
+			"layer": 20.0,
+			"masks": [
+				"bust"
+			],
+			"name": "皮肤血迹",
+			"parent": "skin",
+			"pivot": [
+				0.5,
+				0.5
+			],
+			"position": [
+				11.5,
+				17.5
+			],
+			"rect": [
+				1130.0,
+				680.0,
+				305.0,
+				280.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				17.0,
+				15.606557
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/modular-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"body": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "身体",
+			"clip_to": "",
+			"id": "body",
+			"image": "res://assets/art/static-bust/full-garments.png",
+			"layer": 30.0,
+			"masks": [
+				"bust"
+			],
+			"name": "基础内衣",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				2.25,
+				-42.25
+			],
+			"rect": [
+				110.0,
+				78.0,
+				470.0,
+				546.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				71.0,
+				82.48085
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/full-garments.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"bow": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "bow",
+			"image": "res://assets/art/static-bust/weapons.png",
+			"layer": 150.0,
+			"masks": [],
+			"name": "弓",
+			"parent": "",
+			"pivot": [
+				0.8,
+				0.51
+			],
+			"position": [
+				6.75,
+				-21.75
+			],
+			"rect": [
+				990.0,
+				87.0,
+				134.0,
+				580.0
+			],
+			"rotation": 58.0788802939694,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				17.5,
+				75.74627
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/weapons.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"face": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "face",
+			"image": "res://assets/art/static-bust/modular-proof.png",
+			"layer": 70.0,
+			"masks": [],
+			"name": "净面头",
+			"parent": "",
+			"pivot": [
+				0.5,
+				1.0
+			],
+			"position": [
+				0.25,
+				-32.5
+			],
+			"rect": [
+				50.0,
+				80.0,
+				415.0,
+				480.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				28.52,
+				32.98698824
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/modular-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"hair": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "hair",
+			"image": "res://assets/art/static-bust/modular-proof.png",
+			"layer": 100.0,
+			"masks": [],
+			"name": "发型",
+			"parent": "face",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				-2.75999999046326,
+				-35.4199981689453
+			],
+			"rect": [
+				497.0,
+				54.0,
+				515.0,
+				490.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				35.88,
+				34.13825232
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/modular-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"head": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "head",
+			"image": "res://assets/art/static-bust/body-mild-proof.png",
+			"layer": 70.0,
+			"masks": [],
+			"name": "整头 · 完好",
+			"parent": "",
+			"pivot": [
+				0.5,
+				1.0
+			],
+			"position": [
+				0.25,
+				-32.5
+			],
+			"rect": [
+				75.0,
+				44.0,
+				548.0,
+				548.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				33.8376,
+				33.8376
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/body-mild-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"impact": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "身体",
+			"clip_to": "",
+			"id": "impact",
+			"image": "res://assets/art/static-bust/weapons.png",
+			"layer": 0.0,
+			"masks": [],
+			"name": "impact",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.5
+			],
+			"position": [
+				0.0,
+				0.0
+			],
+			"rect": [
+				883.0,
+				812.0,
+				313.0,
+				297.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				20.0,
+				18.97764
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/weapons.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"linen": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "linen",
+			"image": "res://assets/art/static-bust/full-garments-nested.png",
+			"layer": 40.0,
+			"masks": [
+				"bust"
+			],
+			"name": "亚麻内衬",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				1.5,
+				-42.5
+			],
+			"rect": [
+				726.0,
+				78.0,
+				478.0,
+				546.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				72.0,
+				82.24268
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/full-garments-nested.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"mail": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "mail",
+			"image": "res://assets/art/static-bust/full-garments-nested.png",
+			"layer": 60.0,
+			"masks": [
+				"bust"
+			],
+			"name": "链甲 · 完好",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				3.0,
+				-46.0
+			],
+			"rect": [
+				731.0,
+				644.0,
+				497.0,
+				560.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.69014
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/full-garments-nested.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"mail_damaged": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "mail_damaged",
+			"image": "res://assets/art/static-bust/full-damaged-nested.png",
+			"layer": 60.0,
+			"masks": [
+				"bust"
+			],
+			"name": "链甲 · 破损",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				3.0,
+				-46.0
+			],
+			"rect": [
+				731.0,
+				644.0,
+				497.0,
+				560.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.69014
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/full-damaged-nested.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"padded": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "padded",
+			"image": "res://assets/art/static-bust/full-garments-nested.png",
+			"layer": 50.0,
+			"masks": [
+				"bust"
+			],
+			"name": "绗缝甲 · 完好",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				2.5,
+				-44.5
+			],
+			"rect": [
+				105.0,
+				644.0,
+				496.0,
+				557.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.41633
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/full-garments-nested.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"padded_damaged": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "衣甲",
+			"clip_to": "",
+			"id": "padded_damaged",
+			"image": "res://assets/art/static-bust/full-damaged-nested.png",
+			"layer": 50.0,
+			"masks": [
+				"bust"
+			],
+			"name": "绗缝甲 · 破损",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				2.5,
+				-44.5
+			],
+			"rect": [
+				105.0,
+				644.0,
+				496.0,
+				557.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				72.5,
+				81.41633
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/full-damaged-nested.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"scar": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "face",
+			"id": "scar",
+			"image": "res://assets/art/static-bust/modular-proof.png",
+			"layer": 80.0,
+			"masks": [],
+			"name": "脸部伤痕",
+			"parent": "face",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				1.6100001335144,
+				-14.2600021362305
+			],
+			"rect": [
+				210.0,
+				680.0,
+				150.0,
+				140.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				6.44,
+				6.01066636
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/modular-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"shield": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "shield",
+			"image": "res://assets/art/static-bust/weapons.png",
+			"layer": 120.0,
+			"masks": [],
+			"name": "盾",
+			"parent": "",
+			"pivot": [
+				0.5,
+				1.0
+			],
+			"position": [
+				22.25,
+				-1.75
+			],
+			"rect": [
+				81.0,
+				737.0,
+				305.0,
+				455.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				32.0,
+				47.7377
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/weapons.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"skin": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "身体",
+			"clip_to": "",
+			"id": "skin",
+			"image": "res://assets/art/static-bust/body-mild-proof.png",
+			"layer": 10.0,
+			"masks": [
+				"bust"
+			],
+			"name": "身体 · 裸身",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.0
+			],
+			"position": [
+				0.75,
+				-39.5
+			],
+			"rect": [
+				583.0,
+				301.0,
+				647.0,
+				353.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				52.0,
+				28.370943
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/body-mild-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"spear": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "spear",
+			"image": "res://assets/art/static-bust/weapons.png",
+			"layer": 140.0,
+			"masks": [],
+			"name": "长矛",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.7
+			],
+			"position": [
+				2.75,
+				-25.0
+			],
+			"rect": [
+				600.0,
+				42.0,
+				55.0,
+				630.0
+			],
+			"rotation": 64.984513367007,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				8.4,
+				96.21818
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/weapons.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"sword": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "装备",
+			"clip_to": "",
+			"id": "sword",
+			"image": "res://assets/art/static-bust/weapons.png",
+			"layer": 130.0,
+			"masks": [],
+			"name": "剑",
+			"parent": "",
+			"pivot": [
+				0.5,
+				0.82
+			],
+			"position": [
+				2.0,
+				-14.5
+			],
+			"rect": [
+				141.0,
+				75.0,
+				185.0,
+				596.0
+			],
+			"rotation": 35.523383298111,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				22.5,
+				72.48649
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/weapons.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		},
+		"wounded": {
+			"anchor": "origin",
+			"anchors": {
+				"origin": [
+					0.0,
+					0.0
+				]
+			},
+			"category": "头面",
+			"clip_to": "",
+			"id": "wounded",
+			"image": "res://assets/art/static-bust/body-mild-proof.png",
+			"layer": 70.0,
+			"masks": [],
+			"name": "整头 · 受伤",
+			"parent": "",
+			"pivot": [
+				0.5,
+				1.0
+			],
+			"position": [
+				0.25,
+				-32.5
+			],
+			"rect": [
+				627.0,
+				627.0,
+				535.0,
+				535.0
+			],
+			"rotation": 0.0,
+			"scale": [
+				1.0,
+				1.0
+			],
+			"size": [
+				33.8376,
+				33.8376
+			],
+			"source": {
+				"image": "res://assets/art/static-bust/body-mild-proof.png",
+				"origin": "existing-project"
+			},
+			"tags": []
+		}
+	},
+	"game": {
+		"appearance": {
+			"bandage": true,
+			"beard": true,
+			"blood": true,
+			"hair": true,
+			"head": "modular",
+			"scar": true,
+			"skin": true
+		}
+	},
+	"kind": "asset-workbench",
+	"masks": {
+		"bust": {
+			"center": [
+				0.0,
+				-17.25
+			],
+			"radius": [
+				30.25,
+				7.25
+			],
+			"top": -120.0,
+			"type": "bust"
+		}
+	},
+	"schema": 5.0
+}

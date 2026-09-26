@@ -5,6 +5,8 @@ extends RefCounted
 const World = preload("res://core/world_data.gd")
 const Equipment = preload("res://core/equipment_rules.gd")
 const Character = preload("res://core/character_rules.gd")
+const CasualtySettlement = preload("res://core/casualty_settlement.gd")
+const Company = preload("res://core/company_rules.gd")
 
 const PERK_INFO = {
 	"vigor": {"title": "坚韧", "description": "最大生命与当前生命永久 +8。"},
@@ -66,6 +68,7 @@ static func create_campaign(origin: String, seed_value: int) -> Dictionary:
 		c.roster.append(_new_unit(str(kinds[i]), "crew_%d" % (i + 1), unit_name, i))
 	Equipment.initialize_new_campaign(c)
 	Character.ensure_campaign(c)
+	Company.ensure(c)
 	return c
 
 static func camp_action(c: Dictionary, action: String) -> Dictionary:
@@ -76,7 +79,7 @@ static func camp_action(c: Dictionary, action: String) -> Dictionary:
 		"rest":
 			var hurt: bool = false
 			for unit: Dictionary in living:
-				if int(unit.hp) < int(unit.max_hp):
+				if int(unit.hp) < int(unit.max_hp) or int(unit.get("recovery_until_day", 0)) > int(c.day):
 					hurt = true
 			if not hurt:
 				return _fail("存活队员没有需要休养的伤势；死亡队员需要补员。")
@@ -85,6 +88,7 @@ static func camp_action(c: Dictionary, action: String) -> Dictionary:
 			if has_rations:
 				c.food = int(c.food) - 2
 			c.day = int(c.day) + 1
+			Company.tick(c)
 			for unit: Dictionary in living:
 				unit.hp = mini(int(unit.max_hp), int(unit.hp) + recovery)
 			return _camp_ok(c, "休养一天：每名存活队员恢复 %d 生命，消耗 %d 粮食。%s" % [
@@ -101,6 +105,7 @@ static func camp_action(c: Dictionary, action: String) -> Dictionary:
 			if int(c.food) < 2:
 				c.food = int(c.food) + 4
 				c.day = int(c.day) + 2
+				Company.tick(c)
 				return _camp_ok(c, "缺粮又缺钱：队伍帮渡口搬货两天，换来 4 份粮食。可继续远征。")
 			return _fail("补给需要 12 金；粮食少于 2 且资金不足时，可在渡口做短工换粮。")
 		"repair":
@@ -112,53 +117,25 @@ static func camp_action(c: Dictionary, action: String) -> Dictionary:
 				return repair
 			return _camp_ok(c, str(repair.reason))
 		"recruit":
-			var slot: int = -1
-			for i in range(c.roster.size()):
-				if int(c.roster[i].hp) <= 0:
-					slot = i
-					break
-			if slot < 0 and c.roster.size() < 4:
-				slot = c.roster.size()
-			if slot < 0:
-				return _fail("四个出战位均有存活队员；本原型暂不扩充编制。")
-			var kind: String = str(ORIGIN_KINDS[str(c.origin)][slot])
-			var price: int = 18 if kind == "dog" else 28
-			var paid: int = mini(int(c.gold), price)
-			var advance: int = price - paid
-			c.gold = int(c.gold) - paid
-			c.flags.advance_debt = int(c.flags.get("advance_debt", 0)) + advance
-			var serial: int = int(c.flags.get("next_crew_id", 5))
-			c.flags.next_crew_id = serial + 1
-			var recruit_name: String = "%s·%d" % [str(KIND_NAMES[kind]), serial]
-			var recruit: Dictionary = _new_unit(kind, "crew_%d" % serial, recruit_name, slot)
-			if slot == c.roster.size():
-				c.roster.append(recruit)
-			else:
-				_record_memorial(c, c.roster[slot])
-				Equipment.discard_unit_loadout(c, c.roster[slot])
-				c.roster[slot] = recruit
-			Equipment.grant_recruit_loadout(c, recruit)
-			Character.ensure_character(recruit, c)
-			c.day = int(c.day) + 1
-			Character.ensure_campaign(c)
-			var advance_note: String = ""
-			if advance > 0:
-				advance_note = " 其中 %d 金为预支签约款，之后每次战利品最多扣三分之一偿还。" % advance
-			return _camp_ok(c, "%s加入，补上原有出战位，支付 %d 金，经过一天。%s" % [recruit_name, paid, advance_note])
+			return Company.emergency_recruit(c)
+		"short_work":
+			return Company.short_work(c)
 		_:
 			return _fail("未知营地操作。")
 
-static func get_routes(c: Dictionary) -> Array[Dictionary]:
+static func get_routes(c: Dictionary, contract_id: String = World.CONTRACT_ID) -> Array[Dictionary]:
 	var routes: Array[Dictionary] = []
 	for route_id: String in ROUTE_ORDER:
 		var details: Dictionary = ROUTE_DETAILS[route_id]
-		var unavailable_reason: String = _route_unavailable_reason(c, details)
+		var preparation: Dictionary = _route_preparation(c, route_id, details, contract_id)
+		var unavailable_reason: String = _route_unavailable_reason(c, preparation)
 		routes.append({
 			"id": route_id, "name": str(details.name), "description": _route_description(c, route_id, details),
-			"food_cost": int(details.food_cost), "days": int(details.days),
+			"food_cost": int(preparation.food_cost), "base_food_cost": int(details.food_cost),
+			"extra_food_cost": int(preparation.extra_food_cost), "days": int(details.days),
 			"difficulty": _route_difficulty(c, int(details.difficulty_offset)),
-			"reward": _route_reward(c, int(details.reward_bonus)),
-			"supplies": details.supplies.duplicate(true),
+			"reward": int(preparation.reward),
+			"supplies": preparation.supplies.duplicate(true),
 			"available": unavailable_reason.is_empty(),
 			"reason": "补给充足，可以从这里出发。" if unavailable_reason.is_empty() else unavailable_reason
 		})
@@ -199,47 +176,72 @@ static func get_contract_offers(c: Dictionary, location_id: String) -> Array[Dic
 		reason = "先完成当前旅行、战斗与返营。"
 	elif not str(c.get("world", {}).get("active_contract_id", "")).is_empty():
 		reason = "已有尚未返营的契约。"
-	return [{
+	var offers: Array[Dictionary] = [{
 		"id": World.CONTRACT_ID,
+		"kind": "granary", "instance_id": "quote_%d_granary" % int(c.flags.get("expeditions_started", 0) + 1),
 		"title": "雨夜粮仓",
 		"description": "前往边境粮仓，击退劫掠者并尽量保住粮袋。",
+		"cost": "路线基础耗粮2或3份、耗时1天；特殊准备以路线总价为准，另结每日维护费", "reward": _route_reward(c, 0), "risk": "中：伤亡与粮袋损失",
 		"location_id": World.CAMP_ID,
 		"destination_id": "loc_granary",
-		"routes": get_routes(c),
+		"routes": get_routes(c, World.CONTRACT_ID),
 		"available": reason.is_empty(),
 		"reason": "可以选择路线并接约。" if reason.is_empty() else reason
 	}]
+	offers.append({"id": World.EVACUATION_ID, "kind": "evacuation",
+		"instance_id": "quote_%d_evacuation" % int(c.flags.get("expeditions_started", 0) + 1),
+		"title": "河岸撤离", "description": "突破拦截，让至少两名出战者从战场右边撤出；清空敌人仍须撤到出口。",
+		"cost": "路线基础耗粮2或3份、耗时1天；特殊准备以路线总价为准，另结每日维护费", "reward": _route_reward(c, 6),
+		"risk": "高：未达撤离人数没有合同报酬", "location_id": World.CAMP_ID, "destination_id": "loc_granary",
+		"routes": get_routes(c, World.EVACUATION_ID), "available": reason.is_empty(), "reason": "可以选择路线并接约。" if reason.is_empty() else reason})
+	offers.append({"id": World.SHORT_WORK_ID, "kind": "short_work", "instance_id": "work_%d_%d" % [int(c.seed), int(c.day)],
+		"title": "渡口短工", "description": "两天搬货，付清这两天维护后至少留8金与2粮；无战斗经验与战利品。",
+		"cost": "两天时间；工钱随存活名册维护成本调整，欠款优先抵扣", "reward": Company.maintenance_due(c) * 2 + 12, "risk": "低：时间与维护成本",
+		"location_id": World.CAMP_ID, "destination_id": World.CAMP_ID, "routes": [],
+		"available": reason.is_empty() and (int(c.gold) < 24 or int(c.food) < 6),
+		"reason": ("储备充足，短工留给缺粮缺钱的队伍。" if int(c.gold) >= 24 and int(c.food) >= 6 else ("可以直接完成。" if reason.is_empty() else reason))})
+	return offers
 
 static func accept_contract(c: Dictionary, contract_id: String, route_id: String) -> Dictionary:
-	if contract_id != World.CONTRACT_ID:
+	if contract_id == World.SHORT_WORK_ID:
+		return Company.short_work(c)
+	if contract_id not in [World.CONTRACT_ID, World.EVACUATION_ID]:
 		return _fail("未知契约。")
 	var world: Dictionary = c.get("world", {})
 	if world.is_empty() or str(world.get("company_location_id", "")) != World.CAMP_ID:
 		return _fail("佣兵团必须在灰岸营地接取契约。")
 	if not str(world.get("active_contract_id", "")).is_empty() or not world.get("travel", {}).is_empty():
 		return _fail("已有尚未返营的契约。")
-	var route: Dictionary = _route_by_id(c, route_id)
+	var route: Dictionary = _route_by_id(c, route_id, contract_id)
 	if route.is_empty():
 		return _fail("未知远征路线。")
 	if not bool(route.available):
 		return _fail(str(route.reason))
+	var deployment_result := Company.departure_deployment(c)
+	if not deployment_result.ok:
+		return deployment_result
+	var slots: Array = deployment_result.slots
 	# All validation is complete before food, day, flags, or RNG state can change.
 	c.food = int(c.food) - int(route.food_cost)
 	c.day = int(c.day) + int(route.days)
+	Company.tick(c)
 	var index: int = int(c.flags.get("expeditions_started", 0)) + 1
 	c.flags.expeditions_started = index
 	var participants: Array = []
-	for unit: Dictionary in _living(c):
-		participants.append(str(unit.id))
+	for slot: Dictionary in slots:
+		participants.append(str(slot.unit_id))
 	var expedition_id := "exp_%d_%d" % [int(c.seed), index]
 	c.expedition = {
 		"id": expedition_id, "index": index,
-		"title": "雨夜粮仓", "difficulty": int(route.difficulty),
+		"title": "河岸撤离" if contract_id == World.EVACUATION_ID else "雨夜粮仓", "difficulty": int(route.difficulty),
 		"supplies": route.supplies.duplicate(true),
 		"reward": int(route.reward), "renown_bonus": 0,
 		"route_id": str(route.id), "route_name": str(route.name),
 		"route_food_cost": int(route.food_cost), "route_days": int(route.days),
-		"choice": "", "participant_ids": participants, "event_id": "",
+		"choice": "", "participant_ids": participants, "deployment": slots.duplicate(true),
+		"deployment_instance_id": "%s:deployment" % expedition_id, "event_id": "",
+		"contract_kind": "evacuation" if contract_id == World.EVACUATION_ID else "granary",
+		"extra_food_cost": int(route.extra_food_cost),
 		"contract_id": contract_id, "travel_id": expedition_id,
 		"location_id": "loc_granary"
 	}
@@ -336,18 +338,34 @@ static func _location_name(location_id: String) -> String:
 			return str(location.name)
 	return location_id
 
-static func _route_by_id(c: Dictionary, route_id: String) -> Dictionary:
-	for route: Dictionary in get_routes(c):
+static func _route_by_id(c: Dictionary, route_id: String, contract_id: String = World.CONTRACT_ID) -> Dictionary:
+	for route: Dictionary in get_routes(c, contract_id):
 		if str(route.get("id", "")) == route_id:
 			return route
 	return {}
 
-static func _route_unavailable_reason(c: Dictionary, details: Dictionary) -> String:
+static func _route_preparation(c: Dictionary, route_id: String, details: Dictionary, contract_id: String) -> Dictionary:
+	var extra_food := 0
+	var careful := false
+	for slot: Dictionary in c.get("company", {}).get("deployment", []):
+		var member := _find_living(c, str(slot.get("unit_id", "")))
+		if member.is_empty(): continue
+		if str(member.get("personality", "")) == "cautious": careful = true
+		if route_id == "ridge" and (str(member.get("personality", "")) == "cautious" or "lasting_wound" in member.get("permanent_injuries", [])):
+			extra_food = 1
+	var supplies: Dictionary = details.supplies.duplicate(true)
+	if careful: supplies.water = int(supplies.water) + 1
+	return {"extra_food_cost": extra_food, "food_cost": int(details.food_cost) + extra_food,
+		"supplies": supplies, "reward": _route_reward(c, int(details.reward_bonus) + (6 if contract_id == World.EVACUATION_ID else 0))}
+
+static func _route_unavailable_reason(c: Dictionary, preparation: Dictionary) -> String:
 	if str(c.get("phase", "")) != "camp":
 		return "远征已生成，不能重新抽选事件。"
 	if _living(c).is_empty():
 		return "没有存活队员。请先补员；资金不足时可预支签约款。"
-	var food_cost: int = int(details.get("food_cost", 0))
+	var deployment_problem := Company.deployment_problem(c, c.get("company", {}).get("deployment", []))
+	if not deployment_problem.is_empty(): return deployment_problem
+	var food_cost: int = int(preparation.food_cost)
 	if int(c.get("food", 0)) < food_cost:
 		return "出征需要 %d 份粮食。营地补给在缺钱缺粮时提供短工恢复通路。" % food_cost
 	return ""
@@ -356,9 +374,9 @@ static func _route_description(c: Dictionary, route_id: String, details: Diction
 	if route_id != "ridge":
 		return str(details.description)
 	if _route_base_difficulty(c) >= 2 and not _is_failure_recovery(c):
-		return "敌情已达当前区域上限，与渡口旧道相同；多消耗 1 粮，获得额外 18 金和 1 油。这是补给与收益选择。"
+		return "敌情已达当前区域上限，与渡口旧道相同；多消耗 1 粮，获得额外 18 金和 1 油。这是补给与收益选择。队员附加粮耗另见报价。"
 	if _is_failure_recovery(c):
-		return "上次失利让敌情回落。山脊险径仍比渡口旧道高一档；多消耗 1 粮，获得额外 18 金和 1 油。"
+		return "上次失利让敌情回落。山脊险径仍比渡口旧道高一档；多消耗 1 粮，获得额外 18 金和 1 油。队员附加粮耗另见报价。"
 	return str(details.description)
 
 static func _is_failure_recovery(c: Dictionary) -> bool:
@@ -458,10 +476,21 @@ static func battle_config(c: Dictionary) -> Dictionary:
 		"route_name": str(c.expedition.get("route_name", "渡口旧道")),
 		"event_id": str(c.expedition.get("event_id", "")),
 		"choice": str(c.expedition.get("choice", "")),
+		"deployment": c.expedition.get("deployment", []).duplicate(true),
+		"deployment_instance_id": str(c.expedition.get("deployment_instance_id", "")),
+		"contract_kind": str(c.expedition.get("contract_kind", "granary")),
+		"map_id": "ridge_road" if str(c.expedition.get("route_id", "road")) == "ridge" else "granary_bank",
 		"contract_id": str(c.expedition.get("contract_id", World.CONTRACT_ID)),
 		"travel_id": str(c.expedition.get("travel_id", c.expedition.id)),
 		"location_id": str(c.expedition.get("location_id", "loc_granary"))
 	}
+
+static func battle_roster(c: Dictionary) -> Array:
+	var roster: Array = []
+	for participant_id in c.get("expedition", {}).get("participant_ids", []):
+		var member := _find_living(c, str(participant_id))
+		if not member.is_empty(): roster.append(member.duplicate(true))
+	return roster
 
 static func begin_battle(c: Dictionary, battle: Dictionary) -> Dictionary:
 	if str(c.get("phase", "")) != "ready":
@@ -469,6 +498,8 @@ static func begin_battle(c: Dictionary, battle: Dictionary) -> Dictionary:
 	var expedition_id: String = str(c.get("expedition", {}).get("id", ""))
 	if expedition_id.is_empty() or str(battle.get("id", "")) != expedition_id:
 		return _fail("战斗与当前契约不匹配。")
+	if not str(battle.get("deployment_error", "")).is_empty():
+		return _fail(str(battle.deployment_error))
 	var travel: Dictionary = c.get("world", {}).get("travel", {})
 	if not travel.is_empty() and str(travel.get("status", "")) != "ready":
 		return _fail("旅队尚未抵达契约战场。")
@@ -492,25 +523,32 @@ static func resolve_battle(c: Dictionary, battle: Dictionary) -> Dictionary:
 	var outcome: String = str(battle.get("outcome", ""))
 	if not outcome in ["victory", "defeat", "retreat"]:
 		return _fail("战斗尚未结束。")
+	var casualty_settlement := CasualtySettlement.prepare(battle)
+	if not casualty_settlement.ok:
+		return _fail(str(casualty_settlement.reason))
+	var settlement_battle: Dictionary = casualty_settlement.battle
 	var player_units: Dictionary = {}
-	for unit: Dictionary in battle.get("units", []):
+	for unit: Dictionary in settlement_battle.get("units", []):
 		if str(unit.get("team", "")) == "player":
 			if player_units.has(str(unit.id)):
 				return _fail("战斗中存在重复队员 ID，未进行结算。")
 			player_units[str(unit.id)] = unit
-	for unit: Dictionary in _living(c):
-		if not player_units.has(str(unit.id)):
+	for participant_id in expedition.get("participant_ids", []):
+		if not player_units.has(str(participant_id)):
 			return _fail("战斗缺少出征队员的结果，未进行结算。")
-	var equipment_problem := Equipment.battle_result_problem(c, battle)
+	for result_id in player_units:
+		if str(result_id) not in expedition.get("participant_ids", []):
+			return _fail("战斗包含未出征替补，未进行结算。")
+	var equipment_problem := Equipment.battle_result_problem(c, settlement_battle)
 	if not equipment_problem.is_empty():
 		return _fail(equipment_problem)
 	var progression_claim_id := "battle:%s" % expedition_id
-	var progression_problem := Character.battle_progression_problem(c, battle, outcome, progression_claim_id)
+	var progression_problem := Character.battle_progression_problem(c, settlement_battle, outcome, progression_claim_id)
 	if not progression_problem.is_empty():
 		return _fail(progression_problem)
 	# All validation precedes mutation. The claim guards both money and progression.
-	var equipment_settlement := Equipment.apply_battle_result(c, battle)
-	var progression_settlement := Character.apply_battle_progression(c, battle, outcome, progression_claim_id)
+	var equipment_settlement := Equipment.apply_battle_result(c, settlement_battle)
+	var progression_settlement := Character.apply_battle_progression(c, settlement_battle, outcome, progression_claim_id)
 	c.claimed[expedition_id] = true
 	var casualties: Array = []
 	for unit: Dictionary in c.roster:
@@ -521,6 +559,8 @@ static func resolve_battle(c: Dictionary, battle: Dictionary) -> Dictionary:
 			if int(unit.hp) <= 0:
 				casualties.append(str(unit.name))
 				_record_memorial(c, unit)
+	Company.prune_deployment(c)
+	var is_evacuation := str(expedition.get("contract_kind", "granary")) == "evacuation"
 	var grain_survives: bool = false
 	for prop: Dictionary in battle.get("props", []):
 		if str(prop.get("kind", "")) == "grain" and int(prop.get("hp", 0)) > 0:
@@ -532,7 +572,9 @@ static func resolve_battle(c: Dictionary, battle: Dictionary) -> Dictionary:
 		earned = int(expedition.reward)
 		c.flags.victories = int(c.flags.get("victories", 0)) + 1
 		c.renown = int(c.renown) + 1 + int(expedition.get("renown_bonus", 0))
-		if grain_survives:
+		if is_evacuation:
+			narrative = "至少两名队员冲过河岸出口，撤离契约完成。"
+		elif grain_survives:
 			c.flags.grain_saved = int(c.flags.get("grain_saved", 0)) + 1
 			grain_food = 2
 			earned += 10
@@ -547,22 +589,28 @@ static func resolve_battle(c: Dictionary, battle: Dictionary) -> Dictionary:
 				defeated_enemies += 1
 		if not _living(c).is_empty():
 			earned = mini(12, defeated_enemies * 3)
-		c.flags.grain_lost = int(c.flags.get("grain_lost", 0)) + 1
-		narrative = "你们离开了粮仓。未完成契约不发报酬，幸存者仅带回已击败敌人的少量随身物资。"
+		if not is_evacuation: c.flags.grain_lost = int(c.flags.get("grain_lost", 0)) + 1
+		narrative = "撤离人数不足，契约未完成。" if is_evacuation else "你们离开了粮仓。未完成契约不发报酬，幸存者仅带回已击败敌人的少量随身物资。"
 	else:
-		c.flags.grain_lost = int(c.flags.get("grain_lost", 0)) + 1
-		narrative = "远征失败，契约没有报酬。名册上的死者不会复活；这面旗帜仍可通过预支签约款招募继承者。"
+		if not is_evacuation: c.flags.grain_lost = int(c.flags.get("grain_lost", 0)) + 1
+		narrative = "撤离失败，未达雇主底线。" if is_evacuation else "远征失败，契约没有报酬。名册上的死者不会复活；这面旗帜仍可通过预支签约款招募继承者。"
 	var debt: int = int(c.flags.get("advance_debt", 0))
 	var repayment: int = mini(debt, int(earned / 3))
 	c.flags.advance_debt = debt - repayment
-	c.gold = int(c.gold) + earned - repayment
+	var upkeep_debt: int = int(c.get("company", {}).get("maintenance_debt", 0))
+	var upkeep_repayment: int = mini(upkeep_debt, int((earned - repayment) / 4))
+	c.company.maintenance_debt = upkeep_debt - upkeep_repayment
+	c.gold = int(c.gold) + earned - repayment - upkeep_repayment
 	c.food = int(c.food) + grain_food
 	c.day = int(c.day) + 1
+	Company.tick(c)
 	c.flags.last_outcome = outcome
+	CasualtySettlement.apply_recovery(c, casualty_settlement.survivors)
+	Company.on_battle_settled(c, casualty_settlement.survivors)
 	c.history.append({
 		"type": "result", "id": expedition_id, "outcome": outcome,
 		"grain_saved": grain_survives and outcome == "victory",
-		"gold": earned - repayment, "deaths": casualties.duplicate(), "day": int(c.day)
+		"gold": earned - repayment - upkeep_repayment, "deaths": casualties.duplicate(), "day": int(c.day)
 	})
 	c.battle = battle.duplicate(true)
 	var world: Dictionary = c.get("world", {})
@@ -575,7 +623,9 @@ static func resolve_battle(c: Dictionary, battle: Dictionary) -> Dictionary:
 		granary_state.last_visit_day = int(c.day)
 		world.location_states["loc_granary"] = granary_state
 	var report: String = "%s\n实收 %d 金；粮食 +%d；当前 %d 金、%d 份粮食。" % [
-		narrative, earned - repayment, grain_food, int(c.gold), int(c.food)]
+		narrative, earned - repayment - upkeep_repayment, grain_food, int(c.gold), int(c.food)]
+	if upkeep_repayment > 0:
+		report += "\n偿还维护欠款%d金，尚欠%d金。" % [upkeep_repayment, int(c.company.maintenance_debt)]
 	if repayment > 0:
 		report += "\n已偿还预支签约款 %d 金，尚欠 %d 金。" % [repayment, int(c.flags.advance_debt)]
 	if casualties.is_empty():
@@ -585,6 +635,8 @@ static func resolve_battle(c: Dictionary, battle: Dictionary) -> Dictionary:
 		if not equipment_settlement.get("lost", []).is_empty():
 			report += " 遗失：" + "、".join(equipment_settlement.lost) + "。"
 	var xp_notes: Array[String] = []
+	for survivor: Dictionary in casualty_settlement.survivors:
+		report += "\n%s重伤幸存，装备保留；两天内需休养。" % str(survivor.name)
 	for award: Dictionary in progression_settlement.get("awards", []):
 		var recipient := _find_living(c, str(award.unit_id))
 		xp_notes.append("%s +%d经验" % [str(recipient.get("name", award.unit_id)), int(award.xp)])
@@ -798,7 +850,7 @@ static func _generate_growth(c: Dictionary) -> void:
 	var eligible_units: Array = []
 	var largest_pool: int = -1
 	# Give a three-way permanent choice while any living role has that many options.
-	for unit: Dictionary in _living(c):
+	for unit: Dictionary in battle_roster(c):
 		var count: int = _eligible_perks(unit).size()
 		if count > largest_pool:
 			largest_pool = count

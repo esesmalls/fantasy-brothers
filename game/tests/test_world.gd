@@ -1,7 +1,7 @@
 extends SceneTree
 
 const Campaign = preload("res://core/campaign_rules.gd")
-const Battle = preload("res://core/battle_rules.gd")
+const Battle = preload("res://tests/legacy_battle_rules.gd")
 const Saves = preload("res://core/save_store.gd")
 const World = preload("res://core/world_data.gd")
 
@@ -98,7 +98,7 @@ func _test_world_content_and_route_costs() -> void:
 			var before_view := _snapshot(c)
 			var world_view := Campaign.get_world_view(c)
 			var offers := Campaign.get_contract_offers(c, World.CAMP_ID)
-			check(_snapshot(c) == before_view and world_view.locations.size() == 6 and offers.size() == 1, "%s/%s world and contract previews are pure" % [origin, route_id])
+			check(_snapshot(c) == before_view and world_view.locations.size() == 6 and offers.size() == 3, "%s/%s world and three contract previews are pure" % [origin, route_id])
 			var expected_food := 2 if route_id == "road" else 3
 			var start_food := int(c.food)
 			var start_day := int(c.day)

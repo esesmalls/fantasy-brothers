@@ -1,7 +1,0 @@
-{
-	"catalog_sha256": "b411dfd57a4efb9bbf1c866f2d37f8dbfbc351d838431da5403719e1c678123e",
-	"checks": 85,
-	"engine": "4.7.2-stable (official)",
-	"executable": "S:/fantasy brothers/builds/paperdoll/windows/FantasyBrothers-Paperdoll.exe",
-	"failures": []
-}
